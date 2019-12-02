@@ -5,9 +5,7 @@ var Homepage = (function() {
     var navbarContent = document.getElementById('navbar-content');
 
     var accountButton = newElements.createSignBarButton('My account', 'my-account-button');
-    accountButton.addEventListener('click', function () {
-
-    });
+    accountButton.addEventListener('click', ShowAccountInfo.init);
     navbarContent.appendChild(accountButton);
 
     var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button');
