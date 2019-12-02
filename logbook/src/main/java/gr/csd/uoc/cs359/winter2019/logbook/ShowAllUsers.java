@@ -5,21 +5,26 @@
  */
 package gr.csd.uoc.cs359.winter2019.logbook;
 
+import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  */
-@WebServlet(name = "Main", urlPatterns = "/Main")
+@WebServlet(name = "ShowAllUsers", urlPatterns = "/ShowAllUsers")
 @MultipartConfig
-public class Main extends HttpServlet {
-
-    /* static HashMap<String, List<String>> sessionMap = new HashMap(); */
+public class ShowAllUsers extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,40 +36,24 @@ public class Main extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ClassNotFoundException {
 
-        RequestDispatcher dispatcher = null;
-        switch(request.getParameter("action")) {
-            case "GetLanding":
-                dispatcher = request.getRequestDispatcher("WEB-INF/landing");
-                break;
-            case "GetSignin":
-                dispatcher = request.getRequestDispatcher("WEB-INF/signin");
-                break;
-            case "GetSignup":
-                dispatcher = request.getRequestDispatcher("AccountInfo");
-                break;
-            case "CheckEmailDB":
-                dispatcher = request.getRequestDispatcher("CheckEmailDB");
-                break;
-            case "CheckUsernameDB":
-                dispatcher = request.getRequestDispatcher("CheckUsernameDB");
-                break;
-            case "Signup":
-                dispatcher = request.getRequestDispatcher("Signup");
-                break;
-            case "Signin":
-                dispatcher = request.getRequestDispatcher("Signin");
-                break;
-            case "ShowAllUsers":
-                dispatcher = request.getRequestDispatcher("ShowAllUsers");
-                break;
-            default:
-                break;
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
+        JSONObject json = new JSONObject();
+        JSONObject jsonPage = new JSONObject();
+        List<String> usernames = UserDB.getAllUsersNames();
+        int j = 1;
+        for (int i = 0; i < usernames.size(); i++) {
+            jsonPage.put(Integer.toString(i + 1), usernames.get(i));
+            if (i % 15 == 14 || i == usernames.size() - 1) {
+                json.put(Integer.toString(j), jsonPage);
+                j++;
+                jsonPage = new JSONObject();
+            }
         }
-        if (dispatcher != null) {
-            dispatcher.forward(request, response);
-        }
+        out.print(json.toJSONString());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -79,7 +68,11 @@ public class Main extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -93,7 +86,11 @@ public class Main extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
