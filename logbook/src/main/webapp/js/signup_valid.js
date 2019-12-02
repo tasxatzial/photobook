@@ -2,7 +2,13 @@
 
 var ValidChecker = (function() {
 
+  var state = {
+    inputs: []
+  };
+
   function init() {
+    state.inputs = [];
+
     var username = document.getElementById('signup-username');
     var email = document.getElementById('signup-email');
     var passwd1 = document.getElementById('signup-password');
@@ -16,6 +22,10 @@ var ValidChecker = (function() {
     var interests = document.querySelector('textarea[name="signup-interests"]');
     var about = document.querySelector('textarea[name="signup-about"]');
     var signupMsg = document.getElementById('signupin-msg');
+
+    /* collect all elements --------------------------------------- */
+    state.inputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
+        occupation, city, country, interests, about);
 
     /* valid regex check functions --------------------------------- */
     regexValid(username);
@@ -51,29 +61,6 @@ var ValidChecker = (function() {
         var regex = new RegExp(element.pattern);
         return regex.test(element.value) && element.value;
       };
-    }
-
-    /* checks if an element has a valid value (db checks are excluded) and modifies its isValid attribute */
-    function checkValid(element) {
-      if (element.checkedValid) {
-        return;
-      }
-      element.checkedValid = 1;
-      if (element.valid()) {
-        element.isValid = 1;
-      }
-      else {
-        element.isValid = 0;
-      }
-    }
-
-    /* displays an invalid message next to the element label */
-    function showInvalidMsg(element, value) {
-      if (!element.parentNode.children[0].children[1]) {
-        var label = element.parentNode.children[0];
-        var msg = newElements.createInvalidValueMsg(value);
-        label.appendChild(msg);
-      }
     }
 
     /* add listeners ----------------------------------------------- */
@@ -211,8 +198,38 @@ var ValidChecker = (function() {
 
   }
 
+  /* checks if an element has a valid value (db checks are excluded) and modifies its isValid attribute */
+  function checkValid(element) {
+    if (element.checkedValid) {
+      return;
+    }
+    element.checkedValid = 1;
+    if (element.valid()) {
+      element.isValid = 1;
+    }
+    else {
+      element.isValid = 0;
+    }
+  }
+
+  /* displays an invalid message next to the element label */
+  function showInvalidMsg(element, value) {
+    if (!element.parentNode.children[0].children[1]) {
+      var label = element.parentNode.children[0];
+      var msg = newElements.createInvalidValueMsg(value);
+      label.appendChild(msg);
+    }
+  }
+
+  function getInputs() {
+    return state.inputs;
+  }
+
   return {
-    init: init
+    init: init,
+    getInputs: getInputs,
+    checkValid: checkValid,
+    showInvalidMsg: showInvalidMsg,
   };
 
 }());
