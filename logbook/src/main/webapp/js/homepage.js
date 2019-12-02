@@ -11,9 +11,7 @@ var Homepage = (function() {
     navbarContent.appendChild(accountButton);
 
     var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button');
-    allUsersButton.addEventListener('click', function () {
-
-    });
+    allUsersButton.addEventListener('click', ShowAllUsers.init);
     navbarContent.appendChild(allUsersButton);
 
     var logoutButton = newElements.createSignBarButton('Log out', 'logout-button');

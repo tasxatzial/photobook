@@ -120,6 +120,24 @@ var newElements = (function NewElements() {
     return div;
   }
 
+  function createSelectPage(pages) {
+    var select = document.createElement('select');
+    var option = null;
+    for (var i = 1; i <= pages; i++) {
+      option = document.createElement('option');
+      option.value = String(i);
+      option.innerHTML = String(i);
+      select.appendChild(option);
+    }
+    select.children[0].selected = true;
+
+    var div = document.createElement('div');
+    div.id = 'userlist-select';
+
+    div.appendChild(select);
+    return div;
+  }
+
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
@@ -127,6 +145,7 @@ var newElements = (function NewElements() {
     createLoader: createLoader,
     createSignBarButton: createSignBarButton,
     createInvalidValueMsg: createInvalidValueMsg,
-    createAccountDetails: createAccountDetails
+    createAccountDetails: createAccountDetails,
+    createSelectPage: createSelectPage
   };
 }());
