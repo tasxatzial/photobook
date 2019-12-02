@@ -31,6 +31,23 @@ var Signup = (function() {
       doSignup(action);
     }
   }
+
+  function gatherData() {
+    var data = new FormData();
+    var inputs = ValidChecker.getInputs();
+    for (var i = 0; i < inputs.length; i++) {
+      data.append(inputs[i].name.split('-')[1], inputs[i].value);
+    }
+
+    for (var j = 0; j < el.gender.length; j++) {
+      if (el.gender[j].checked) {
+        data.append(el.gender[j].name.split('-')[1], el.gender[j].value);
+      }
+    }
+
+    data.append(el.address.name.split('-')[1], el.address.value);
+    return data;
+  }
   
   function doSignup(action) {
 
