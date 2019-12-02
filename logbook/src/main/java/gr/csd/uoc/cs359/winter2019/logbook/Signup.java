@@ -5,21 +5,32 @@
  */
 package gr.csd.uoc.cs359.winter2019.logbook;
 
+import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.User;
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Enumeration;
+import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  */
-@WebServlet(name = "Main", urlPatterns = "/Main")
+@WebServlet(name = "Signup", urlPatterns = {"/Signup"})
 @MultipartConfig
-public class Main extends HttpServlet {
-
-    /* static HashMap<String, List<String>> sessionMap = new HashMap(); */
+public class Signup extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,34 +41,33 @@ public class Main extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
 
-        RequestDispatcher dispatcher = null;
-        switch(request.getParameter("action")) {
-            case "GetLanding":
-                dispatcher = request.getRequestDispatcher("WEB-INF/landing");
-                break;
-            case "GetSignin":
-                dispatcher = request.getRequestDispatcher("WEB-INF/signin");
-                break;
-            case "GetSignup":
-                dispatcher = request.getRequestDispatcher("AccountInfo");
-                break;
-            case "CheckEmailDB":
-                dispatcher = request.getRequestDispatcher("CheckEmailDB");
-                break;
-            case "CheckUsernameDB":
-                dispatcher = request.getRequestDispatcher("CheckUsernameDB");
-                break;
-            case "Signup":
-                dispatcher = request.getRequestDispatcher("Signup");
-                break;
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, ClassNotFoundException {
+
+        response.setContentType("application/json;charset=UTF-8");
+
+        JSONObject jsonSignup = new JSONObject();
+
+
+    }
+
+    protected String getRegexPattern(String field) {
+        switch(field) {
+            case "username":
+                return "^[A-Za-z]{8,}$";
+            case "password":
+                return "^[\\w0-9!#$%&'*+/=?^`{|}\\[\\]_\\\\~<>., -]{8,10}$";
+            case "email":
+                return "^[\\w!#$%&'*+/=?^`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$";
+            case "firstName":
+            case "job":
+            case "lastName":
+                return "^[^0-9!#$%&'*+/=?^`{|}\\[\\]_\\\\~<>.,-]{3,15}$";
+            case "city":
+                return "^[^!#$%&'*+/=?^`{|}\\[\\]_\\\\~<>.,]{2,20}$";
             default:
-                break;
-        }
-        if (dispatcher != null) {
-            dispatcher.forward(request, response);
+                return null;
         }
     }
 
@@ -73,7 +83,11 @@ public class Main extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -87,7 +101,11 @@ public class Main extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
