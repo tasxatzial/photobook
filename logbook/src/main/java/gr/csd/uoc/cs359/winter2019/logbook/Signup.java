@@ -137,6 +137,30 @@ public class Signup extends HttpServlet {
             }
         }
 
+        boolean error = false;
+        for(Iterator iterator = jsonSignup.keySet().iterator(); iterator.hasNext();) {
+            String key = (String) iterator.next();
+            if (!jsonSignup.get(key).equals("")) {
+                error = true;
+                break;
+            }
+        }
+
+        if (error) {
+            try (PrintWriter out = response.getWriter()) {
+                out.print(jsonSignup.toJSONString());
+                response.setStatus(400);
+            }
+        }
+        else {
+            doSignup(request, response);
+        }
+
+    }
+
+    protected void doSignup(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ClassNotFoundException {
+
     }
 
     protected boolean isValidDate(String date) {
