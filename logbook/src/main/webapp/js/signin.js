@@ -54,7 +54,7 @@ var Signin = (function() {
       else {
         el.nonav.innerHTML = state.xhr.responseText;
         el.navbarContent.removeChild(el.signupButton);
-        /* Homepage.init(); */
+        Homepage.init();
       }
     }
 
