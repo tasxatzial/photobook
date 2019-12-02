@@ -1,5 +1,7 @@
 var ShowAllUsers = (function() {
   var state = {
+    xhr: null,
+    xhrResponse: null,
     pages: 1
   };
 
@@ -9,7 +11,48 @@ var ShowAllUsers = (function() {
   };
 
   function init() {
+    el.nonav = document.getElementById('no-nav');
+    var allUsersButton = document.getElementById('show-users-button');
 
+    allUsersButton.disabled = true;
+
+    state.pages = 1;
+    state.xhrResponse = null;
+
+    var data = new FormData();
+    data.append("action", "ShowAllUsers");
+    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+
+    function successCallback() {
+      state.xhrResponse = JSON.parse(state.xhr.responseText);
+
+      state.pages = Object.keys(state.xhrResponse).length;
+      el.userListParent = newElements.createUserListContainer(state.pages);
+      addListeners();
+      showPage(1);
+      var userlistSection = document.createElement('div');
+      userlistSection.id = 'userlist-section';
+      userlistSection.appendChild(el.userListParent);
+      userlistSection.style.minHeight = '53rem';
+      var max = 0;
+      var userlistContainer = el.userListParent.children[0].children[1];
+      for (var i = 0; i < userlistContainer.childNodes.length; i++) {
+        if (userlistContainer.children[i].innerHTML.length > max) {
+          max = userlistContainer.children[i].innerHTML.length;
+        }
+      }
+      el.userListParent.style.width = max*0.45 + 'rem';
+      el.userListParent.style.width = max*0.45 + 'rem';
+      el.nonav.innerHTML = '';
+      el.nonav.style.height = 'auto';
+      el.nonav.appendChild(userlistSection);
+      allUsersButton.disabled = false;
+    }
+
+    function failCallback() {
+      allUsersButton.disabled = false;
+      console.log(state.xhr.responseText);
+    }
   }
 
   function addListeners() {
