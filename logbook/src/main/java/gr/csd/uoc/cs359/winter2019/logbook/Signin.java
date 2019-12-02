@@ -55,6 +55,19 @@ public class Signin extends HttpServlet {
         else {
             jsonSignin.put("username", "0");
         }
+        if (jsonSignin.get("username").equals("0") || jsonSignin.get("password").equals("0")) {
+            response.setContentType("application/json;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print(jsonSignin.toJSONString());
+        }
+        else {
+            response.setContentType("text/html;charset=UTF-8");
+            HttpSession newSession = request.getSession(true);
+            newSession.setAttribute("username", request.getParameter("username"));
+            newSession.setMaxInactiveInterval(24 * 3600 * 365);
+            dispatcher = request.getRequestDispatcher("WEB-INF/homepage");
+            dispatcher.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
