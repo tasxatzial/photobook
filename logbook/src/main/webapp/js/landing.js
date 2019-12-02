@@ -37,7 +37,30 @@ var Landing = (function() {
   }
 
   function showSignup() {
+    var state = {
+      xhr: null
+    };
 
+    /* disable signup button to avoid clicking it again */
+    el.landingSignupButton.disabled = false;
+
+    /* get the signup page, prepare the data */
+    var data = new FormData();
+    data.append('action', 'GetSignup');
+
+    /* make the call to the main servlet */
+    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+
+    function successCallback() {
+      el.nonav.innerHTML = state.xhr.responseText;
+    }
+
+    function failCallback() {
+
+      /* getting the signup page was a fail, so we need to re-enable the signup button */
+      el.landingSignupButton.disabled = false;
+      console.log(state.xhr.responseText);
+    }
   }
 
   function init() {
