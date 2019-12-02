@@ -80,10 +80,20 @@ var newElements = (function NewElements() {
     return loader;
   }
 
+  function createSignBarButton(value, id) {
+    var button = document.createElement('input');
+    button.type = 'button';
+    button.className = 'navbar-button';
+    button.value = value;
+    button.id = id;
+    return button;
+  }
+
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
     createSignUpPhotoSection: createSignUpPhotoSection,
-    createLoader: createLoader
+    createLoader: createLoader,
+    createSignBarButton: createSignBarButton
   };
 }());

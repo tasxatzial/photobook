@@ -52,7 +52,11 @@ var Landing = (function() {
     state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
 
     function successCallback() {
+
+      /* replace the content of index with the signup page */
       el.nonav.innerHTML = state.xhr.responseText;
+
+      Signup.init('Signup');
     }
 
     function failCallback() {
