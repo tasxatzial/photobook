@@ -48,7 +48,32 @@ var Signup = (function() {
     data.append(el.address.name.split('-')[1], el.address.value);
     return data;
   }
-  
+
+  function disableInputs(value, action) {
+    var inputs = ValidChecker.getInputs();
+    for (var i = 0; i < inputs.length; i++) {
+      if (value === true) {
+        formInput.disable(inputs[i]);
+      }
+      else if (action === 'Signup' || inputs[i].name !== "signup-username") {
+        formInput.enable(inputs[i]);
+      }
+    }
+    if (value === true) {
+      formInput.disable(el.gender[0]);
+      formInput.disable(el.gender[1]);
+      formInput.disable(el.gender[2]);
+      formInput.disable(el.address);
+    }
+    else {
+      formInput.enable(el.gender[0]);
+      formInput.enable(el.gender[1]);
+      formInput.enable(el.gender[2]);
+      formInput.enable(el.address);
+    }
+    el.signupButton.disabled = value;
+  }
+
   function doSignup(action) {
 
   }
