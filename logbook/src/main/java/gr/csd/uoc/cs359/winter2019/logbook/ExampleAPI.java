@@ -46,7 +46,7 @@ public class ExampleAPI {
         user.setInterests("Enigma, decyphering");
         user.setInfo("You will have a job due to my work! :)");
 
-        if (UserDB.checkValidUserName("turing")) {
+        if (UserDB.checkValidUserName("turing") == 1) {
             // Add turing to database
             System.out.println("==>Adding users");
             UserDB.addUser(user);
@@ -83,7 +83,7 @@ public class ExampleAPI {
         System.out.println("==>Deleting");
         UserDB.deleteUser("turing");
         System.out.println("==>Deleted");
-        if (UserDB.checkValidUserName("turing")) {
+        if (UserDB.checkValidUserName("turing") == 1) {
             // You can be a new Turing!
             System.out.println("Well, Turing is gone for a long time now!");
             System.out.println("Hope we find a new one in this 2019 class!");

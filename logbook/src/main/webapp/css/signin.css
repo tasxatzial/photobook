@@ -1,0 +1,46 @@
+/* form container */
+#signin-parent {
+  max-width: 20rem;
+}
+
+#signin-section {
+  min-height: 33rem;
+}
+
+/* container of the select photo button */
+#signin-photo-button-parent {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+
+.signin-photo-button {
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  width: 1.5rem;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* image of the photo button & face photo */
+.signin-photo-button img, #signin-photo-parent img {
+  width: 100%;
+  height: auto;
+}
+
+/* the hidden photo section element */
+#signin-photo-section {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+/* selected photo container */
+#signin-photo-parent {
+  width: 10rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: .4rem;
+}

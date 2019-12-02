@@ -1,0 +1,65 @@
+/* spinning loader */
+.loader {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* form title */
+#signup-parent header h2, #signin-parent header h2 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+/* any-button besides the sign up/in button */
+.sign-internal-button {
+  font-family: inherit;
+  font-size: .9rem;
+  margin-bottom: .4rem;
+}
+
+/* input boxes except radio buttons */
+.sign-tofill input, textarea, select {
+  background-color: #f5fdff;
+  border: 1px solid silver;
+  border-radius: 3px;
+  height: 2rem;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 100%;
+  min-width: 0;
+}
+
+/* increase distance between form labels and their input boxes.
+   margin-top should be 0 so that the distance between form fields
+   is defined only by the next rule */
+.sign-label {
+  display: inline-block;
+  margin-bottom: 0.2rem;
+  margin-top: 0;
+}
+
+/* increase distance between all direct childs of the form */
+.sign-child {
+  margin-bottom: 1.4rem;
+}
+
+/* message container for the location search & upload photo actions */
+.sign-process-msg {
+  font-size: 0.9rem;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.invalid-value {
+  font-size: 0.8rem;
+  color: red;
+}
+
+/* make input boxes wider in lower resolutions */
+@media only screen and (max-width: 45rem) {
+  #signin-parent, #signup-parent {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}

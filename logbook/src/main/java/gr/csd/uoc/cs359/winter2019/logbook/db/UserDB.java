@@ -335,6 +335,32 @@ public class UserDB {
         }
     }
 
+    public static void deleteUsersBy(String user) throws ClassNotFoundException {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+
+            con = CS359DB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("DELETE FROM users ")
+                    .append(" WHERE ")
+                    .append(" created_by = ").append("'").append(user).append("';");
+
+            stmt.executeUpdate(insQuery.toString());
+            System.out.println("#DB: All users by " + user + " were successfully deleted from the database.");
+
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            closeDBConnection(stmt, con);
+        }
+    }
+
     /**
      * Delete information for specific user
      *
@@ -368,8 +394,8 @@ public class UserDB {
         }
     }
 
-    public static boolean checkValidUserName(String userName) throws ClassNotFoundException {
-        boolean valid = true;
+    public static int checkValidUserName(String userName) throws ClassNotFoundException {
+        int valid = -1;
         Statement stmt = null;
         Connection con = null;
         try {
@@ -387,7 +413,10 @@ public class UserDB {
 
             if (stmt.getResultSet().next() == true) {
                 System.out.println("#DB: The member already exists");
-                valid = false;
+                valid = 0;
+            }
+            else {
+                valid = 1;
             }
 
         } catch (SQLException ex) {
@@ -401,8 +430,8 @@ public class UserDB {
         return valid;
     }
 
-    public static boolean checkValidEmail(String email) throws ClassNotFoundException {
-        boolean valid = true;
+    public static int checkValidEmail(String email) throws ClassNotFoundException {
+        int valid = -1;
         Statement stmt = null;
         Connection con = null;
         try {
@@ -418,11 +447,50 @@ public class UserDB {
 
             stmt.execute(insQuery.toString());
             if (stmt.getResultSet().next() == true) {
-                System.out.println("#DB: The member alreadyExists");
-                valid = false;
+                System.out.println("#DB: The member already exists");
+                valid = 0;
+            }
+            else {
+                valid = 1;
             }
 
         } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            closeDBConnection(stmt, con);
+        }
+
+        return valid;
+    }
+
+    public static boolean checkValidPassword(String userName, String password) throws ClassNotFoundException {
+        boolean valid = false;
+        Statement stmt = null;
+        Connection con = null;
+
+        try {
+
+            con = CS359DB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM users ")
+                    .append(" WHERE ")
+                    .append(" user_name = ").append("'").append(userName).append("'").append(" AND ")
+                    .append(" password = ").append("'").append(password).append("';");
+
+            stmt.execute(insQuery.toString());
+
+            if (stmt.getResultSet().next() == true) {
+                System.out.println("#DB: Password is valid");
+                valid = true;
+            }
+
+        } catch (SQLException ex) {
+
             // Log exception
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

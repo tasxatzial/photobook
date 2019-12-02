@@ -1,0 +1,106 @@
+/* form container */
+#signup-parent {
+  max-width: 27rem;
+}
+
+#signup-section {
+  min-height: 133rem;
+}
+
+/* location search (button + msg)  */
+#signup-location-search, #signup-geolocation-search {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#signup-show-map-button {
+  background-color: white;
+}
+
+/* face photo container */
+#signup-photo-parent {
+  width: 9rem;
+}
+
+#signup-photo-parent img {
+  width: 100%;
+  height: auto;
+}
+
+/* both lines of the photo section label start from the same column */
+#signup-photo-section label {
+  padding-left: 22px;
+  text-indent: -22px;
+}
+
+/* the hidden photo section that appears after clicking the checkbox */
+#signup-photo-section-hidden {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+/* photo section buttons container */
+#signup-photo-control-buttons {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+}
+
+/* buttons and upload msg container */
+#signup-photo-controls {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* required fields */
+.signup-necessary::after {
+  content: '*';
+  color: red;
+}
+
+/* reset appearance of radio buttons list */
+#signup-gender ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* the subsections are:
+   1) Associate username with photo
+   2) Geolocation
+   3) Location search */
+.signup-subsection {
+  font-size: 0.9rem;
+}
+
+/* shows 100 chars without any resizing */
+textarea[name="signup-interests"] {
+  height: 4.1rem;
+  max-height: 6rem;
+}
+
+/* shows 500 chars without any resizing */
+textarea[name="signup-about"] {
+  height: 14rem;
+  max-height: 17rem;
+}
+
+/* increase distance between the requirements information and the related
+   input box */
+.signup-require-info {
+  margin-top: 0.2rem;
+  margin-bottom: 0;
+  font-size: .8rem;
+}
+
+.flex-label {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}

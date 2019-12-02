@@ -1,0 +1,94 @@
+html {
+  font-size: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: auto;
+}
+
+#no-nav {
+  margin-top: 2.8rem;
+  background-image: linear-gradient(to bottom, #d0f4ea, #e5ddce);
+}
+
+/* sign button container */
+.sign-button {
+  text-align: center;
+}
+
+/* sign button */
+.sign-button input {
+  font-family: inherit;
+  font-size: 1.2rem;
+  letter-spacing: .05rem;
+  color: white;
+  padding: 7px 12px;
+  background: linear-gradient(to bottom, #43628b, #324a69);
+  border: 1px solid #1b5e2e;
+  border-radius: 3px;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  text-align: center;
+  max-width: 50%;
+  width: 50%;
+  margin: 1.5rem auto 1rem;
+}
+
+/* button press effect */
+input[type="button"]:active, button:active {
+  position: relative;
+  top: 1px;
+}
+
+#landing-section, #signin-section, #signup-section, #userlist-section {
+  height: calc(100vh - 2.8rem);
+  padding-top: 5rem;
+}
+
+#landing-page, #signup-parent, #signin-parent, #userlist-parent {
+  border-radius: 3px;
+  box-shadow: 0 5px 16px -5px rgba(0, 0, 0, 1);
+  background: white;
+  padding: 16px 48px 24px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* landing page specific ----------------------------------------- */
+#landing-section {
+  min-height: 35rem;
+}
+
+#landing-page {
+  max-width: 28rem;
+}
+
+#landing-page > p {
+  text-align: center;
+}
+#landing-page > p:first-child {
+  font-size: 1.5rem;
+}
+
+#landing-page > p:nth-child(2) {
+  font-size: 1.2rem;
+}
+
+#landing-signin-button input {
+  font-size: 1.1rem;
+  padding: 3px 5px;
+  width: 35%;
+}
+/* END OF landing page specific ------------------------------------- */
+
+@media only screen and (max-width: 45rem) {
+  #landing-section, #signin-section, #signup-section, #userlist-section {
+    padding-top: 0;
+  }
+}
