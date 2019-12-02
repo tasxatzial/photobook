@@ -150,6 +150,35 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  function createUserListContainer(pages) {
+    if (!pages) {
+      pages = 1;
+    }
+    var div = document.createElement('div');
+    div.id = 'userlist-parent';
+
+    var header = document.createElement('header');
+    var headerH2 = document.createElement('h2');
+    headerH2.innerHTML = 'Users';
+    header.appendChild(headerH2);
+
+    var listWithHeader = document.createElement('div');
+    listWithHeader.appendChild(header);
+
+    var prevButton = newElements.createImgButton('images/left.png', '3rem');
+    var nextButton = newElements.createImgButton('images/right.png', '3rem');
+    var selectPages = createSelectPage(pages);
+    var buttonSection = document.createElement('div');
+    buttonSection.id = 'userlist-nav';
+    buttonSection.appendChild(prevButton);
+    buttonSection.appendChild(selectPages);
+    buttonSection.appendChild(nextButton);
+
+    div.appendChild(listWithHeader);
+    div.appendChild(buttonSection);
+    return div;
+  }
+
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
@@ -159,6 +188,7 @@ var newElements = (function NewElements() {
     createInvalidValueMsg: createInvalidValueMsg,
     createAccountDetails: createAccountDetails,
     createSelectPage: createSelectPage,
-    createImgButton: createImgButton
+    createImgButton: createImgButton,
+    createUserListContainer: createUserListContainer
   };
 }());

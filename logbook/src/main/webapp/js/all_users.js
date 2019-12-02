@@ -1,6 +1,7 @@
 var ShowAllUsers = (function() {
 
   function init() {
+
   }
 
   return {
