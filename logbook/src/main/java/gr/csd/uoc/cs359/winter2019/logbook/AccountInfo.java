@@ -15,11 +15,9 @@ import javax.servlet.RequestDispatcher;
 /**
  *
  */
-@WebServlet(name = "Main", urlPatterns = "/Main")
+@WebServlet(name = "AccountInfo", urlPatterns = "/AccountInfo")
 @MultipartConfig
-public class Main extends HttpServlet {
-
-    /* static HashMap<String, List<String>> sessionMap = new HashMap(); */
+public class AccountInfo extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,25 +29,27 @@ public class Main extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ClassNotFoundException {
 
-        RequestDispatcher dispatcher = null;
-        switch(request.getParameter("action")) {
-            case "GetLanding":
-                dispatcher = request.getRequestDispatcher("WEB-INF/landing");
-                break;
-            case "GetSignin":
-                dispatcher = request.getRequestDispatcher("WEB-INF/signin");
-                break;
-            case "GetSignup":
-                dispatcher = request.getRequestDispatcher("AccountInfo");
-                break;
-            default:
-                break;
-        }
-        if (dispatcher != null) {
+            response.setContentType("text/html;charset=UTF-8");
+            request.setAttribute("username", "");
+            request.setAttribute("password", "");
+            request.setAttribute("password-confirm","");
+            request.setAttribute("email", "");
+            request.setAttribute("firstName", "");
+            request.setAttribute("lastName", "");
+            request.setAttribute("birthDate", "");
+            request.setAttribute("country", "");
+            request.setAttribute("city", "");
+            request.setAttribute("address", "");
+            request.setAttribute("job", "");
+            request.setAttribute("gender", "");
+            request.setAttribute("interests", "");
+            request.setAttribute("about","");
+            request.setAttribute("title", "Sign up");
+            request.setAttribute("button", "Sign up");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/signup.jsp");
             dispatcher.forward(request, response);
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,7 +64,11 @@ public class Main extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -78,7 +82,11 @@ public class Main extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
