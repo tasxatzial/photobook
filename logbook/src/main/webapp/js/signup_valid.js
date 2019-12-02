@@ -78,6 +78,7 @@ var ValidChecker = (function() {
 
     /* add listeners ----------------------------------------------- */
     addValidPatternListeners(passwd1);
+    addPasswdConfirmListeners();
     addValidPatternListeners(firstName);
     addValidPatternListeners(lastName);
     addValidPatternListeners(occupation);
@@ -109,6 +110,32 @@ var ValidChecker = (function() {
           }
         };
       }(element));
+    }
+
+    /* same value listeners for password and password-confirm */
+    function addPasswdConfirmListeners() {
+      passwd1.addEventListener('input', clearMismatchMsg);
+      passwd1.addEventListener('focusout', checkMismatch);
+
+      passwd2.checkedValid = 0;
+      passwd2.scrollElem = passwd1;
+      passwd2.invalidMsg = 'Mismatch';
+      passwd2.addEventListener('input', clearMismatchMsg);
+      passwd2.addEventListener('focusout', checkMismatch);
+
+      function checkMismatch() {
+        checkValid(passwd2);
+        if (passwd1.value && passwd2.value && passwd1.isValid && !passwd2.isValid) {
+          showInvalidMsg(passwd2, passwd2.invalidMsg);
+        }
+      }
+      function clearMismatchMsg() {
+        signupMsg.innerHTML = '';
+        passwd2.checkedValid = 0;
+        if (passwd2.parentNode.children[0].children[1]) {
+          passwd2.parentNode.children[0].removeChild(passwd2.parentNode.children[0].children[1]);
+        }
+      }
     }
 
   }
