@@ -15,6 +15,27 @@ var Signup = (function() {
     signinButton: null
   };
 
+  function clickSignup(action) {
+    var invalidElement = checkInvalidElements();
+    if (invalidElement) {
+      ValidChecker.scrollToParent(invalidElement);
+    }
+    else if (el.username.isTaken === 1) {
+      console.log('taken');
+      ValidChecker.scrollToParent(el.username);
+    }
+    else if (el.email.isTaken === 1) {
+      ValidChecker.scrollToParent(el.email);
+    }
+    else {
+      doSignup(action);
+    }
+  }
+  
+  function doSignup(action) {
+
+  }
+
   function checkInvalidElements() {
     var inputs = ValidChecker.getInputs();
     var topElement = null;
