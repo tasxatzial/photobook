@@ -77,6 +77,8 @@ var ValidChecker = (function() {
     }
 
     /* add listeners ----------------------------------------------- */
+    addUsernameEmailListeners(username, 'CheckUsernameDB');
+    addUsernameEmailListeners(email, 'CheckEmailDB');
     addValidPatternListeners(passwd1);
     addPasswdConfirmListeners();
     addValidPatternListeners(firstName);
@@ -136,6 +138,36 @@ var ValidChecker = (function() {
           passwd2.parentNode.children[0].removeChild(passwd2.parentNode.children[0].children[1]);
         }
       }
+    }
+
+    /* username and email check listeners (both regex checks and db checks */
+    function addUsernameEmailListeners(element) {
+      element.checkedValid = 0;
+      element.isTaken = -1;
+      element.invalidMsg = 'Invalid';
+      element.scrollElem = element;
+      element.addEventListener('input', function (x) {
+        return function () {
+          signupMsg.innerHTML = '';
+          x.checkedValid = 0;
+          x.isTaken = -1;
+          if (x.parentNode.children[0].children[1]) {
+            x.parentNode.children[0].removeChild(x.parentNode.children[0].children[1]);
+          }
+        };
+      }(element));
+      element.addEventListener('focusout', function(x) {
+        return function() {
+          checkValid(x);
+          if (!x.value) {
+            return;
+          }
+          if (!x.isValid) {
+            showInvalidMsg(x, x.invalidMsg);
+            return;
+          }
+        };
+      }(element));
     }
 
   }
