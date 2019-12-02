@@ -140,8 +140,8 @@ var ValidChecker = (function() {
       }
     }
 
-    /* username and email check listeners (both regex checks and db checks */
-    function addUsernameEmailListeners(element) {
+    /* username and email check listeners (includes both regex checks and db checks */
+    function addUsernameEmailListeners(element, action) {
       element.checkedValid = 0;
       element.isTaken = -1;
       element.invalidMsg = 'Invalid';

@@ -44,6 +44,9 @@ public class Main extends HttpServlet {
             case "GetSignup":
                 dispatcher = request.getRequestDispatcher("AccountInfo");
                 break;
+            case "CheckEmailDB":
+                dispatcher = request.getRequestDispatcher("CheckEmailDB");
+                break;
             default:
                 break;
         }
