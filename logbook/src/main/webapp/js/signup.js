@@ -107,6 +107,27 @@ var Signup = (function() {
       }
       disableInputs(false, action);
     }
+
+    function failCallback(action) {
+      if (action === 'Signup') {
+        el.navbarContent.removeChild(el.signinButton);
+      }
+      el.signupContent.innerHTML = '';
+      if (state.xhr.status >= 500) {
+        var errorMsg = document.createElement('p');
+        errorMsg.innerHTML = 'Oops, something went wrong. Please try again in a while';
+        el.signupSection.style.minHeight = '25rem';
+        el.header.innerHTML = state.xhr.status + ' - Server Error';
+        el.signupContent.appendChild(errorMsg);
+      } else {
+        var response = JSON.parse(state.xhr.responseText);
+        var accountInfo = newElements.createAccountDetails(response, el.dataNames, true);
+        el.header.innerHTML = state.xhr.status + ' - Bad Request';
+        el.signupSection.style.minHeight = '43rem';
+        el.signupContent.appendChild(accountInfo);
+      }
+      disableInputs(false, action);
+    }
   }
 
   function checkInvalidElements() {
@@ -156,7 +177,7 @@ var Signup = (function() {
     el.signupButton.addEventListener('click', function () {
       clickSignup(action);
     });
-    
+
     if (action === 'Signup') {
       el.signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
       el.signinButton.addEventListener('click', function () {
