@@ -48,7 +48,74 @@ public class Signup extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         JSONObject jsonSignup = new JSONObject();
+        RequestDispatcher dispatcher;
 
+        String passwd1 = request.getParameter("password");
+        Enumeration paramNames = request.getParameterNames();
+
+        while (paramNames.hasMoreElements()) {
+            String paramName = (String) paramNames.nextElement();
+            String[] paramValues = request.getParameterValues(paramName);
+            switch (paramName) {
+                case "firstName":
+                case "lastName":
+                case "username":
+                case "password":
+                case "email":
+                case "job":
+                case "city":
+                    if (!paramValues[0].matches(getRegexPattern(paramName))) {
+                        jsonSignup.put(paramName, "Invalid pattern");
+                    }
+                    else {
+                        jsonSignup.put(paramName, "");
+                    }
+                    break;
+                case "password-confirm":
+                    if (passwd1.matches(getRegexPattern("password")) &&
+                            !passwd1.equals(paramValues[0])) {
+                        jsonSignup.put(paramName, "Passwords don't match");
+                    }
+                    else {
+                        jsonSignup.put(paramName, "");
+                    }
+                    break;
+                case "birthDate":
+                    if (!isValidDate(paramValues[0])) {
+                        jsonSignup.put(paramName, "Invalid pattern");
+                    }
+                    else {
+                        jsonSignup.put(paramName, "");
+                    }
+                    break;
+                case "country":
+                    if (Countries.getNameOf(paramValues[0]) == null) {
+                        jsonSignup.put(paramName, "Invalid value");
+                    }
+                    else {
+                        jsonSignup.put(paramName, "");
+                    }
+                    break;
+                case "interests":
+                    if (paramValues[0].length() > 100) {
+                        jsonSignup.put(paramName, "Exceeds maximum size (100)");
+                    }
+                    else {
+                        jsonSignup.put(paramName, "");
+                    }
+                    break;
+                case "about":
+                    if (paramValues[0].length() > 500) {
+                        jsonSignup.put(paramName, "Exceeds maximum size (500)");
+                    }
+                    else {
+                        jsonSignup.put(paramName, "");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 
     }
 
@@ -62,7 +129,7 @@ public class Signup extends HttpServlet {
         }
         return true;
     }
-    
+
     protected String getRegexPattern(String field) {
         switch(field) {
             case "username":
