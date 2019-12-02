@@ -80,6 +80,7 @@ var Landing = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    showSignin: showSignin
   };
 }());

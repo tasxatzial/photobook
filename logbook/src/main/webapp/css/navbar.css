@@ -17,3 +17,26 @@
   position: fixed;
   top: 0;
 }
+
+#navbar-content {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-flow: row nowrap;
+  max-width: 95rem;
+}
+
+.navbar-button {
+  margin: 0;
+  color: white;
+  background-color: #324a69;
+  font-size: 1.1rem;
+  border: 0;
+  padding: 5px 12px;
+}
+
+.navbar-button:hover {
+  background-color: #4d968a;
+}
