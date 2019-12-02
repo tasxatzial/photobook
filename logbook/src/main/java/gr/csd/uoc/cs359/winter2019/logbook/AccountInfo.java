@@ -5,6 +5,9 @@
  */
 package gr.csd.uoc.cs359.winter2019.logbook;
 
+import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.User;
+
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -31,10 +34,34 @@ public class AccountInfo extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
 
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession != null && oldSession.getAttribute("username") != null && request.getAttribute("accountInfo") != null) {
+            response.setContentType("text/html;charset=UTF-8");
+            User user = UserDB.getUser((String) oldSession.getAttribute("username"));
+            request.setAttribute("username", oldSession.getAttribute("username"));
+            request.setAttribute("password", user.getPassword());
+            request.setAttribute("password-confirm", user.getPassword());
+            request.setAttribute("email", user.getEmail());
+            request.setAttribute("firstName", user.getFirstName());
+            request.setAttribute("lastName", user.getLastName());
+            request.setAttribute("birthDate", user.getBirthDate().split(" ")[0]);
+            request.setAttribute("country", user.getCountry());
+            request.setAttribute("city", user.getTown());
+            request.setAttribute("address", user.getAddress());
+            request.setAttribute("job", user.getOccupation());
+            request.setAttribute("gender", user.getGender());
+            request.setAttribute("interests", user.getInterests());
+            request.setAttribute("about", user.getInfo());
+            request.setAttribute("title", "My Account");
+            request.setAttribute("button", "Update");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/signup.jsp");
+            dispatcher.forward(request, response);
+        }
+        else {
             response.setContentType("text/html;charset=UTF-8");
             request.setAttribute("username", "");
             request.setAttribute("password", "");
-            request.setAttribute("password-confirm","");
+            request.setAttribute("password-confirm", "");
             request.setAttribute("email", "");
             request.setAttribute("firstName", "");
             request.setAttribute("lastName", "");
@@ -45,11 +72,12 @@ public class AccountInfo extends HttpServlet {
             request.setAttribute("job", "");
             request.setAttribute("gender", "");
             request.setAttribute("interests", "");
-            request.setAttribute("about","");
+            request.setAttribute("about", "");
             request.setAttribute("title", "Sign up");
             request.setAttribute("button", "Sign up");
             RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/signup.jsp");
             dispatcher.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -59,6 +59,10 @@ public class Main extends HttpServlet {
             case "ShowAllUsers":
                 dispatcher = request.getRequestDispatcher("ShowAllUsers");
                 break;
+            case "AccountInfo":
+                request.setAttribute("accountInfo", "1");
+                dispatcher = request.getRequestDispatcher("AccountInfo");
+                break;
             default:
                 break;
         }
