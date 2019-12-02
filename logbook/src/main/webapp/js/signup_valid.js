@@ -17,7 +17,7 @@ var ValidChecker = (function() {
     var about = document.querySelector('textarea[name="signup-about"]');
     var signupMsg = document.getElementById('signupin-msg');
 
-    /* add valid check functions --------------------------------- */
+    /* valid regex check functions --------------------------------- */
     regexValid(username);
     regexValid(email);
     regexValid(passwd1);
@@ -52,6 +52,65 @@ var ValidChecker = (function() {
         return regex.test(element.value) && element.value;
       };
     }
+
+    /* checks if an element has a valid value (db checks are excluded) and modifies its isValid attribute */
+    function checkValid(element) {
+      if (element.checkedValid) {
+        return;
+      }
+      element.checkedValid = 1;
+      if (element.valid()) {
+        element.isValid = 1;
+      }
+      else {
+        element.isValid = 0;
+      }
+    }
+
+    /* displays an invalid message next to the element label */
+    function showInvalidMsg(element, value) {
+      if (!element.parentNode.children[0].children[1]) {
+        var label = element.parentNode.children[0];
+        var msg = newElements.createInvalidValueMsg(value);
+        label.appendChild(msg);
+      }
+    }
+
+    /* add listeners ----------------------------------------------- */
+    addValidPatternListeners(passwd1);
+    addValidPatternListeners(firstName);
+    addValidPatternListeners(lastName);
+    addValidPatternListeners(occupation);
+    addValidPatternListeners(city);
+    addValidPatternListeners(birthDate);
+    addValidPatternListeners(country);
+    addValidPatternListeners(interests);
+    addValidPatternListeners(about);
+
+    /* regex validation listeners for all elements besides username, email, password-confirm */
+    function addValidPatternListeners(element) {
+      element.checkedValid = 0;
+      element.invalidMsg = 'Invalid';
+      element.scrollElem = element;
+      element.addEventListener('input', function (x) {
+        return function () {
+          signupMsg.innerHTML = '';
+          x.checkedValid = 0;
+          if (x.parentNode.children[0].children[1]) {
+            x.parentNode.children[0].removeChild(x.parentNode.children[0].children[1]);
+          }
+        };
+      }(element));
+      element.addEventListener('focusout', function (x) {
+        return function () {
+          checkValid(x);
+          if (x.value && !x.isValid) {
+            showInvalidMsg(x, x.invalidMsg);
+          }
+        };
+      }(element));
+    }
+
   }
 
   return {

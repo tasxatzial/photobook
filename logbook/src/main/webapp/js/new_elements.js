@@ -89,11 +89,19 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  function createInvalidValueMsg(text) {
+    var msg = document.createElement('div');
+    msg.innerHTML = text;
+    msg.className = 'invalid-value';
+    return msg;
+  }
+
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
     createSignUpPhotoSection: createSignUpPhotoSection,
     createLoader: createLoader,
-    createSignBarButton: createSignBarButton
+    createSignBarButton: createSignBarButton,
+    createInvalidValueMsg: createInvalidValueMsg
   };
 }());
