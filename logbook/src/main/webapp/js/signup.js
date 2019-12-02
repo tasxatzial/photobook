@@ -106,7 +106,7 @@ var Signup = (function() {
     el.signinMsg = document.getElementById('signupin-msg');
 
     el.signupButton.addEventListener('click', function () {
-
+      clickSignup(action);
     });
 
     ValidChecker.init();

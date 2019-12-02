@@ -96,12 +96,37 @@ var newElements = (function NewElements() {
     return msg;
   }
 
+  function createAccountDetails(response, dataNames, skipEmpty) {
+    var div = document.createElement('div');
+    Object.keys(response).forEach(function(key, index) {
+      if (skipEmpty !== true || response[key] !== '') {
+        var msg = document.createElement('p');
+        if (dataNames !== null) {
+          msg.innerHTML = dataNames[key] + ': ';
+        }
+        else {
+          msg.innerHTML = key + ': ';
+        }
+        msg.style.fontWeight = 'bold';
+        msg.style.whiteSpace = 'nowrap';
+        var span = document.createElement('span');
+        span.innerHTML = response[key];
+        span.style.fontWeight = 'normal';
+        msg.appendChild(span);
+
+        div.appendChild(msg);
+      }
+    });
+    return div;
+  }
+
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
     createSignUpPhotoSection: createSignUpPhotoSection,
     createLoader: createLoader,
     createSignBarButton: createSignBarButton,
-    createInvalidValueMsg: createInvalidValueMsg
+    createInvalidValueMsg: createInvalidValueMsg,
+    createAccountDetails: createAccountDetails
   };
 }());
