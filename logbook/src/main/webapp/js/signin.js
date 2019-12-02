@@ -9,6 +9,18 @@ var Signin = (function() {
     nonav: null
   };
 
+  function disableInputs(value) {
+    el.signinButton.disabled = value;
+    if (value === true) {
+      formInput.disable(el.username);
+      formInput.disable(el.password);
+    }
+    else {
+      formInput.enable(el.username);
+      formInput.enable(el.password);
+    }
+  }
+
   function init() {
     el.signinButton = document.querySelector('#signin-button input');
     el.username = document.getElementById('signin-username');
