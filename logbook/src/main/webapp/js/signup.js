@@ -15,6 +15,21 @@ var Signup = (function() {
     signinButton: null
   };
 
+  function checkInvalidElements() {
+    var inputs = ValidChecker.getInputs();
+    var topElement = null;
+    for (var j = 0; j < inputs.length; j++) {
+      ValidChecker.checkValid(inputs[j]);
+      if (!inputs[j].isValid) {
+        ValidChecker.showInvalidMsg(inputs[j], inputs[j].invalidMsg);
+        if (!topElement) {
+          topElement = inputs[j].scrollElem;
+        }
+      }
+    }
+    return topElement;
+  }
+
   function init(action) {
     el.navbarContent = document.getElementById('navbar-content');
     el.username = document.getElementById('signup-username');
@@ -32,7 +47,7 @@ var Signup = (function() {
     });
 
     ValidChecker.init();
-    
+
     if (action === 'Signup') {
       el.signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
       el.signinButton.addEventListener('click', function () {

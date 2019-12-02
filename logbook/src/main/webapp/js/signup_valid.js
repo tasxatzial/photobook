@@ -212,6 +212,15 @@ var ValidChecker = (function() {
     }
   }
 
+  /* scrolls to an element */
+  function scrollToParent(element) {
+    if (window.scrollY) {
+      var html = document.getElementsByTagName('html')[0];
+      var fontSize = parseFloat(getComputedStyle(html).getPropertyValue('font-size'));
+      window.scroll(0, element.parentNode.offsetTop - 2.8 * fontSize);
+    }
+  }
+
   /* displays an invalid message next to the element label */
   function showInvalidMsg(element, value) {
     if (!element.parentNode.children[0].children[1]) {
@@ -230,6 +239,7 @@ var ValidChecker = (function() {
     getInputs: getInputs,
     checkValid: checkValid,
     showInvalidMsg: showInvalidMsg,
+    scrollToParent: scrollToParent
   };
 
 }());
