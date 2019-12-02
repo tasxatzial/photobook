@@ -1,0 +1,29 @@
+/* all users list ------------------------------------------- */
+#userlist-parent {
+    max-width: 30rem;
+    height: 44rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+
+#userlist-parent header h2 {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.next-button {
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+#userlist-nav {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 65%;
+    max-width: 15rem;
+    margin-left: auto;
+    margin-right: auto;
+}
