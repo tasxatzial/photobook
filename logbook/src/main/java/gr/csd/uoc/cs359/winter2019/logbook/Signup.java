@@ -128,6 +128,15 @@ public class Signup extends HttpServlet {
             }
         }
 
+        if ((jsonSignup.get("email").equals("") && oldSession == null)) {
+            request.setAttribute("CheckEmailDB", "1");
+            dispatcher = request.getRequestDispatcher("CheckEmailDB");
+            dispatcher.include(request, response);
+            if (request.getAttribute("email").equals("0")) {
+                jsonSignup.put("email", "Already taken");
+            }
+        }
+
     }
 
     protected boolean isValidDate(String date) {
