@@ -160,7 +160,46 @@ public class Signup extends HttpServlet {
 
     protected void doSignup(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ClassNotFoundException {
+        User user = new User();
+        user.setUserName(request.getParameter("username"));
+        user.setPassword(request.getParameter("password"));
+        user.setEmail(request.getParameter("email"));
+        user.setFirstName(request.getParameter("firstName"));
+        user.setLastName(request.getParameter("lastName"));
+        user.setBirthDate(request.getParameter("birthDate"));
+        user.setCountry(request.getParameter("country"));
+        user.setTown(request.getParameter("city"));
+        user.setAddress(request.getParameter("address"));
+        user.setOccupation(request.getParameter("job"));
+        user.setGender(request.getParameter("gender"));
+        user.setInterests(request.getParameter("interests"));
+        user.setInfo(request.getParameter("about"));
 
+        UserDB.addUser(user);
+
+
+        user = UserDB.getUser(request.getParameter("username"));
+        try (PrintWriter out = response.getWriter()) {
+            JSONObject jsonSignup = new JSONObject();
+            if (user != null) {
+                jsonSignup.put("username", request.getParameter("username"));
+                jsonSignup.put("password", request.getParameter("password"));
+                jsonSignup.put("email", request.getParameter("email"));
+                jsonSignup.put("firstName", request.getParameter("firstName"));
+                jsonSignup.put("lastName", request.getParameter("lastName"));
+                jsonSignup.put("birthDate", request.getParameter("birthDate"));
+                jsonSignup.put("country", Countries.getNameOf(request.getParameter("country")));
+                jsonSignup.put("city", request.getParameter("city"));
+                jsonSignup.put("address", request.getParameter("address"));
+                jsonSignup.put("job", request.getParameter("job"));
+                jsonSignup.put("gender", request.getParameter("gender"));
+                jsonSignup.put("interests", request.getParameter("interests"));
+                jsonSignup.put("about", request.getParameter("about"));
+            } else {
+                response.setStatus(501);
+            }
+            out.print(jsonSignup.toJSONString());
+        }
     }
 
     protected boolean isValidDate(String date) {
