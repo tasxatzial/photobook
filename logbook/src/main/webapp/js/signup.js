@@ -75,7 +75,38 @@ var Signup = (function() {
   }
 
   function doSignup(action) {
+    var state = {
+      xhr: null
+    };
 
+    disableInputs(true, action);
+
+    var data = gatherData();
+
+    data.append('action', action);
+    state.xhr = ajaxRequest('POST', 'Main', data,
+        function() {return successCallback(action);},
+        function() {return failCallback(action);}
+    );
+
+    function successCallback(action) {
+      if (action === 'Signup') {
+        var response = JSON.parse(state.xhr.responseText);
+        var accountInfoTitle = document.createElement('p');
+        var accountInfo = newElements.createAccountDetails(response, el.dataNames, false);
+        el.header.innerHTML = 'Success';
+        el.signupSection.style.minHeight = '60rem';
+        accountInfoTitle.innerHTML = 'You provided the following information: ';
+        el.signupContent.innerHTML = '';
+        el.signupContent.appendChild(accountInfoTitle);
+        el.signupContent.appendChild(accountInfo);
+      }
+      else {
+        el.signinMsg.innerHTML = 'Success';
+        el.signinMsg.style.color = 'green';
+      }
+      disableInputs(false, action);
+    }
   }
 
   function checkInvalidElements() {
