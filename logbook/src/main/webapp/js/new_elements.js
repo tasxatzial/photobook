@@ -138,6 +138,18 @@ var newElements = (function NewElements() {
     return div;
   }
 
+  function createImgButton(imageUrl, width) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.classList = "signin-photo-button next-button";
+    button.style.width = width;
+    var img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = "";
+    button.appendChild(img);
+    return button;
+  }
+
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
@@ -146,6 +158,7 @@ var newElements = (function NewElements() {
     createSignBarButton: createSignBarButton,
     createInvalidValueMsg: createInvalidValueMsg,
     createAccountDetails: createAccountDetails,
-    createSelectPage: createSelectPage
+    createSelectPage: createSelectPage,
+    createImgButton: createImgButton
   };
 }());
