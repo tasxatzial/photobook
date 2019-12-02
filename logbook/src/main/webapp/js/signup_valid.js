@@ -166,8 +166,47 @@ var ValidChecker = (function() {
             showInvalidMsg(x, x.invalidMsg);
             return;
           }
+          if (x.name === 'signup-username') {
+            checkTaken(username, action, successCallback, failCallback);
+          }
+          if (x.name === 'signup-email') {
+            checkTaken(email, action, successCallback, failCallback);
+          }
+
+          function successCallback() {}
+          function failCallback() {
+            showInvalidMsg(x, 'Error checking');
+          }
         };
       }(element));
+    }
+
+    /* checks that username/email do not exist on database */
+    function checkTaken(element, action, successFunc, failFunc) {
+      var state = {
+        xhr: null
+      };
+
+      var data = new FormData();
+      data.append('action', action);
+      data.append(element.name.split('-')[1], element.value);
+      state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failFunc);
+
+      function successCallback() {
+        var response = JSON.parse(state.xhr.responseText);
+        if (response[element.name.split('-')[1]] === '0') {
+          element.isTaken = 1;
+          showInvalidMsg(element, 'Already taken');
+        }
+        else if (response[element.name.split('-')[1]] === '-1') {
+          element.isTaken = -1;
+          showInvalidMsg(element, 'Error checking');
+        }
+        else {
+          element.isTaken = 0;
+        }
+        successFunc();
+      }
     }
 
   }
