@@ -11,7 +11,7 @@
     document.getElementById('no-nav').innerHTML = state.xhr.responseText;
     var id = document.getElementById('landing-section');
     if (id) {
-      /* Landing.init(); */
+      Landing.init();
     }
     else {
 
