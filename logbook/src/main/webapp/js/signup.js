@@ -135,13 +135,28 @@ var Signup = (function() {
     el.gender = document.querySelectorAll('input[type="radio"]');
     el.signupButton = document.querySelector('#signup-button input');
     el.signinMsg = document.getElementById('signupin-msg');
+    el.dataNames = {
+      "username": "Username",
+      "password": "Password",
+      "password-confirm": "Confirm Password",
+      "email": "Email",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "birthDate": "Birth date",
+      "gender": "Gender",
+      "job": "Occupation",
+      "country": "Country",
+      "city": "City",
+      "address": "Address",
+      "interests": "Interests",
+      "about": "General Info"
+    };
 
+    ValidChecker.init();
     el.signupButton.addEventListener('click', function () {
       clickSignup(action);
     });
-
-    ValidChecker.init();
-
+    
     if (action === 'Signup') {
       el.signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
       el.signinButton.addEventListener('click', function () {
