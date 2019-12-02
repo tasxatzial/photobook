@@ -26,12 +26,25 @@ var Landing = (function() {
 
       /* replace the content of index with the signin page */
       el.nonav.innerHTML = state.xhr.responseText;
+
+      /* remove the top right signup button (if there is one) */
+      if (el.navbarContent.children[1]) {
+        el.navbarContent.removeChild(el.navbarContent.children[1]);
+      }
+
+      Signin.init();
     }
 
     function failCallback() {
 
       /* getting the signin page was a fail, so we need to re-enable the signin button */
       el.landingSigninButton.disabled =  false;
+
+      /* enable the top right signin button (if there is one) */
+      if (el.navbarContent.children[1]) {
+        el.navbarContent.children[1].disabled = false;
+      }
+
       console.log(state.xhr.responseText);
     }
   }
@@ -42,7 +55,7 @@ var Landing = (function() {
     };
 
     /* disable signup button to avoid clicking it again */
-    el.landingSignupButton.disabled = false;
+    el.landingSignupButton.disabled = true;
 
     /* get the signup page, prepare the data */
     var data = new FormData();
@@ -56,6 +69,11 @@ var Landing = (function() {
       /* replace the content of index with the signup page */
       el.nonav.innerHTML = state.xhr.responseText;
 
+      /* remove the top right signin button (if there is one) */
+      if (el.navbarContent.children[1]) {
+        el.navbarContent.removeChild(el.navbarContent.children[1]);
+      }
+
       Signup.init('Signup');
     }
 
@@ -63,6 +81,12 @@ var Landing = (function() {
 
       /* getting the signup page was a fail, so we need to re-enable the signup button */
       el.landingSignupButton.disabled = false;
+
+      /* enable the top right signup button (if there is one) */
+      if (el.navbarContent.children[1]) {
+        el.navbarContent.children[1].disabled = false;
+      }
+
       console.log(state.xhr.responseText);
     }
   }
@@ -81,6 +105,7 @@ var Landing = (function() {
 
   return {
     init: init,
-    showSignin: showSignin
+    showSignin: showSignin,
+    showSignup: showSignup
   };
 }());
