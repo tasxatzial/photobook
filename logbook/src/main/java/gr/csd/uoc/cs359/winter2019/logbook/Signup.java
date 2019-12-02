@@ -118,6 +118,16 @@ public class Signup extends HttpServlet {
             }
         }
 
+        HttpSession oldSession = request.getSession(false);
+        if (jsonSignup.get("username").equals("") && oldSession == null) {
+            request.setAttribute("CheckUsernameDB", "1");
+            dispatcher = request.getRequestDispatcher("CheckUsernameDB");
+            dispatcher.include(request, response);
+            if (request.getAttribute("username").equals("0")) {
+                jsonSignup.put("username", "Already taken");
+            }
+        }
+
     }
 
     protected boolean isValidDate(String date) {
