@@ -38,6 +38,9 @@ public class Main extends HttpServlet {
             case "GetLanding":
                 dispatcher = request.getRequestDispatcher("WEB-INF/landing");
                 break;
+            case "GetSignin":
+                dispatcher = request.getRequestDispatcher("WEB-INF/signin");
+                break;
             default:
                 break;
         }

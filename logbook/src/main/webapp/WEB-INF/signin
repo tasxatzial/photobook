@@ -1,0 +1,25 @@
+<div id="signin-section">
+  <div id="signin-parent">
+    <header>
+      <h2>Sign in</h2>
+    </header>
+    <div id="signin-content">
+      <div class="sign-tofill sign-child">
+        <label for="signin-username" class="sign-label">Username</label><br>
+        <div id="signin-photo-button-parent">
+          <input type="text" name="signin-username" id="signin-username" required>
+          <button type="button" class="signin-photo-button" disabled><img src="images/camera-icon.png" alt="Cam"></button>
+          <input type="file" id="file-input" name="name" style="display: none">
+        </div>
+      </div>
+      <div id="signin-password-parent" class="sign-tofill sign-child">
+        <label for="signin-password" class="sign-label">Password</label><br>
+        <input type="password" name="signin-password" id="signin-password" required>
+      </div>
+      <div id="signupin-msg"></div>
+      <div class="sign-button" id="signin-button">
+        <input type="button" value="Sign in" disabled>
+      </div>
+    </div>
+  </div>
+</div>
