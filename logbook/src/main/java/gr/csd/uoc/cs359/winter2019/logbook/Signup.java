@@ -52,6 +52,17 @@ public class Signup extends HttpServlet {
 
     }
 
+    protected boolean isValidDate(String date) {
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        try {
+            sdf.parse(date);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+    
     protected String getRegexPattern(String field) {
         switch(field) {
             case "username":
