@@ -16,12 +16,12 @@ var Signup = (function() {
   };
 
   function clickSignup(action) {
+    el.signinMsg.innerHTML = '';
     var invalidElement = checkInvalidElements();
     if (invalidElement) {
       ValidChecker.scrollToParent(invalidElement);
     }
     else if (el.username.isTaken === 1) {
-      console.log('taken');
       ValidChecker.scrollToParent(el.username);
     }
     else if (el.email.isTaken === 1) {

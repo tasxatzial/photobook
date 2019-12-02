@@ -3,7 +3,9 @@
 var ValidChecker = (function() {
 
   var state = {
-    inputs: []
+    inputs: [],
+    oldUsername: null,
+    oldEmail: null
   };
 
   function init() {
@@ -153,10 +155,10 @@ var ValidChecker = (function() {
             showInvalidMsg(x, x.invalidMsg);
             return;
           }
-          if (x.name === 'signup-username') {
+          if (x.name === 'signup-username' && username.value !== state.oldUsername) {
             checkTaken(username, action, successCallback, failCallback);
           }
-          if (x.name === 'signup-email') {
+          if (x.name === 'signup-email' && email.value !== state.oldEmail) {
             checkTaken(email, action, successCallback, failCallback);
           }
 

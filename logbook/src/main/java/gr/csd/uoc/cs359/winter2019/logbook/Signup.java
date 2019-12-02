@@ -128,7 +128,9 @@ public class Signup extends HttpServlet {
             }
         }
 
-        if ((jsonSignup.get("email").equals("") && oldSession == null)) {
+        if ((jsonSignup.get("email").equals("") && oldSession == null) ||
+                (oldSession != null && oldSession.getAttribute("username") != null &&
+                        !request.getParameter("email").equals(UserDB.getUser(request.getParameter("username")).getEmail()))) {
             request.setAttribute("CheckEmailDB", "1");
             dispatcher = request.getRequestDispatcher("CheckEmailDB");
             dispatcher.include(request, response);
@@ -175,8 +177,13 @@ public class Signup extends HttpServlet {
         user.setInterests(request.getParameter("interests"));
         user.setInfo(request.getParameter("about"));
 
-        UserDB.addUser(user);
-
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession != null && oldSession.getAttribute("username") != null) {
+            UserDB.updateUser(user);
+        }
+        else {
+            UserDB.addUser(user);
+        }
 
         user = UserDB.getUser(request.getParameter("username"));
         try (PrintWriter out = response.getWriter()) {

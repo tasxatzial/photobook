@@ -51,6 +51,7 @@ public class Main extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("CheckUsernameDB");
                 break;
             case "Signup":
+            case "UpdateAccount":
                 dispatcher = request.getRequestDispatcher("Signup");
                 break;
             case "Signin":
