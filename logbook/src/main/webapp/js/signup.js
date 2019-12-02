@@ -31,6 +31,8 @@ var Signup = (function() {
 
     });
 
+    ValidChecker.init();
+    
     if (action === 'Signup') {
       el.signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
       el.signinButton.addEventListener('click', function () {
