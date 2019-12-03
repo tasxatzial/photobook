@@ -33,6 +33,8 @@ public class Main extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession oldSession = request.getSession(false);
+
         RequestDispatcher dispatcher = null;
         switch(request.getParameter("action")) {
             case "GetLanding":
@@ -63,6 +65,12 @@ public class Main extends HttpServlet {
             case "AccountInfo":
                 request.setAttribute("accountInfo", "1");
                 dispatcher = request.getRequestDispatcher("AccountInfo");
+                break;
+            case "Logout":
+                if (oldSession != null) {
+                    oldSession.invalidate();
+                }
+                dispatcher = request.getRequestDispatcher("WEB-INF/landing");
                 break;
             default:
                 break;
