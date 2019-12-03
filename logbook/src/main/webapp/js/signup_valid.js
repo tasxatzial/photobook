@@ -84,6 +84,7 @@ var ValidChecker = (function() {
       element.checkedValid = 0;
       element.invalidMsg = 'Invalid';
       element.scrollElem = element;
+      element.oldValue = element.value;
       element.addEventListener('input', function (x) {
         return function () {
           signupMsg.innerHTML = '';
@@ -95,6 +96,9 @@ var ValidChecker = (function() {
       }(element));
       element.addEventListener('focusout', function (x) {
         return function () {
+          if (x.checkedValid) {
+            return;
+          }
           checkValid(x);
           if (x.value && !x.isValid) {
             showInvalidMsg(x, x.invalidMsg);
@@ -115,6 +119,9 @@ var ValidChecker = (function() {
       passwd2.addEventListener('focusout', checkMismatch);
 
       function checkMismatch() {
+        if (passwd1.checkedValid && passwd2.checkedValid) {
+          return;
+        }
         checkValid(passwd2);
         if (passwd1.value && passwd2.value && passwd1.isValid && !passwd2.isValid) {
           showInvalidMsg(passwd2, passwd2.invalidMsg);
@@ -147,6 +154,9 @@ var ValidChecker = (function() {
       }(element));
       element.addEventListener('focusout', function(x) {
         return function() {
+          if (x.checkedValid) {
+            return;
+          }
           checkValid(x);
           if (!x.value) {
             return;
