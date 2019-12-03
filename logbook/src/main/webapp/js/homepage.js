@@ -13,9 +13,7 @@ var Homepage = (function() {
     navbarContent.appendChild(allUsersButton);
 
     var logoutButton = newElements.createSignBarButton('Log out', 'logout-button');
-    logoutButton.addEventListener('click', function () {
-
-    });
+    logoutButton.addEventListener('click', logout);
     navbarContent.appendChild(logoutButton);
     logoutButton.style.marginLeft = 'auto';
 
