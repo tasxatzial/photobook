@@ -49,6 +49,7 @@ public class Main extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("WEB-INF/signin");
                 break;
             case "GetSignup":
+            case "AccountInfo":
                 dispatcher = request.getRequestDispatcher("AccountInfo");
                 break;
             case "CheckEmailDB":
@@ -62,19 +63,10 @@ public class Main extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("Signup");
                 break;
             case "Signin":
-                if (oldSession != null && oldSession.getAttribute("username") != null) {
-                    dispatcher = request.getRequestDispatcher("WEB-INF/homepage");
-                }
-                else {
-                    dispatcher = request.getRequestDispatcher("Signin");
-                }
+                dispatcher = request.getRequestDispatcher("Signin");
                 break;
             case "ShowAllUsers":
                 dispatcher = request.getRequestDispatcher("ShowAllUsers");
-                break;
-            case "AccountInfo":
-                request.setAttribute("accountInfo", "1");
-                dispatcher = request.getRequestDispatcher("AccountInfo");
                 break;
             case "Logout":
                 if (oldSession != null) {

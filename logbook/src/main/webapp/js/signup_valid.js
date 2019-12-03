@@ -155,10 +155,10 @@ var ValidChecker = (function() {
             showInvalidMsg(x, x.invalidMsg);
             return;
           }
-          if (x.name === 'signup-username' && username.value !== state.oldUsername) {
+          if (x.name === 'signup-username') {
             checkTaken(username, action, successCallback, failCallback);
           }
-          if (x.name === 'signup-email' && email.value !== state.oldEmail) {
+          if (x.name === 'signup-email') {
             checkTaken(email, action, successCallback, failCallback);
           }
 

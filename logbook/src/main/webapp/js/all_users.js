@@ -26,6 +26,11 @@ var ShowAllUsers = (function() {
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
 
+      if (state.xhrResponse.ERROR) {
+        logout();
+        return;
+      }
+
       state.pages = Object.keys(state.xhrResponse).length;
       el.userListParent = newElements.createUserListContainer(state.pages);
       addListeners();

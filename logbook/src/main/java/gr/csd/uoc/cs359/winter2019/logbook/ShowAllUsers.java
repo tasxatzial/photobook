@@ -39,9 +39,15 @@ public class ShowAllUsers extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException {
 
         response.setContentType("application/json;charset=UTF-8");
+        JSONObject json = new JSONObject();
         PrintWriter out = response.getWriter();
 
-        JSONObject json = new JSONObject();
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession == null || oldSession.getAttribute("username") == null) {
+            json.put("ERROR", "NO_SESSION");
+            out.print(json.toJSONString());
+        }
+
         JSONObject jsonPage = new JSONObject();
         List<String> usernames = UserDB.getAllUsersNames();
         int j = 1;

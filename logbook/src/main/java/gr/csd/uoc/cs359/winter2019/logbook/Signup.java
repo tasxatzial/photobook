@@ -49,6 +49,7 @@ public class Signup extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         JSONObject jsonSignup = new JSONObject();
+
         RequestDispatcher dispatcher;
 
         String passwd1 = request.getParameter("password");
@@ -119,7 +120,7 @@ public class Signup extends HttpServlet {
         }
 
         HttpSession oldSession = request.getSession(false);
-        if (jsonSignup.get("username").equals("") && oldSession == null) {
+        if (jsonSignup.get("username").equals("") && request.getParameter("action").equals("Signup")) {
             request.setAttribute("CheckUsernameDB", "1");
             dispatcher = request.getRequestDispatcher("CheckUsernameDB");
             dispatcher.include(request, response);
@@ -128,9 +129,10 @@ public class Signup extends HttpServlet {
             }
         }
 
-        if ((jsonSignup.get("email").equals("") && oldSession == null) ||
-                (oldSession != null && oldSession.getAttribute("username") != null &&
-                        !request.getParameter("email").equals(UserDB.getUser(request.getParameter("username")).getEmail()))) {
+        if (jsonSignup.get("email").equals("") &&
+                (oldSession == null || request.getParameter("action").equals("Signup") ||
+                !request.getParameter("action").equals("UpdateAccount")  ||
+                !request.getParameter("email").equals(UserDB.getUser(request.getParameter("username")).getEmail()))) {
             request.setAttribute("CheckEmailDB", "1");
             dispatcher = request.getRequestDispatcher("CheckEmailDB");
             dispatcher.include(request, response);

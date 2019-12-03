@@ -37,6 +37,13 @@ public class Signin extends HttpServlet {
 
         RequestDispatcher dispatcher = null;
 
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession != null && oldSession.getAttribute("username") != null) {
+            dispatcher = request.getRequestDispatcher("WEB-INF/homepage");
+            dispatcher.forward(request, response);
+        }
+
+
         JSONObject jsonSignin = new JSONObject();
         request.setAttribute("CheckUsernameDB", "1");
         dispatcher = request.getRequestDispatcher("CheckUsernameDB");
