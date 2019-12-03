@@ -10,12 +10,13 @@ var Signin = (function() {
   };
 
   function disableInputs(value) {
-    el.signinButton.disabled = value;
     if (value === true) {
+      formSubmit.disable(el.signinButton);
       formInput.disable(el.username);
       formInput.disable(el.password);
     }
     else {
+      formSubmit.enable(el.signinButton);
       formInput.enable(el.username);
       formInput.enable(el.password);
     }

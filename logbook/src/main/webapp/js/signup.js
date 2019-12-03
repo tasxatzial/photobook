@@ -27,7 +27,7 @@ var Signup = (function() {
     else if (el.email.isTaken === 1) {
       ValidChecker.scrollToParent(el.email);
     }
-    else {
+    else if (!el.signupButton.disabled) {
       doSignup(action);
     }
   }
@@ -64,14 +64,15 @@ var Signup = (function() {
       formInput.disable(el.gender[1]);
       formInput.disable(el.gender[2]);
       formInput.disable(el.address);
+      formSubmit.disable(el.signupButton);
     }
     else {
       formInput.enable(el.gender[0]);
       formInput.enable(el.gender[1]);
       formInput.enable(el.gender[2]);
       formInput.enable(el.address);
+      formSubmit.enable(el.signupButton);
     }
-    el.signupButton.disabled = value;
   }
 
   function doSignup(action) {

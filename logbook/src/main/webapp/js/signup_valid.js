@@ -24,6 +24,7 @@ var ValidChecker = (function() {
     var interests = document.querySelector('textarea[name="signup-interests"]');
     var about = document.querySelector('textarea[name="signup-about"]');
     var signupMsg = document.getElementById('signupin-msg');
+    var signupButton = document.querySelector('#signup-button input');
 
     /* collect all elements --------------------------------------- */
     state.inputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
@@ -165,6 +166,8 @@ var ValidChecker = (function() {
             showInvalidMsg(x, x.invalidMsg);
             return;
           }
+          console.log(2);
+          formSubmit.disable(signupButton);
           if (x.name === 'signup-username') {
             checkTaken(username, action, successCallback, failCallback);
           }
@@ -172,8 +175,11 @@ var ValidChecker = (function() {
             checkTaken(email, action, successCallback, failCallback);
           }
 
-          function successCallback() {}
+          function successCallback() {
+            formSubmit.enable(signupButton);
+          }
           function failCallback() {
+            formSubmit.enable(signupButton);
             showInvalidMsg(x, 'Error checking');
           }
         };

@@ -71,11 +71,11 @@ var funcApply = function(func, array) {
 /* style for enabled/disabled form submit button */
 var formSubmit = (function() {
   function enable(input) {
-    input.disable = false;
+    input.disabled = false;
     input.style.background ='linear-gradient(to bottom, #43628b, #324a69)';
   }
   function disable(input) {
-    input.disable = true;
+    input.disabled = true;
     input.style.background ='gray';
   }
 
