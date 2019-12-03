@@ -30,9 +30,9 @@
       </div>
       <div class="sign-tofill sign-child">
         <div class="flex-label">
-          <label for="signup-password-confirm" class="signup-necessary sign-label">Confirm Password</label>
+          <label for="signup-passwordConfirm" class="signup-necessary sign-label">Confirm Password</label>
         </div>
-        <input type="password" value="<%= (String) request.getAttribute("password")%>" name="signup-password-confirm" id="signup-password-confirm" required>
+        <input type="password" value="<%= (String) request.getAttribute("password")%>" name="signup-passwordConfirm" id="signup-passwordConfirm" required>
       </div>
       <div class="sign-tofill sign-child">
         <div class="flex-label">

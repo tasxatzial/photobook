@@ -48,9 +48,7 @@ public class Signup extends HttpServlet {
 
         response.setContentType("application/json;charset=UTF-8");
 
-        JSONObject jsonSignup = new JSONObject();
-
-        RequestDispatcher dispatcher;
+        JSONObject jsonSignup = checkFields(request);
 
         String passwd1 = request.getParameter("password");
         Enumeration paramNames = request.getParameterNames();
@@ -73,7 +71,7 @@ public class Signup extends HttpServlet {
                         jsonSignup.put(paramName, "");
                     }
                     break;
-                case "password-confirm":
+                case "passwordConfirm":
                     if (passwd1.matches(getRegexPattern("password")) &&
                             !passwd1.equals(paramValues[0])) {
                         jsonSignup.put(paramName, "Passwords don't match");
@@ -119,6 +117,7 @@ public class Signup extends HttpServlet {
             }
         }
 
+        RequestDispatcher dispatcher;
         HttpSession oldSession = request.getSession(false);
         if (jsonSignup.get("username").equals("") && request.getParameter("action").equals("Signup")) {
             request.setAttribute("CheckUsernameDB", "1");
@@ -160,6 +159,22 @@ public class Signup extends HttpServlet {
             doSignup(request, response);
         }
 
+    }
+
+    protected JSONObject checkFields(HttpServletRequest request) {
+        JSONObject json = new JSONObject();
+        String[] fields = new String[]{
+                "username", "password", "passwordConfirm", "email",
+                "firstName", "lastName", "birthDate", "country", "city",
+                "address", "job", "gender", "interests", "about" };
+
+        for (int i = 0; i < fields.length; i++) {
+            if (request.getParameter(fields[i]) == null) {
+                json.put(fields[i], "Missing value");
+            }
+        }
+
+        return json;
     }
 
     protected void doSignup(HttpServletRequest request, HttpServletResponse response)

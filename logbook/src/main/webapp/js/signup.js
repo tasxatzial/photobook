@@ -159,7 +159,7 @@ var Signup = (function() {
     el.dataNames = {
       "username": "Username",
       "password": "Password",
-      "password-confirm": "Confirm Password",
+      "passwordConfirm": "Confirm Password",
       "email": "Email",
       "firstName": "First name",
       "lastName": "Last name",

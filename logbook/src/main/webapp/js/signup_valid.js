@@ -14,7 +14,7 @@ var ValidChecker = (function() {
     var username = document.getElementById('signup-username');
     var email = document.getElementById('signup-email');
     var passwd1 = document.getElementById('signup-password');
-    var passwd2 = document.getElementById('signup-password-confirm');
+    var passwd2 = document.getElementById('signup-passwordConfirm');
     var firstName = document.getElementById('signup-firstName');
     var lastName = document.getElementById('signup-lastName');
     var occupation = document.getElementById('signup-job');
@@ -79,7 +79,7 @@ var ValidChecker = (function() {
     addValidPatternListeners(interests);
     addValidPatternListeners(about);
 
-    /* regex validation listeners for all elements besides username, email, password-confirm */
+    /* regex validation listeners for all elements besides username, email, passwordConfirm */
     function addValidPatternListeners(element) {
       element.checkedValid = 0;
       element.invalidMsg = 'Invalid';
@@ -107,7 +107,7 @@ var ValidChecker = (function() {
       }(element));
     }
 
-    /* same value listeners for password and password-confirm */
+    /* same value listeners for password and passwordConfirm */
     function addPasswdConfirmListeners() {
       passwd1.addEventListener('input', clearMismatchMsg);
       passwd1.addEventListener('focusout', checkMismatch);

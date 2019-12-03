@@ -43,12 +43,11 @@ public class Signin extends HttpServlet {
             dispatcher.forward(request, response);
         }
 
-
         JSONObject jsonSignin = new JSONObject();
         request.setAttribute("CheckUsernameDB", "1");
         dispatcher = request.getRequestDispatcher("CheckUsernameDB");
         dispatcher.include(request, response);
-        if (request.getAttribute("username").equals("0")) {
+        if (request.getParameter("username") != null && request.getAttribute("username").equals("0")) {
             jsonSignin.put("username", "1");
             String password = request.getParameter("password");
             String username = request.getParameter("username");
