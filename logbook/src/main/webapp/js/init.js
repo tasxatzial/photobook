@@ -14,7 +14,7 @@
       Landing.init();
     }
     else {
-
+      Homepage.init();
     }
   }
 

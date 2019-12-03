@@ -38,7 +38,12 @@ public class Main extends HttpServlet {
         RequestDispatcher dispatcher = null;
         switch(request.getParameter("action")) {
             case "GetLanding":
-                dispatcher = request.getRequestDispatcher("WEB-INF/landing");
+                if (oldSession != null && oldSession.getAttribute("username") != null) {
+                    dispatcher = request.getRequestDispatcher("WEB-INF/homepage");
+                }
+                else {
+                    dispatcher = request.getRequestDispatcher("WEB-INF/landing");
+                }
                 break;
             case "GetSignin":
                 dispatcher = request.getRequestDispatcher("WEB-INF/signin");
@@ -57,7 +62,12 @@ public class Main extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("Signup");
                 break;
             case "Signin":
-                dispatcher = request.getRequestDispatcher("Signin");
+                if (oldSession != null && oldSession.getAttribute("username") != null) {
+                    dispatcher = request.getRequestDispatcher("WEB-INF/homepage");
+                }
+                else {
+                    dispatcher = request.getRequestDispatcher("Signin");
+                }
                 break;
             case "ShowAllUsers":
                 dispatcher = request.getRequestDispatcher("ShowAllUsers");
