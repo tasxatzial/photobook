@@ -8,7 +8,7 @@ for displaying the image. To trigger the file selection
 dialog, the click() method must be called with an argument
 that is the function that will be called when the image
 has finished loading on the DOM */
-var PhotoPicker = function(photoContainer, fileInput) {
+function PhotoPicker(photoContainer, fileInput) {
   var state = {
     photob64: null,
     callback: null
@@ -62,7 +62,6 @@ var PhotoPicker = function(photoContainer, fileInput) {
     };
   }
 
-
   function getPhotob64() {
     return state.photob64;
   }
@@ -73,6 +72,8 @@ var PhotoPicker = function(photoContainer, fileInput) {
   }
 
   (function init() {
+    state.photob64 = null;
+    state.callback = null;
 
     /* necessary so that the onchange event fires if the same
     file is selected twice in a row. This is necessary in the following scenario:
@@ -87,7 +88,6 @@ var PhotoPicker = function(photoContainer, fileInput) {
 
     /* fires when a file is selected */
     fileInput.onchange = function(event) {
-      
       var file = event.target.files[0];
       if (file) { //when OK is pressed
         displayImage(file);
@@ -100,4 +100,4 @@ var PhotoPicker = function(photoContainer, fileInput) {
     click: click,
     getPhotob64: getPhotob64
   };
-};
+}

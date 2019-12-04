@@ -1,3 +1,5 @@
+'use strict';
+
 var ShowAccountInfo = (function() {
   var state = {
     xhr: null,

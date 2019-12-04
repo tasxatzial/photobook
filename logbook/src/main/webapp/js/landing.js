@@ -1,3 +1,5 @@
+'use strict';
+
 var Landing = (function() {
 
   var el = {

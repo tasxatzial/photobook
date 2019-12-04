@@ -61,24 +61,18 @@ public class CheckUsernameDB extends HttpServlet {
         if (request.getAttribute("username").equals("1")) {
             json.put("username", "1");
         }
-        else if (request.getAttribute("username").equals("0")) {
-            json.put("username", "0");
-        }
         else {
-            json.put("username", "-1");
+            json.put("username", "0");
         }
     }
 
     protected void checkUsername(HttpServletRequest request, String username) throws ClassNotFoundException {
-        int validUsername = UserDB.checkValidUserName(username);
-        if (validUsername == 0) {
+        boolean validUsername = UserDB.checkValidUserName(username);
+        if (!validUsername) {
             request.setAttribute("username", "0");
         }
-        else if (validUsername == 1) {
-            request.setAttribute("username", "1");
-        }
         else {
-            request.setAttribute("username", "-1");
+            request.setAttribute("username", "1");
         }
     }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 /*  face recognition that is based on faceplusplus service */
-var FaceAPI = function () {
+var FaceAPI = (function() {
 
   // Object that holds anything related with the facetPlusPlus REST API Service
   var faceAPI = {
@@ -314,4 +314,4 @@ var FaceAPI = function () {
     analyze: analyze,
     emotionReply: emotionReply
   };
-};
+}());

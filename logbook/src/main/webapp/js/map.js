@@ -5,7 +5,7 @@ function OLMap(divId) {
   var state = {
 
     /* the map element */
-    obj: new OpenLayers.Map(divId),
+    obj: null,
 
     /* the markers for the locations */
     markers: null,
@@ -25,10 +25,12 @@ function OLMap(divId) {
     projection4326: null
   };
 
-  /* basic initialization */
-  state.obj.addLayer(new OpenLayers.Layer.OSM());
-  state.projection = state.obj.getProjectionObject();
-  state.projection4326 = new OpenLayers.Projection('EPSG:4326');
+  (function init() {
+    state.obj = new OpenLayers.Map(divId);
+    state.obj.addLayer(new OpenLayers.Layer.OSM());
+    state.projection = state.obj.getProjectionObject();
+    state.projection4326 = new OpenLayers.Projection('EPSG:4326');
+  }());
 
   function getDiv() {
     return state.obj.div;

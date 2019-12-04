@@ -1,3 +1,5 @@
+'use strict';
+
 var Homepage = (function() {
 
   function init() {

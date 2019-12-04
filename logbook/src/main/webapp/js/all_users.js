@@ -1,3 +1,5 @@
+'use strict';
+
 var ShowAllUsers = (function() {
   var state = {
     xhr: null,
@@ -98,7 +100,7 @@ var ShowAllUsers = (function() {
       if (el.userListParent.children[0].children[1]) {
         el.userListParent.children[0].removeChild(el.userListParent.children[0].children[1]);
       }
-      var userPage = newElements.createAccountDetails(state.xhrResponse[pageNo], null, false);
+      var userPage = newElements.createSignupSummary(state.xhrResponse[pageNo], null, false);
       el.userListParent.children[0].appendChild(userPage);
     }
   }

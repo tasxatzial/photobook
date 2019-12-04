@@ -394,8 +394,8 @@ public class UserDB {
         }
     }
 
-    public static int checkValidUserName(String userName) throws ClassNotFoundException {
-        int valid = -1;
+    public static boolean checkValidUserName(String userName) throws ClassNotFoundException {
+        boolean valid = true;
         Statement stmt = null;
         Connection con = null;
         try {
@@ -413,10 +413,7 @@ public class UserDB {
 
             if (stmt.getResultSet().next() == true) {
                 System.out.println("#DB: The member already exists");
-                valid = 0;
-            }
-            else {
-                valid = 1;
+                valid = false;
             }
 
         } catch (SQLException ex) {
@@ -430,8 +427,8 @@ public class UserDB {
         return valid;
     }
 
-    public static int checkValidEmail(String email) throws ClassNotFoundException {
-        int valid = -1;
+    public static boolean checkValidEmail(String email) throws ClassNotFoundException {
+        boolean valid = true;
         Statement stmt = null;
         Connection con = null;
         try {
@@ -447,11 +444,8 @@ public class UserDB {
 
             stmt.execute(insQuery.toString());
             if (stmt.getResultSet().next() == true) {
-                System.out.println("#DB: The member already exists");
-                valid = 0;
-            }
-            else {
-                valid = 1;
+                System.out.println("#DB: The member alreadyExists");
+                valid = false;
             }
 
         } catch (SQLException ex) {

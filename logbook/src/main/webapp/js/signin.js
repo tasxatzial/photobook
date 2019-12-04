@@ -1,3 +1,5 @@
+'use strict';
+
 var Signin = (function() {
   var el = {
     signinButton: null,
@@ -9,17 +11,16 @@ var Signin = (function() {
     nonav: null
   };
 
-  function disableInputs(value) {
-    if (value === true) {
-      formSubmit.disable(el.signinButton);
-      formInput.disable(el.username);
-      formInput.disable(el.password);
-    }
-    else {
-      formSubmit.enable(el.signinButton);
-      formInput.enable(el.username);
-      formInput.enable(el.password);
-    }
+  function disableInputs() {
+    formSubmit.disable(el.signinButton);
+    formInput.disable(el.username);
+    formInput.disable(el.password);
+  }
+
+  function enableInputs() {
+    formSubmit.enable(el.signinButton);
+    formInput.enable(el.username);
+    formInput.enable(el.password);
   }
 
   function doSignin() {
@@ -27,7 +28,7 @@ var Signin = (function() {
       xhr: null
     };
 
-    disableInputs(true);
+    disableInputs();
 
     /* prepare data */
     var data = new FormData();
@@ -48,9 +49,8 @@ var Signin = (function() {
         else {
           invalid = 'password';
         }
-        el.signinMsg.innerHTML = 'Invalid ' + invalid;
-        el.signinMsg.style.color = 'red';
-        disableInputs(false);
+        formMsg.showError(el.signinMsg, 'Invalid ' + invalid);
+        enableInputs();
       }
       else {
         el.nonav.innerHTML = state.xhr.responseText;
@@ -60,7 +60,7 @@ var Signin = (function() {
     }
 
     function failCallback() {
-      disableInputs(false);
+      enableInputs();
       console.log(state.xhr.responseText);
     }
   }
@@ -75,9 +75,15 @@ var Signin = (function() {
     el.nonav = document.getElementById('no-nav');
     el.signupButton = newElements.createSignBarButton('Sign up', 'signup-nav-button');
 
-    el.username.addEventListener('input', function() {el.signinMsg.innerHTML = '';});
-    el.password.addEventListener('input', function() {el.signinMsg.innerHTML = '';});
-    el.signinButton.addEventListener('click', function() {el.signinMsg.innerHTML = '';});
+    el.username.addEventListener('input', function() {
+      el.signinMsg.innerHTML = '';
+    });
+    el.password.addEventListener('input', function() {
+      el.signinMsg.innerHTML = '';
+    });
+    el.signinButton.addEventListener('click', function() {
+      el.signinMsg.innerHTML = '';
+    });
     el.signinButton.addEventListener('click', doSignin);
     el.signupButton.addEventListener('click', function () {
       el.signupButton.disabled = true;
@@ -86,6 +92,8 @@ var Signin = (function() {
     el.signupButton.style.marginLeft = 'auto';
     el.signinButton.disabled = false;
     el.navbarContent.appendChild(el.signupButton);
+    
+    SignInFace.init();
   }
 
   return {

@@ -59,24 +59,18 @@ public class CheckEmailDB extends HttpServlet {
         if (request.getAttribute("email").equals("0")) {
             json.put("email", "0");
         }
-        else if (request.getAttribute("email").equals("1")) {
-            json.put("email", "1");
-        }
         else {
-            json.put("email", "-1");
+            json.put("email", "1");
         }
     }
 
     protected void checkEmail(HttpServletRequest request, String email) throws ClassNotFoundException {
-        int validEmail = UserDB.checkValidEmail(email);
-        if (validEmail == 0) {
+        boolean validEmail = UserDB.checkValidEmail(email);
+        if (!validEmail) {
             request.setAttribute("email", "0");
         }
-        else if (validEmail == 1) {
-            request.setAttribute("email", "1");
-        }
         else {
-            request.setAttribute("email", "-1");
+            request.setAttribute("email", "1");
         }
     }
 

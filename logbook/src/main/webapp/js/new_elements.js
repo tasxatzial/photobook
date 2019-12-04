@@ -96,7 +96,7 @@ var newElements = (function NewElements() {
     return msg;
   }
 
-  function createAccountDetails(response, dataNames, skipEmpty) {
+  function createSignupSummary(response, dataNames, skipEmpty) {
     var div = document.createElement('div');
     Object.keys(response).forEach(function(key, index) {
       if (skipEmpty !== true || response[key] !== '') {
@@ -122,6 +122,7 @@ var newElements = (function NewElements() {
 
   function createSelectPage(pages) {
     var select = document.createElement('select');
+    select.className = "sign-tofill";
     var option = null;
     for (var i = 1; i <= pages; i++) {
       option = document.createElement('option');
@@ -186,8 +187,7 @@ var newElements = (function NewElements() {
     createLoader: createLoader,
     createSignBarButton: createSignBarButton,
     createInvalidValueMsg: createInvalidValueMsg,
-    createAccountDetails: createAccountDetails,
-    createSelectPage: createSelectPage,
+    createSignupSummary: createSignupSummary,
     createImgButton: createImgButton,
     createUserListContainer: createUserListContainer
   };

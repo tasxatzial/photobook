@@ -1,3 +1,5 @@
+'use strict';
+
 var Signup = (function() {
 
   var el = {
@@ -34,7 +36,7 @@ var Signup = (function() {
 
   function gatherData() {
     var data = new FormData();
-    var inputs = ValidChecker.getInputs();
+    var inputs = ValidChecker.getCheckedInputs();
     for (var i = 0; i < inputs.length; i++) {
       data.append(inputs[i].name.split('-')[1], inputs[i].value);
     }
@@ -49,30 +51,30 @@ var Signup = (function() {
     return data;
   }
 
-  function disableInputs(value, action) {
-    var inputs = ValidChecker.getInputs();
+  function enableInputs(action) {
+    var inputs = ValidChecker.getCheckedInputs();
     for (var i = 0; i < inputs.length; i++) {
-      if (value === true) {
-        formInput.disable(inputs[i]);
-      }
-      else if (action === 'Signup' || inputs[i].name !== "signup-username") {
+      if (action === 'Signup' || inputs[i].name !== "signup-username") {
         formInput.enable(inputs[i]);
       }
     }
-    if (value === true) {
-      formInput.disable(el.gender[0]);
-      formInput.disable(el.gender[1]);
-      formInput.disable(el.gender[2]);
-      formInput.disable(el.address);
-      formSubmit.disable(el.signupButton);
+    formInput.enable(el.gender[0]);
+    formInput.enable(el.gender[1]);
+    formInput.enable(el.gender[2]);
+    formInput.enable(el.address);
+    formSubmit.enable(el.signupButton);
+  }
+
+  function disableInputs() {
+    var inputs = ValidChecker.getCheckedInputs();
+    for (var i = 0; i < inputs.length; i++) {
+      formInput.disable(inputs[i]);
     }
-    else {
-      formInput.enable(el.gender[0]);
-      formInput.enable(el.gender[1]);
-      formInput.enable(el.gender[2]);
-      formInput.enable(el.address);
-      formSubmit.enable(el.signupButton);
-    }
+    formInput.disable(el.gender[0]);
+    formInput.disable(el.gender[1]);
+    formInput.disable(el.gender[2]);
+    formInput.disable(el.address);
+    formSubmit.disable(el.signupButton);
   }
 
   function doSignup(action) {
@@ -80,7 +82,7 @@ var Signup = (function() {
       xhr: null
     };
 
-    disableInputs(true, action);
+    disableInputs();
 
     var data = gatherData();
 
@@ -94,7 +96,7 @@ var Signup = (function() {
       if (action === 'Signup') {
         var response = JSON.parse(state.xhr.responseText);
         var accountInfoTitle = document.createElement('p');
-        var accountInfo = newElements.createAccountDetails(response, el.dataNames, false);
+        var accountInfo = newElements.createSignupSummary(response, el.dataNames, false);
         el.header.innerHTML = 'Success';
         el.signupSection.style.minHeight = '60rem';
         accountInfoTitle.innerHTML = 'You provided the following information: ';
@@ -103,10 +105,9 @@ var Signup = (function() {
         el.signupContent.appendChild(accountInfo);
       }
       else {
-        el.signinMsg.innerHTML = 'Success';
-        el.signinMsg.style.color = 'green';
+        formMsg.showOK(el.signinMsg, 'Success');
       }
-      disableInputs(false, action);
+      enableInputs(action);
     }
 
     function failCallback(action) {
@@ -122,17 +123,17 @@ var Signup = (function() {
         el.signupContent.appendChild(errorMsg);
       } else {
         var response = JSON.parse(state.xhr.responseText);
-        var accountInfo = newElements.createAccountDetails(response, el.dataNames, true);
+        var accountInfo = newElements.createSignupSummary(response, el.dataNames, true);
         el.header.innerHTML = state.xhr.status + ' - Bad Request';
         el.signupSection.style.minHeight = '43rem';
         el.signupContent.appendChild(accountInfo);
       }
-      disableInputs(false, action);
+      enableInputs(action);
     }
   }
 
   function checkInvalidElements() {
-    var inputs = ValidChecker.getInputs();
+    var inputs = ValidChecker.getCheckedInputs();
     var topElement = null;
     for (var j = 0; j < inputs.length; j++) {
       ValidChecker.checkValid(inputs[j]);
@@ -175,6 +176,9 @@ var Signup = (function() {
     };
 
     ValidChecker.init();
+    SignUpLocation.init();
+    SignUpFace.init();
+    
     el.signupButton.addEventListener('click', function () {
       clickSignup(action);
     });

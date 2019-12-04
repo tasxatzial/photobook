@@ -1,3 +1,5 @@
+'use strict';
+
 function logout() {
   var state = {
     xhr: null

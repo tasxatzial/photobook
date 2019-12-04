@@ -41,7 +41,7 @@ public class AccountInfo extends HttpServlet {
             User user = UserDB.getUser((String) oldSession.getAttribute("username"));
             request.setAttribute("username", oldSession.getAttribute("username"));
             request.setAttribute("password", user.getPassword());
-            request.setAttribute("password-confirm", user.getPassword());
+            request.setAttribute("passwordConfirm", user.getPassword());
             request.setAttribute("email", user.getEmail());
             request.setAttribute("firstName", user.getFirstName());
             request.setAttribute("lastName", user.getLastName());
@@ -62,7 +62,7 @@ public class AccountInfo extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             request.setAttribute("username", "");
             request.setAttribute("password", "");
-            request.setAttribute("password-confirm", "");
+            request.setAttribute("passwordConfirm", "");
             request.setAttribute("email", "");
             request.setAttribute("firstName", "");
             request.setAttribute("lastName", "");

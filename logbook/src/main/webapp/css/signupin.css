@@ -18,7 +18,7 @@
 }
 
 /* input boxes except radio buttons */
-.sign-tofill input, textarea, select {
+.sign-tofill {
   background-color: #f5fdff;
   border: 1px solid silver;
   border-radius: 3px;

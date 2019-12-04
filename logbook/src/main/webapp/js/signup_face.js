@@ -1,25 +1,13 @@
 'use strict';
 
 /*  face recognition controller */
-var signUpFace = function () {
+var SignUpFace = (function () {
 
   var state = {
-
-    /* hidden photo section that appears when checkbox is clicked */
-    photoSection: null,
-
     photoSectionVisible: false,
-    uploadMsgParent: null,
-    uploadButton: null,
-    photoParent: null,
-    selectButton: null,
 
-    /* class that controls the select photo button and the display
-    of the image */
+    /* class that controls the select photo button and the display of the image */
     photoPicker: null,
-  
-    /* face++ object */
-    facePlus: null,
 
     /* true when setID or addFace fail */
     fail: false,
@@ -34,6 +22,20 @@ var signUpFace = function () {
     addFace: null
   };
 
+  var el = {
+    username: null,
+    checkBox: null,
+    photoSectionParent: null,
+
+    /* hidden photo section that appears when checkbox is clicked */
+    photoSection: null,
+
+    uploadMsgParent: null,
+    uploadButton: null,
+    photoParent: null,
+    selectButton: null
+  };
+
   /* called from task setID or addFace when they succeed.
   Will return immediately if:
   1) the other task has failed -> photo uploading result: fail
@@ -45,11 +47,11 @@ var signUpFace = function () {
       return;
     }
 
-    formMsg.showOK(state.uploadMsgParent, 'Success');
-    formButton.disable(state.uploadButton);
-    formInput.enable(username);
-    formButton.enable(state.selectButton);
-    checkBox.disabled = false;
+    formMsg.showOK(el.uploadMsgParent, 'Success');
+    formButton.disable(el.uploadButton);
+    formInput.enable(el.username);
+    formButton.enable(el.selectButton);
+    el.checkBox.disabled = false;
   }
 
   /* called from task setID or addFace when they fail, the errMsg is
@@ -61,11 +63,11 @@ var signUpFace = function () {
     if (!state.fail) {
       state.fail = true;
 
-      formMsg.showError(state.uploadMsgParent, state.facePlus.shortMsg(errMsg));
-      formInput.enable(username);
-      formButton.enable(state.selectButton);
-      formButton.enable(state.uploadButton);
-      checkBox.disabled = false;
+      formMsg.showError(el.uploadMsgParent, FaceAPI.shortMsg(errMsg));
+      formInput.enable(el.username);
+      formButton.enable(el.selectButton);
+      formButton.enable(el.uploadButton);
+      el.checkBox.disabled = false;
     }
   }
 
@@ -74,26 +76,26 @@ var signUpFace = function () {
   function detectSuccess() {
     var faceToken = tasks.detect.getToken();
     if (!faceToken) {
-      formMsg.showError(state.uploadMsgParent, 'No face detected');
-      formButton.enable(state.selectButton);
-      formInput.enable(username);
-      checkBox.disabled = false;
+      formMsg.showError(el.uploadMsgParent, 'No face detected');
+      formButton.enable(el.selectButton);
+      formInput.enable(el.username);
+      el.checkBox.disabled = false;
     }
     else {
       state.ended = false;
       state.fail = false;
-      tasks.setID = state.facePlus.setID(username.value, faceToken, taskSuccess, taskFail);
-      tasks.addFace = state.facePlus.addFace(faceToken, taskSuccess, taskFail);
+      tasks.setID = FaceAPI.setID(el.username.value, faceToken, taskSuccess, taskFail);
+      tasks.addFace = FaceAPI.addFace(faceToken, taskSuccess, taskFail);
     }
   }
 
   /* called when ajax request for detect fails -> photo uploading result: fail */
   function detectFail() {
-    formInput.enable(username);
-    formButton.enable(state.selectButton);
-    formButton.enable(state.uploadButton);
-    checkBox.disabled = false;
-    formMsg.showError(state.uploadMsgParent, state.facePlus.shortMsg(tasks.detect.getErrorMsg()));
+    formInput.enable(el.username);
+    formButton.enable(el.selectButton);
+    formButton.enable(el.uploadButton);
+    el.checkBox.disabled = false;
+    formMsg.showError(el.uploadMsgParent, FaceAPI.shortMsg(tasks.detect.getErrorMsg()));
   }
 
   /* the first request to the face++ service, called every time
@@ -101,12 +103,12 @@ var signUpFace = function () {
   function detect() {
     var photo = state.photoPicker.getPhotob64();
     var loader = newElements.createLoader('images/loader.gif');
-    formMsg.showElement(state.uploadMsgParent, loader);
-    formInput.disable(username);
-    formButton.disable(state.selectButton);
-    formButton.disable(state.uploadButton);
-    checkBox.disabled = true;
-    tasks.detect = state.facePlus.detect(photo, detectSuccess, detectFail);
+    formMsg.showElement(el.uploadMsgParent, loader);
+    formInput.disable(el.username);
+    formButton.disable(el.selectButton);
+    formButton.disable(el.uploadButton);
+    el.checkBox.disabled = true;
+    tasks.detect = FaceAPI.detect(photo, detectSuccess, detectFail);
   }
 
   /* called every time the select photo button is clicked */
@@ -116,10 +118,10 @@ var signUpFace = function () {
     1) The selected photo is not an accepted format
     2) The selected photo is loaded on the DOM */
     state.photoPicker.click(function(){
-      formMsg.clear(state.uploadMsgParent);
+      formMsg.clear(el.uploadMsgParent);
       var photo = state.photoPicker.getPhotob64();
       if (photo) {
-        formButton.enable(state.uploadButton);
+        formButton.enable(el.uploadButton);
       }
     });
   }
@@ -128,29 +130,28 @@ var signUpFace = function () {
   function toggleControl() {
 
     /* initialize the photo section once */
-    if (!state.photoSection) {
-      state.facePlus = new FaceAPI();
-      state.photoSection = newElements.createSignUpPhotoSection();
-      photoSectionParent.appendChild(state.photoSection);
-      state.selectButton = document.getElementById('signup-pick-photo-button');
-      state.uploadButton = document.getElementById('signup-upload-photo-button');
-      state.uploadButton.addEventListener('click', detect);
-      state.uploadMsgParent = document.getElementById('signup-upload-photo-msg');
-      state.photoParent = document.getElementById('signup-photo-parent');
+    if (!el.photoSection) {
+      el.photoSection = newElements.createSignUpPhotoSection();
+      el.photoSectionParent.appendChild(el.photoSection);
+      el.selectButton = document.getElementById('signup-pick-photo-button');
+      el.uploadButton = document.getElementById('signup-upload-photo-button');
+      el.uploadButton.addEventListener('click', detect);
+      el.uploadMsgParent = document.getElementById('signup-upload-photo-msg');
+      el.photoParent = document.getElementById('signup-photo-parent');
       var fileInput = document.getElementById('file-input');
-      state.photoPicker = new PhotoPicker(state.photoParent, fileInput);
-      state.selectButton.addEventListener('click', pickNewImage);
-      formButton.enable(state.selectButton);
+      state.photoPicker = new PhotoPicker(el.photoParent, fileInput);
+      el.selectButton.addEventListener('click', pickNewImage);
+      formButton.enable(el.selectButton);
     }
 
     /* toggle the visibility of the photo section */
     if (state.photoSectionVisible) {
       initphotoSection();
-      photoSectionParent.removeChild(state.photoSection);
+      el.photoSectionParent.removeChild(el.photoSection);
       state.photoSectionVisible = false;
     }
     else {
-      photoSectionParent.appendChild(state.photoSection);
+      el.photoSectionParent.appendChild(el.photoSection);
       state.photoSectionVisible = true;
     }
   }
@@ -159,36 +160,45 @@ var signUpFace = function () {
   1) user types a username
   2) user clicks the checkbox/label to hide the photo section */
   function initphotoSection() {
-    formMsg.clear(state.uploadMsgParent);
-    formButton.disable(state.uploadButton);
-    formButton.enable(state.selectButton);
+    formMsg.clear(el.uploadMsgParent);
+    formButton.disable(el.uploadButton);
+    formButton.enable(el.selectButton);
     state.photoPicker.clearPhoto();
   }
 
   /* check if username value permits to access the photo section.
   called every time user types in username box */
-  function usernameCheck() {
+  function usernameCheck(usernameRegex) {
     if (state.photoSectionVisible) {
       initphotoSection();
-      photoSectionParent.removeChild(state.photoSection);
+      el.photoSectionParent.removeChild(el.photoSection);
       state.photoSectionVisible = false;
-      checkBox.checked = false;
+      el.checkBox.checked = false;
     }
-    checkBox.disabled = !usernameRegex.test(username.value);
+    el.checkBox.disabled = !usernameRegex.test(el.username.value);
   }
 
-  var username = document.getElementById('signup-username');
-  var checkBox = document.querySelector('#signup-photo-section input');
-  var photoSectionParent = document.getElementById('signup-photo-section');
-  var usernameRegex = new RegExp(username.pattern);
+  function init() {
+    state.photoSectionVisible = false;
+    el.username = document.getElementById('signup-username');
+    el.checkBox = document.querySelector('#signup-photo-section input');
+    el.photoSectionParent = document.getElementById('signup-photo-section');
+    var usernameRegex = new RegExp(el.username.pattern);
 
-  username.addEventListener('input', usernameCheck);
-  checkBox.addEventListener('click', toggleControl);
+    el.username.addEventListener('input', function () {
+      usernameCheck(usernameRegex);
+    });
+    el.checkBox.addEventListener('click', toggleControl);
 
-  if (checkBox.checked) { //firefox remembers its state when page is reloaded
-    checkBox.checked = false;
+    if (el.checkBox.checked) { //firefox remembers its state when page is reloaded
+      el.checkBox.checked = false;
+    }
+    if (usernameRegex.test(el.username.value)) {
+      el.checkBox.disabled = false;
+    }
   }
-  if (usernameRegex.test(username.value)) {
-    checkBox.disabled = false;
-  }
-};
+  
+  return {
+    init: init
+  };
+}());

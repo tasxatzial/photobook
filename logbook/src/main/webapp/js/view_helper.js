@@ -62,12 +62,6 @@ var formInput = (function() {
   };
 }());
 
-var funcApply = function(func, array) {
-  for (var i = 0; i < array.length; i++) {
-    func(array[i]);
-  }
-};
-
 /* style for enabled/disabled form submit button */
 var formSubmit = (function() {
   function enable(input) {

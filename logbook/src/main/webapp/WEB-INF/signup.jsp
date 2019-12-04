@@ -1,17 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-
 <div id="signup-section">
   <div id="signup-parent">
     <header>
       <h2><%= (String) request.getAttribute("title") %></h2>
     </header>
     <div id="signup">
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <label for="signup-username" class="signup-necessary sign-label">Username</label>
         </div>
-        <input type="text" value="<%= (String) request.getAttribute("username")%>" name="signup-username" id="signup-username" pattern="^[A-Za-z]{8,}$" required>
+        <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("username")%>" name="signup-username" id="signup-username" pattern="^[A-Za-z]{8,}$" required>
         <p class="signup-require-info">At least 8 characters, only letters</p>
       </div>
       <div class="sign-child signup-subsection" id="signup-photo-section">
@@ -21,45 +20,45 @@
           </label>
         </p>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <label for="signup-password" class="signup-necessary sign-label">Password</label>
         </div>
-        <input type="password" value="<%= (String) request.getAttribute("password")%>" name="signup-password" id="signup-password" pattern="^[\w0-9!#$%&'*+/=?^`{|}\[\]_\\~<>., -]{8,10}$" required>
+        <input type="password" class="sign-tofill" value="<%= (String) request.getAttribute("password")%>" name="signup-password" id="signup-password" pattern="^[\w0-9!#$%&'*+/=?^`{|}\[\]_\\~<>., -]{8,10}$" required>
         <p class="signup-require-info">8 to 10 characters</p>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <label for="signup-passwordConfirm" class="signup-necessary sign-label">Confirm Password</label>
         </div>
-        <input type="password" value="<%= (String) request.getAttribute("password")%>" name="signup-passwordConfirm" id="signup-passwordConfirm" required>
+        <input type="password" class="sign-tofill" value="<%= (String) request.getAttribute("password")%>" name="signup-passwordConfirm" id="signup-passwordConfirm" required>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <label for="signup-email" class="signup-necessary sign-label">E-mail</label>
         </div>
-        <input type="email" value="<%= (String) request.getAttribute("email")%>" name="signup-email" id="signup-email"
+        <input type="email" class="sign-tofill" value="<%= (String) request.getAttribute("email")%>" name="signup-email" id="signup-email"
                pattern="^[\w!#$%&'*+/=?^`{|}~-]+(?:\.[\w!#$%&'*+/=?^`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$" required>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <label for="signup-firstName" class="signup-necessary sign-label">First name</label>
         </div>
-        <input type="text" value="<%= (String) request.getAttribute("firstName")%>" name="signup-firstName" id="signup-firstName" pattern="^[^0-9!#$%&'*+/=?^`{|}\[\]_\\~<>.,-]{3,15}$" required>
+        <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("firstName")%>" name="signup-firstName" id="signup-firstName" pattern="^[^0-9!#$%&'*+/=?^`{|}\[\]_\\~<>.,-]{3,15}$" required>
         <p class="signup-require-info">3 to 15 characters</p>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <label for="signup-lastName" class="signup-necessary sign-label">Last name</label>
         </div>
-        <input type="text" value="<%= (String) request.getAttribute("lastName")%>" name="signup-lastName" id="signup-lastName" pattern="^[^0-9!#$%&'*+/=?^`{|}\[\]_\\~<>.,-]{3,15}$" required>
+        <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("lastName")%>" name="signup-lastName" id="signup-lastName" pattern="^[^0-9!#$%&'*+/=?^`{|}\[\]_\\~<>.,-]{3,15}$" required>
         <p class="signup-require-info">3 to 15 characters</p>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <label for="signup-birthDate" class="signup-necessary sign-label">Date of Birth</label>
         </div>
-        <input type="date" value="<%= (String) request.getAttribute("birthDate")%>" name="signup-birthDate" id="signup-birthDate" required>
+        <input type="date" class="sign-tofill" value="<%= (String) request.getAttribute("birthDate")%>" name="signup-birthDate" id="signup-birthDate" required>
       </div>
       <div class="sign-child" id="signup-gender">
         <p class="sign-label">Gender</p>
@@ -70,11 +69,11 @@
           <li><label><input type="radio" name="signup-gender" value="" checked>It's a secret</label></li>
         </ul>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <label for="signup-job" class="signup-necessary sign-label">Occupation</label>
         </div>
-        <input type="text" value="<%= (String) request.getAttribute("job")%>" name="signup-job" id="signup-job" pattern="^[^0-9!#$%&'*+/=?^`{|}\[\]_\\~<>.,-]{3,15}$" required>
+        <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("job")%>" name="signup-job" id="signup-job" pattern="^[^0-9!#$%&'*+/=?^`{|}\[\]_\\~<>.,-]{3,15}$" required>
         <p class="signup-require-info">3 to 15 characters</p>
       </div>
       <div class="sign-child signup-subsection">
@@ -84,12 +83,12 @@
           <div class="sign-process-msg" id="signup-geolocation-search-state"></div>
         </div>
       </div>
-      <div class="sign-tofill sign-child" id="signup-country-parent">
+      <div class="sign-child" id="signup-country-parent">
         <div class="flex-label">
           <p class="sign-label signup-necessary">Country</p>
           <div id="country-hidden" style="display: none"><%= request.getAttribute("country") %></div>
         </div>
-        <select name="signup-country" id="signup-country" required>
+        <select name="signup-country" class="sign-tofill" id="signup-country" required>
           <option value="" selected disabled hidden>Choose one</option>
           <option value="AF">Afghanistan</option>
           <option value="AX">Åland Islands</option>
@@ -342,16 +341,16 @@
           <option value="ZW">Zimbabwe</option>
         </select>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <label for="signup-city" class="signup-necessary sign-label">City</label>
         </div>
-        <input type="text" value="<%= (String) request.getAttribute("city")%>" name="signup-city" id="signup-city" pattern="^[^!#$%&'*+/=?^`{|}\[\]_\\~<>.,]{2,20}$" required>
+        <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("city")%>" name="signup-city" id="signup-city" pattern="^[^!#$%&'*+/=?^`{|}\[\]_\\~<>.,]{2,20}$" required>
         <p class="signup-require-info">2 to 20 characters</p>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <label for="signup-address" class="sign-label">Address</label><br>
-        <input type="text" value="<%= (String) request.getAttribute("address")%>" name="signup-address" id="signup-address">
+        <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("address")%>" name="signup-address" id="signup-address">
       </div>
       <div class="sign-child signup-subsection">
         <p>- If the Country/City fields are filled in, you may find your location on a map</p>
@@ -361,17 +360,17 @@
         </div>
         <div id="signup-map-parent"></div>
       </div>
-      <div class="sign-tofill sign-child" id="signup-interests-parent">
+      <div class="sign-child" id="signup-interests-parent">
         <div class="flex-label">
           <p class="sign-label">Interests</p>
         </div>
-        <textarea name="signup-interests" rows="2" cols="50"><%= (String) request.getAttribute("interests")%></textarea>
+        <textarea name="signup-interests" class="sign-tofill" rows="2" cols="50"><%= (String) request.getAttribute("interests")%></textarea>
       </div>
-      <div class="sign-tofill sign-child">
+      <div class="sign-child">
         <div class="flex-label">
           <p class="sign-label">General information about you</p>
         </div>
-        <textarea name="signup-about" rows="5" cols="50"><%= (String) request.getAttribute("about")%></textarea>
+        <textarea name="signup-about" class="sign-tofill" rows="5" cols="50"><%= (String) request.getAttribute("about")%></textarea>
       </div>
       <div class="sign-button" id="signup-button">
         <input type="button" value="<%= (String) request.getAttribute("button") %>" disabled>

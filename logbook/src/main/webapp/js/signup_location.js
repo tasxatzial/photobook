@@ -1,21 +1,68 @@
 'use strict';
 
-var signUpLocation = function () {
+var SignUpLocation = (function () {
   var state = {
     xhr: null,
     xhrResponse: null,
     mapVisible: false,
     mapObj: null,
-    mapButton: null,
 
-    /* true if the map displays for the first time a location */
+    /* true if the map displays a location for the first time */
     newLocation: true
   };
+
+  var el = {
+    nominatimSearchButton: null,
+    nominatimSearchMsg: null,
+    geolocSearchButton: null,
+    geolocSearchMsg: null,
+    address: null,
+    country: null,
+    city: null,
+    mapParent: null,
+    mapButton: null
+  };
+
   var nominatimAPI = {
     url: 'https://nominatim.openstreetmap.org/search',
     reverseUrl: 'https://nominatim.openstreetmap.org/reverse'
   };
 
+  function init() {
+    state.xhrResponse = null;
+    state.mapVisible = false;
+    state.map = null;
+    state.newLocation = true;
+
+    el.nominatimSearchButton = document.getElementById('signup-location-search-button');
+    el.nominatimSearchMsg = document.getElementById('signup-location-search-state');
+    el.geolocSearchButton = document.getElementById('signup-geolocation-search-button');
+    el.geolocSearchMsg = document.getElementById('signup-geolocation-search-state');
+    el.address = document.getElementById('signup-address');
+    el.country = document.getElementById('signup-country');
+    el.city = document.getElementById('signup-city');
+    el.mapParent = document.getElementById('signup-map-parent');
+
+    el.nominatimSearchButton.addEventListener('click', locationSearch);
+    el.geolocSearchButton.addEventListener('click', geolocSearch);
+    el.country.addEventListener('input', locationCheck);
+    el.city.addEventListener('input', locationCheck);
+    el.address.addEventListener('input', locationCheck);
+
+    /* check if geolocation is supported */
+    if (navigator.geolocation) {
+      formButton.enable(el.geolocSearchButton);
+    }
+    else {
+      el.geolocSearchButton.innerHTML = 'Detection not supported';
+    }
+
+    /* enable/disable search location button based on current location values */
+    if (LocationSearch.isSearchDataReady(el.city, el.country)) {
+      formButton.enable(el.nominatimSearchButton);
+    }
+  }
+  
   /* called by toggleMap() every time the visibility of the map is toggled.
   Assumes that a map object already exists */
   function toggleOldMap() {
@@ -26,45 +73,45 @@ var signUpLocation = function () {
       state.newLocation = false;
 
       /* zoom more if there is an address value */
-      if (!address.value.trim()) {
-        state.mapObj.setZoom(11);
+      if (!el.address.value.trim()) {
+        state.map.setZoom(11);
       }
       else {
-        state.mapObj.setZoom(15);
+        state.map.setZoom(15);
       }
 
       /* add the location to the map */
-      state.mapObj.addLocation(state.xhrResponse);
+      state.map.addLocation(state.xhrResponse);
 
       /* create the map button */
-      state.mapButton = newElements.createMapButton();
-      state.mapButton.addEventListener('click', toggleMap);
-      formMsg.showElement(nominatimSearchMsg, state.mapButton);
+      el.mapButton = newElements.createMapButton();
+      el.mapButton.addEventListener('click', toggleMap);
+      formMsg.showElement(el.nominatimSearchMsg, el.mapButton);
     }
 
     /* add/remove map div to/from DOM */
     if (state.mapVisible) {
-      state.mapButton.innerHTML = 'Show map';
-      mapParent.removeChild(state.mapObj.getDiv());
+      el.mapButton.innerHTML = 'Show map';
+      el.mapParent.removeChild(state.map.getDiv());
       state.mapVisible = false;
     }
     else {
-      state.mapButton.innerHTML = 'Hide map';
-      mapParent.appendChild(state.mapObj.getDiv());
+      el.mapButton.innerHTML = 'Hide map';
+      el.mapParent.appendChild(state.map.getDiv());
       state.mapVisible = true;
-      state.mapObj.drawMap();
+      state.map.drawMap();
     }
   }
 
   /* called every time the visibility of the map is toggled.
   Creates a map object in case none exists and then calls toggleOldMap() */
   function toggleMap() {
-    if (!state.mapObj) {
-      var map = document.createElement('div');
-      map.id = 'map';
-      mapParent.appendChild(map);
-      map.style.height = '20rem';
-      state.mapObj = new OLMap('map');
+    if (!state.map) {
+      var mapDiv = document.createElement('div');
+      mapDiv.id = 'map';
+      el.mapParent.appendChild(mapDiv);
+      mapDiv.style.height = '20rem';
+      state.map = new OLMap('map');
     }
     toggleOldMap();
   }
@@ -75,25 +122,25 @@ var signUpLocation = function () {
   function initMap() {
     if (state.mapVisible) {
       state.mapVisible = false;
-      mapParent.removeChild(state.mapObj.getDiv());
+      el.mapParent.removeChild(state.map.getDiv());
     }
-    if (state.mapObj) {
-      state.mapObj.resetState();
+    if (state.map) {
+      state.map.resetState();
     }
     state.newLocation = true;
   }
 
   /* check if city/country values permit a location search */
   function locationCheck() {
-    formMsg.clear(nominatimSearchMsg);
-    formMsg.clear(geolocSearchMsg);
-    formButton.enable(geolocSearchButton);
+    formMsg.clear(el.nominatimSearchMsg);
+    formMsg.clear(el.geolocSearchMsg);
+    formButton.enable(el.geolocSearchButton);
     initMap();
-    if (formLocationSearch.isSearchDataReady(city, country)) {
-      formButton.enable(nominatimSearchButton);
+    if (LocationSearch.isSearchDataReady(el.city, el.country)) {
+      formButton.enable(el.nominatimSearchButton);
     }
     else {
-      formButton.disable(nominatimSearchButton);
+      formButton.disable(el.nominatimSearchButton);
     }
   }
 
@@ -107,26 +154,34 @@ var signUpLocation = function () {
         toggleMap();
       }
       else {
-        formMsg.showError(nominatimSearchMsg, 'Not found');
+        formMsg.showError(el.nominatimSearchMsg, 'Not found');
       }
-      funcApply(formInput.enable, [country, city, address]);
-      formButton.enable(geolocSearchButton);
+      formInput.enable(el.country);
+      formInput.enable(el.city);
+      formInput.enable(el.address);
+      formButton.enable(el.geolocSearchButton);
     }
 
     /* ajax request fail callback */
     function failCallback() {
-      formMsg.showError(nominatimSearchMsg, 'Error');
-      funcApply(formInput.enable, [country, city, address]);
-      funcApply(formButton.enable, [nominatimSearchButton, geolocSearchButton]);
+      formMsg.showError(el.nominatimSearchMsg, 'Error');
+      formInput.enable(el.country);
+      formInput.enable(el.city);
+      formInput.enable(el.address);
+      formButton.enable(el.nominatimSearchButton);
+      formButton.enable(el.geolocSearchButton);
     }
 
     /* initialize */
-    var input = formLocationSearch.createInput(address, city, country);
-    funcApply(formInput.disable, [country, city, address]);
-    funcApply(formButton.disable, [nominatimSearchButton, geolocSearchButton]);
-    formMsg.clear(geolocSearchMsg);
+    var input = LocationSearch.createInput(el.address, el.city, el.country);
+    formInput.disable(el.country);
+    formInput.disable(el.city);
+    formInput.disable(el.address);
+    formButton.disable(el.nominatimSearchButton);
+    formButton.disable(el.geolocSearchButton);
+    formMsg.clear(el.geolocSearchMsg);
     var loader = newElements.createLoader('images/loader.gif');
-    formMsg.showElement(nominatimSearchMsg, loader);
+    formMsg.showElement(el.nominatimSearchMsg, loader);
     state.xhr = ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback);
   }
 
@@ -139,29 +194,31 @@ var signUpLocation = function () {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
 
       /* calculate country/city/address from the ajax response */
-      var location = formLocationSearch.parseReverseSearch(state.xhrResponse);
+      var location = LocationSearch.parseReverseSearch(state.xhrResponse);
 
-      funcApply(formInput.enable, [country, city, address]);
+      formInput.enable(el.country);
+      formInput.enable(el.city);
+      formInput.enable(el.address);
 
       /* show error if 1) all country/city/address are empty
                       2) reverse nominatim search returns an unknown location */
       if (state.xhrResponse.error || !location) {
-        formMsg.showError(geolocSearchMsg, 'Not found');
-        if (formLocationSearch.isSearchDataReady(city, country)) {
-          formButton.enable(nominatimSearchButton);
+        formMsg.showError(el.geolocSearchMsg, 'Not found');
+        if (LocationSearch.isSearchDataReady(el.city, el.country)) {
+          formButton.enable(el.nominatimSearchButton);
         }
       }
       else {
         /* else update country/city/address fields */
-        country.value = location.country ? location.country : '';
-        city.value = location.city ? location.city : '';
-        address.value = location.address ? location.address : '';
+        el.country.value = location.country ? location.country : '';
+        el.city.value = location.city ? location.city : '';
+        el.address.value = location.address ? location.address : '';
 
-        formMsg.showOK(geolocSearchMsg, 'Found');
+        formMsg.showOK(el.geolocSearchMsg, 'Found');
         initMap();
 
         /* show map only if the returned country/city values permit search */
-        if (formLocationSearch.isSearchDataReady(city, country)) {
+        if (LocationSearch.isSearchDataReady(el.city, el.country)) {
           toggleMap();
         }
       }
@@ -169,11 +226,13 @@ var signUpLocation = function () {
 
     /* geolocation search + reverse nominatim fail callback */
     function failCallback() {
-      formMsg.showError(geolocSearchMsg, 'Error');
-      funcApply(formInput.enable, [country, city, address]);
-      formButton.enable(geolocSearchButton);
-      if (formLocationSearch.isSearchDataReady(city, country)) {
-        formButton.enable(nominatimSearchButton);
+      formMsg.showError(el.geolocSearchMsg, 'Error');
+      formInput.enable(el.country);
+      formInput.enable(el.city);
+      formInput.enable(el.address);
+      formButton.enable(el.geolocSearchButton);
+      if (LocationSearch.isSearchDataReady(el.city, el.country)) {
+        formButton.enable(el.nominatimSearchButton);
       }
     }
 
@@ -181,49 +240,28 @@ var signUpLocation = function () {
     function successNavCallback(position) {
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
-      var input = formLocationSearch.createLatLonInput(lat, lon);
+      var input = LocationSearch.createLatLonInput(lat, lon);
       state.xhr = ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, failCallback);
     }
 
     /* initialize */
-    funcApply(formInput.disable, [country, city, address]);
-    funcApply(formButton.disable, [nominatimSearchButton, geolocSearchButton]);
-    formMsg.clear(nominatimSearchMsg);
+    formInput.disable(el.country);
+    formInput.disable(el.city);
+    formInput.disable(el.address);
+    formButton.disable(el.nominatimSearchButton);
+    formButton.disable(el.geolocSearchButton);
+    formMsg.clear(el.nominatimSearchMsg);
     var loader = newElements.createLoader('images/loader.gif');
-    formMsg.showElement(geolocSearchMsg, loader);
+    formMsg.showElement(el.geolocSearchMsg, loader);
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
   }
+  
+  return {
+    init: init
+  };
+}());
 
-  var nominatimSearchButton = document.getElementById('signup-location-search-button');
-  var nominatimSearchMsg = document.getElementById('signup-location-search-state');
-  var geolocSearchButton = document.getElementById('signup-geolocation-search-button');
-  var geolocSearchMsg = document.getElementById('signup-geolocation-search-state');
-  var address = document.getElementById('signup-address');
-  var country = document.getElementById('signup-country');
-  var city = document.getElementById('signup-city');
-  var mapParent = document.getElementById('signup-map-parent');
-
-  nominatimSearchButton.addEventListener('click', locationSearch);
-  geolocSearchButton.addEventListener('click', geolocSearch);
-  country.addEventListener('input', locationCheck);
-  city.addEventListener('input', locationCheck);
-  address.addEventListener('input', locationCheck);
-
-  /* check if geolocation is supported */
-  if (navigator.geolocation) {
-    formButton.enable(geolocSearchButton);
-  }
-  else {
-    geolocSearchButton.innerHTML = 'Detection not supported';
-  }
-
-  /* enable/disable search location button based on current location values */
-  if (formLocationSearch.isSearchDataReady(city, country)) {
-    formButton.enable(nominatimSearchButton);
-  }
-};
-
-var formLocationSearch = (function() {
+var LocationSearch = (function() {
   /* Return true if city/country permit a location search. Assumes that
   arguments are valid elements with a value attribute. City must also have
   a pattern attribute */

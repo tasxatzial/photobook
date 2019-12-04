@@ -3,13 +3,13 @@
 var ValidChecker = (function() {
 
   var state = {
-    inputs: [],
+    checkedInputs: [],
     oldUsername: null,
     oldEmail: null
   };
 
   function init() {
-    state.inputs = [];
+    state.checkedInputs = [];
 
     var username = document.getElementById('signup-username');
     var email = document.getElementById('signup-email');
@@ -27,7 +27,7 @@ var ValidChecker = (function() {
     var signupButton = document.querySelector('#signup-button input');
 
     /* collect all elements --------------------------------------- */
-    state.inputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
+    state.checkedInputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
         occupation, city, country, interests, about);
 
     /* valid regex check functions --------------------------------- */
@@ -166,7 +166,6 @@ var ValidChecker = (function() {
             showInvalidMsg(x, x.invalidMsg);
             return;
           }
-          console.log(2);
           formSubmit.disable(signupButton);
           if (x.name === 'signup-username') {
             checkTaken(username, action, successCallback, failCallback);
@@ -202,10 +201,6 @@ var ValidChecker = (function() {
         if (response[element.name.split('-')[1]] === '0') {
           element.isTaken = 1;
           showInvalidMsg(element, 'Already taken');
-        }
-        else if (response[element.name.split('-')[1]] === '-1') {
-          element.isTaken = -1;
-          showInvalidMsg(element, 'Error checking');
         }
         else {
           element.isTaken = 0;
@@ -248,13 +243,13 @@ var ValidChecker = (function() {
     }
   }
 
-  function getInputs() {
-    return state.inputs;
+  function getCheckedInputs() {
+    return state.checkedInputs;
   }
 
   return {
     init: init,
-    getInputs: getInputs,
+    getCheckedInputs: getCheckedInputs,
     checkValid: checkValid,
     showInvalidMsg: showInvalidMsg,
     scrollToParent: scrollToParent

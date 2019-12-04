@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.RequestDispatcher;
 
+
 /**
  *
  */
@@ -34,6 +35,8 @@ public class Main extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession oldSession = request.getSession(false);
+
+
 
         RequestDispatcher dispatcher = null;
         switch(request.getParameter("action")) {
