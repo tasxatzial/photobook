@@ -18,7 +18,7 @@ function OLMap(divId) {
     initZoom: 0,
 
     /* custom zoom level set by user */
-    customInitZoom: null,
+    customInitZoom: 0,
   
     /* the projections that are needed for converting coordinates */
     projection: null,
@@ -54,13 +54,13 @@ function OLMap(divId) {
     /* custom zoom level overrides the zoom lvl of the map */
     if (state.customInitZoom) {
       zoom = state.customInitZoom;
-    }
 
-    /* center on the first location, this will change in future revisions */
-    if (state.locations.length) {
-      var locY = state.locations[0].lat;
-      var locX = state.locations[0].lon;
-      center = new OpenLayers.LonLat(locX, locY).transform(state.projection4326, state.projection);
+      /* center on the first location, this will change in future revisions */
+      if (state.locations.length) {
+        var locY = state.locations[0].lat;
+        var locX = state.locations[0].lon;
+        center = new OpenLayers.LonLat(locX, locY).transform(state.projection4326, state.projection);
+      }
     }
 
     return {
