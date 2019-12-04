@@ -48,10 +48,9 @@ var SignUpFace = (function () {
     }
 
     formMsg.showOK(el.uploadMsgParent, 'Success');
+    formButton.enable(el.selectButton);
     formButton.disable(el.uploadButton);
     formInput.enable(el.username);
-    formButton.enable(el.selectButton);
-    el.checkBox.disabled = false;
   }
 
   /* called from task setID or addFace when they fail, the errMsg is
