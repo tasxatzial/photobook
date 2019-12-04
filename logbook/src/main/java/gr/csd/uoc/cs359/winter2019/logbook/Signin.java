@@ -72,7 +72,9 @@ public class Signin extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             HttpSession newSession = request.getSession(true);
             newSession.setAttribute("username", request.getParameter("username"));
-            newSession.setMaxInactiveInterval(24 * 3600 * 365);
+            Cookie cookie = new Cookie("JSESSIONID", newSession.getId());
+            cookie.setMaxAge(365 * 24 * 3600);
+            response.addCookie(cookie);
             dispatcher = request.getRequestDispatcher("WEB-INF/homepage");
             dispatcher.forward(request, response);
         }
