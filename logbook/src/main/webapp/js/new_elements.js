@@ -109,6 +109,7 @@ var newElements = (function NewElements() {
         }
         msg.style.fontWeight = 'bold';
         msg.style.whiteSpace = 'nowrap';
+        msg.style.overflowX = 'hidden';
         var span = document.createElement('span');
         span.innerHTML = response[key];
         span.style.fontWeight = 'normal';
