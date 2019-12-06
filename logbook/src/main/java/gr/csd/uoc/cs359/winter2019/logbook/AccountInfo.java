@@ -35,7 +35,6 @@ public class AccountInfo extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException {
 
         HttpSession oldSession = request.getSession(false);
-
         if (oldSession != null && oldSession.getAttribute("username") != null) {
             response.setContentType("text/html;charset=UTF-8");
             User user = UserDB.getUser((String) oldSession.getAttribute("username"));

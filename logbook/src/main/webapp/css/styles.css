@@ -13,7 +13,8 @@ body {
 
 #no-nav {
   margin-top: 2.8rem;
-  background-image: linear-gradient(to bottom, #d0f4ea, #e5ddce);
+  background-image: linear-gradient(to bottom, #dcf4ec, #e5ddce);
+  /* height: auto; */
 }
 
 /* sign button container */
@@ -46,9 +47,9 @@ input[type="button"]:active, button:active {
   top: 1px;
 }
 
-#landing-section, #signin-section, #signup-section, #userlist-section {
+#landing-section, #signin-section, #userlist-section {
   height: calc(100vh - 2.8rem);
-  padding-top: 5rem;
+  padding-top: 4rem;
 }
 
 #landing-page, #signup-parent, #signin-parent, #userlist-parent {
@@ -62,7 +63,7 @@ input[type="button"]:active, button:active {
 
 /* landing page specific ----------------------------------------- */
 #landing-section {
-  min-height: 35rem;
+  min-height: 32rem;
 }
 
 #landing-page {
@@ -88,7 +89,7 @@ input[type="button"]:active, button:active {
 /* END OF landing page specific ------------------------------------- */
 
 @media only screen and (max-width: 45rem) {
-  #landing-section, #signin-section, #signup-section, #userlist-section {
+  #landing-section, #signin-section, #userlist-section {
     padding-top: 0;
   }
 }

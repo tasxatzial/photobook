@@ -51,7 +51,6 @@ var ShowAllUsers = (function() {
       el.userListParent.style.width = max*0.45 + 'rem';
       el.userListParent.style.width = max*0.45 + 'rem';
       el.nonav.innerHTML = '';
-      el.nonav.style.height = 'auto';
       el.nonav.appendChild(userlistSection);
       allUsersButton.disabled = false;
     }
