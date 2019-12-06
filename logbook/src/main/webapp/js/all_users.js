@@ -9,6 +9,7 @@ var ShowAllUsers = (function() {
 
   var el = {
     userListParent: null,
+    userListNav: null,
     nonav: null
   };
 
@@ -40,16 +41,6 @@ var ShowAllUsers = (function() {
       var userlistSection = document.createElement('div');
       userlistSection.id = 'userlist-section';
       userlistSection.appendChild(el.userListParent);
-      userlistSection.style.minHeight = '53rem';
-      var max = 0;
-      var userlistContainer = el.userListParent.children[0].children[1];
-      for (var i = 0; i < userlistContainer.childNodes.length; i++) {
-        if (userlistContainer.children[i].innerHTML.length > max) {
-          max = userlistContainer.children[i].innerHTML.length;
-        }
-      }
-      el.userListParent.style.maxWidth = max*0.45 + 'rem';
-      el.userListParent.style.maxWidth = max*0.45 + 'rem';
       el.nonav.innerHTML = '';
       el.nonav.appendChild(userlistSection);
       allUsersButton.disabled = false;
@@ -96,11 +87,11 @@ var ShowAllUsers = (function() {
 
   function showPage(pageNo) {
     if (pageNo <= state.pages && pageNo >= 1) {
-      if (el.userListParent.children[0].children[1]) {
-        el.userListParent.children[0].removeChild(el.userListParent.children[0].children[1]);
+      if (el.userListParent.children[2]) {
+        el.userListParent.removeChild(el.userListParent.children[2]);
       }
       var userPage = newElements.createUsersList(state.xhrResponse[pageNo]);
-      el.userListParent.children[0].appendChild(userPage);
+      el.userListParent.appendChild(userPage);
     }
   }
 

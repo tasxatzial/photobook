@@ -1,0 +1,15 @@
+.next-button {
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+#userlist-nav {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 65%;
+    max-width: 15rem;
+    margin-left: auto;
+    margin-right: auto;
+}

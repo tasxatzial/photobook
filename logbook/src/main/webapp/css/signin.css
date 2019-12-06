@@ -3,10 +3,6 @@
   max-width: 20rem;
 }
 
-#signin-section {
-  min-height: 33rem;
-}
-
 /* container of the select photo button */
 #signin-photo-button-parent {
   display: flex;

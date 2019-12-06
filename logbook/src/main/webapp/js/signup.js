@@ -97,10 +97,10 @@ var Signup = (function() {
         var response = JSON.parse(state.xhr.responseText);
         var accountInfoTitle = document.createElement('p');
         var accountInfo = newElements.createSignupSummary(response, el.dataNames, false);
-        el.header.innerHTML = 'Success';
-        el.signupSection.style.minHeight = '60rem';
+        el.header.innerHTML = 'Sign up completed';
         accountInfoTitle.innerHTML = 'You provided the following information: ';
         el.signupContent.innerHTML = '';
+        el.signupMiddle.style.maxWidth = '65rem';
         el.signupContent.appendChild(accountInfoTitle);
         el.signupContent.appendChild(accountInfo);
       }
@@ -115,17 +115,16 @@ var Signup = (function() {
         el.navbarContent.removeChild(el.signinButton);
       }
       el.signupContent.innerHTML = '';
+      el.signupMiddle.style.maxWidth = '65rem';
       if (state.xhr.status >= 500) {
         var errorMsg = document.createElement('p');
         errorMsg.innerHTML = 'Oops, something went wrong. Please try again in a while';
-        el.signupSection.style.minHeight = '25rem';
         el.header.innerHTML = state.xhr.status + ' - Server Error';
         el.signupContent.appendChild(errorMsg);
       } else {
         var response = JSON.parse(state.xhr.responseText);
         var accountInfo = newElements.createSignupSummary(response, el.dataNames, true);
         el.header.innerHTML = state.xhr.status + ' - Bad Request';
-        el.signupSection.style.minHeight = '43rem';
         el.signupContent.appendChild(accountInfo);
       }
       enableInputs(action);
@@ -151,9 +150,10 @@ var Signup = (function() {
     el.navbarContent = document.getElementById('navbar-content');
     el.username = document.getElementById('signup-username');
     el.email = document.getElementById('signup-email');
-    el.signupSection = document.getElementById('signup-section');
-    el.header = el.signupSection.children[0].children[0].children[0].children[0];
-    el.signupContent = el.signupSection.children[0].children[0].children[1];
+    el.signupMiddle = document.getElementById('signup-middle');
+    el.header = el.signupMiddle.children[0].children[0];
+    el.signupContent = el.signupMiddle.children[1];
+
     el.address = document.getElementById('signup-address');
     el.gender = document.querySelectorAll('input[type="radio"]');
     el.signupButton = document.querySelector('#signup-button input');
@@ -180,7 +180,7 @@ var Signup = (function() {
     SignUpFace.init();
     
     el.signupButton.addEventListener('click', function () {
-      clickSignup(action);
+      doSignup(action);
     });
 
     if (action === 'Signup') {

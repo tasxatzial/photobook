@@ -3,7 +3,6 @@
 var Homepage = (function() {
 
   function init() {
-    /* document.getElementById('no-nav').style.height = 'calc(100vh - 2.8rem)'; */
     var navbarContent = document.getElementById('navbar-content');
 
     var accountButton = newElements.createSignBarButton('My account', 'profile-button');

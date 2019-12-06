@@ -100,8 +100,8 @@ var newElements = (function NewElements() {
     var msg = document.createElement('p');
     msg.innerHTML = key + ': ';
     msg.style.fontWeight = 'bold';
-    msg.style.whiteSpace = 'nowrap';
-    msg.style.overflowX = 'hidden';
+    /* msg.style.whiteSpace = 'nowrap'; */
+    /* msg.style.overflowX = 'hidden'; */
     var span = document.createElement('span');
     span.innerHTML = value;
     span.style.fontWeight = 'normal';
@@ -174,9 +174,6 @@ var newElements = (function NewElements() {
     headerH2.innerHTML = 'Users';
     header.appendChild(headerH2);
 
-    var listWithHeader = document.createElement('div');
-    listWithHeader.appendChild(header);
-
     var prevButton = newElements.createImgButton('images/left.png', '3rem');
     var nextButton = newElements.createImgButton('images/right.png', '3rem');
     var selectPages = createSelectPage(pages);
@@ -186,8 +183,9 @@ var newElements = (function NewElements() {
     buttonSection.appendChild(selectPages);
     buttonSection.appendChild(nextButton);
 
-    div.appendChild(listWithHeader);
+    div.appendChild(header);
     div.appendChild(buttonSection);
+
     return div;
   }
 

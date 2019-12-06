@@ -1,0 +1,24 @@
+#landing-section {
+    min-height: 32rem;
+}
+
+#landing-page {
+    max-width: 28rem;
+}
+
+#landing-page > p {
+    text-align: center;
+}
+#landing-page > p:first-child {
+    font-size: 1.5rem;
+}
+
+#landing-page > p:nth-child(2) {
+    font-size: 1.2rem;
+}
+
+#landing-signin-button input {
+    font-size: 1.1rem;
+    padding: 3px 5px;
+    width: 35%;
+}
