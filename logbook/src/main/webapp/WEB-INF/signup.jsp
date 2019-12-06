@@ -67,7 +67,7 @@
           <ul>
             <li><label><input type="radio" name="signup-gender" value="Male">Male</label></li>
             <li><label><input type="radio" name="signup-gender" value="Female">Female</label></li>
-            <li><label><input type="radio" name="signup-gender" value="" checked>It's a secret</label></li>
+            <li><label><input type="radio" name="signup-gender" value="Unknown" checked>It's a secret</label></li>
           </ul>
         </div>
         <div class="sign-child">

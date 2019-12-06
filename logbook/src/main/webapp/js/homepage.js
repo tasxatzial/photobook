@@ -6,8 +6,10 @@ var Homepage = (function() {
     /* document.getElementById('no-nav').style.height = 'calc(100vh - 2.8rem)'; */
     var navbarContent = document.getElementById('navbar-content');
 
-    var accountButton = newElements.createSignBarButton('My account', 'my-account-button');
-    accountButton.addEventListener('click', ShowAccountInfo.init);
+    var accountButton = newElements.createSignBarButton('My account', 'profile-button');
+    accountButton.addEventListener('click', function() {
+      ShowProfile.init("");
+    });
     navbarContent.appendChild(accountButton);
 
     var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button');

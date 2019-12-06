@@ -22,7 +22,7 @@ var ShowAllUsers = (function() {
     state.xhrResponse = null;
 
     var data = new FormData();
-    data.append("action", "ShowAllUsers");
+    data.append("action", "GetAllUsers");
     state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
 
     function successCallback() {

@@ -12,7 +12,7 @@ function logout() {
 
   function successCallback() {
     var navbarContent = document.getElementById('navbar-content');
-    var accountButton = document.getElementById('my-account-button');
+    var accountButton = document.getElementById('profile-button');
     var allUsersButton = document.getElementById('show-users-button');
     var logoutButton = document.getElementById('logout-button');
     navbarContent.removeChild(accountButton);

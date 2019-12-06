@@ -1,6 +1,6 @@
 'use strict';
 
-var ShowAccountInfo = (function() {
+var ShowAccount = (function() {
   var state = {
     xhr: null,
     xhrResponse: null
@@ -11,7 +11,7 @@ var ShowAccountInfo = (function() {
   };
 
   function init() {
-    el.accountInfoButton = document.getElementById('my-account-button');
+    el.accountInfoButton = document.getElementById('account-button');
 
     el.accountInfoButton.disabled = true;
     state.xhrResponse = null;
@@ -50,6 +50,35 @@ var ShowAccountInfo = (function() {
     function failCallback() {
       el.accountInfoButton.disabled = false;
       console.log(state.xhr.responseText);
+    }
+  }
+
+  return {
+    init: init
+  };
+}());
+
+var ShowProfile = (function() {
+  var state = {
+    xhr: null,
+    xhrResponse: null
+  };
+
+  function init(username) {
+
+    state.xhrResponse = null;
+
+    var data = new FormData();
+    data.append("action", "GetProfile");
+    data.append("username", username);
+    state.xhr = ajaxRequest("POST", "Main", data, successCallback, failCallback);
+
+    function successCallback() {
+      state.xhrResponse = JSON.parse(state.xhr.responseText);
+    }
+
+    function failCallback() {
+      
     }
   }
 

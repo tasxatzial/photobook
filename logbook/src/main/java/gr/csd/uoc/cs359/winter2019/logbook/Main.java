@@ -68,8 +68,11 @@ public class Main extends HttpServlet {
             case "Signin":
                 dispatcher = request.getRequestDispatcher("Signin");
                 break;
-            case "ShowAllUsers":
-                dispatcher = request.getRequestDispatcher("ShowAllUsers");
+            case "GetAllUsers":
+                dispatcher = request.getRequestDispatcher("GetAllUsers");
+                break;
+            case "GetProfile":
+                dispatcher = request.getRequestDispatcher("GetProfile");
                 break;
             case "Logout":
                 if (oldSession != null) {

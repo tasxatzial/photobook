@@ -70,7 +70,7 @@ public class AccountInfo extends HttpServlet {
             request.setAttribute("city", "");
             request.setAttribute("address", "");
             request.setAttribute("job", "");
-            request.setAttribute("gender", "");
+            request.setAttribute("gender", "Unknown");
             request.setAttribute("interests", "");
             request.setAttribute("about", "");
             request.setAttribute("title", "Sign up");

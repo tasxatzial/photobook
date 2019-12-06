@@ -22,9 +22,9 @@ import javax.servlet.http.HttpSession;
 /**
  *
  */
-@WebServlet(name = "ShowAllUsers", urlPatterns = "/ShowAllUsers")
+@WebServlet(name = "GetAllUsers", urlPatterns = "/GetAllUsers")
 @MultipartConfig
-public class ShowAllUsers extends HttpServlet {
+public class GetAllUsers extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,6 +46,7 @@ public class ShowAllUsers extends HttpServlet {
         if (oldSession == null || oldSession.getAttribute("username") == null) {
             json.put("ERROR", "NO_SESSION");
             out.print(json.toJSONString());
+            return;
         }
 
         JSONObject jsonPage = new JSONObject();
