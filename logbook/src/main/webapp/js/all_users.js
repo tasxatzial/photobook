@@ -99,7 +99,7 @@ var ShowAllUsers = (function() {
       if (el.userListParent.children[0].children[1]) {
         el.userListParent.children[0].removeChild(el.userListParent.children[0].children[1]);
       }
-      var userPage = newElements.createSignupSummary(state.xhrResponse[pageNo], null, false);
+      var userPage = newElements.createUsersList(state.xhrResponse[pageNo]);
       el.userListParent.children[0].appendChild(userPage);
     }
   }

@@ -96,27 +96,37 @@ var newElements = (function NewElements() {
     return msg;
   }
 
+  function createKeyValue(key, value) {
+    var msg = document.createElement('p');
+    msg.innerHTML = key + ': ';
+    msg.style.fontWeight = 'bold';
+    msg.style.whiteSpace = 'nowrap';
+    msg.style.overflowX = 'hidden';
+    var span = document.createElement('span');
+    span.innerHTML = value;
+    span.style.fontWeight = 'normal';
+    msg.appendChild(span);
+
+    return msg;
+  }
+
   function createSignupSummary(response, dataNames, skipEmpty) {
     var div = document.createElement('div');
-    Object.keys(response).forEach(function(key, index) {
-      if (skipEmpty !== true || response[key] !== '') {
-        var msg = document.createElement('p');
-        if (dataNames !== null) {
-          msg.innerHTML = dataNames[key] + ': ';
-        }
-        else {
-          msg.innerHTML = key + ': ';
-        }
-        msg.style.fontWeight = 'bold';
-        msg.style.whiteSpace = 'nowrap';
-        msg.style.overflowX = 'hidden';
-        var span = document.createElement('span');
-        span.innerHTML = response[key];
-        span.style.fontWeight = 'normal';
-        msg.appendChild(span);
-
+    for (var i = 0; i < dataNames.length; i++) {
+      if (response[dataNames[i][0]] &&
+          (skipEmpty === false || response[dataNames[i][0]] !== '' )) {
+        var msg = createKeyValue(dataNames[i][1], response[dataNames[i][0]]);
         div.appendChild(msg);
       }
+    }
+    return div;
+  }
+
+  function createUsersList(page) {
+    var div = document.createElement('div');
+    Object.keys(page).forEach(function(key, index) {
+      var msg = createKeyValue(key, page[key]);
+      div.appendChild(msg);
     });
     return div;
   }
@@ -190,6 +200,7 @@ var newElements = (function NewElements() {
     createInvalidValueMsg: createInvalidValueMsg,
     createSignupSummary: createSignupSummary,
     createImgButton: createImgButton,
-    createUserListContainer: createUserListContainer
+    createUserListContainer: createUserListContainer,
+    createUsersList: createUsersList
   };
 }());

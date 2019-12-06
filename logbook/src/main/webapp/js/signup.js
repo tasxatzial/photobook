@@ -152,28 +152,28 @@ var Signup = (function() {
     el.username = document.getElementById('signup-username');
     el.email = document.getElementById('signup-email');
     el.signupSection = document.getElementById('signup-section');
-    el.header = el.signupSection.children[0].children[0].children[0];
-    el.signupContent = el.signupSection.children[0].children[1];
+    el.header = el.signupSection.children[0].children[0].children[0].children[0];
+    el.signupContent = el.signupSection.children[0].children[0].children[1];
     el.address = document.getElementById('signup-address');
     el.gender = document.querySelectorAll('input[type="radio"]');
     el.signupButton = document.querySelector('#signup-button input');
     el.signinMsg = document.getElementById('signupin-msg');
-    el.dataNames = {
-      "username": "Username",
-      "password": "Password",
-      "passwordConfirm": "Confirm Password",
-      "email": "Email",
-      "firstName": "First name",
-      "lastName": "Last name",
-      "birthDate": "Birth date",
-      "gender": "Gender",
-      "job": "Occupation",
-      "country": "Country",
-      "city": "City",
-      "address": "Address",
-      "interests": "Interests",
-      "about": "General Info"
-    };
+    el.dataNames = [
+      ["username", "Username"],
+      ["password", "Password"],
+      ["passwordConfirm", "Confirm Password"],
+      ["email", "Email"],
+      ["firstName", "First name"],
+      ["lastName", "Last name"],
+      ["birthDate", "Birth date"],
+      ["gender", "Gender"],
+      ["job", "Occupation"],
+      ["country", "Country"],
+      ["city", "City"],
+      ["address", "Address"],
+      ["interests", "Interests"],
+      ["about", "General Info"]
+    ];
 
     ValidChecker.init();
     SignUpLocation.init();
