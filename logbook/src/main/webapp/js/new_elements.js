@@ -103,11 +103,11 @@ var newElements = (function NewElements() {
   function createKeyValue(key, value) {
     var span = document.createElement('span');
     span.innerHTML = value;
-    span.style.fontWeight = 'normal';
+    span.className = 'normal-font-weight';
 
     var msg = document.createElement('p');
     msg.innerHTML = key + ': ';
-    msg.style.fontWeight = 'bold';
+    msg.className = 'bold-font-weight';
     msg.appendChild(span);
 
     return msg;
@@ -147,10 +147,35 @@ var newElements = (function NewElements() {
   }
 
   function createUserPage(page) {
+    var hrBottom = document.createElement('hr');
+    hrBottom.className = 'userlist-hr-bottom';
+
     var div = document.createElement('div');
+    div.appendChild(hrBottom);
+
     Object.keys(page).forEach(function(key, index) {
       var msg = createKeyValue(key, page[key]);
-      div.appendChild(msg);
+
+      var nextButton = createNavButton('images/right.png');
+      nextButton.className = 'next-button username-arrow';
+
+      var user = document.createElement('div');
+      user.className = "username-flex";
+      user.appendChild(msg);
+      user.appendChild(nextButton);
+
+      var button = document.createElement('button');
+      button.className = 'username-button';
+      button.appendChild(user);
+      button.onclick = function() {
+        ShowProfile.init(page[key]);
+      };
+
+      var hr = document.createElement('hr');
+      hr.className = 'userlist-hr';
+
+      div.appendChild(button);
+      div.appendChild(hr);
     });
 
     return div;
@@ -176,15 +201,14 @@ var newElements = (function NewElements() {
     return div;
   }
 
-  function createImgButton(imageUrl, width) {
+  function createNavButton(imageUrl) {
     var img = document.createElement('img');
     img.src = imageUrl;
     img.alt = "";
 
     var button = document.createElement('button');
     button.type = 'button';
-    button.classList = "signin-photo-button next-button";
-    button.style.width = width;
+    button.className = 'next-button';
     button.appendChild(img);
 
     return button;
@@ -202,8 +226,8 @@ var newElements = (function NewElements() {
     headerH2.innerHTML = 'Users';
     header.appendChild(headerH2);
 
-    var prevButton = newElements.createImgButton('images/left.png', '3rem');
-    var nextButton = newElements.createImgButton('images/right.png', '3rem');
+    var prevButton = createNavButton('images/left.png');
+    var nextButton = createNavButton('images/right.png');
     var selectPages = createSelectPage(pages);
     var buttonSection = document.createElement('div');
     buttonSection.id = 'userlist-nav';
@@ -228,7 +252,6 @@ var newElements = (function NewElements() {
     createSignBarButton: createSignBarButton,
     createInvalidValueMsg: createInvalidValueMsg,
     createSignupSummary: createSignupSummary,
-    createImgButton: createImgButton,
     createUsersList: createUsersList,
     createUserPage: createUserPage,
     createProfile: createProfile

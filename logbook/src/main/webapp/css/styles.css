@@ -13,7 +13,6 @@ body {
 
 #no-nav {
   margin-top: 2.8rem;
-  /* background-image: linear-gradient(to bottom, #dcf4ec, #e5ddce); */
 }
 
 /* blue button container */
@@ -33,7 +32,6 @@ body {
   border-radius: 3px;
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
-  cursor: pointer;
   text-align: center;
   max-width: 50%;
   width: 50%;
@@ -60,6 +58,14 @@ input[type="button"]:active, button:active {
 
 #signup-parent, #userlist-parent, #profile-parent {
   max-width: 65rem;
+}
+
+.normal-font-weight {
+  font-weight: normal;
+}
+
+.bold-font-weight {
+  font-weight: bold;
 }
 
 /* form title */

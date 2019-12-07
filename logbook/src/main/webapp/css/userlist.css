@@ -1,7 +1,17 @@
 .next-button {
+    box-sizing: content-box;
     border: 0;
     background-color: transparent;
     cursor: pointer;
+    width: 3rem;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-right: 0;
+}
+
+.next-button img {
+    width: 100%;
+    height: auto;
 }
 
 #userlist-nav {
@@ -12,4 +22,34 @@
     max-width: 15rem;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 16px;
+}
+
+.username-button {
+    font: inherit;
+    text-align: left;
+    background-color: transparent;
+    cursor: pointer;
+    border: 0;
+    width: 100%;
+}
+
+.username-arrow {
+    margin-left: auto;
+    width: 2rem;
+}
+
+.username-flex {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.userlist-hr-bottom {
+    margin-bottom: 0;
+}
+
+.userlist-hr {
+    margin-bottom: 0;
+    margin-top: 0;
 }
