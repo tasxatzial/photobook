@@ -157,10 +157,10 @@ var newElements = (function NewElements() {
       var msg = createKeyValue(key, page[key]);
 
       var nextButton = createNavButton('images/right.png');
-      nextButton.className = 'next-button username-arrow';
+      nextButton.className = 'arrow-button username-arrow';
 
       var user = document.createElement('div');
-      user.className = "username-flex";
+      user.className = "username-line";
       user.appendChild(msg);
       user.appendChild(nextButton);
 
@@ -208,7 +208,7 @@ var newElements = (function NewElements() {
 
     var button = document.createElement('button');
     button.type = 'button';
-    button.className = 'next-button';
+    button.className = 'arrow-button';
     button.appendChild(img);
 
     return button;
@@ -244,6 +244,32 @@ var newElements = (function NewElements() {
     return userlistSection;
   }
 
+  function createNavTab(name) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.innerHTML = name;
+    button.className = 'myaccount-nav-button';
+    return button;
+  }
+
+  function createUserNav() {
+    var div = document.createElement('div');
+    div.className = 'myaccount-nav';
+
+    function addTab(tab) {
+      div.appendChild(tab);
+    }
+
+    function getDiv() {
+      return div;
+    }
+
+    return {
+      getDiv: getDiv,
+      addTab: addTab
+    };
+  }
+
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
@@ -254,6 +280,8 @@ var newElements = (function NewElements() {
     createSignupSummary: createSignupSummary,
     createUsersList: createUsersList,
     createUserPage: createUserPage,
-    createProfile: createProfile
+    createProfile: createProfile,
+    createUserNav: createUserNav,
+    createNavTab: createNavTab
   };
 }());

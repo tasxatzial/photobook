@@ -13,9 +13,7 @@ var ShowAllUsers = (function() {
 
   function init() {
     var nonav = document.getElementById('no-nav');
-    var allUsersButton = document.getElementById('show-users-button');
 
-    allUsersButton.disabled = true;
     state.pages = 1;
     state.xhrResponse = null;
 
@@ -37,11 +35,9 @@ var ShowAllUsers = (function() {
       showPage(1);
       nonav.innerHTML = '';
       nonav.appendChild(userlistSection);
-      allUsersButton.disabled = false;
     }
 
     function failCallback() {
-      allUsersButton.disabled = false;
       console.log(state.xhr.responseText);
     }
   }

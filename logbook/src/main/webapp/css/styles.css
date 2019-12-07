@@ -44,6 +44,10 @@ input[type="button"]:active, button:active {
   top: 1px;
 }
 
+input[type="button"]:focus, button:focus {
+  outline: 0;
+}
+
 #signin-section, #landing-section {
   padding-top: 4rem;
 }
@@ -70,7 +74,7 @@ input[type="button"]:active, button:active {
 
 /* form title */
 #signup-parent header h2, #signin-parent header h2, #userlist-parent header h2, #profile-parent header h2 {
-  font-size: 2rem;
+  font-size: 1.7rem;
   text-align: center;
 }
 

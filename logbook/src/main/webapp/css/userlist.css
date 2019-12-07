@@ -1,4 +1,4 @@
-.next-button {
+.arrow-button {
     box-sizing: content-box;
     border: 0;
     background-color: transparent;
@@ -9,7 +9,7 @@
     margin-right: 0;
 }
 
-.next-button img {
+.arrow-button img {
     width: 100%;
     height: auto;
 }
@@ -39,7 +39,7 @@
     width: 2rem;
 }
 
-.username-flex {
+.username-line {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;

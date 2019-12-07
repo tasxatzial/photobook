@@ -1,0 +1,28 @@
+.myaccount-nav {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.myaccount-nav-button {
+    box-sizing: content-box;
+    background-color: transparent;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 100%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-left: 2px;
+    margin-right: 2px;
+    border: 1px solid gray;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.active-tab {
+    border-bottom: 0;
+}
+
+.inactive-tab {
+    border-bottom: 1px dashed silver;
+}

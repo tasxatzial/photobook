@@ -7,9 +7,8 @@ var ShowAccount = (function() {
   };
 
   function init() {
-    var accountInfoButton = document.getElementById('account-button');
     var nonav = document.getElementById('no-nav');
-    accountInfoButton.disabled = true;
+
     state.xhrResponse = null;
 
     var data = new FormData();
@@ -38,12 +37,10 @@ var ShowAccount = (function() {
           gender[i].checked = 'true';
         }
       }
-      accountInfoButton.disabled = false;
       Signup.init('UpdateAccount');
     }
 
     function failCallback() {
-      accountInfoButton.disabled = false;
       console.log(state.xhr.responseText);
     }
   }
