@@ -8,17 +8,14 @@ var ShowAllUsers = (function() {
   };
 
   var el = {
-    userListParent: null,
-    userListNav: null,
-    nonav: null
+    userListParent: null
   };
 
   function init() {
-    el.nonav = document.getElementById('no-nav');
+    var nonav = document.getElementById('no-nav');
     var allUsersButton = document.getElementById('show-users-button');
 
     allUsersButton.disabled = true;
-
     state.pages = 1;
     state.xhrResponse = null;
 
@@ -28,21 +25,18 @@ var ShowAllUsers = (function() {
 
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
-
       if (state.xhrResponse.ERROR) {
         logout();
         return;
       }
 
       state.pages = Object.keys(state.xhrResponse).length;
-      el.userListParent = newElements.createUserListContainer(state.pages);
+      var userlistSection = newElements.createUsersList(state.pages);
+      el.userListParent = userlistSection.children[0];
       addListeners();
       showPage(1);
-      var userlistSection = document.createElement('div');
-      userlistSection.id = 'userlist-section';
-      userlistSection.appendChild(el.userListParent);
-      el.nonav.innerHTML = '';
-      el.nonav.appendChild(userlistSection);
+      nonav.innerHTML = '';
+      nonav.appendChild(userlistSection);
       allUsersButton.disabled = false;
     }
 
@@ -90,7 +84,7 @@ var ShowAllUsers = (function() {
       if (el.userListParent.children[2]) {
         el.userListParent.removeChild(el.userListParent.children[2]);
       }
-      var userPage = newElements.createUsersList(state.xhrResponse[pageNo]);
+      var userPage = newElements.createUserPage(state.xhrResponse[pageNo]);
       el.userListParent.appendChild(userPage);
     }
   }

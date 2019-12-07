@@ -8,6 +8,7 @@ var newElements = (function NewElements() {
     button.id = 'signup-show-map-button';
     button.innerHTML = 'Show map';
     button.className = 'sign-internal-button';
+
     return button;
   }
 
@@ -58,18 +59,18 @@ var newElements = (function NewElements() {
   }
 
   function createSignInPhotoSection() {
-    var section = document.createElement('div');
-    section.id = 'signin-photo-section';
-    section.className = 'sign-child';
-
     var photoContainer = document.createElement('div');
     photoContainer.id = 'signin-photo-parent';
 
     var uploadMsg = document.createElement('div');
     uploadMsg.className = 'sign-process-msg';
 
+    var section = document.createElement('div');
+    section.id = 'signin-photo-section';
+    section.className = 'sign-child';
     section.appendChild(photoContainer);
     section.appendChild(uploadMsg);
+
     return section;
   }
 
@@ -77,6 +78,7 @@ var newElements = (function NewElements() {
     var loader = document.createElement('img');
     loader.src = pathToFile;
     loader.className = 'loader';
+
     return loader;
   }
 
@@ -86,6 +88,7 @@ var newElements = (function NewElements() {
     button.className = 'navbar-button';
     button.value = value;
     button.id = id;
+
     return button;
   }
 
@@ -93,18 +96,18 @@ var newElements = (function NewElements() {
     var msg = document.createElement('div');
     msg.innerHTML = text;
     msg.className = 'invalid-value';
+
     return msg;
   }
 
   function createKeyValue(key, value) {
-    var msg = document.createElement('p');
-    msg.innerHTML = key + ': ';
-    msg.style.fontWeight = 'bold';
-    /* msg.style.whiteSpace = 'nowrap'; */
-    /* msg.style.overflowX = 'hidden'; */
     var span = document.createElement('span');
     span.innerHTML = value;
     span.style.fontWeight = 'normal';
+
+    var msg = document.createElement('p');
+    msg.innerHTML = key + ': ';
+    msg.style.fontWeight = 'bold';
     msg.appendChild(span);
 
     return msg;
@@ -113,7 +116,7 @@ var newElements = (function NewElements() {
   function createSignupSummary(response, dataNames, skipEmpty) {
     var div = document.createElement('div');
     for (var i = 0; i < dataNames.length; i++) {
-      if (response[dataNames[i][0]] &&
+      if (response[dataNames[i][0]] !== undefined &&
           (skipEmpty === false || response[dataNames[i][0]] !== '' )) {
         var msg = createKeyValue(dataNames[i][1], response[dataNames[i][0]]);
         div.appendChild(msg);
@@ -122,18 +125,41 @@ var newElements = (function NewElements() {
     return div;
   }
 
-  function createUsersList(page) {
+  function createProfile(response, dataNames) {
+    var header = document.createElement('header');
+    var headerH2 = document.createElement('h2');
+    headerH2.innerHTML = response[dataNames[0][0]];
+    header.appendChild(headerH2);
+
+    var profile = createSignupSummary(response, Init.dataNames, false);
+    profile.removeChild(profile.children[0]);
+
+    var div = document.createElement('div');
+    div.id = 'profile-parent';
+    div.appendChild(header);
+    div.appendChild(profile);
+
+    var profileSection = document.createElement('div');
+    profileSection.id = 'profile-section';
+    profileSection.appendChild(div);
+
+    return profileSection;
+  }
+
+  function createUserPage(page) {
     var div = document.createElement('div');
     Object.keys(page).forEach(function(key, index) {
       var msg = createKeyValue(key, page[key]);
       div.appendChild(msg);
     });
+
     return div;
   }
 
   function createSelectPage(pages) {
     var select = document.createElement('select');
     select.className = "sign-tofill";
+
     var option = null;
     for (var i = 1; i <= pages; i++) {
       option = document.createElement('option');
@@ -145,24 +171,26 @@ var newElements = (function NewElements() {
 
     var div = document.createElement('div');
     div.id = 'userlist-select';
-
     div.appendChild(select);
+
     return div;
   }
 
   function createImgButton(imageUrl, width) {
+    var img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = "";
+
     var button = document.createElement('button');
     button.type = 'button';
     button.classList = "signin-photo-button next-button";
     button.style.width = width;
-    var img = document.createElement('img');
-    img.src = imageUrl;
-    img.alt = "";
     button.appendChild(img);
+
     return button;
   }
 
-  function createUserListContainer(pages) {
+  function createUsersList(pages) {
     if (!pages) {
       pages = 1;
     }
@@ -186,7 +214,10 @@ var newElements = (function NewElements() {
     div.appendChild(header);
     div.appendChild(buttonSection);
 
-    return div;
+    var userlistSection = document.createElement('div');
+    userlistSection.id = 'userlist-section';
+    userlistSection.appendChild(div);
+    return userlistSection;
   }
 
   return {
@@ -198,7 +229,8 @@ var newElements = (function NewElements() {
     createInvalidValueMsg: createInvalidValueMsg,
     createSignupSummary: createSignupSummary,
     createImgButton: createImgButton,
-    createUserListContainer: createUserListContainer,
-    createUsersList: createUsersList
+    createUsersList: createUsersList,
+    createUserPage: createUserPage,
+    createProfile: createProfile
   };
 }());

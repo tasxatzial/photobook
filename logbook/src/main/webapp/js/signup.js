@@ -3,7 +3,6 @@
 var Signup = (function() {
 
   var el = {
-    navbarContent: null,
     username: null,
     email: null,
     signupSection: null,
@@ -12,9 +11,7 @@ var Signup = (function() {
     address: null,
     gender: null,
     signupButton: null,
-    dataNames: null,
-    signinMsg: null,
-    signinButton: null
+    signinMsg: null
   };
 
   function clickSignup(action) {
@@ -96,7 +93,7 @@ var Signup = (function() {
       if (action === 'Signup') {
         var response = JSON.parse(state.xhr.responseText);
         var accountInfoTitle = document.createElement('p');
-        var accountInfo = newElements.createSignupSummary(response, el.dataNames, false);
+        var accountInfo = newElements.createSignupSummary(response, Init.dataNames, false);
         el.header.innerHTML = 'Sign up completed';
         accountInfoTitle.innerHTML = 'You provided the following information: ';
         el.signupContent.innerHTML = '';
@@ -111,9 +108,6 @@ var Signup = (function() {
     }
 
     function failCallback(action) {
-      if (action === 'Signup') {
-        el.navbarContent.removeChild(el.signinButton);
-      }
       el.signupContent.innerHTML = '';
       el.signupMiddle.style.maxWidth = '65rem';
       if (state.xhr.status >= 500) {
@@ -123,7 +117,7 @@ var Signup = (function() {
         el.signupContent.appendChild(errorMsg);
       } else {
         var response = JSON.parse(state.xhr.responseText);
-        var accountInfo = newElements.createSignupSummary(response, el.dataNames, true);
+        var accountInfo = newElements.createSignupSummary(response, Init.dataNames, true);
         el.header.innerHTML = state.xhr.status + ' - Bad Request';
         el.signupContent.appendChild(accountInfo);
       }
@@ -147,7 +141,6 @@ var Signup = (function() {
   }
 
   function init(action) {
-    el.navbarContent = document.getElementById('navbar-content');
     el.username = document.getElementById('signup-username');
     el.email = document.getElementById('signup-email');
     el.signupMiddle = document.getElementById('signup-middle');
@@ -158,39 +151,23 @@ var Signup = (function() {
     el.gender = document.querySelectorAll('input[type="radio"]');
     el.signupButton = document.querySelector('#signup-button input');
     el.signinMsg = document.getElementById('signupin-msg');
-    el.dataNames = [
-      ["username", "Username"],
-      ["password", "Password"],
-      ["passwordConfirm", "Confirm Password"],
-      ["email", "Email"],
-      ["firstName", "First name"],
-      ["lastName", "Last name"],
-      ["birthDate", "Birth date"],
-      ["gender", "Gender"],
-      ["job", "Occupation"],
-      ["country", "Country"],
-      ["city", "City"],
-      ["address", "Address"],
-      ["interests", "Interests"],
-      ["about", "General Info"]
-    ];
 
     ValidChecker.init();
     SignUpLocation.init();
     SignUpFace.init();
     
     el.signupButton.addEventListener('click', function () {
-      doSignup(action);
+      clickSignup(action);
     });
 
     if (action === 'Signup') {
-      el.signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
-      el.signinButton.addEventListener('click', function () {
-        el.signinButton.disabled = true;
+      var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
+      signinButton.addEventListener('click', function () {
+        signinButton.disabled = true;
         Landing.showSignin();
       });
-      el.signinButton.style.marginLeft = 'auto';
-      el.navbarContent.appendChild(el.signinButton);
+      signinButton.style.marginLeft = 'auto';
+      document.getElementById('navbar-content').appendChild(signinButton);
     }
     el.signupButton.disabled = false;
   }

@@ -6,14 +6,10 @@ var ShowAccount = (function() {
     xhrResponse: null
   };
 
-  var el = {
-    accountInfoButton: null
-  };
-
   function init() {
-    el.accountInfoButton = document.getElementById('account-button');
-
-    el.accountInfoButton.disabled = true;
+    var accountInfoButton = document.getElementById('account-button');
+    var nonav = document.getElementById('no-nav');
+    accountInfoButton.disabled = true;
     state.xhrResponse = null;
 
     var data = new FormData();
@@ -21,16 +17,15 @@ var ShowAccount = (function() {
     state.xhr = ajaxRequest("POST", "Main", data, successCallback, failCallback);
 
     function successCallback() {
-      var nonav = document.getElementById('no-nav');
       nonav.innerHTML = state.xhr.responseText;
-      nonav.style.height = 'auto';
       formInput.disable(document.getElementById('signup-username'));
 
       var countryHidden = document.getElementById('country-hidden');
       var country = document.getElementById('signup-country');
       country.children[0].selected = 'false';
       for (var j = 0; j < country.children.length; j++) {
-        if (country.children[j].value === countryHidden.innerHTML) {
+        if (country.children[j].value === countryHidden.innerHTML ||
+            country.children[j].name === countryHidden.innerHTML) {
           country.children[j].selected = 'true';
           break;
         }
@@ -43,42 +38,13 @@ var ShowAccount = (function() {
           gender[i].checked = 'true';
         }
       }
-      el.accountInfoButton.disabled = false;
+      accountInfoButton.disabled = false;
       Signup.init('UpdateAccount');
     }
 
     function failCallback() {
-      el.accountInfoButton.disabled = false;
+      accountInfoButton.disabled = false;
       console.log(state.xhr.responseText);
-    }
-  }
-
-  return {
-    init: init
-  };
-}());
-
-var ShowProfile = (function() {
-  var state = {
-    xhr: null,
-    xhrResponse: null
-  };
-
-  function init(username) {
-
-    state.xhrResponse = null;
-
-    var data = new FormData();
-    data.append("action", "GetProfile");
-    data.append("username", username);
-    state.xhr = ajaxRequest("POST", "Main", data, successCallback, failCallback);
-
-    function successCallback() {
-      state.xhrResponse = JSON.parse(state.xhr.responseText);
-    }
-
-    function failCallback() {
-      
     }
   }
 

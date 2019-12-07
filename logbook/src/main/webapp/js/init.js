@@ -1,9 +1,26 @@
 'use strict';
 
-(function() {
+var Init = (function() {
   var state = {
     xhr: null
   };
+
+  var dataNames = [
+    ["username", "Username"],
+    ["password", "Password"],
+    ["passwordConfirm", "Confirm Password"],
+    ["email", "Email"],
+    ["firstName", "First name"],
+    ["lastName", "Last name"],
+    ["birthDate", "Birth date"],
+    ["gender", "Gender"],
+    ["job", "Occupation"],
+    ["country", "Country"],
+    ["city", "City"],
+    ["address", "Address"],
+    ["interests", "Interests"],
+    ["about", "General Info"]
+  ];
 
   var data = new FormData();
   data.append("action", "GetLanding");
@@ -23,4 +40,8 @@
   function failCallback() {
     console.log(state.xhr.responseText);
   }
+
+  return {
+    dataNames: dataNames
+  };
 }());

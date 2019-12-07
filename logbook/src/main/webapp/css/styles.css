@@ -50,7 +50,7 @@ input[type="button"]:active, button:active {
   padding-top: 4rem;
 }
 
-#landing-page, #signup-parent, #signin-parent, #userlist-parent {
+#landing-page, #signup-parent, #signin-parent, #userlist-parent, #profile-parent {
   border-radius: 3px;
   background: white;
   padding: 16px 32px 24px;
@@ -58,12 +58,12 @@ input[type="button"]:active, button:active {
   margin-right: auto;
 }
 
-#signup-parent, #userlist-parent {
+#signup-parent, #userlist-parent, #profile-parent {
   max-width: 65rem;
 }
 
 /* form title */
-#signup-parent header h2, #signin-parent header h2, #userlist-parent header h2 {
+#signup-parent header h2, #signin-parent header h2, #userlist-parent header h2, #profile-parent header h2 {
   font-size: 2rem;
   text-align: center;
 }

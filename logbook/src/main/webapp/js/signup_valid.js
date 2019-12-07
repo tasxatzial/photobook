@@ -3,9 +3,7 @@
 var ValidChecker = (function() {
 
   var state = {
-    checkedInputs: [],
-    oldUsername: null,
-    oldEmail: null
+    checkedInputs: []
   };
 
   function init() {
