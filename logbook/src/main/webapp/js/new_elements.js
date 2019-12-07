@@ -125,28 +125,27 @@ var newElements = (function NewElements() {
     return div;
   }
 
-  function createProfile(response, dataNames) {
+  function createAccountSection(username, owner) {
     var header = document.createElement('header');
     var headerH2 = document.createElement('h2');
-    headerH2.innerHTML = response[dataNames[0][0]];
+    headerH2.innerHTML = username;
     header.appendChild(headerH2);
 
-    var profile = createSignupSummary(response, Init.dataNames, false);
-    profile.removeChild(profile.children[0]);
+    var navTabs = createNavTabs(username, owner);
 
     var div = document.createElement('div');
-    div.id = 'profile-parent';
+    div.id = 'account-parent';
     div.appendChild(header);
-    div.appendChild(profile);
+    div.appendChild(navTabs);
 
-    var profileSection = document.createElement('div');
-    profileSection.id = 'profile-section';
-    profileSection.appendChild(div);
+    var accountSection = document.createElement('div');
+    accountSection.id = 'account-section';
+    accountSection.appendChild(div);
 
-    return profileSection;
+    return accountSection;
   }
 
-  function createUserPage(page) {
+  function createAllUsers(page) {
     var hrBottom = document.createElement('hr');
     hrBottom.className = 'userlist-hr-bottom';
 
@@ -156,7 +155,7 @@ var newElements = (function NewElements() {
     Object.keys(page).forEach(function(key, index) {
       var msg = createKeyValue(key, page[key]);
 
-      var nextButton = createNavButton('images/right.png');
+      var nextButton = createArrowButton('images/right.png');
       nextButton.className = 'arrow-button username-arrow';
 
       var user = document.createElement('div');
@@ -201,7 +200,7 @@ var newElements = (function NewElements() {
     return div;
   }
 
-  function createNavButton(imageUrl) {
+  function createArrowButton(imageUrl) {
     var img = document.createElement('img');
     img.src = imageUrl;
     img.alt = "";
@@ -212,6 +211,32 @@ var newElements = (function NewElements() {
     button.appendChild(img);
 
     return button;
+  }
+
+  function createNavTab(name) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.innerHTML = name;
+    button.className = 'account-nav-button';
+    return button;
+  }
+
+  function createNavTabs(username, owner) {
+    var navTabs = document.createElement('div');
+    navTabs.id = 'account-nav';
+
+    var showProfileButton = createNavTab('Profile');
+    var showPostsButton = createNavTab('Posts');
+
+    navTabs.appendChild(showProfileButton);
+    navTabs.appendChild(showPostsButton);
+
+    if (owner) {
+      var editAccountButton = createNavTab('Edit Account');
+      navTabs.appendChild(editAccountButton);
+    }
+
+    return navTabs;
   }
 
   function createUsersList(pages) {
@@ -226,8 +251,8 @@ var newElements = (function NewElements() {
     headerH2.innerHTML = 'Users';
     header.appendChild(headerH2);
 
-    var prevButton = createNavButton('images/left.png');
-    var nextButton = createNavButton('images/right.png');
+    var prevButton = createArrowButton('images/left.png');
+    var nextButton = createArrowButton('images/right.png');
     var selectPages = createSelectPage(pages);
     var buttonSection = document.createElement('div');
     buttonSection.id = 'userlist-nav';
@@ -244,32 +269,6 @@ var newElements = (function NewElements() {
     return userlistSection;
   }
 
-  function createNavTab(name) {
-    var button = document.createElement('button');
-    button.type = 'button';
-    button.innerHTML = name;
-    button.className = 'myaccount-nav-button';
-    return button;
-  }
-
-  function createUserNav() {
-    var div = document.createElement('div');
-    div.className = 'myaccount-nav';
-
-    function addTab(tab) {
-      div.appendChild(tab);
-    }
-
-    function getDiv() {
-      return div;
-    }
-
-    return {
-      getDiv: getDiv,
-      addTab: addTab
-    };
-  }
-
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
@@ -279,9 +278,7 @@ var newElements = (function NewElements() {
     createInvalidValueMsg: createInvalidValueMsg,
     createSignupSummary: createSignupSummary,
     createUsersList: createUsersList,
-    createUserPage: createUserPage,
-    createProfile: createProfile,
-    createUserNav: createUserNav,
-    createNavTab: createNavTab
+    createAllUsers: createAllUsers,
+    createAccountSection: createAccountSection
   };
 }());

@@ -80,7 +80,7 @@ var ShowAllUsers = (function() {
       if (el.userListParent.children[2]) {
         el.userListParent.removeChild(el.userListParent.children[2]);
       }
-      var userPage = newElements.createUserPage(state.xhrResponse[pageNo]);
+      var userPage = newElements.createAllUsers(state.xhrResponse[pageNo]);
       el.userListParent.appendChild(userPage);
     }
   }

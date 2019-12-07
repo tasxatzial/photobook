@@ -67,6 +67,12 @@ public class GetProfile extends HttpServlet {
         json.put("gender", user.getGender().toString());
         json.put("interests", user.getInterests());
         json.put("about", user.getInfo());
+        if (oldSession.getAttribute("username").equals(user.getUserName())) {
+            json.put("owner", "1");
+        }
+        else {
+            json.put("owner", "0");
+        }
         out.print(json.toJSONString());
     }
 
