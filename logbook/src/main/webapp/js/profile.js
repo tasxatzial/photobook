@@ -66,6 +66,8 @@ var ShowProfile = (function() {
 
     if (el.editAccountButton) {
       el.editAccountButton.addEventListener('click', function () {
+        var div = document.getElementById('account-parent').children[2];
+        ShowAccount.init(div);
         showBorders(el.editAccountButton, el.showProfileButton, el.showPostsButton);
       });
     }

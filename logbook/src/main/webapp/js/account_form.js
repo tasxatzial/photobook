@@ -6,8 +6,8 @@ var ShowAccount = (function() {
     xhrResponse: null
   };
 
-  function init() {
-    var nonav = document.getElementById('no-nav');
+  function init(div) {
+    /* var nonav = document.getElementById('no-nav'); */
 
     state.xhrResponse = null;
 
@@ -16,7 +16,7 @@ var ShowAccount = (function() {
     state.xhr = ajaxRequest("POST", "Main", data, successCallback, failCallback);
 
     function successCallback() {
-      nonav.innerHTML = state.xhr.responseText;
+      div.innerHTML = state.xhr.responseText;
       formInput.disable(document.getElementById('signup-username'));
 
       var countryHidden = document.getElementById('country-hidden');
