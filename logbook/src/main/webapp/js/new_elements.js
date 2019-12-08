@@ -168,7 +168,7 @@ var newElements = (function NewElements() {
       button.className = 'username-button';
       button.appendChild(user);
       button.onclick = function() {
-        ShowProfile.init(page[key]);
+        ShowProfile.init(page[key], 1);
       };
 
       var hr = document.createElement('hr');

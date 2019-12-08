@@ -14,7 +14,7 @@ var ShowProfile = (function() {
     editAccountButton: null
   };
 
-  function init(username) {
+  function init(username, firstTime) {
     var nonav = document.getElementById('no-nav');
 
     state.username = username;
@@ -32,21 +32,27 @@ var ShowProfile = (function() {
         return;
       }
 
-      state.owner = state.xhrResponse["owner"] === "1";
-      el.accountSection = newElements.createAccountSection(state.xhrResponse[Init.dataNames[0][0]], state.owner);
-      nonav.innerHTML = '';
-      nonav.appendChild(el.accountSection);
+      if (firstTime === 1) {
+        state.owner = state.xhrResponse["owner"] === "1";
+        el.accountSection = newElements.createAccountSection(state.xhrResponse[Init.dataNames[0][0]], state.owner);
+        nonav.innerHTML = '';
+        nonav.appendChild(el.accountSection);
 
-      var navTabs = document.getElementById('account-nav');
-      el.showProfileButton = navTabs.children[0];
-      el.showPostsButton = navTabs.children[1];
-      el.editAccountButton =  navTabs.children[2];
+        var navTabs = document.getElementById('account-nav');
+        el.showProfileButton = navTabs.children[0];
+        el.showPostsButton = navTabs.children[1];
+        el.editAccountButton = navTabs.children[2];
 
-      addListeners();
+        addListeners();
+      }
+
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
 
       var profile = newElements.createSignupSummary(state.xhrResponse, Init.dataNames, false);
       var accountParent = document.getElementById('account-parent');
+      if (firstTime !== 1) {
+        accountParent.removeChild(accountParent.children[2]);
+      }
       accountParent.appendChild(profile);
     }
 
@@ -57,7 +63,7 @@ var ShowProfile = (function() {
 
   function addListeners() {
     el.showProfileButton.addEventListener('click', function () {
-      ShowProfile.init(state.username);
+      ShowProfile.init(state.username, 0);
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
     });
     el.showPostsButton.addEventListener('click', function () {
