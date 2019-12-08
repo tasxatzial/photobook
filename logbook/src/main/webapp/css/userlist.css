@@ -35,14 +35,15 @@
 }
 
 .username-arrow {
-    margin-left: auto;
     width: 2rem;
+    height: 100%;
 }
 
 .username-line {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
+    align-items: center;
 }
 
 .userlist-hr-bottom {

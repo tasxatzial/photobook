@@ -155,13 +155,14 @@ var newElements = (function NewElements() {
     Object.keys(page).forEach(function(key, index) {
       var msg = createKeyValue(key, page[key]);
 
-      var nextButton = createArrowButton('images/right.png');
-      nextButton.className = 'arrow-button username-arrow';
+      var img = document.createElement('img');
+      img.src = 'images/right.png';
+      img.className = 'username-arrow';
 
       var user = document.createElement('div');
       user.className = "username-line";
       user.appendChild(msg);
-      user.appendChild(nextButton);
+      user.appendChild(img);
 
       var button = document.createElement('button');
       button.className = 'username-button';

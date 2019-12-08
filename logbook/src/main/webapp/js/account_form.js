@@ -7,8 +7,6 @@ var ShowAccount = (function() {
   };
 
   function init(div) {
-    /* var nonav = document.getElementById('no-nav'); */
-
     state.xhrResponse = null;
 
     var data = new FormData();
