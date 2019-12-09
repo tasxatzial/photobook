@@ -15,9 +15,11 @@ function logout() {
     var accountButton = document.getElementById('profile-button');
     var allUsersButton = document.getElementById('show-users-button');
     var logoutButton = document.getElementById('logout-button');
+    var postsButton = document.getElementById('show-posts');
     navbarContent.removeChild(accountButton);
     navbarContent.removeChild(allUsersButton);
     navbarContent.removeChild(logoutButton);
+    navbarContent.removeChild(postsButton);
 
     document.getElementById('no-nav').innerHTML = state.xhr.responseText;
     Landing.init();

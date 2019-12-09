@@ -52,7 +52,7 @@ input[type="button"]:focus, button:focus {
   padding-top: 4rem;
 }
 
-#landing-page, #signup-parent, #signin-parent, #userlist-parent, #account-parent {
+#landing-page, #signup-parent, #signin-parent, #userlist-parent, #account-parent, #posts-parent {
   border-radius: 3px;
   background: white;
   padding: 16px 32px 24px;
@@ -60,7 +60,7 @@ input[type="button"]:focus, button:focus {
   margin-right: auto;
 }
 
-#signup-parent, #userlist-parent, #account-parent {
+#signup-parent, #userlist-parent, #account-parent, #posts-parent {
   max-width: 65rem;
 }
 

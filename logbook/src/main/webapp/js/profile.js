@@ -32,7 +32,7 @@ var ShowProfile = (function() {
         return;
       }
 
-      if (firstTime === 1) {
+      if (firstTime) {
         state.owner = state.xhrResponse["owner"] === "1";
         el.accountSection = newElements.createAccountSection(state.xhrResponse[Init.dataNames[0][0]], state.owner);
         nonav.innerHTML = '';
@@ -50,7 +50,7 @@ var ShowProfile = (function() {
 
       var profile = newElements.createSignupSummary(state.xhrResponse, Init.dataNames, false);
       var accountParent = document.getElementById('account-parent');
-      if (firstTime !== 1) {
+      if (!firstTime) {
         accountParent.removeChild(accountParent.children[2]);
       }
       accountParent.appendChild(profile);
@@ -63,10 +63,11 @@ var ShowProfile = (function() {
 
   function addListeners() {
     el.showProfileButton.addEventListener('click', function () {
-      ShowProfile.init(state.username, 0);
+      ShowProfile.init(state.username, false);
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
     });
     el.showPostsButton.addEventListener('click', function () {
+      ShowPosts.init(true, state.owner);
       showBorders(el.showPostsButton, el.showProfileButton, el.editAccountButton);
     });
 

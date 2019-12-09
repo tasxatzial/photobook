@@ -12,6 +12,20 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  function createBlueButton(value, id) {
+    var div = document.createElement('div');
+    div.className = 'sign-button';
+    div.id = id;
+
+    var input = document.createElement('input');
+    input.type = 'button';
+    input.value = value;
+
+    div.appendChild(input);
+
+    return div;
+  }
+
   function createSignUpPhotoSection() {
     var selectButton = document.createElement('button');
     selectButton.id = 'signup-pick-photo-button';
@@ -125,13 +139,30 @@ var newElements = (function NewElements() {
     return div;
   }
 
+  function createPostsSection(canPost) {
+    var div = document.createElement('div');
+    div.id = 'posts-parent';
+
+    if (canPost) {
+      var postButton = createBlueButton('+ New Post', 'new-post-button');
+      div.appendChild(postButton);
+    }
+
+    var postsSection = document.createElement('div');
+    postsSection.id = 'posts-section';
+
+    postsSection.appendChild(div);
+
+    return postsSection;
+  }
+
   function createAccountSection(username, owner) {
     var header = document.createElement('header');
     var headerH2 = document.createElement('h2');
     headerH2.innerHTML = username;
     header.appendChild(headerH2);
 
-    var navTabs = createNavTabs(username, owner);
+    var navTabs = createNavTabs(owner);
 
     var div = document.createElement('div');
     div.id = 'account-parent';
@@ -222,7 +253,7 @@ var newElements = (function NewElements() {
     return button;
   }
 
-  function createNavTabs(username, owner) {
+  function createNavTabs(owner) {
     var navTabs = document.createElement('div');
     navTabs.id = 'account-nav';
 
@@ -280,6 +311,7 @@ var newElements = (function NewElements() {
     createSignupSummary: createSignupSummary,
     createUsersList: createUsersList,
     createAllUsers: createAllUsers,
-    createAccountSection: createAccountSection
+    createAccountSection: createAccountSection,
+    createPostsSection: createPostsSection
   };
 }());
