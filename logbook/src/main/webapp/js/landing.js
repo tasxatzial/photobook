@@ -14,9 +14,6 @@ var Landing = (function() {
       xhr: null
     };
 
-    /* disable signin button to avoid clicking it again */
-    el.landingSigninButton.disabled =  true;
-
     /* get the signin page, prepare the data */
     var data = new FormData();
     data.append('action', 'GetSignin');
@@ -38,15 +35,6 @@ var Landing = (function() {
     }
 
     function failCallback() {
-
-      /* getting the signin page was a fail, so we need to re-enable the signin button */
-      el.landingSigninButton.disabled =  false;
-
-      /* enable the top right signin button (if there is one) */
-      if (el.navbarContent.children[1]) {
-        el.navbarContent.children[1].disabled = false;
-      }
-
       console.log(state.xhr.responseText);
     }
   }
@@ -55,9 +43,6 @@ var Landing = (function() {
     var state = {
       xhr: null
     };
-
-    /* disable signup button to avoid clicking it again */
-    el.landingSignupButton.disabled = true;
 
     /* get the signup page, prepare the data */
     var data = new FormData();
@@ -80,15 +65,6 @@ var Landing = (function() {
     }
 
     function failCallback() {
-
-      /* getting the signup page was a fail, so we need to re-enable the signup button */
-      el.landingSignupButton.disabled = false;
-
-      /* enable the top right signup button (if there is one) */
-      if (el.navbarContent.children[1]) {
-        el.navbarContent.children[1].disabled = false;
-      }
-
       console.log(state.xhr.responseText);
     }
   }

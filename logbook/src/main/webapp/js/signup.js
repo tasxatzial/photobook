@@ -162,10 +162,7 @@ var Signup = (function() {
 
     if (action === 'Signup') {
       var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
-      signinButton.addEventListener('click', function () {
-        signinButton.disabled = true;
-        Landing.showSignin();
-      });
+      signinButton.addEventListener('click', Landing.showSignin);
       signinButton.style.marginLeft = 'auto';
       document.getElementById('navbar-content').appendChild(signinButton);
     }

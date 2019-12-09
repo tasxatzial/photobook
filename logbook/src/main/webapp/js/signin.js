@@ -85,10 +85,7 @@ var Signin = (function() {
       el.signinMsg.innerHTML = '';
     });
     el.signinButton.addEventListener('click', doSignin);
-    el.signupButton.addEventListener('click', function () {
-      el.signupButton.disabled = true;
-      Landing.showSignup();
-    });
+    el.signupButton.addEventListener('click', Landing.showSignup);
     el.signupButton.style.marginLeft = 'auto';
     el.signinButton.disabled = false;
     el.navbarContent.appendChild(el.signupButton);
