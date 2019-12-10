@@ -140,18 +140,18 @@ var newElements = (function NewElements() {
   }
 
   function createPostsSection(canPost) {
-    var div = document.createElement('div');
-    div.id = 'posts-parent';
+    var postsParent = document.createElement('div');
+    postsParent.id = 'posts-parent';
 
     if (canPost) {
       var postButton = createBlueButton('+ New Post', 'new-post-button');
-      div.appendChild(postButton);
+      postsParent.appendChild(postButton);
     }
 
     var postsSection = document.createElement('div');
     postsSection.id = 'posts-section';
 
-    postsSection.appendChild(div);
+    postsSection.appendChild(postsParent);
 
     return postsSection;
   }

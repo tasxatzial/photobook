@@ -74,6 +74,9 @@ public class Main extends HttpServlet {
             case "GetProfile":
                 dispatcher = request.getRequestDispatcher("GetProfile");
                 break;
+            case "GetPostForm":
+                dispatcher = request.getRequestDispatcher("WEB-INF/post_form.jsp");
+                break;
             case "Logout":
                 if (oldSession != null) {
                     oldSession.invalidate();

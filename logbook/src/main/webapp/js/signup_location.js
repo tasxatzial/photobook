@@ -34,9 +34,9 @@ var SignUpLocation = (function () {
     state.map = null;
     state.newLocation = true;
 
-    el.nominatimSearchButton = document.getElementById('signup-location-search-button');
+    el.nominatimSearchButton = document.getElementsByClassName('signup-location-search-button')[0];
     el.nominatimSearchMsg = document.getElementById('signup-location-search-state');
-    el.geolocSearchButton = document.getElementById('signup-geolocation-search-button');
+    el.geolocSearchButton = document.getElementsByClassName('signup-geolocation-search-button')[0];
     el.geolocSearchMsg = document.getElementById('signup-geolocation-search-state');
     el.address = document.getElementById('signup-address');
     el.country = document.getElementById('signup-country');

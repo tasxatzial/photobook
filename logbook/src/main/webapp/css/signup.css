@@ -5,12 +5,27 @@
   margin-right: auto;
 }
 
-/* location search (button + msg)  */
-#signup-location-search, #signup-geolocation-search {
+/* location search (button + msg) parent container */
+.signup-location-search, .signup-geolocation-search {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
+}
+
+/* location search (button + msg) container */
+.signup-location-search-content, .signup-geolocation-search-content {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: flex-start;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+}
+
+.signup-location-search-button, .signup-geolocation-search-button {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #signup-show-map-button {
