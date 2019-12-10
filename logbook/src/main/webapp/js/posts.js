@@ -1,7 +1,6 @@
 'use strict';
 
 var ShowPosts = (function() {
-
   var el = {
     postsSection: null
   };
@@ -21,31 +20,13 @@ var ShowPosts = (function() {
     }
     if (canPost) {
       var newPostButton = el.postsSection.children[0].children[0];
-      newPostButton.addEventListener('click', getForm);
+      newPostButton.addEventListener('click', function() {
+        PostForm.init(userPosts);
+      });
     }
   }
-
-  function getForm() {
-    var state = {
-      xhr: null
-    };
-
-    var data = new FormData();
-    data.append("action", "GetPostForm");
-    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
-
-    function successCallback() {
-      var div = document.createElement('div');
-      div.innerHTML =  state.xhr.responseText;
-      el.postsSection.children[0].appendChild(div);
-    }
-
-    function failCallback() {
-      console.log(state.xhr.responseText);
-    }
-  }
-
   return {
     init: init
   };
 }());
+

@@ -52,15 +52,13 @@ input[type="button"]:focus, button:focus {
   padding-top: 4rem;
 }
 
-#landing-page, #signup-parent, #signin-parent, #userlist-parent, #account-parent, #posts-parent {
-  border-radius: 3px;
-  background: white;
+#landing-page, #signup-parent, #signin-parent, #userlist-parent, #account-parent, #posts-parent, #post-form-parent {
   padding: 16px 32px 24px;
   margin-left: auto;
   margin-right: auto;
 }
 
-#signup-parent, #userlist-parent, #account-parent, #posts-parent {
+#signup-parent, #userlist-parent, #account-parent, #posts-parent, #post-form-parent {
   max-width: 65rem;
 }
 
@@ -73,7 +71,7 @@ input[type="button"]:focus, button:focus {
 }
 
 /* form title */
-#signup-parent header h2, #signin-parent header h2, #userlist-parent header h2, #account-parent header h2 {
+#signup-parent header h2, #signin-parent header h2, #userlist-parent header h2, #account-parent header h2, #post-form-parent header h2 {
   font-size: 1.7rem;
   text-align: center;
 }

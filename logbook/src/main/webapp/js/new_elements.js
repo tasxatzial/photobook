@@ -301,6 +301,17 @@ var newElements = (function NewElements() {
     return userlistSection;
   }
 
+  function createPostFormSection() {
+    var postFormParent = document.createElement('div');
+    postFormParent.id = 'post-form-parent';
+
+    var postFormSection = document.createElement('div');
+    postFormSection.id = 'post-form-section';
+
+    postFormSection.appendChild(postFormParent);
+
+    return postFormSection;
+  }
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
@@ -312,6 +323,7 @@ var newElements = (function NewElements() {
     createUsersList: createUsersList,
     createAllUsers: createAllUsers,
     createAccountSection: createAccountSection,
-    createPostsSection: createPostsSection
+    createPostsSection: createPostsSection,
+    createPostFormSection: createPostFormSection
   };
 }());

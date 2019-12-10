@@ -1,3 +1,6 @@
+<header>
+  <h2>New Post</h2>
+</header>
 <div class="sign-child">
   <div class="flex-label">
     <p class="sign-label signup-necessary">1. Description.</p>
@@ -5,7 +8,7 @@
   <textarea class="sign-tofill" id="post-description"></textarea>
 </div>
 <div class="sign-child">
-  <p class="sign-label signup-necessary">2. Please provide a (latitude, longitude). You can either use autodetection or detect it by providing a country/place.</p>
+  <p class="sign-label signup-necessary">2. Please provide a (latitude, longitude). You can either use autodetection or by providing a country/place.</p>
   <div class="signup-geolocation-search">
     <div class="signup-geolocation-search-content">
       <label class="sign-label"><input type="radio" name="detect-method">Autodetect</label>
