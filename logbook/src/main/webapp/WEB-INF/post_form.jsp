@@ -22,7 +22,12 @@
       <p class="signup-require-info">City and/or address and/or place</p>
     </div>
   </div>
-  <button type="button" class="sign-internal-button" id="post-form-detect-button">Detect my location</button>
+  <div id="post-form-detect">
+    <div id="flex-post-location">
+      <button type="button" class="sign-internal-button" id="post-form-detect-button">Detect my location</button>
+      <div id="post-form-detect-msg"></div>
+    </div>
+  </div>
 </div>
 <div class="sign-child">
   <label for="post-form-online-page" class="sign-label">3. You may provide a link to an online page.</label>

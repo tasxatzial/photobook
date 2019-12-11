@@ -3,7 +3,8 @@
 var PostForm = (function() {
   var state = {
     xhr: null,
-    xhrResponse: null
+    xhrResponse: null,
+    lastDetectionMethod: null
   };
 
   var loc = {
@@ -64,6 +65,7 @@ var PostForm = (function() {
       el.locationPlace = document.getElementById('post-form-country-hidden');
       el.onlinePhotoToggle = OnlinePhotoToggle();
       el.postButton = document.getElementById('post-button');
+      el.locationDetectMsg = document.getElementById('post-form-detect-msg');
 
       addListeners();
     }
@@ -97,6 +99,10 @@ var PostForm = (function() {
       el.locationPlace.style.display = 'none';
       el.locationPlace.children[1].children[1].value = '';
       el.locationPlace.children[0].children[1].value = '';
+      if (state.lastDetectionMethod !== 'geolocation') {
+        formMsg.clear(el.locationDetectMsg);
+      }
+      state.lastDetectionMethod = 'geolocation';
     });
 
     el.locationDetect.children[2].children[0].addEventListener('click', function() {
@@ -104,6 +110,10 @@ var PostForm = (function() {
       loc.lon = null;
       el.locationPlace.style.display = 'block';
       el.locationPlace.children[1].style.marginBottom = '0.7rem';
+      if (state.lastDetectionMethod !== 'place') {
+        formMsg.clear(el.locationDetectMsg);
+      }
+      state.lastDetectionMethod = 'place';
     });
 
     el.locationDetectButton.addEventListener('click', pickLocationDetectMethod);
@@ -131,6 +141,7 @@ var PostForm = (function() {
       function successNavCallback(position) {
         loc.lat = position.coords.latitude;
         loc.lon = position.coords.longitude;
+        formMsg.showOK(el.locationDetectMsg, '(' + loc.lat + ', ' + loc.lon + ')');
       }
       function failCallback() {
         console.log("geolocation error");
@@ -156,6 +167,7 @@ var PostForm = (function() {
       state.xhrResponse = JSON.parse(state.xhr.responseText)[0];
       loc.lat = state.xhrResponse.lat;
       loc.lon = state.xhrResponse.lon;
+      formMsg.showOK(el.locationDetectMsg, '(' + loc.lat + ', ' + loc.lon + ')');
     }
 
     function failCallback() {
