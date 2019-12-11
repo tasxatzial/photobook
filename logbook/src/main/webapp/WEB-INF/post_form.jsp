@@ -6,9 +6,9 @@
   <textarea name="post-form-description" class="sign-tofill" id="post-form-description"></textarea>
 </div>
 <div class="sign-child">
-  <p class="sign-label signup-necessary">2. Please provide a (latitude, longitude). You can either use Geolocation or provide a Country/Place.</p>
+  <p class="sign-label signup-necessary">2. Please enter a (latitude, longitude). You can use Geolocation or manually provide a Country/Place</p>
   <div class="post-form-options">
-    <label class="sign-label"><input type="radio" name="detect-method" id="post-form-auto-detect">Geolocation</label><br>
+    <label class="sign-label"><input type="radio" name="detect-method" id="post-form-auto-detect" checked>Geolocation</label><br>
     <label class="sign-label"><input type="radio" name="detect-method" id="post-form-place-detect">Country/Place</label>
   </div>
   <div id="post-form-country-hidden" style="display: none">
@@ -22,7 +22,7 @@
       <p class="signup-require-info">City and/or address and/or place</p>
     </div>
   </div>
-  <button type="button" class="sign-internal-button" id="post-form-detect-button" disabled>Detect my location</button>
+  <button type="button" class="sign-internal-button" id="post-form-detect-button">Detect my location</button>
 </div>
 <div class="sign-child">
   <label for="post-form-online-page" class="sign-label">3. You may provide a link to an online page.</label>
@@ -43,6 +43,6 @@
   </div>
 </div>
 <div class="sign-button" id="post-button">
-  <input type="button" value="Create post" disabled>
+  <input type="button" value="Create post">
   <div id="signupin-msg"></div>
 </div>

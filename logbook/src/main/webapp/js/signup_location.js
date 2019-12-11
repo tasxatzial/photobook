@@ -274,7 +274,7 @@ var LocationSearch = (function() {
   Assumes that arguments are valid elements with a value attribute */
   function createInput(address, city, country) {
     var cityAddress = city.value;
-    if (address.value.trim()) {
+    if (address && address.value.trim()) {
       cityAddress = city.value + ',' + address.value;
     }
     return '?q=' + cityAddress +

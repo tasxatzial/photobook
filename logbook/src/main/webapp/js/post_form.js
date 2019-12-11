@@ -3,15 +3,33 @@
 var PostForm = (function() {
   var state = {
     xhr: null,
+    xhrResponse: null,
+    detectionMethod: null
+  };
+
+  var loc = {
+    lat: null,
+    lon: null
+  };
+
+  var nominatimAPI = {
+    url: 'https://nominatim.openstreetmap.org/search'
   };
 
   var el = {
     filePicker: null,
-    selectOnlinePhoto: null
+    selectOnlinePhoto: null,
+    locationPlace: null,
+    locationDetect: null,
+    description: null,
+    onlineResource: null,
+    onlineImage: null
   };
 
   function init(userPosts) {
     var nonav = document.getElementById('no-nav');
+
+
     var data = new FormData();
     data.append("action", "GetPostForm");
     state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
@@ -30,6 +48,13 @@ var PostForm = (function() {
         postFormSection.children[0].style.paddingRight = '0';
         accountParent.appendChild(postFormSection);
       }
+
+      el.createPostMsg = document.getElementById('signupin-msg');
+
+      el.description = document.getElementById('post-form-description');
+      el.onlineResource = document.getElementById('post-form-online-page');
+      el.onlineImage = document.getElementById('post-form-online-image');
+
       addListeners();
     }
 
@@ -42,9 +67,9 @@ var PostForm = (function() {
     el.selectOnlinePhoto = document.getElementById('select-online-photo');
     var selectDiskPhoto = document.getElementById('select-disk-photo');
     el.filePicker = new PhotoPicker(selectDiskPhoto.children[2], selectDiskPhoto.children[1]);
-    var locationDetect = document.querySelector('.post-form-options');
+    el.locationDetect = document.querySelector('.post-form-options');
     var locationDetectButton = document.getElementById('post-form-detect-button');
-    var locationPlace = document.getElementById('post-form-country-hidden');
+    el.locationPlace = document.getElementById('post-form-country-hidden');
     var onlinePhotoToggle = OnlinePhotoToggle();
 
     el.selectOnlinePhoto.children[0].children[0].addEventListener('click', function() {
@@ -59,16 +84,60 @@ var PostForm = (function() {
       });
     });
 
-    locationDetect.children[0].children[0].addEventListener('click', function() {
+    el.locationDetect.children[0].children[0].addEventListener('click', function() {
+      loc.lat = null;
+      loc.lon = null;
       locationDetectButton.disabled = false;
-      locationPlace.style.display = 'none';
+      el.locationPlace.style.display = 'none';
+      el.locationPlace.children[1].children[1].value = '';
+      el.locationPlace.children[0].children[1].value = '';
     });
 
-    locationDetect.children[2].children[0].addEventListener('click', function() {
-      locationDetectButton.disabled = true;
-      locationPlace.style.display = 'block';
-      locationPlace.children[1].style.marginBottom = '0.7rem';
+    el.locationDetect.children[2].children[0].addEventListener('click', function() {
+      loc.lat = null;
+      loc.lon = null;
+      el.locationPlace.style.display = 'block';
+      el.locationPlace.children[1].style.marginBottom = '0.7rem';
     });
+
+    locationDetectButton.addEventListener('click', pickLocationDetectMethod);
+  }
+
+
+  function pickLocationDetectMethod() {
+    if (el.locationDetect.children[0].children[0].checked) {
+      navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
+      function successNavCallback(position) {
+        loc.lat = position.coords.latitude;
+        loc.lon = position.coords.longitude;
+      }
+      function failCallback() {}
+    }
+    else {
+      locationSearch();
+    }
+  }
+
+  function locationSearch() {
+    var state = {
+      xhr: null,
+      xhrResponse: null
+    };
+
+    var place = el.locationPlace.children[1].children[1];
+    var country = el.locationPlace.children[0].children[1];
+    var input = LocationSearch.createInput('', place, country);
+    state.xhr = state.xhr = ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback);
+
+    function successCallback() {
+      state.xhrResponse = JSON.parse(state.xhr.responseText)[0];
+      loc.lat = state.xhrResponse.lat;
+      loc.lon = state.xhrResponse.lon;
+    }
+
+    function failCallback() {
+      console.log(state.xhr.responseText);
+    }
   }
 
   function OnlinePhotoToggle() {
