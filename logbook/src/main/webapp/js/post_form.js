@@ -2,7 +2,12 @@
 
 var PostForm = (function() {
   var state = {
-    xhr: null
+    xhr: null,
+  };
+
+  var el = {
+    filePicker: null,
+    selectOnlinePhoto: null
   };
 
   function init(userPosts) {
@@ -34,24 +39,23 @@ var PostForm = (function() {
   }
 
   function addListeners() {
-    var selectOnlinePhoto = document.getElementById('select-online-photo');
+    el.selectOnlinePhoto = document.getElementById('select-online-photo');
     var selectDiskPhoto = document.getElementById('select-disk-photo');
-    var filePicker = new PhotoPicker(selectDiskPhoto.children[2], selectDiskPhoto.children[1]);
+    el.filePicker = new PhotoPicker(selectDiskPhoto.children[2], selectDiskPhoto.children[1]);
     var locationDetect = document.querySelector('.post-form-options');
     var locationDetectButton = document.getElementById('post-form-detect-button');
     var locationPlace = document.getElementById('post-form-country-hidden');
+    var onlinePhotoToggle = OnlinePhotoToggle();
 
-    selectOnlinePhoto.children[0].children[0].addEventListener('click', function() {
-      selectOnlinePhoto.children[1].style.display = 'inline-block';
-      selectOnlinePhoto.className = 'sign-child';
-      filePicker.clearPhoto();
+    el.selectOnlinePhoto.children[0].children[0].addEventListener('click', function() {
+      onlinePhotoToggle.toggle();
     });
 
     selectDiskPhoto.children[0].addEventListener('click', function() {
-      filePicker.click(function() {
-        selectOnlinePhoto.children[1].style.display = 'none';
-        selectOnlinePhoto.children[0].children[0].checked = false;
-        selectOnlinePhoto.className = '';
+      el.filePicker.click(function() {
+        el.selectOnlinePhoto.children[1].style.display = 'none';
+        el.selectOnlinePhoto.children[0].children[0].checked = false;
+        el.selectOnlinePhoto.className = '';
       });
     });
 
@@ -65,6 +69,30 @@ var PostForm = (function() {
       locationPlace.style.display = 'block';
       locationPlace.children[1].style.marginBottom = '0.7rem';
     });
+  }
+
+  function OnlinePhotoToggle() {
+    var state = {
+      checked: false
+    };
+
+    function toggle() {
+      if (state.checked) {
+        state.checked = false;
+        el.selectOnlinePhoto.children[1].style.display = 'none';
+        el.selectOnlinePhoto.className = '';
+        el.selectOnlinePhoto.children[1].value = '';
+      } else {
+        state.checked = true;
+        el.selectOnlinePhoto.children[1].style.display = 'inline-block';
+        el.selectOnlinePhoto.className = 'sign-child';
+        el.filePicker.clearPhoto();
+      }
+    }
+
+    return {
+      toggle: toggle
+    };
   }
 
   return {

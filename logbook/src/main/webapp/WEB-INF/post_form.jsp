@@ -6,9 +6,9 @@
   <textarea name="post-form-description" class="sign-tofill" id="post-form-description"></textarea>
 </div>
 <div class="sign-child">
-  <p class="sign-label signup-necessary">2. Please provide a (latitude, longitude). You can either use autodetection or provide a Country/Place.</p>
+  <p class="sign-label signup-necessary">2. Please provide a (latitude, longitude). You can either use Geolocation or provide a Country/Place.</p>
   <div class="post-form-options">
-    <label class="sign-label"><input type="radio" name="detect-method" id="post-form-auto-detect">Autodetect</label><br>
+    <label class="sign-label"><input type="radio" name="detect-method" id="post-form-auto-detect">Geolocation</label><br>
     <label class="sign-label"><input type="radio" name="detect-method" id="post-form-place-detect">Country/Place</label>
   </div>
   <div id="post-form-country-hidden" style="display: none">
@@ -32,7 +32,7 @@
   <div class="sign-label">4. You may provide a link to an image. It can be an online image or you can select one from disk.</div>
   <div class="post-form-options">
     <div id="select-online-photo">
-      <label class="sign-label"><input type="radio">Online image</label>
+      <label class="sign-label"><input type="checkbox">Online image</label>
       <input type="text" class="sign-tofill" name="post-form-online-image" id="post-form-online-image" style="display: none">
     </div>
     <div id="select-disk-photo">
