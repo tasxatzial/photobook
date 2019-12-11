@@ -8,6 +8,10 @@ var SignInFace = (function () {
     analyze: null
   };
 
+  var state = {
+    photoSectionVisible: false
+  };
+  
   var el = {
     /* object that controls the select photo button and the display of the image on the DOM */
     photoPicker: null,
@@ -16,8 +20,6 @@ var SignInFace = (function () {
 
     /* hidden photo section that appears when photo button is clicked */
     photoSection: null,
-
-    photoSectionVisible: false,
 
     username: null,
     passwordParent: null,
@@ -77,7 +79,7 @@ var SignInFace = (function () {
   /* called after the selected image has been displayed on the DOM */
   function postSelectPhoto() {
     var photo = el.photoPicker.getPhotob64();
-    el.photoSectionVisible = true;
+    state.photoSectionVisible = true;
     el.form.insertBefore(el.photoSection, el.passwordParent);
     formMsg.clear(el.uploadMsgParent);
     if (photo) {
@@ -112,8 +114,8 @@ var SignInFace = (function () {
   /* removes the hidden photo section if user types and a previous photo
   has been used */
   function resetPhotoSection() {
-    if (el.photoSectionVisible) {
-      el.photoSectionVisible = false;
+    if (state.photoSectionVisible) {
+      state.photoSectionVisible = false;
       el.form.removeChild(el.photoSection);
       formMsg.clear(el.uploadMsgParent);
       el.photoPicker.clearPhoto();
@@ -128,6 +130,7 @@ var SignInFace = (function () {
     el.photoButton = document.getElementsByClassName('signin-photo-button')[0];
     el.submit = document.querySelector('#signin-button input');
 
+    state.photoSectionVisible = false;
     formButton.enable(el.photoButton);
     el.photoButton.addEventListener('click', selectPhoto);
     el.username.addEventListener('input', resetPhotoSection);
