@@ -34,3 +34,7 @@
 #select-disk-photo {
     margin-top: .2rem;
 }
+
+#post-form-parent input[type="radio"] {
+    margin-left: 0;
+}

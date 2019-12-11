@@ -36,13 +36,17 @@ var PostForm = (function() {
   function addListeners() {
     var selectOnlinePhoto = document.getElementById('select-online-photo');
     var selectDiskPhoto = document.getElementById('select-disk-photo');
+    var filePicker = new PhotoPicker(selectDiskPhoto.children[2], selectDiskPhoto.children[1]);
+    var locationDetect = document.querySelector('.post-form-options');
+    var locationDetectButton = document.getElementById('post-form-detect-button');
+    var locationPlace = document.getElementById('post-form-country-hidden');
 
     selectOnlinePhoto.children[0].children[0].addEventListener('click', function() {
-      selectOnlinePhoto.children[1].style.display = 'block';
+      selectOnlinePhoto.children[1].style.display = 'inline-block';
       selectOnlinePhoto.className = 'sign-child';
       filePicker.clearPhoto();
     });
-    var filePicker = new PhotoPicker(selectDiskPhoto.children[2], selectDiskPhoto.children[1]);
+
     selectDiskPhoto.children[0].addEventListener('click', function() {
       filePicker.click(function() {
         selectOnlinePhoto.children[1].style.display = 'none';
@@ -51,7 +55,16 @@ var PostForm = (function() {
       });
     });
 
+    locationDetect.children[0].children[0].addEventListener('click', function() {
+      locationDetectButton.disabled = false;
+      locationPlace.style.display = 'none';
+    });
 
+    locationDetect.children[2].children[0].addEventListener('click', function() {
+      locationDetectButton.disabled = true;
+      locationPlace.style.display = 'block';
+      locationPlace.children[1].style.marginBottom = '0.7rem';
+    });
   }
 
   return {
