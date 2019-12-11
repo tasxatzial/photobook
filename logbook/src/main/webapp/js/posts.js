@@ -35,7 +35,22 @@ var ShowPosts = (function() {
 
     var data = new FormData();
     data.append("action", "GetPosts");
+    if (username === false) {
+      data.append('username', '0');
+      console.log("false");
+    }
+    else {
+      data.append('username', username);
+    }
+    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
 
+    function successCallback() {
+      console.log(JSON.parse(state.xhr.responseText));
+    }
+
+    function failCallback() {
+
+    }
   }
 
   return {

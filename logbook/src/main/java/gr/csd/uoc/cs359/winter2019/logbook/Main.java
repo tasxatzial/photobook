@@ -77,6 +77,9 @@ public class Main extends HttpServlet {
             case "GetPostForm":
                 dispatcher = request.getRequestDispatcher("WEB-INF/post_form.jsp");
                 break;
+            case "GetPosts":
+                dispatcher = request.getRequestDispatcher("GetPosts");
+                break;
             case "Logout":
                 if (oldSession != null) {
                     oldSession.invalidate();
