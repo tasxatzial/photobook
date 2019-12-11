@@ -3,10 +3,6 @@
     max-height: 17rem;
 }
 
-#country-detect {
-    margin-bottom: .5rem;
-}
-
 #post-form-photo-container {
     display: flex;
     flex-flow: row nowrap;
@@ -27,9 +23,14 @@
 }
 
 .post-form-options {
-    margin-top: .5rem;
+    margin-top: .3rem;
+    margin-bottom: .3rem;
 }
 
 #select-online-photo {
     width: 100%;
+}
+
+#select-disk-photo {
+    margin-top: .2rem;
 }

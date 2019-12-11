@@ -11,7 +11,7 @@
   <p class="sign-label signup-necessary">2. Please provide a (latitude, longitude). You can either use autodetection or provide a country/place.</p>
   <div class="post-form-options">
     <label class="sign-label"><input type="radio" name="detect-method">Autodetect</label><br>
-    <label class="sign-label"><input type="radio" name="detect-method" id="country-detect">Country/Place</label>
+    <label class="sign-label"><input type="radio" name="detect-method">Country/Place</label>
   </div>
   <button type="button" class="sign-internal-button" disabled>Detect my location</button>
   <div id="country-place-hidden" style="display: none">
@@ -35,7 +35,7 @@
   <div class="post-form-options">
     <div id="select-online-photo">
       <label class="sign-label"><input type="radio">Online image</label>
-      <input type="text" class="sign-tofill">
+      <input type="text" class="sign-tofill" style="display: none">
     </div>
     <div id="select-disk-photo">
       <button type="button" class="sign-internal-button" id="post-form-disk-select">Select from disk</button>

@@ -34,11 +34,24 @@ var PostForm = (function() {
   }
 
   function addListeners() {
+    var selectOnlinePhoto = document.getElementById('select-online-photo');
     var selectDiskPhoto = document.getElementById('select-disk-photo');
+
+    selectOnlinePhoto.children[0].children[0].addEventListener('click', function() {
+      selectOnlinePhoto.children[1].style.display = 'block';
+      selectOnlinePhoto.className = 'sign-child';
+      filePicker.clearPhoto();
+    });
     var filePicker = new PhotoPicker(selectDiskPhoto.children[2], selectDiskPhoto.children[1]);
     selectDiskPhoto.children[0].addEventListener('click', function() {
-      filePicker.click(null);
+      filePicker.click(function() {
+        selectOnlinePhoto.children[1].style.display = 'none';
+        selectOnlinePhoto.children[0].children[0].checked = false;
+        selectOnlinePhoto.className = '';
+      });
     });
+
+
   }
 
   return {
