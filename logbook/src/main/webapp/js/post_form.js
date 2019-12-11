@@ -31,7 +31,7 @@ var PostForm = (function() {
     onlinePhotoToggle: null
   };
 
-  function init(userPosts) {
+  function init(username) {
     var nonav = document.getElementById('no-nav');
 
     var data = new FormData();
@@ -41,7 +41,7 @@ var PostForm = (function() {
     function successCallback() {
       var postFormSection = newElements.createPostFormSection();
       postFormSection.children[0].innerHTML = state.xhr.responseText;
-      if (!userPosts) {
+      if (username === false) {
         nonav.innerHTML = '';
         nonav.appendChild(postFormSection);
       }

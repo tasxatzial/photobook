@@ -17,7 +17,7 @@ var Homepage = (function() {
 
     var postsButton = newElements.createSignBarButton('Posts', 'show-posts');
     postsButton.addEventListener('click', function() {
-      ShowPosts.init(false, true);
+      ShowPosts.init(false);
     });
     navbarContent.appendChild(postsButton);
 
@@ -31,7 +31,7 @@ var Homepage = (function() {
     postsButton.addEventListener('click', underline(postsButton, allUsersButton, accountButton));
 
     underline(postsButton, allUsersButton, accountButton)();
-    ShowPosts.init(false, true);
+    ShowPosts.init(false);
   }
 
   function underline(element1, element2, element3) {

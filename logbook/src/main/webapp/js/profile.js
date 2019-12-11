@@ -17,13 +17,12 @@ var ShowProfile = (function() {
 
   function init(username, firstTime) {
     var nonav = document.getElementById('no-nav');
-
     state.username = username;
     state.xhrResponse = null;
 
     var data = new FormData();
     data.append("action", "GetProfile");
-    data.append("username", username);
+    data.append("username", state.username);
     state.xhr = ajaxRequest("POST", "Main", data, successCallback, failCallback);
 
     function successCallback() {
@@ -68,7 +67,7 @@ var ShowProfile = (function() {
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
     });
     el.showPostsButton.addEventListener('click', function () {
-      ShowPosts.init(true, state.owner);
+      ShowPosts.init(state.username, state.owner);
       showBorders(el.showPostsButton, el.showProfileButton, el.editAccountButton);
     });
 

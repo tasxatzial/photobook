@@ -139,11 +139,11 @@ var newElements = (function NewElements() {
     return div;
   }
 
-  function createPostsSection(canPost) {
+  function createPostsSection(username) {
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';
 
-    if (canPost) {
+    if (!username) {
       var postButton = createBlueButton('+ New Post', 'new-post-button');
       postsParent.appendChild(postButton);
     }

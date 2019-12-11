@@ -5,10 +5,10 @@ var ShowPosts = (function() {
     postsSection: null
   };
 
-  function init(userPosts, canPost) {
-    el.postsSection = newElements.createPostsSection(canPost);
+  function init(username) {
+    el.postsSection = newElements.createPostsSection(username);
     var nonav = document.getElementById('no-nav');
-    if (!userPosts) {
+    if (username === false) {
       nonav.innerHTML = '';
       nonav.appendChild(el.postsSection);
     }
@@ -18,13 +18,26 @@ var ShowPosts = (function() {
       accountParent.removeChild(accountParent.children[2]);
       accountParent.appendChild(el.postsSection);
     }
-    if (canPost) {
+    if (!username) {
       var newPostButton = el.postsSection.children[0].children[0];
       newPostButton.addEventListener('click', function() {
-        PostForm.init(userPosts);
+        PostForm.init(username);
       });
     }
+
+    getPosts(username);
   }
+
+  function getPosts(username) {
+    var state = {
+      xhr: null
+    };
+
+    var data = new FormData();
+    data.append("action", "GetPosts");
+
+  }
+
   return {
     init: init
   };
