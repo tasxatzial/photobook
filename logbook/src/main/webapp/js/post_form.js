@@ -3,8 +3,7 @@
 var PostForm = (function() {
   var state = {
     xhr: null,
-    xhrResponse: null,
-    detectionMethod: null
+    xhrResponse: null
   };
 
   var loc = {
@@ -21,14 +20,18 @@ var PostForm = (function() {
     selectOnlinePhoto: null,
     locationPlace: null,
     locationDetect: null,
+    createPostMsg: null,
     description: null,
     onlineResource: null,
-    onlineImage: null
+    onlineImage: null,
+    postButton: null,
+    selectDiskPhoto: null,
+    locationDetectButton: null,
+    onlinePhotoToggle: null
   };
 
   function init(userPosts) {
     var nonav = document.getElementById('no-nav');
-
 
     var data = new FormData();
     data.append("action", "GetPostForm");
@@ -50,10 +53,17 @@ var PostForm = (function() {
       }
 
       el.createPostMsg = document.getElementById('signupin-msg');
-
       el.description = document.getElementById('post-form-description');
       el.onlineResource = document.getElementById('post-form-online-page');
       el.onlineImage = document.getElementById('post-form-online-image');
+      el.selectOnlinePhoto = document.getElementById('select-online-photo');
+      el.selectDiskPhoto = document.getElementById('select-disk-photo');
+      el.filePicker = new PhotoPicker(el.selectDiskPhoto.children[2], el.selectDiskPhoto.children[1]);
+      el.locationDetect = document.querySelector('.post-form-options');
+      el.locationDetectButton = document.getElementById('post-form-detect-button');
+      el.locationPlace = document.getElementById('post-form-country-hidden');
+      el.onlinePhotoToggle = OnlinePhotoToggle();
+      el.postButton = document.getElementById('post-button');
 
       addListeners();
     }
@@ -64,19 +74,15 @@ var PostForm = (function() {
   }
 
   function addListeners() {
-    el.selectOnlinePhoto = document.getElementById('select-online-photo');
-    var selectDiskPhoto = document.getElementById('select-disk-photo');
-    el.filePicker = new PhotoPicker(selectDiskPhoto.children[2], selectDiskPhoto.children[1]);
-    el.locationDetect = document.querySelector('.post-form-options');
-    var locationDetectButton = document.getElementById('post-form-detect-button');
-    el.locationPlace = document.getElementById('post-form-country-hidden');
-    var onlinePhotoToggle = OnlinePhotoToggle();
-
-    el.selectOnlinePhoto.children[0].children[0].addEventListener('click', function() {
-      onlinePhotoToggle.toggle();
+    el.description.addEventListener('input', function() {
+      formMsg.clear(el.createPostMsg);
     });
 
-    selectDiskPhoto.children[0].addEventListener('click', function() {
+    el.selectOnlinePhoto.children[0].children[0].addEventListener('click', function() {
+      el.onlinePhotoToggle.toggle();
+    });
+
+    el.selectDiskPhoto.children[0].addEventListener('click', function() {
       el.filePicker.click(function() {
         el.selectOnlinePhoto.children[1].style.display = 'none';
         el.selectOnlinePhoto.children[0].children[0].checked = false;
@@ -87,7 +93,7 @@ var PostForm = (function() {
     el.locationDetect.children[0].children[0].addEventListener('click', function() {
       loc.lat = null;
       loc.lon = null;
-      locationDetectButton.disabled = false;
+      el.locationDetectButton.disabled = false;
       el.locationPlace.style.display = 'none';
       el.locationPlace.children[1].children[1].value = '';
       el.locationPlace.children[0].children[1].value = '';
@@ -100,18 +106,35 @@ var PostForm = (function() {
       el.locationPlace.children[1].style.marginBottom = '0.7rem';
     });
 
-    locationDetectButton.addEventListener('click', pickLocationDetectMethod);
+    el.locationDetectButton.addEventListener('click', pickLocationDetectMethod);
+    el.postButton.addEventListener('click', createPost);
   }
 
+  function createPost() {
+    if (loc.lat === null || loc.lon === null || el.description.value.trim() === '') {
+      formMsg.showError(el.createPostMsg, 'Please provide all required fields');
+      return;
+    }
+
+    console.log(loc.lat);
+    console.log(loc.lon);
+    console.log(el.description.value);
+    console.log(el.onlineResource.value);
+    console.log(el.onlineImage.value);
+    console.log(el.filePicker.getPhotob64());
+  }
 
   function pickLocationDetectMethod() {
+    formMsg.clear(el.createPostMsg);
     if (el.locationDetect.children[0].children[0].checked) {
       navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
       function successNavCallback(position) {
         loc.lat = position.coords.latitude;
         loc.lon = position.coords.longitude;
       }
-      function failCallback() {}
+      function failCallback() {
+        console.log("geolocation error");
+      }
     }
     else {
       locationSearch();
