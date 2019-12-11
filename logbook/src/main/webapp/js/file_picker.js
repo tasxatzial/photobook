@@ -15,7 +15,9 @@ function PhotoPicker(photoContainer, fileInput) {
   };
 
   function click(callback) {
-    state.callback = callback;
+    if (typeof callback === 'function') {
+      state.callback = callback;
+    }
     fileInput.click();
   }
 
@@ -33,7 +35,7 @@ function PhotoPicker(photoContainer, fileInput) {
     
     /* read the selected file as base64 */
     var reader = new FileReader();
-    reader.readAsDataURL(file,'UTF-8');
+    reader.readAsDataURL(file);
 
     /* fires when reading is done */
     reader.onload = function(event) {
@@ -43,7 +45,9 @@ function PhotoPicker(photoContainer, fileInput) {
       if (!isValidImage(state.photob64.split(',')[0])) {
         photoContainer.innerHTML = 'Invalid format';
         state.photob64 = null;
-        state.callback();
+        if (state.callback) {
+          state.callback();
+        }
         return;
       }
 
@@ -54,7 +58,9 @@ function PhotoPicker(photoContainer, fileInput) {
 
       /* fires after the image has been added to the DOM */
       img.onload = function() {
-        state.callback();
+        if (state.callback) {
+          state.callback();
+        }
       };
 
       /* specifying the src must be done after defining the onload event */

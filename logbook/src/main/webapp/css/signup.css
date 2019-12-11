@@ -5,21 +5,11 @@
   margin-right: auto;
 }
 
-/* location search (button + msg) parent container */
+/* location search (button + msg) container */
 .signup-location-search, .signup-geolocation-search {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
-  align-items: stretch;
-}
-
-/* location search (button + msg) container */
-.signup-location-search-content, .signup-geolocation-search-content {
-  display: flex;
-  flex-flow: column wrap;
   justify-content: flex-start;
-  margin-left: auto;
-  margin-right: auto;
   margin-top: 1rem;
 }
 
@@ -82,14 +72,6 @@
   padding: 0;
   margin-top: 0;
   margin-bottom: 0;
-}
-
-/* the subsections are:
-   1) Associate username with photo
-   2) Geolocation
-   3) Location search */
-.signup-subsection {
-  font-size: 0.9rem;
 }
 
 /* shows 100 chars without any resizing */

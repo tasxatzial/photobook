@@ -25,11 +25,20 @@ var PostForm = (function() {
         postFormSection.children[0].style.paddingRight = '0';
         accountParent.appendChild(postFormSection);
       }
+      addListeners();
     }
 
     function failCallback() {
       console.log(state.xhr.responseText);
     }
+  }
+
+  function addListeners() {
+    var selectDiskPhoto = document.getElementById('select-disk-photo');
+    var filePicker = new PhotoPicker(selectDiskPhoto.children[2], selectDiskPhoto.children[1]);
+    selectDiskPhoto.children[0].addEventListener('click', function() {
+      filePicker.click(null);
+    });
   }
 
   return {

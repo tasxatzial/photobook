@@ -14,7 +14,7 @@
           <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("username")%>" name="signup-username" id="signup-username" pattern="^[A-Za-z]{8,}$" required>
           <p class="signup-require-info">At least 8 characters, only letters</p>
         </div>
-        <div class="sign-child signup-subsection" id="signup-photo-section">
+        <div class="sign-child" id="signup-photo-section">
           <p>
             <label class="sign-label"><input type="checkbox" disabled>
               Associate my username with a photo that may be used to identify me during the sign in process
@@ -77,13 +77,11 @@
           <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("job")%>" name="signup-job" id="signup-job" pattern="^[^0-9!#$%&'*+/=?^`{|}\[\]_\\~<>.,-]{3,15}$" required>
           <p class="signup-require-info">3 to 15 characters</p>
         </div>
-        <div class="sign-child signup-subsection">
+        <div class="sign-child">
           <p class="sign-label">- You may detect your location or manually fill in the fields below</p>
           <div class="signup-geolocation-search">
-            <div class="signup-geolocation-search-content">
-              <button type="button" class="signup-geolocation-search-button sign-internal-button" disabled>Detect my location</button>
-              <div class="sign-process-msg" id="signup-geolocation-search-state"></div>
-            </div>
+            <button type="button" class="signup-geolocation-search-button sign-internal-button" disabled>Detect my location</button>
+            <div class="sign-process-msg" id="signup-geolocation-search-state"></div>
           </div>
         </div>
         <div class="sign-child" id="signup-country-parent">
@@ -104,13 +102,11 @@
           <label for="signup-address" class="sign-label">Address</label><br>
           <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("address")%>" name="signup-address" id="signup-address">
         </div>
-        <div class="sign-child signup-subsection">
+        <div class="sign-child">
           <p class="sign-label">- If the Country/City fields are filled in, you may find your location on a map</p>
           <div class="signup-location-search">
-            <div class="signup-location-search-content">
-              <button type="button" class="signup-location-search-button sign-internal-button" disabled>Search my location</button>
-              <div class="sign-process-msg" id="signup-location-search-state"></div>
-            </div>
+            <button type="button" class="signup-location-search-button sign-internal-button" disabled>Search my location</button>
+            <div class="sign-process-msg" id="signup-location-search-state"></div>
           </div>
           <div id="signup-map-parent"></div>
         </div>
