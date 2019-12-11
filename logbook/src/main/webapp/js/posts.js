@@ -37,7 +37,6 @@ var ShowPosts = (function() {
     data.append("action", "GetPosts");
     if (username === false) {
       data.append('username', '0');
-      console.log("false");
     }
     else {
       data.append('username', username);
