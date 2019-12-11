@@ -21,9 +21,9 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
 
-@WebServlet(name = "GetPosts", urlPatterns = "/GetPosts")
+@WebServlet(name = "CreatePost", urlPatterns = "/CreatePost")
 @MultipartConfig
-public class GetPosts extends HttpServlet {
+public class CreatePost extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,36 +48,19 @@ public class GetPosts extends HttpServlet {
             return;
         }
 
-        String username = request.getParameter("username");
+        Post post = new Post();
+        String username = (String) oldSession.getAttribute("username");
+        post.setUserName(username);
+        post.setDescription(request.getParameter("description"));
+        post.setResourceURL(request.getParameter("resourceURL"));
+        post.setImageURL(request.getParameter("imageURL"));
+        post.setImageBase64(request.getParameter("imageBase64"));
+        post.setLatitude(request.getParameter("latitude"));
+        post.setLongitude(request.getParameter("longitude"));
 
-        List<Post> posts;
-        if (username.equals("0")) {
-            posts = PostDB.getTop10RecentPosts();
-        }
-        else if (username.equals("")) {
-            posts = PostDB.getTop10RecentPostsOfUser((String) oldSession.getAttribute("username"));
-        }
-        else {
-            posts = PostDB.getTop10RecentPostsOfUser(username);
-        }
+        PostDB.addPost(post);
 
-        Post post;
-        JSONObject json;
 
-        for (int i = 0; i < posts.size(); i++) {
-            post = posts.get(i);
-            json = new JSONObject();
-            json.put("userName", post.getUserName());
-            json.put("description", post.getDescription());
-            json.put("resourceURL", post.getResourceURL());
-            json.put("imageURL", post.getImageURL());
-            json.put("imageBase64", post.getImageBase64());
-            json.put("latitude", post.getLatitude());
-            json.put("longitude", post.getLongitude());
-            json.put("createdAt", post.getCreatedAt());
-            jsonFinal.put(Integer.toString(i), json);
-        }
-        out.println(jsonFinal.toJSONString());
     }
 
     /**

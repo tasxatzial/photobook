@@ -121,17 +121,38 @@ var PostForm = (function() {
   }
 
   function createPost() {
+    var state = {
+      xhr: null
+    };
+
     if (loc.lat === null || loc.lon === null || el.description.value.trim() === '') {
       formMsg.showError(el.createPostMsg, 'Please provide all required fields');
       return;
     }
 
-    console.log(loc.lat);
-    console.log(loc.lon);
-    console.log(el.description.value);
-    console.log(el.onlineResource.value);
-    console.log(el.onlineImage.value);
-    console.log(el.filePicker.getPhotob64());
+    var data = new FormData();
+    data.append("action", "CreatePost");
+    data.append("latitude", loc.lat);
+    data.append("longitude", loc.lon);
+    data.append("description", el.description.value);
+    data.append("resourceURL", el.onlineResource.value);
+    data.append("imageURL", el.onlineImage.value);
+    if (el.filePicker.getPhotob64()) {
+      data.append("imageBase64", el.filePicker.getPhotob64());
+    }
+    else {
+      data.append("imageBase64", '');
+    }
+
+    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+
+    function successCallback() {
+
+    }
+
+    function failCallback() {
+
+    }
   }
 
   function pickLocationDetectMethod() {
