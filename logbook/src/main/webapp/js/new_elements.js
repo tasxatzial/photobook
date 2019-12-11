@@ -312,6 +312,11 @@ var newElements = (function NewElements() {
 
     return postFormSection;
   }
+
+  function createShortPosts(response) {
+
+  }
+
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
@@ -324,6 +329,7 @@ var newElements = (function NewElements() {
     createAllUsers: createAllUsers,
     createAccountSection: createAccountSection,
     createPostsSection: createPostsSection,
-    createPostFormSection: createPostFormSection
+    createPostFormSection: createPostFormSection,
+    createShortPosts: createShortPosts
   };
 }());

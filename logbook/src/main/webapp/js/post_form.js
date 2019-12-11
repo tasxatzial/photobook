@@ -84,6 +84,20 @@ var PostForm = (function() {
       el.onlinePhotoToggle.toggle();
     });
 
+    function addPlaceInputListeners() {
+      formMsg.clear(el.createPostMsg);
+      formMsg.clear(el.locationDetectMsg);
+      if (el.locationPlace.children[0].children[1].value !== '' && el.locationPlace.children[1].children[1].value.trim() !== '') {
+        el.locationDetectButton.disabled = false;
+      }
+      else {
+        el.locationDetectButton.disabled = true;
+      }
+    }
+
+    el.locationPlace.children[0].children[1].addEventListener('input', addPlaceInputListeners);
+    el.locationPlace.children[1].children[1].addEventListener('input', addPlaceInputListeners);
+
     el.selectDiskPhoto.children[0].addEventListener('click', function() {
       el.filePicker.click(function() {
         el.selectOnlinePhoto.children[1].style.display = 'none';
@@ -108,6 +122,7 @@ var PostForm = (function() {
     el.locationDetect.children[2].children[0].addEventListener('click', function() {
       loc.lat = null;
       loc.lon = null;
+      el.locationDetectButton.disabled = true;
       el.locationPlace.style.display = 'block';
       el.locationPlace.children[1].style.marginBottom = '0.7rem';
       if (state.lastDetectionMethod !== 'place') {
