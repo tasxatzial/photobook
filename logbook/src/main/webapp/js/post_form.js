@@ -201,9 +201,14 @@ var PostForm = (function() {
 
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText)[0];
-      loc.lat = state.xhrResponse.lat;
-      loc.lon = state.xhrResponse.lon;
-      formMsg.showOK(el.locationDetectMsg, '(' + loc.lat + ', ' + loc.lon + ')');
+      if (state.xhrResponse) {
+        loc.lat = state.xhrResponse.lat;
+        loc.lon = state.xhrResponse.lon;
+        formMsg.showOK(el.locationDetectMsg, '(' + loc.lat + ', ' + loc.lon + ')');
+      }
+      else {
+        formMsg.showError(el.locationDetectMsg, 'Not found');
+      }
     }
 
     function failCallback() {
