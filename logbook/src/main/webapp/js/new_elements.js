@@ -140,6 +140,11 @@ var newElements = (function NewElements() {
   }
 
   function createPostsSection(username) {
+    var header = document.createElement('header');
+    var headerH2 = document.createElement('h2');
+    headerH2.innerHTML = 'Latest posts';
+    header.appendChild(headerH2);
+
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';
 
@@ -147,10 +152,10 @@ var newElements = (function NewElements() {
       var postButton = createBlueButton('+ New Post', 'new-post-button');
       postsParent.appendChild(postButton);
     }
+    postsParent.appendChild(header);
 
     var postsSection = document.createElement('div');
     postsSection.id = 'posts-section';
-
     postsSection.appendChild(postsParent);
 
     return postsSection;
@@ -313,8 +318,92 @@ var newElements = (function NewElements() {
     return postFormSection;
   }
 
-  function createShortPosts(response) {
+  function createShortPost(postJSON) {
+    var state = {
+      xhr: null,
+      xhrResponse: null
+    };
 
+    var nominatimAPI = {
+      reverseUrl: 'https://nominatim.openstreetmap.org/reverse'
+    };
+
+    var description = document.createElement('p');
+    if (postJSON['description'].length > 350) {
+      description.innerHTML = postJSON['description'].replace('\n', '<br><br>').substring(0, 350) + ' ...';
+    }
+    else {
+      description.innerHTML = postJSON['description'].replace('\n', '<br><br>');
+    }
+
+    var image = document.createElement('img');
+    image.className = 'short-post-photo';
+    if (postJSON['imageBase64'] &&
+        (postJSON['imageBase64'].split([','])[0] === 'data:image/jpeg;base64' || postJSON['imageBase64'].substring(0, 3) === '/9j/')) {
+      image.src = postJSON['imageBase64'];
+    }
+    else {
+      image.src = postJSON['imageURL'];
+    }
+    var imageParent = document.createElement('div');
+    imageParent.className = 'short-post-photo-parent';
+    imageParent.appendChild(image);
+
+    var button = document.createElement('button');
+    button.className = 'transparent-button';
+    button.innerHTML = postJSON['userName'];
+    button.style.textDecoration = 'underline';
+    button.onclick = function() {
+      ShowProfile.init(postJSON['userName'], 1);
+    };
+
+    var username = createKeyValue('Posted by', postJSON['userName']);
+    username.children[0].innerHTML = '';
+    username.children[0].appendChild(button);
+
+    var location = createKeyValue('Location', 'Not available');
+
+    var hr = document.createElement('hr');
+
+    var readMoreButton = document.createElement('button');
+    readMoreButton.className = 'transparent-button';
+    readMoreButton.innerHTML = 'Read the full post';
+
+    var readMore = document.createElement('p');
+    readMore.id = 'read-more';
+    readMore.className = 'sign-button';
+    readMore.appendChild(readMoreButton);
+
+    var postContainer = document.createElement('div');
+
+    postContainer.appendChild(hr);
+    postContainer.appendChild(imageParent);
+    postContainer.appendChild(description);
+    postContainer.appendChild(location);
+    postContainer.appendChild(username);
+    postContainer.appendChild(readMore);
+
+    var input = LocationSearch.createLatLonInput(postJSON['latitude'], postJSON['longitude']);
+    state.xhr = ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, function () {});
+    function successCallback() {
+      state.xhrResponse = JSON.parse(state.xhr.responseText);
+      var responseLocation = LocationSearch.parseReverseSearch(state.xhrResponse);
+      var loc = '';
+      if (responseLocation.country) {
+        loc += responseLocation.country;
+      }
+      if (responseLocation.city) {
+        loc += ', ' + responseLocation.city;
+      }
+      if (responseLocation.address) {
+        loc += ', ' + responseLocation.address;
+      }
+      if (loc !== '') {
+        location.children[0].innerHTML = loc;
+      }
+    }
+
+    return postContainer;
   }
 
   return {
@@ -330,6 +419,6 @@ var newElements = (function NewElements() {
     createAccountSection: createAccountSection,
     createPostsSection: createPostsSection,
     createPostFormSection: createPostFormSection,
-    createShortPosts: createShortPosts
+    createShortPost: createShortPost
   };
 }());

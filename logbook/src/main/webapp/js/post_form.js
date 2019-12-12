@@ -4,7 +4,11 @@ var PostForm = (function() {
   var state = {
     xhr: null,
     xhrResponse: null,
-    lastDetectionMethod: null
+    lastDetectionMethod: null,
+  };
+
+  var data = {
+    username: null
   };
 
   var loc = {
@@ -38,10 +42,11 @@ var PostForm = (function() {
 
   function init(username) {
     var nonav = document.getElementById('no-nav');
+    data.username = username;
 
-    var data = new FormData();
-    data.append("action", "GetPostForm");
-    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+    var formData = new FormData();
+    formData.append("action", "GetPostForm");
+    state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
 
     function successCallback() {
       var postFormSection = newElements.createPostFormSection();
@@ -53,8 +58,6 @@ var PostForm = (function() {
       else {
         var accountParent = document.getElementById('account-parent');
         accountParent.removeChild(accountParent.children[2]);
-        postFormSection.children[0].style.paddingLeft = '0';
-        postFormSection.children[0].style.paddingRight = '0';
         accountParent.appendChild(postFormSection);
       }
 
@@ -163,24 +166,24 @@ var PostForm = (function() {
       return;
     }
 
-    var data = new FormData();
-    data.append("action", "CreatePost");
-    data.append("latitude", loc.lat);
-    data.append("longitude", loc.lon);
-    data.append("description", el.description.value);
-    data.append("resourceURL", el.onlineResource.value);
-    data.append("imageURL", el.onlineImage.value);
+    var formData = new FormData();
+    formData.append("action", "CreatePost");
+    formData.append("latitude", loc.lat);
+    formData.append("longitude", loc.lon);
+    formData.append("description", el.description.value);
+    formData.append("resourceURL", el.onlineResource.value);
+    formData.append("imageURL", el.onlineImage.value);
     if (el.filePicker.getPhotob64()) {
-      data.append("imageBase64", el.filePicker.getPhotob64());
+      formData.append("imageBase64", el.filePicker.getPhotob64());
     }
     else {
-      data.append("imageBase64", '');
+      formData.append("imageBase64", '');
     }
 
-    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+    state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
 
     function successCallback() {
-
+      ShowPosts.init(data.username);
     }
 
     function failCallback() {

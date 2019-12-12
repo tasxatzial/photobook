@@ -5,7 +5,12 @@ var ShowPosts = (function() {
     postsSection: null
   };
 
+  var data = {
+    username: null
+  };
+
   function init(username) {
+    data.username = username;
     el.postsSection = newElements.createPostsSection(username);
     var nonav = document.getElementById('no-nav');
     if (username === false) {
@@ -13,7 +18,6 @@ var ShowPosts = (function() {
       nonav.appendChild(el.postsSection);
     }
     else {
-      el.postsSection.children[0].style.padding = '0';
       var accountParent = document.getElementById('account-parent');
       accountParent.removeChild(accountParent.children[2]);
       accountParent.appendChild(el.postsSection);
@@ -25,26 +29,29 @@ var ShowPosts = (function() {
       });
     }
 
-    getPosts(username);
+    getPosts();
   }
 
-  function getPosts(username) {
+  function getPosts() {
     var state = {
-      xhr: null
+      xhr: null,
+      xhrResponse: null
     };
 
-    var data = new FormData();
-    data.append("action", "GetPosts");
-    if (username === false) {
-      data.append('username', '0');
+    var formData = new FormData();
+    formData.append("action", "GetPosts");
+    if (data.username === false) {
+      formData.append('username', '0');
     }
     else {
-      data.append('username', username);
+      formData.append('username', data.username);
     }
-    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+    state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
 
     function successCallback() {
-      console.log(JSON.parse(state.xhr.responseText));
+      state.xhrResponse = JSON.parse(state.xhr.responseText);
+      var shortPost = newElements.createShortPost(state.xhrResponse['0']);
+      el.postsSection.children[0].appendChild(shortPost);
     }
 
     function failCallback() {

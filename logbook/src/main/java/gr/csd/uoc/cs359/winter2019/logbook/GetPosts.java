@@ -75,6 +75,7 @@ public class GetPosts extends HttpServlet {
             json.put("latitude", post.getLatitude());
             json.put("longitude", post.getLongitude());
             json.put("createdAt", post.getCreatedAt());
+            json.put("postID", post.getPostID());
             jsonFinal.put(Integer.toString(i), json);
         }
         out.println(jsonFinal.toJSONString());

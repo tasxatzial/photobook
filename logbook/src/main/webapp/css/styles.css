@@ -58,8 +58,12 @@ input[type="button"]:focus, button:focus {
   margin-right: auto;
 }
 
-#signup-parent, #userlist-parent, #account-parent, #posts-parent, #post-form-parent {
+#signup-parent, #account-parent {
   max-width: 65rem;
+}
+
+#posts-parent, #post-form-parent, #userlist-parent {
+  max-width: 40rem;
 }
 
 .normal-font-weight {
@@ -70,8 +74,16 @@ input[type="button"]:focus, button:focus {
   font-weight: bold;
 }
 
+.transparent-button {
+  font: inherit;
+  background-color: transparent;
+  cursor: pointer;
+  border: 0;
+}
+
+
 /* form title */
-#signup-parent header h2, #signin-parent header h2, #userlist-parent header h2, #account-parent header h2, #post-form-parent header h2 {
+#signup-parent header h2, #signin-parent header h2, #userlist-parent header h2, #posts-parent header h2, #account-parent > header h2 {
   font-size: 1.7rem;
   text-align: center;
 }

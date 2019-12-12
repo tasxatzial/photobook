@@ -1,0 +1,24 @@
+.short-post-photo-parent {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.short-post-photo {
+  max-width: 100%;
+  max-height: 15rem;
+}
+
+
+#read-more {
+  font-size: 1.2rem;
+}
+
+#account-parent #posts-parent header h2, #post-form-parent header h2 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+}
