@@ -337,6 +337,7 @@ var newElements = (function NewElements() {
     };
 
     var description = document.createElement('p');
+    description.className = 'post-description';
     if (postJSON['description'].length > 350) {
       description.innerHTML = postJSON['description'].trim().replace('\n', '<br><br>').substring(0, 350) + ' ...';
     }
@@ -360,7 +361,7 @@ var newElements = (function NewElements() {
     readMoreButton.className = 'read-more-button';
 
     var readMore = document.createElement('p');
-    readMore.id = 'read-more';
+    readMore.className = 'read-more';
     readMore.innerHTML = 'Read the full post';
 
     var img = document.createElement('img');
@@ -378,9 +379,23 @@ var newElements = (function NewElements() {
       ShowProfile.init(postJSON['userName'], 1);
     };
 
-    var username = createKeyValue('Posted by', postJSON['userName']);
-    username.children[0].innerHTML = '';
-    username.children[0].appendChild(button);
+    var at = document.createElement('p');
+    at.innerHTML = ' at ';
+    at.style.fontWeight = 'bold';
+
+    var postedBy = document.createElement('div');
+    postedBy.innerHTML = 'Posted by:';
+    postedBy.style.fontWeight = 'bold';
+
+    var timestamp = document.createElement('p');
+    timestamp.innerHTML = postJSON['createdAt'].substring(0, postJSON['createdAt'].lastIndexOf(":"));
+
+    var username = document.createElement('div');
+    username.className = 'post-footer';
+    username.appendChild(postedBy);
+    username.appendChild(button);
+    username.appendChild(at);
+    username.appendChild(timestamp);
 
     var location = createKeyValue('Location', 'Querying...');
 

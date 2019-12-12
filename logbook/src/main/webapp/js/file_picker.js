@@ -51,7 +51,6 @@ function PhotoPicker(photoContainer, fileInput) {
         return;
       }
 
-      console.log(state.photob64.length);
       /* create the image element and add it to DOM */
       var img = document.createElement('img');
       photoContainer.innerHTML = '';
