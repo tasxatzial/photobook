@@ -75,12 +75,17 @@ input[type="button"]:focus, button:focus {
 }
 
 .transparent-button {
+  box-sizing: content-box;
   font: inherit;
   background-color: transparent;
   cursor: pointer;
   border: 0;
 }
 
+.transparent-button img {
+  width: 100%;
+  height: auto;
+}
 
 /* form title */
 #signup-parent header h2, #signin-parent header h2, #userlist-parent header h2, #posts-parent header h2, #account-parent > header h2 {

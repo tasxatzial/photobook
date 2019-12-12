@@ -50,8 +50,11 @@ var ShowPosts = (function() {
 
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
-      var shortPost = newElements.createShortPost(state.xhrResponse['0']);
-      el.postsSection.children[0].appendChild(shortPost);
+      var shortPost = null;
+      Object.keys(state.xhrResponse).forEach(function(key,index) {
+        shortPost = newElements.createShortPost(state.xhrResponse[key]);
+        el.postsSection.children[0].appendChild(shortPost);
+      });
     }
 
     function failCallback() {

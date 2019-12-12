@@ -192,8 +192,8 @@ var newElements = (function NewElements() {
       var msg = createKeyValue(key, page[key]);
 
       var img = document.createElement('img');
+      img.className = 'user-show-more-arrow';
       img.src = 'images/right.png';
-      img.className = 'username-arrow';
 
       var user = document.createElement('div');
       user.className = "username-line";
@@ -244,7 +244,7 @@ var newElements = (function NewElements() {
 
     var button = document.createElement('button');
     button.type = 'button';
-    button.className = 'arrow-button';
+    button.className = 'transparent-button';
     button.appendChild(img);
 
     return button;
@@ -280,29 +280,38 @@ var newElements = (function NewElements() {
     if (!pages) {
       pages = 1;
     }
-    var div = document.createElement('div');
-    div.id = 'userlist-parent';
 
-    var header = document.createElement('header');
     var headerH2 = document.createElement('h2');
     headerH2.innerHTML = 'Users';
+
+    var header = document.createElement('header');
     header.appendChild(headerH2);
 
     var prevButton = createArrowButton('images/left.png');
+    prevButton.className = 'userlist-arrow-button transparent-button';
+    prevButton.id = 'userlist-left-arrow-button';
+
     var nextButton = createArrowButton('images/right.png');
+    nextButton.className = 'userlist-arrow-button transparent-button';
+    nextButton.id = 'userlist-right-arrow-button';
+
     var selectPages = createSelectPage(pages);
+
     var buttonSection = document.createElement('div');
     buttonSection.id = 'userlist-nav';
     buttonSection.appendChild(prevButton);
     buttonSection.appendChild(selectPages);
     buttonSection.appendChild(nextButton);
 
+    var div = document.createElement('div');
+    div.id = 'userlist-parent';
     div.appendChild(header);
     div.appendChild(buttonSection);
 
     var userlistSection = document.createElement('div');
     userlistSection.id = 'userlist-section';
     userlistSection.appendChild(div);
+
     return userlistSection;
   }
 
@@ -312,7 +321,6 @@ var newElements = (function NewElements() {
 
     var postFormSection = document.createElement('div');
     postFormSection.id = 'post-form-section';
-
     postFormSection.appendChild(postFormParent);
 
     return postFormSection;
@@ -330,10 +338,10 @@ var newElements = (function NewElements() {
 
     var description = document.createElement('p');
     if (postJSON['description'].length > 350) {
-      description.innerHTML = postJSON['description'].replace('\n', '<br><br>').substring(0, 350) + ' ...';
+      description.innerHTML = postJSON['description'].trim().replace('\n', '<br><br>').substring(0, 350) + ' ...';
     }
     else {
-      description.innerHTML = postJSON['description'].replace('\n', '<br><br>');
+      description.innerHTML = postJSON['description'].trim().replace('\n', '<br><br>');
     }
 
     var image = document.createElement('img');
@@ -348,6 +356,20 @@ var newElements = (function NewElements() {
     var imageParent = document.createElement('div');
     imageParent.className = 'short-post-photo-parent';
     imageParent.appendChild(image);
+
+    var readMoreButton = document.createElement('button');
+    readMoreButton.className = 'read-more-button';
+
+    var readMore = document.createElement('p');
+    readMore.id = 'read-more';
+    readMore.innerHTML = 'Read the full post';
+
+    var img = document.createElement('img');
+    img.className = 'post-show-more-arrow';
+    img.src = 'images/right.png';
+
+    readMoreButton.appendChild(readMore);
+    readMoreButton.appendChild(img);
 
     var button = document.createElement('button');
     button.className = 'transparent-button';
@@ -365,14 +387,8 @@ var newElements = (function NewElements() {
 
     var hr = document.createElement('hr');
 
-    var readMoreButton = document.createElement('button');
-    readMoreButton.className = 'transparent-button';
-    readMoreButton.innerHTML = 'Read the full post';
-
-    var readMore = document.createElement('p');
-    readMore.id = 'read-more';
-    readMore.className = 'sign-button';
-    readMore.appendChild(readMoreButton);
+    var nextButton = createArrowButton('images/right.png');
+    nextButton.className = 'transparent-button';
 
     var postContainer = document.createElement('div');
     postContainer.appendChild(hr);
@@ -380,7 +396,7 @@ var newElements = (function NewElements() {
     postContainer.appendChild(description);
     postContainer.appendChild(location);
     postContainer.appendChild(username);
-    postContainer.appendChild(readMore);
+    postContainer.appendChild(readMoreButton);
 
     var input = LocationSearch.createLatLonInput(postJSON['latitude'], postJSON['longitude']);
     if (input) {

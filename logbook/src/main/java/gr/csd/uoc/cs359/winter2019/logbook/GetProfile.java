@@ -6,6 +6,7 @@
 package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.Countries;
 import gr.csd.uoc.cs359.winter2019.logbook.model.User;
 import org.json.simple.JSONObject;
 
@@ -60,7 +61,13 @@ public class GetProfile extends HttpServlet {
         json.put("firstName", user.getFirstName());
         json.put("lastName", user.getLastName());
         json.put("birthDate", user.getBirthDate().split(" ")[0]);
-        json.put("country", user.getCountry());
+        String country = Countries.getNameOf(user.getCountry());
+        if (country != null) {
+            json.put("country", country);
+        }
+        else {
+            json.put("country", user.getCountry());
+        }
         json.put("city", user.getTown());
         json.put("address", user.getAddress());
         json.put("job", user.getOccupation());

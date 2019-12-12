@@ -1,42 +1,40 @@
-.arrow-button {
-    box-sizing: content-box;
-    border: 0;
-    background-color: transparent;
-    cursor: pointer;
+.userlist-arrow-button {
     width: 3rem;
     padding-left: 5px;
     padding-right: 5px;
-    margin-right: 0;
 }
 
-.arrow-button img {
+#userlist-left-arrow-button {
+    margin-right: auto;
+}
+
+#userlist-right-arrow-button {
+    margin-left: auto;
+}
+
+.username-button {
+    font: inherit;
+    background-color: transparent;
+    cursor: pointer;
+    border: 0;
     width: 100%;
+}
+
+.user-show-more-arrow {
+    width: 2rem;
     height: auto;
+    margin-left: auto;
 }
 
 #userlist-nav {
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-between;
-    width: 65%;
+    align-items: center;
+    width: 60%;
     max-width: 15rem;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 16px;
-}
-
-.username-button {
-    font: inherit;
-    text-align: left;
-    background-color: transparent;
-    cursor: pointer;
-    border: 0;
-    width: 100%;
-}
-
-.username-arrow {
-    width: 2rem;
-    height: 100%;
 }
 
 .username-line {
