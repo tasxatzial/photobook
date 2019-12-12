@@ -9,6 +9,7 @@ import gr.csd.uoc.cs359.winter2019.logbook.db.PostDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Post;
 import org.json.simple.JSONObject;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -69,9 +70,15 @@ public class GetPosts extends HttpServlet {
             json = new JSONObject();
             json.put("userName", post.getUserName());
             json.put("description", post.getDescription());
-            json.put("resourceURL", post.getResourceURL());
-            json.put("imageURL", post.getImageURL());
-            json.put("imageBase64", post.getImageBase64());
+            if (isValidURL(post.getResourceURL())) {
+                json.put("resourceURL", post.getResourceURL());
+            }
+            if (isValidURL(post.getImageURL())) {
+                json.put("imageURL", post.getImageURL());
+            }
+            else if (isValidImageBase64(post.getImageBase64())) {
+                json.put("imageBase64", post.getImageBase64());
+            }
             json.put("latitude", post.getLatitude());
             json.put("longitude", post.getLongitude());
             json.put("createdAt", post.getCreatedAt());
@@ -79,6 +86,28 @@ public class GetPosts extends HttpServlet {
             jsonFinal.put(Integer.toString(i), json);
         }
         out.println(jsonFinal.toJSONString());
+    }
+
+    protected Boolean isValidImageBase64(String image) {
+        String trimmedImage = image.trim();
+        if (!trimmedImage.equals("")) {
+            String img[] = image.split(",");
+            if (img[0].equals("data:image/jpeg;base64") || img[0].equals("data:image/png;base64")) {
+                return img.length > 1 && !img[1].matches("[^A-Za-z0-9+/=]");
+            }
+        }
+        return false;
+    }
+
+    protected Boolean isValidURL(String imageURL) {
+        String trimmedURL = imageURL.trim();
+        int trimmedURLLength = trimmedURL.length();
+        if (trimmedURLLength < 7 ||
+                (!trimmedURL.substring(0, 7).equals("http://") && !trimmedURL.substring(0, 8).equals("https://") && !trimmedURL.substring(0, 4).equals("www."))) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

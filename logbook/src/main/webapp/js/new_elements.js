@@ -346,12 +346,11 @@ var newElements = (function NewElements() {
 
     var image = document.createElement('img');
     image.className = 'short-post-photo';
-    if (postJSON['imageBase64'] &&
-        (postJSON['imageBase64'].split([','])[0] === 'data:image/jpeg;base64' || postJSON['imageBase64'].substring(0, 3) === '/9j/')) {
-      image.src = postJSON['imageBase64'];
-    }
-    else {
+    if (postJSON['imageURL']) {
       image.src = postJSON['imageURL'];
+    }
+    else if (postJSON['imageBase64']) {
+      image.src = postJSON['imageBase64'];
     }
     var imageParent = document.createElement('div');
     imageParent.className = 'short-post-photo-parent';
