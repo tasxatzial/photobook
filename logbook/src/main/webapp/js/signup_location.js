@@ -285,7 +285,7 @@ var LocationSearch = (function() {
   /* create the string for a ajax reverse nomination search request.
   Assumes that arguments are strings or numbers */
   function createLatLonInput(latitude, longitude) {
-    if (isNaN(latitude) || isNaN(longitude)) {
+    if (latitude.trim() === '' || longitude.trim() === '' || isNaN(latitude) || isNaN(longitude)) {
       return null;
     }
     return '?lat=' + latitude +

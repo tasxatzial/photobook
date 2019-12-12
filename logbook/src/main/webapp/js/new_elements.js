@@ -383,7 +383,7 @@ var newElements = (function NewElements() {
     username.children[0].innerHTML = '';
     username.children[0].appendChild(button);
 
-    var location = createKeyValue('Location', 'Not available');
+    var location = createKeyValue('Location', 'Querying...');
 
     var hr = document.createElement('hr');
 
@@ -400,17 +400,25 @@ var newElements = (function NewElements() {
 
     var input = LocationSearch.createLatLonInput(postJSON['latitude'], postJSON['longitude']);
     if (input) {
-      state.xhr = ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, function () {});
+      state.xhr = ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, failCallback);
+    }
+    else {
+      location.children[0].innerHTML = 'Not available';
     }
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       var responseLocation = LocationSearch.parseReverseSearch(state.xhrResponse);
       if (!responseLocation) {
+        location.children[0].innerHTML = 'Not available';
         return;
       }
+
       var loc = '';
       if (responseLocation.country) {
         loc += responseLocation.country;
+      }
+      else if (responseLocation.country_code) {
+        loc += responseLocation.country_code;
       }
       if (responseLocation.city) {
         loc += ', ' + responseLocation.city;
@@ -418,9 +426,11 @@ var newElements = (function NewElements() {
       if (responseLocation.address) {
         loc += ', ' + responseLocation.address;
       }
-      if (loc !== '') {
-        location.children[0].innerHTML = loc;
-      }
+      location.children[0].innerHTML = loc;
+    }
+
+    function failCallback() {
+      location.children[0].innerHTML = 'Not available';
     }
 
     return postContainer;
