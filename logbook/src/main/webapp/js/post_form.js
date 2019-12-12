@@ -78,6 +78,12 @@ var PostForm = (function() {
       el.postButton = document.getElementById('post-button');
       el.locationDetectMsg = document.getElementById('post-form-detect-msg');
 
+      if (!navigator.geolocation) {
+        el.geolocationRadio.innerHTML = 'Geolocation not supported';
+        el.geolocationRadio.disabled = true;
+        el.placeRadio.checked = true;
+      }
+
       addListeners();
     }
 
@@ -117,18 +123,20 @@ var PostForm = (function() {
       });
     });
 
-    el.geolocationRadio.addEventListener('click', function() {
-      loc.lat = null;
-      loc.lon = null;
-      el.locationDetectButton.disabled = false;
-      el.locationPlace.style.display = 'none';
-      el.place.value = '';
-      el.country.value = '';
-      if (state.lastDetectionMethod !== 'geolocation') {
-        formMsg.clear(el.locationDetectMsg);
-      }
-      state.lastDetectionMethod = 'geolocation';
-    });
+    if (navigator.geolocation) {
+      el.geolocationRadio.addEventListener('click', function () {
+        loc.lat = null;
+        loc.lon = null;
+        el.locationDetectButton.disabled = false;
+        el.locationPlace.style.display = 'none';
+        el.place.value = '';
+        el.country.value = '';
+        if (state.lastDetectionMethod !== 'geolocation') {
+          formMsg.clear(el.locationDetectMsg);
+        }
+        state.lastDetectionMethod = 'geolocation';
+      });
+    }
 
     el.placeRadio.addEventListener('click', function() {
       loc.lat = null;
@@ -182,19 +190,23 @@ var PostForm = (function() {
 
   function pickLocationDetectMethod() {
     formMsg.clear(el.createPostMsg);
-    if (el.geolocationRadio.checked) {
-      navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
-      function successNavCallback(position) {
-        loc.lat = position.coords.latitude;
-        loc.lon = position.coords.longitude;
-        formMsg.showOK(el.locationDetectMsg, '(' + loc.lat + ', ' + loc.lon + ')');
-      }
-      function failCallback() {
-        console.log("geolocation error");
-      }
+    if (navigator.geolocation && el.geolocationRadio.checked) {
+      geolocationSearch();
     }
     else {
       locationSearch();
+    }
+  }
+
+  function geolocationSearch() {
+    navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
+    function successNavCallback(position) {
+      loc.lat = position.coords.latitude;
+      loc.lon = position.coords.longitude;
+      formMsg.showOK(el.locationDetectMsg, '(' + loc.lat + ', ' + loc.lon + ')');
+    }
+    function failCallback() {
+      formMsg.showError(el.locationDetectMsg, "Error");
     }
   }
 
