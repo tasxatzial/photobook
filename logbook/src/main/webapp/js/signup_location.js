@@ -297,13 +297,16 @@ var LocationSearch = (function() {
   object with country,city,address keys. If null is returned,
   none of the country,city,address could be identified from the response */
   function parseReverseSearch(response) {
+    var country_code = null;
     var country = null;
     var city = null;
     var address = null;
+
     if (response.address) {
       /* country */
       if (response.address.country_code) {
-        country = response.address.country_code.toUpperCase();
+        country_code = response.address.country_code.toUpperCase();
+        country = response.address.country;
       }
       /* city */
       if (response.address.village) {
@@ -323,12 +326,13 @@ var LocationSearch = (function() {
         }
       }
     }
-    if (!country && !city && !address) {
+    if (!country_code && !country && !city && !address) {
       return null;
     }
 
     return {
       country: country,
+      country_code: country_code,
       city: city,
       address: address
     };

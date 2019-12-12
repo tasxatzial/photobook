@@ -375,7 +375,6 @@ var newElements = (function NewElements() {
     readMore.appendChild(readMoreButton);
 
     var postContainer = document.createElement('div');
-
     postContainer.appendChild(hr);
     postContainer.appendChild(imageParent);
     postContainer.appendChild(description);
@@ -390,6 +389,9 @@ var newElements = (function NewElements() {
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       var responseLocation = LocationSearch.parseReverseSearch(state.xhrResponse);
+      if (!responseLocation) {
+        return;
+      }
       var loc = '';
       if (responseLocation.country) {
         loc += responseLocation.country;
