@@ -384,7 +384,9 @@ var newElements = (function NewElements() {
     postContainer.appendChild(readMore);
 
     var input = LocationSearch.createLatLonInput(postJSON['latitude'], postJSON['longitude']);
-    state.xhr = ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, function () {});
+    if (input) {
+      state.xhr = ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, function () {});
+    }
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       var responseLocation = LocationSearch.parseReverseSearch(state.xhrResponse);
