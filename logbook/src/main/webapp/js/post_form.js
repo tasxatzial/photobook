@@ -20,15 +20,20 @@ var PostForm = (function() {
     filePicker: null,
     selectOnlinePhoto: null,
     locationPlace: null,
-    locationDetect: null,
     createPostMsg: null,
     description: null,
     onlineResource: null,
-    onlineImage: null,
     postButton: null,
     selectDiskPhoto: null,
     locationDetectButton: null,
-    onlinePhotoToggle: null
+    onlinePhotoToggle: null,
+    geolocationRadio: null,
+    placeRadio: null,
+    country: null,
+    place: null,
+    onlineImage: null,
+    onlineImageCheckbox: null,
+    selectDiskPhotoButton: null
   };
 
   function init(username) {
@@ -56,13 +61,19 @@ var PostForm = (function() {
       el.createPostMsg = document.getElementById('signupin-msg');
       el.description = document.getElementById('post-form-description');
       el.onlineResource = document.getElementById('post-form-online-page');
-      el.onlineImage = document.getElementById('post-form-online-image');
       el.selectOnlinePhoto = document.getElementById('select-online-photo');
+      el.onlineImage = el.selectOnlinePhoto.children[1];
+      el.onlineImageCheckbox = el.selectOnlinePhoto.children[0].children[0];
       el.selectDiskPhoto = document.getElementById('select-disk-photo');
+      el.selectDiskPhotoButton = el.selectDiskPhoto.children[0];
       el.filePicker = new PhotoPicker(el.selectDiskPhoto.children[2], el.selectDiskPhoto.children[1]);
-      el.locationDetect = document.querySelector('.post-form-options');
+      var locationDetect = document.querySelector('.post-form-options');
+      el.geolocationRadio = locationDetect.children[0].children[0];
+      el.placeRadio = locationDetect.children[2].children[0];
       el.locationDetectButton = document.getElementById('post-form-detect-button');
       el.locationPlace = document.getElementById('post-form-country-hidden');
+      el.country = el.locationPlace.children[0].children[1];
+      el.place = el.locationPlace.children[1].children[1];
       el.onlinePhotoToggle = OnlinePhotoToggle();
       el.postButton = document.getElementById('post-button');
       el.locationDetectMsg = document.getElementById('post-form-detect-msg');
@@ -80,14 +91,14 @@ var PostForm = (function() {
       formMsg.clear(el.createPostMsg);
     });
 
-    el.selectOnlinePhoto.children[0].children[0].addEventListener('click', function() {
+    el.onlineImageCheckbox.addEventListener('click', function() {
       el.onlinePhotoToggle.toggle();
     });
 
     function addPlaceInputListeners() {
       formMsg.clear(el.createPostMsg);
       formMsg.clear(el.locationDetectMsg);
-      if (el.locationPlace.children[0].children[1].value !== '' && el.locationPlace.children[1].children[1].value.trim() !== '') {
+      if (el.country.value !== '' && el.place.value.trim() !== '') {
         el.locationDetectButton.disabled = false;
       }
       else {
@@ -95,36 +106,35 @@ var PostForm = (function() {
       }
     }
 
-    el.locationPlace.children[0].children[1].addEventListener('input', addPlaceInputListeners);
-    el.locationPlace.children[1].children[1].addEventListener('input', addPlaceInputListeners);
+    el.country.addEventListener('input', addPlaceInputListeners);
+    el.place.addEventListener('input', addPlaceInputListeners);
 
-    el.selectDiskPhoto.children[0].addEventListener('click', function() {
+    el.selectDiskPhotoButton.addEventListener('click', function() {
       el.filePicker.click(function() {
-        el.selectOnlinePhoto.children[1].style.display = 'none';
-        el.selectOnlinePhoto.children[0].children[0].checked = false;
+        el.onlineImage.style.display = 'none';
+        el.onlineImageCheckbox.checked = false;
         el.selectOnlinePhoto.className = '';
       });
     });
 
-    el.locationDetect.children[0].children[0].addEventListener('click', function() {
+    el.geolocationRadio.addEventListener('click', function() {
       loc.lat = null;
       loc.lon = null;
       el.locationDetectButton.disabled = false;
       el.locationPlace.style.display = 'none';
-      el.locationPlace.children[1].children[1].value = '';
-      el.locationPlace.children[0].children[1].value = '';
+      el.place.value = '';
+      el.country.value = '';
       if (state.lastDetectionMethod !== 'geolocation') {
         formMsg.clear(el.locationDetectMsg);
       }
       state.lastDetectionMethod = 'geolocation';
     });
 
-    el.locationDetect.children[2].children[0].addEventListener('click', function() {
+    el.placeRadio.addEventListener('click', function() {
       loc.lat = null;
       loc.lon = null;
       el.locationDetectButton.disabled = true;
       el.locationPlace.style.display = 'block';
-      el.locationPlace.children[1].style.marginBottom = '0.7rem';
       if (state.lastDetectionMethod !== 'place') {
         formMsg.clear(el.locationDetectMsg);
       }
@@ -166,13 +176,13 @@ var PostForm = (function() {
     }
 
     function failCallback() {
-
+      console.log(state.xhr.responseText);
     }
   }
 
   function pickLocationDetectMethod() {
     formMsg.clear(el.createPostMsg);
-    if (el.locationDetect.children[0].children[0].checked) {
+    if (el.geolocationRadio.checked) {
       navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
       function successNavCallback(position) {
         loc.lat = position.coords.latitude;
@@ -194,9 +204,7 @@ var PostForm = (function() {
       xhrResponse: null
     };
 
-    var place = el.locationPlace.children[1].children[1];
-    var country = el.locationPlace.children[0].children[1];
-    var input = LocationSearch.createInput('', place, country);
+    var input = LocationSearch.createInput('', el.place, el.country);
     state.xhr = state.xhr = ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback);
 
     function successCallback() {
@@ -224,12 +232,12 @@ var PostForm = (function() {
     function toggle() {
       if (state.checked) {
         state.checked = false;
-        el.selectOnlinePhoto.children[1].style.display = 'none';
+        el.onlineImage.style.display = 'none';
         el.selectOnlinePhoto.className = '';
-        el.selectOnlinePhoto.children[1].value = '';
+        el.onlineImage.value = '';
       } else {
         state.checked = true;
-        el.selectOnlinePhoto.children[1].style.display = 'inline-block';
+        el.onlineImage.style.display = 'inline-block';
         el.selectOnlinePhoto.className = 'sign-child';
         el.filePicker.clearPhoto();
       }

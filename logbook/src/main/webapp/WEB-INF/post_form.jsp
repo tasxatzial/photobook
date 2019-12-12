@@ -16,7 +16,7 @@
       <p class="sign-label signup-necessary">Country</p>
       <jsp:include page="countries" />
     </div>
-    <div class="sign-child">
+    <div class="sign-child" id="post-form-place-parent">
       <label for="post-form-place" class="sign-label signup-necessary">Place</label>
       <input type="text" name="post-form-place" id="post-form-place" class="sign-tofill">
       <p class="signup-require-info">City and/or address and/or place</p>
@@ -43,7 +43,7 @@
     <div id="select-disk-photo">
       <button type="button" class="sign-internal-button" id="post-form-disk-select">Select from disk</button>
       <input type="file" name="post-form-disk-image" style="display: none">
-      <div id="post-form-photo-container"></div>
+      <div id="post-form-photo-parent"></div>
     </div>
   </div>
 </div>

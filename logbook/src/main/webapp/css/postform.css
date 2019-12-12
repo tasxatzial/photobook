@@ -3,7 +3,7 @@
   max-height: 17rem;
 }
 
-#post-form-photo-container {
+#post-form-photo-parent {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
@@ -12,7 +12,7 @@
   width: 100%;
 }
 
-#post-form-photo-container img {
+#post-form-photo-parent img {
   max-width: 100%;
   max-height: 30rem;
 }
@@ -54,4 +54,8 @@
 
 #post-form-detect-msg {
   margin-bottom: .3rem;
+}
+
+#post-form-place-parent {
+  margin-bottom: 0.7rem;
 }
