@@ -441,14 +441,13 @@ var newElements = (function NewElements() {
       state.xhr = ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, failCallback);
     }
     else {
-      location.children[0].innerHTML = 'Not available';
+      failCallback();
     }
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       state.responseLocation = LocationSearch.parseReverseSearch(state.xhrResponse);
       if (!state.responseLocation) {
-        location.children[0].innerHTML = 'Not available';
-        readMoreButton.disabled = false;
+        failCallback();
         return;
       }
 
