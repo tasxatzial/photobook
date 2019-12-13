@@ -424,10 +424,11 @@ var newElements = (function NewElements() {
       var data = {
         description: postJSON['description'],
         resourceURL: postJSON['resourceURL'],
+        location: state.responseLocation,
         lat: postJSON['latitude'],
         lon: postJSON['longitude'],
       };
-      if (state.responseLocation.address) {
+      if (state.responseLocation && state.responseLocation.address) {
         data.zoom = 15;
       }
       else {
@@ -496,18 +497,20 @@ var newElements = (function NewElements() {
       shortPost.insertBefore(onlineURL, location);
     }
 
-    var mapDiv = document.createElement('div');
-    mapDiv.id = 'map-post';
-    var mapParent = document.createElement('div');
-    mapParent.id = 'post-map-parent';
-    mapParent.appendChild(mapDiv);
-    shortPost.insertBefore(mapParent, postedBy);
+    if (data['location']) {
+      var mapDiv = document.createElement('div');
+      mapDiv.id = 'map-post';
+      var mapParent = document.createElement('div');
+      mapParent.id = 'post-map-parent';
+      mapParent.appendChild(mapDiv);
+      shortPost.insertBefore(mapParent, postedBy);
 
-    mapDiv.style.height = '20rem';
-    var map = new OLMap(mapDiv.id);
-    map.setZoom(data['zoom']);
-    map.addLocation({lat: data['lat'], lon: data['lon']});
-    map.drawMap();
+      mapDiv.style.height = '20rem';
+      var map = new OLMap(mapDiv.id);
+      map.setZoom(data['zoom']);
+      map.addLocation({lat: data['lat'], lon: data['lon']});
+      map.drawMap();
+    }
 
     callback(shortPost);
   }
