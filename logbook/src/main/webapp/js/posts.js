@@ -46,24 +46,30 @@ var ShowPosts = (function() {
     else {
       formData.append('username', data.username);
     }
-    state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
 
+    state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       var shortPost = null;
       Object.keys(state.xhrResponse).forEach(function(key,index) {
-        shortPost = newElements.createShortPost(state.xhrResponse[key]);
+        shortPost = newElements.createShortPost(state.xhrResponse[key], showFullPost);
+        el.postsSection.children[0].appendChild(document.createElement('hr'));
         el.postsSection.children[0].appendChild(shortPost);
       });
     }
 
     function failCallback() {
-
+      console.log(state.xhr.responseText);
     }
+  }
+
+  function showFullPost(fullPost) {
+    el.postsSection.children[0].innerHTML = '';
+    el.postsSection.children[0].appendChild(fullPost);
+    window.scrollTo(0, 0);
   }
 
   return {
     init: init
   };
 }());
-

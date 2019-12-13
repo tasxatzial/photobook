@@ -91,7 +91,7 @@ public class GetPosts extends HttpServlet {
     protected Boolean isValidImageBase64(String image) {
         String trimmedImage = image.trim();
         if (!trimmedImage.equals("")) {
-            String img[] = image.split(",");
+            String[] img = image.split(",");
             if (img[0].equals("data:image/jpeg;base64") || img[0].equals("data:image/png;base64")) {
                 return img.length > 1 && !img[1].matches("[^A-Za-z0-9+/=]");
             }

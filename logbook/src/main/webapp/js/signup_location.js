@@ -111,7 +111,7 @@ var SignUpLocation = (function () {
       mapDiv.id = 'map';
       el.mapParent.appendChild(mapDiv);
       mapDiv.style.height = '20rem';
-      state.map = new OLMap('map');
+      state.map = new OLMap(mapDiv.id);
     }
     toggleOldMap();
   }
@@ -210,7 +210,7 @@ var SignUpLocation = (function () {
       }
       else {
         /* else update country/city/address fields */
-        el.country.value = location.country ? location.country : '';
+        el.country.value = location.country_code ? location.country_code : '';
         el.city.value = location.city ? location.city : '';
         el.address.value = location.address ? location.address : '';
 
@@ -285,7 +285,7 @@ var LocationSearch = (function() {
   /* create the string for a ajax reverse nomination search request.
   Assumes that arguments are strings or numbers */
   function createLatLonInput(latitude, longitude) {
-    if (latitude.trim() === '' || longitude.trim() === '' || isNaN(latitude) || isNaN(longitude)) {
+    if (String(latitude).trim() === '' || String(longitude).trim() === '' || isNaN(latitude) || isNaN(longitude)) {
       return null;
     }
     return '?lat=' + latitude +

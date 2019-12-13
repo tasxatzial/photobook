@@ -204,9 +204,9 @@ var PostForm = (function() {
   function geolocationSearch() {
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
     function successNavCallback(position) {
-      loc.lat = position.coords.latitude;
-      loc.lon = position.coords.longitude;
-      formMsg.showOK(el.locationDetectMsg, '(' + loc.lat + ', ' + loc.lon + ')');
+      loc.lat = String(position.coords.latitude);
+      loc.lon = String(position.coords.longitude);
+      formMsg.showOK(el.locationDetectMsg, '(' + loc.lat.substring(0, loc.lat.length - 4) + ', ' + loc.lon.substring(0, loc.lon.length - 4) + ')');
     }
     function failCallback() {
       formMsg.showError(el.locationDetectMsg, "Error");

@@ -326,10 +326,11 @@ var newElements = (function NewElements() {
     return postFormSection;
   }
 
-  function createShortPost(postJSON) {
+  function createShortPost(postJSON, callback) {
     var state = {
       xhr: null,
-      xhrResponse: null
+      xhrResponse: null,
+      responseLocation: null
     };
 
     var nominatimAPI = {
@@ -355,10 +356,10 @@ var newElements = (function NewElements() {
     }
     var imageParent = document.createElement('div');
     imageParent.className = 'short-post-photo-parent';
+    if (image.src) {
+      imageParent.style.marginTop = '1rem';
+    }
     imageParent.appendChild(image);
-
-    var readMoreButton = document.createElement('button');
-    readMoreButton.className = 'read-more-button';
 
     var readMore = document.createElement('p');
     readMore.className = 'read-more';
@@ -368,8 +369,11 @@ var newElements = (function NewElements() {
     img.className = 'post-show-more-arrow';
     img.src = 'images/right.png';
 
+    var readMoreButton = document.createElement('button');
+    readMoreButton.className = 'read-more-button';
     readMoreButton.appendChild(readMore);
     readMoreButton.appendChild(img);
+    readMoreButton.disabled = true;
 
     var button = document.createElement('button');
     button.className = 'transparent-button';
@@ -399,18 +403,32 @@ var newElements = (function NewElements() {
 
     var location = createKeyValue('Location', 'Querying...');
 
-    var hr = document.createElement('hr');
-
     var nextButton = createArrowButton('images/right.png');
     nextButton.className = 'transparent-button';
 
     var postContainer = document.createElement('div');
-    postContainer.appendChild(hr);
+
     postContainer.appendChild(imageParent);
     postContainer.appendChild(description);
     postContainer.appendChild(location);
     postContainer.appendChild(username);
     postContainer.appendChild(readMoreButton);
+
+    readMoreButton.addEventListener('click', function () {
+      var data = {
+        description: postJSON['description'],
+        resourceURL: postJSON['resourceURL'],
+        lat: postJSON['latitude'],
+        lon: postJSON['longitude'],
+      };
+      if (state.responseLocation.address) {
+        data.zoom = 15;
+      }
+      else {
+        data.zoom = 11;
+      }
+      turnToFullPost(postContainer, data, callback);
+    });
 
     var input = LocationSearch.createLatLonInput(postJSON['latitude'], postJSON['longitude']);
     if (input) {
@@ -421,26 +439,28 @@ var newElements = (function NewElements() {
     }
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
-      var responseLocation = LocationSearch.parseReverseSearch(state.xhrResponse);
-      if (!responseLocation) {
+      state.responseLocation = LocationSearch.parseReverseSearch(state.xhrResponse);
+      if (!state.responseLocation) {
         location.children[0].innerHTML = 'Not available';
+        readMoreButton.disabled = false;
         return;
       }
 
       var loc = '';
-      if (responseLocation.country) {
-        loc += responseLocation.country;
+      if (state.responseLocation.country) {
+        loc += state.responseLocation.country;
       }
-      else if (responseLocation.country_code) {
-        loc += responseLocation.country_code;
+      else if (state.responseLocation.country_code) {
+        loc += state.responseLocation.country_code;
       }
-      if (responseLocation.city) {
-        loc += ', ' + responseLocation.city;
+      if (state.responseLocation.city) {
+        loc += ', ' + state.responseLocation.city;
       }
-      if (responseLocation.address) {
-        loc += ', ' + responseLocation.address;
+      if (state.responseLocation.address) {
+        loc += ', ' + state.responseLocation.address;
       }
       location.children[0].innerHTML = loc;
+      readMoreButton.disabled = false;
     }
 
     function failCallback() {
@@ -448,6 +468,32 @@ var newElements = (function NewElements() {
     }
 
     return postContainer;
+  }
+
+  function turnToFullPost(shortPost, data, callback) {
+    var photoParent = shortPost.children[0];
+    var description = shortPost.children[1];
+    var postedBy = shortPost.children[3];
+    var readMore = shortPost.children[4];
+
+    photoParent.children[0].className = 'full-post-photo';
+    description.innerHTML = data['description'].trim().replace('\n', '<br><br>');
+    shortPost.removeChild(readMore);
+
+    var mapDiv = document.createElement('div');
+    mapDiv.id = 'map-post';
+    var mapParent = document.createElement('div');
+    mapParent.id = 'post-map-parent';
+    mapParent.appendChild(mapDiv);
+    shortPost.insertBefore(mapParent, postedBy);
+
+    mapDiv.style.height = '20rem';
+    var map = new OLMap(mapDiv.id);
+    map.setZoom(data['zoom']);
+    map.addLocation({lat: data['lat'], lon: data['lon']});
+    map.drawMap();
+
+    callback(shortPost);
   }
 
   return {
