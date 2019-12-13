@@ -18,9 +18,11 @@ var ShowPosts = (function() {
       nonav.appendChild(el.postsSection);
     }
     else {
+      el.postsSection.children[0].style.paddingLeft = '0';
+      el.postsSection.children[0].style.paddingRight = '0';
       var accountParent = document.getElementById('account-parent');
-      accountParent.removeChild(accountParent.children[2]);
-      accountParent.appendChild(el.postsSection);
+      accountParent.children[2].innerHTML = '';
+      accountParent.children[2].appendChild(el.postsSection);
     }
     if (!username) {
       var newPostButton = el.postsSection.children[0].children[0];

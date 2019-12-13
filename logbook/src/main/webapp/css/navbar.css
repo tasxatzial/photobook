@@ -42,3 +42,10 @@
 .navbar-button:hover {
   background-color: #4d968a;
 }
+
+@media only screen and (max-width: 45rem) {
+  #navbar-content {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
