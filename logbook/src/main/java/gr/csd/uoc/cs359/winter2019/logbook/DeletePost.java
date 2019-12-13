@@ -21,9 +21,9 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
 
-@WebServlet(name = "GetPosts", urlPatterns = "/GetPosts")
+@WebServlet(name = "DeletePost", urlPatterns = "/DeletePost")
 @MultipartConfig
-public class GetPosts extends HttpServlet {
+public class DeletePost extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,80 +48,24 @@ public class GetPosts extends HttpServlet {
             return;
         }
 
-        String username = request.getParameter("username");
-
-        List<Post> posts;
-        if (username.equals("0")) {
-            posts = PostDB.getTop10RecentPosts();
+        if (!oldSession.getAttribute("username").equals(request.getParameter("username"))) {
+            jsonFinal.put("ERROR", "INVALID_USER");
+            out.print(jsonFinal.toJSONString());
+            return;
         }
-        else if (username.equals("")) {
-            posts = PostDB.getTop10RecentPostsOfUser((String) oldSession.getAttribute("username"));
+
+        PostDB.deletePost(Integer.parseInt(request.getParameter("postID")));
+        Post post = PostDB.getPost(Integer.parseInt(request.getParameter("postID")));
+
+        if (post != null) {
+            jsonFinal.put("ERROR", "DELETE_FAIL");
+            response.setStatus(500);
+            out.print(jsonFinal.toJSONString());
         }
         else {
-            posts = PostDB.getTop10RecentPostsOfUser(username);
+            jsonFinal.put("SUCCESS", "1");
+            out.print(jsonFinal.toJSONString());
         }
-
-        Post post;
-        JSONObject json;
-
-        for (int i = 0; i < posts.size(); i++) {
-            post = posts.get(i);
-            json = new JSONObject();
-            json.put("userName", post.getUserName());
-            json.put("description", post.getDescription());
-            if (isValidURL(post.getResourceURL())) {
-                json.put("resourceURL", post.getResourceURL());
-            }
-            else {
-                json.put("resourceURL", "");
-            }
-            if (isValidURL(post.getImageURL())) {
-                json.put("imageURL", post.getImageURL());
-            }
-            else {
-                json.put("imageURL", "");
-            }
-            if (isValidImageBase64(post.getImageBase64())) {
-                json.put("imageBase64", post.getImageBase64());
-            }
-            else {
-                json.put("imageBase64", "");
-            }
-            json.put("latitude", post.getLatitude());
-            json.put("longitude", post.getLongitude());
-            json.put("createdAt", post.getCreatedAt());
-            json.put("postID", post.getPostID());
-            if (oldSession.getAttribute("username").equals(post.getUserName())) {
-                json.put("owner", "1");
-            }
-            else {
-                json.put("owner", "");
-            }
-            jsonFinal.put(Integer.toString(i), json);
-        }
-        out.println(jsonFinal.toJSONString());
-    }
-
-    protected Boolean isValidImageBase64(String image) {
-        String trimmedImage = image.trim();
-        if (!trimmedImage.equals("")) {
-            String[] img = image.split(",");
-            if (img[0].equals("data:image/jpeg;base64") || img[0].equals("data:image/png;base64")) {
-                return img.length > 1 && !img[1].matches("[^A-Za-z0-9+/=]");
-            }
-        }
-        return false;
-    }
-
-    protected Boolean isValidURL(String imageURL) {
-        String trimmedURL = imageURL.trim();
-        int trimmedURLLength = trimmedURL.length();
-        if (trimmedURLLength < 7 ||
-                (!trimmedURL.substring(0, 7).equals("http://") && !trimmedURL.substring(0, 8).equals("https://") && !trimmedURL.substring(0, 4).equals("www."))) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

@@ -83,6 +83,9 @@ public class Main extends HttpServlet {
             case "CreatePost":
                 dispatcher = request.getRequestDispatcher("CreatePost");
                 break;
+            case "DeletePost":
+                dispatcher = request.getRequestDispatcher("DeletePost");
+                break;
             case "Logout":
                 if (oldSession != null) {
                     oldSession.invalidate();

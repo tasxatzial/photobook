@@ -63,3 +63,7 @@
   font-weight: bold;
   text-align: center;
 }
+
+#delete-post-button input {
+  background: #ff4e56;
+}

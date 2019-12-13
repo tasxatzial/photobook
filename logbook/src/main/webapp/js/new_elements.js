@@ -414,6 +414,7 @@ var newElements = (function NewElements() {
 
     var postContainer = document.createElement('div');
     postContainer.id = 'postID' + postJSON['postID'];
+    postContainer.username = postJSON['userName'];
     postContainer.appendChild(imageParent);
     postContainer.appendChild(description);
     postContainer.appendChild(location);
@@ -427,6 +428,7 @@ var newElements = (function NewElements() {
         location: state.responseLocation,
         lat: postJSON['latitude'],
         lon: postJSON['longitude'],
+        owner: postJSON['owner']
       };
       if (state.responseLocation && state.responseLocation.address) {
         data.zoom = 15;
@@ -488,6 +490,7 @@ var newElements = (function NewElements() {
     description.innerHTML = data['description'].trim().replace('\n', '<br><br>');
     shortPost.removeChild(readMore);
 
+
     if (data['resourceURL']) {
       var url = document.createElement('a');
       url.href = data['resourceURL'];
@@ -510,6 +513,14 @@ var newElements = (function NewElements() {
       map.setZoom(data['zoom']);
       map.addLocation({lat: data['lat'], lon: data['lon']});
       map.drawMap();
+    }
+
+    if (data['owner']) {
+      var deleteButton = createBlueButton('Delete post', 'delete-post-button');
+      shortPost.appendChild(deleteButton);
+      var deleteMsg = document.createElement('div');
+      deleteMsg.id = 'delete-post-msg';
+      deleteButton.appendChild(deleteMsg);
     }
 
     callback(shortPost);

@@ -69,6 +69,38 @@ var ShowPosts = (function() {
     el.postsSection.children[0].innerHTML = '';
     el.postsSection.children[0].appendChild(fullPost);
     window.scrollTo(0, 0);
+
+    var deleteButton = document.getElementById('delete-post-button');
+    if (deleteButton) {
+      deleteButton.children[0].addEventListener('click', function () {
+        deletePost(fullPost);
+      });
+    }
+  }
+
+  function deletePost(fullPost) {
+    var state = {
+      xhr: null
+    };
+
+    var postID = fullPost.id.substring(6);
+    var username = fullPost.username;
+
+    var formData = new FormData();
+    formData.append("action", "DeletePost");
+    formData.append("postID", postID);
+    formData.append("username", username);
+
+    state.xhr = ajaxRequest('POST', "Main", formData, successCallback, failCallback);
+
+    function successCallback() {
+      ShowPosts.init(data.username);
+    }
+
+    function failCallback() {
+      var deleteMsg = document.getElementById('delete-post-msg');
+      formMsg.showError(deleteMsg, 'Error');
+    }
   }
 
   return {
