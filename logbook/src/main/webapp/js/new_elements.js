@@ -114,9 +114,15 @@ var newElements = (function NewElements() {
     return msg;
   }
 
-  function createKeyValue(key, value) {
+  function createKeyValue(key, value, append) {
     var span = document.createElement('span');
-    span.innerHTML = value;
+    if (append) {
+      span.innerHTML = '';
+      span.appendChild(value);
+    }
+    else {
+      span.innerHTML = value;
+    }
     span.className = 'normal-font-weight';
 
     var msg = document.createElement('p');
@@ -407,7 +413,7 @@ var newElements = (function NewElements() {
     nextButton.className = 'transparent-button';
 
     var postContainer = document.createElement('div');
-
+    postContainer.id = 'postID' + postJSON['postID'];
     postContainer.appendChild(imageParent);
     postContainer.appendChild(description);
     postContainer.appendChild(location);
@@ -465,6 +471,7 @@ var newElements = (function NewElements() {
 
     function failCallback() {
       location.children[0].innerHTML = 'Not available';
+      readMoreButton.disabled = false;
     }
 
     return postContainer;
@@ -473,12 +480,22 @@ var newElements = (function NewElements() {
   function turnToFullPost(shortPost, data, callback) {
     var photoParent = shortPost.children[0];
     var description = shortPost.children[1];
+    var location = shortPost.children[2];
     var postedBy = shortPost.children[3];
     var readMore = shortPost.children[4];
 
     photoParent.children[0].className = 'full-post-photo';
     description.innerHTML = data['description'].trim().replace('\n', '<br><br>');
     shortPost.removeChild(readMore);
+
+    if (data['resourceURL']) {
+      var url = document.createElement('a');
+      url.href = data['resourceURL'];
+      url.target = 'blank';
+      url.innerHTML = data['resourceURL'];
+      var onlineURL = createKeyValue('See also', url, 1);
+      shortPost.insertBefore(onlineURL, location);
+    }
 
     var mapDiv = document.createElement('div');
     mapDiv.id = 'map-post';
