@@ -27,18 +27,8 @@
   border-bottom: 1px dashed silver;
 }
 
-#delete-account-button {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-}
-
 #delete-account-button input {
   background: #ff4e56;
-}
-
-#edit-account-parent input {
-  width: 15rem;
 }
 
 #account-delete-confirm-text {

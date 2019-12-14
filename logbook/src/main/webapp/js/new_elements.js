@@ -183,6 +183,8 @@ var newElements = (function NewElements() {
 
     var div = document.createElement('div');
     div.id = 'account-parent';
+    div.className = 'parent-in-main';
+
     div.appendChild(header);
     div.appendChild(navTabs);
     div.appendChild(content);
@@ -318,6 +320,8 @@ var newElements = (function NewElements() {
 
     var div = document.createElement('div');
     div.id = 'userlist-parent';
+    div.className = 'parent-in-main';
+
     div.appendChild(header);
     div.appendChild(buttonSection);
 
@@ -542,6 +546,7 @@ var newElements = (function NewElements() {
 
     var div = document.createElement('div');
     div.id = 'edit-account-parent';
+    div.className = 'parent-in-myaccount';
 
     div.appendChild(editAccount);
     div.appendChild(deleteAccount);
@@ -578,6 +583,17 @@ var newElements = (function NewElements() {
     return div;
   }
 
+  function createProfileSection(response, dataNames, skipEmpty) {
+    var profileParent = createSignupSummary(response, dataNames, skipEmpty);
+    profileParent.id = 'profile-parent';
+    profileParent.className = 'parent-in-myaccount';
+
+    var profileSection = document.createElement('div');
+    profileSection.id = 'profile-section';
+    profileSection.appendChild(profileParent);
+
+    return profileSection;
+  }
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
@@ -593,6 +609,7 @@ var newElements = (function NewElements() {
     createPostFormSection: createPostFormSection,
     createShortPost: createShortPost,
     createYesNoButtons: createYesNoButtons,
-    createEditAccountSection: createEditAccountSection
+    createEditAccountSection: createEditAccountSection,
+    createProfileSection: createProfileSection
   };
 }());

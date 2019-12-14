@@ -1,5 +1,5 @@
 <div id="signin-section">
-  <div id="signin-parent">
+  <div id="signin-parent" class="parent-in-main">
     <header>
       <h2>Sign in</h2>
     </header>

@@ -56,10 +56,12 @@ var PostForm = (function() {
       var postFormSection = newElements.createPostFormSection();
       postFormSection.children[0].innerHTML = state.xhr.responseText;
       if (username === false) {
+        postFormSection.children[0].className = 'parent-in-main';
         nonav.innerHTML = '';
         nonav.appendChild(postFormSection);
       }
       else {
+        postFormSection.children[0].className = 'parent-in-myaccount';
         var accountSubsection = document.getElementById('account-subsection');
         accountSubsection. innerHTML = '';
         accountSubsection.appendChild(postFormSection);

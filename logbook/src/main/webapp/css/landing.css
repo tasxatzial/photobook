@@ -1,19 +1,16 @@
-#landing-section {
-  min-height: 32rem;
-}
-
 #landing-page {
   max-width: 28rem;
 }
 
-#landing-page > p {
+#landing-signin-msg, #landing-signup-msg {
   text-align: center;
 }
-#landing-page > p:first-child {
+
+#landing-signup-msg {
   font-size: 1.5rem;
 }
 
-#landing-page > p:nth-child(2) {
+#landing-signin-msg {
   font-size: 1.2rem;
 }
 

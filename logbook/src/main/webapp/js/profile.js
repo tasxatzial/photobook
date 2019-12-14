@@ -46,10 +46,10 @@ var ShowProfile = (function() {
       }
 
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
-      var profile = newElements.createSignupSummary(state.xhrResponse, Init.dataNames, false);
+      var profileSection = newElements.createProfileSection(state.xhrResponse, Init.dataNames, false);
       var accountSubsection = document.getElementById('account-subsection');
       accountSubsection.innerHTML = '';
-      accountSubsection.appendChild(profile);
+      accountSubsection.appendChild(profileSection);
     }
 
     function failCallback() {

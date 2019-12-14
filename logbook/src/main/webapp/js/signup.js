@@ -146,7 +146,7 @@ var Signup = (function() {
     el.signupMiddle = document.getElementById('signup-middle');
     el.header = el.signupMiddle.children[0].children[0];
     el.signupContent = el.signupMiddle.children[1];
-
+    var signupParent = document.getElementById('signup-parent');
     el.address = document.getElementById('signup-address');
     el.gender = document.querySelectorAll('input[type="radio"]');
     el.signupButton = document.querySelector('#signup-button input');
@@ -165,6 +165,10 @@ var Signup = (function() {
       signinButton.addEventListener('click', Landing.showSignin);
       signinButton.style.marginLeft = 'auto';
       document.getElementById('navbar-content').appendChild(signinButton);
+      signupParent.className = 'parent-in-main';
+    }
+    else {
+      signupParent.className = 'parent-in-myaccount';
     }
     el.signupButton.disabled = false;
   }

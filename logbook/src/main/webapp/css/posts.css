@@ -58,12 +58,6 @@
   margin-bottom: 1rem;
 }
 
-#account-parent #posts-parent header h2, #post-form-parent header h2 {
-  font-size: 1.4rem;
-  font-weight: bold;
-  text-align: center;
-}
-
 #delete-post-button input {
   background: #ff4e56;
 }

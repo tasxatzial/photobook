@@ -16,12 +16,12 @@ var ShowPosts = (function() {
 
     var nonav = document.getElementById('no-nav');
     if (username === false) {
+      el.postsSection.children[0].className = 'parent-in-main';
       nonav.innerHTML = '';
       nonav.appendChild(el.postsSection);
     }
     else {
-      el.postsSection.children[0].style.paddingLeft = '0';
-      el.postsSection.children[0].style.paddingRight = '0';
+      el.postsSection.children[0].className = 'parent-in-myaccount';
       var accountSubsection = document.getElementById('account-subsection');
       accountSubsection.innerHTML = '';
       accountSubsection.appendChild(el.postsSection);
