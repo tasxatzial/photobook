@@ -88,6 +88,7 @@ function OLMap(divId) {
 
     /* calculate zoom level and center only when the map is shown for the first time */
     if (!state.initZoom) {
+
       var zoomCenter = findZoomCenter();
       state.initZoom = zoomCenter.zoom;
       state.obj.setCenter(zoomCenter.center, zoomCenter.zoom);

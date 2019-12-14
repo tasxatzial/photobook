@@ -1,6 +1,10 @@
 'use strict';
 
 var ShowPosts = (function() {
+  var obj = {
+    mapObj: null
+  };
+
   var el = {
     postsSection: null,
     loader: null
@@ -13,8 +17,8 @@ var ShowPosts = (function() {
   function init(username) {
     data.username = username;
     el.postsSection = newElements.createPostsSection(username);
-
     var nonav = document.getElementById('no-nav');
+
     if (username === false) {
       el.postsSection.children[0].className = 'parent-in-main';
       nonav.innerHTML = '';
@@ -62,7 +66,7 @@ var ShowPosts = (function() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       var shortPost = null;
       Object.keys(state.xhrResponse).forEach(function(key,index) {
-        shortPost = newElements.createShortPost(state.xhrResponse[key], showFullPost);
+        shortPost = newElements.createShortPost(state.xhrResponse[key], showFullPost, obj.mapObj);
         el.postsSection.children[0].appendChild(document.createElement('hr'));
         el.postsSection.children[0].appendChild(shortPost);
       });
@@ -74,7 +78,8 @@ var ShowPosts = (function() {
     }
   }
 
-  function showFullPost(fullPost) {
+  function showFullPost(fullPost, mapObj) {
+    obj.mapObj = mapObj;
     el.postsSection.children[0].innerHTML = '';
     el.postsSection.children[0].appendChild(fullPost);
     window.scrollTo(0, 0);

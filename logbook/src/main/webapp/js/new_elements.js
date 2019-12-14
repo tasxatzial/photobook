@@ -343,7 +343,7 @@ var newElements = (function NewElements() {
     return postFormSection;
   }
 
-  function createShortPost(postJSON, callback) {
+  function createShortPost(postJSON, callback, mapObj) {
     var state = {
       xhr: null,
       xhrResponse: null,
@@ -447,7 +447,7 @@ var newElements = (function NewElements() {
       else {
         data.zoom = 11;
       }
-      turnToFullPost(postContainer, data, callback);
+      turnToFullPost(postContainer, data, callback, mapObj);
     });
 
     var input = LocationSearch.createLatLonInput(postJSON['latitude'], postJSON['longitude']);
@@ -490,7 +490,7 @@ var newElements = (function NewElements() {
     return postContainer;
   }
 
-  function turnToFullPost(shortPost, data, callback) {
+  function turnToFullPost(shortPost, data, callback, mapObj) {
     var photoParent = shortPost.children[0];
     var description = shortPost.children[1];
     var location = shortPost.children[2];
@@ -512,7 +512,29 @@ var newElements = (function NewElements() {
     }
 
     if (data['location']) {
-      var mapDiv = document.createElement('div');
+
+      /* creates a map object only once */
+      if (!mapObj) {
+        var mapDiv = document.createElement('div');
+        mapDiv.id = 'map-post';
+        var mapParent = document.createElement('div');
+        mapParent.id = 'post-map-parent';
+        mapParent.appendChild(mapDiv);
+        shortPost.insertBefore(mapParent, postedBy);
+
+        mapDiv.style.height = '20rem';
+        mapObj = new OLMap(mapDiv.id);
+      }
+      else {
+        shortPost.insertBefore(mapObj.getDiv().parentElement, postedBy);
+        mapObj.resetState();
+      }
+
+      mapObj.setZoom(data['zoom']);
+      mapObj.addLocation({lat: data['lat'], lon: data['lon']});
+      mapObj.drawMap();
+      /* creates a new map object every time a full post is shown */
+      /*var mapDiv = document.createElement('div');
       mapDiv.id = 'map-post';
       var mapParent = document.createElement('div');
       mapParent.id = 'post-map-parent';
@@ -523,7 +545,7 @@ var newElements = (function NewElements() {
       var map = new OLMap(mapDiv.id);
       map.setZoom(data['zoom']);
       map.addLocation({lat: data['lat'], lon: data['lon']});
-      map.drawMap();
+      map.drawMap();*/
     }
 
     if (data['owner']) {
@@ -534,7 +556,7 @@ var newElements = (function NewElements() {
       deleteButton.appendChild(deleteMsg);
     }
 
-    callback(shortPost);
+    callback(shortPost, mapObj);
   }
 
   function createEditAccountSection() {
