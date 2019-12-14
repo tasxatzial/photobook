@@ -83,7 +83,6 @@ public class GetPosts extends HttpServlet {
                 json.put("imageURL", "");
             }
             if (isValidImageBase64(post.getImageBase64())) {
-                System.out.println(post.getImageBase64());
                 json.put("imageBase64", post.getImageBase64());
             }
             else {

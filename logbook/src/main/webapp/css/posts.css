@@ -67,3 +67,9 @@
 #delete-post-button input {
   background: #ff4e56;
 }
+
+#posts-loader {
+  width: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}

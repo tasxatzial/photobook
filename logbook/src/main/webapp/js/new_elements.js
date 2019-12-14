@@ -151,6 +151,9 @@ var newElements = (function NewElements() {
     headerH2.innerHTML = 'Latest posts';
     header.appendChild(headerH2);
 
+    var loader = document.createElement('div');
+    loader.id = 'posts-loader';
+
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';
 
@@ -159,6 +162,7 @@ var newElements = (function NewElements() {
       postsParent.appendChild(postButton);
     }
     postsParent.appendChild(header);
+    postsParent.appendChild(loader);
 
     var postsSection = document.createElement('div');
     postsSection.id = 'posts-section';

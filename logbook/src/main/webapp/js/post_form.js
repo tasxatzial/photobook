@@ -44,7 +44,7 @@ var PostForm = (function() {
     loc.lat = null;
     loc.lon = null;
     state.lastDetectionMethod = null;
-    
+
     var nonav = document.getElementById('no-nav');
     data.username = username;
 

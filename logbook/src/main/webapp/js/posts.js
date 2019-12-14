@@ -49,8 +49,12 @@ var ShowPosts = (function() {
       formData.append('username', data.username);
     }
 
+    var loader = newElements.createLoader("images/loader.gif");
+    el.postsSection.children[0].children[2].appendChild(loader);
+
     state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
     function successCallback() {
+      el.postsSection.children[0].children[2].removeChild(loader);
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       var shortPost = null;
       Object.keys(state.xhrResponse).forEach(function(key,index) {
@@ -61,6 +65,7 @@ var ShowPosts = (function() {
     }
 
     function failCallback() {
+      el.postsSection.children[0].children[2].removeChild(loader);
       console.log(state.xhr.responseText);
     }
   }
