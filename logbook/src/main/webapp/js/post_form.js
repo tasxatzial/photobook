@@ -4,7 +4,7 @@ var PostForm = (function() {
   var state = {
     xhr: null,
     xhrResponse: null,
-    lastDetectionMethod: null,
+    lastDetectionMethod: null
   };
 
   var data = {
@@ -30,14 +30,14 @@ var PostForm = (function() {
     postButton: null,
     selectDiskPhoto: null,
     locationDetectButton: null,
-    onlinePhotoToggle: null,
     geolocationRadio: null,
     placeRadio: null,
     country: null,
     place: null,
     onlineImage: null,
     onlineImageCheckbox: null,
-    selectDiskPhotoButton: null
+    selectDiskPhotoButton: null,
+    photoToggle: null
   };
 
   function init(username) {
@@ -67,6 +67,7 @@ var PostForm = (function() {
       el.selectOnlinePhoto = document.getElementById('select-online-photo');
       el.onlineImage = el.selectOnlinePhoto.children[1];
       el.onlineImageCheckbox = el.selectOnlinePhoto.children[0].children[0];
+      el.photoToggle = PhotoToggler();
       el.selectDiskPhoto = document.getElementById('select-disk-photo');
       el.selectDiskPhotoButton = el.selectDiskPhoto.children[0];
       el.filePicker = new PhotoPicker(el.selectDiskPhoto.children[2], el.selectDiskPhoto.children[1]);
@@ -77,7 +78,6 @@ var PostForm = (function() {
       el.locationPlace = document.getElementById('post-form-country-hidden');
       el.country = el.locationPlace.children[0].children[1];
       el.place = el.locationPlace.children[1].children[1];
-      el.onlinePhotoToggle = OnlinePhotoToggle();
       el.postButton = document.getElementById('post-button');
       el.locationDetectMsg = document.getElementById('post-form-detect-msg');
 
@@ -101,7 +101,13 @@ var PostForm = (function() {
     });
 
     el.onlineImageCheckbox.addEventListener('click', function() {
-      el.onlinePhotoToggle.toggle();
+      el.photoToggle.toggle("onlineImage");
+    });
+
+    el.selectDiskPhotoButton.addEventListener('click', function() {
+      el.filePicker.click(function() {
+        el.photoToggle.toggle("diskPhoto");
+      });
     });
 
     function addPlaceInputListeners() {
@@ -117,14 +123,6 @@ var PostForm = (function() {
 
     el.country.addEventListener('input', addPlaceInputListeners);
     el.place.addEventListener('input', addPlaceInputListeners);
-
-    el.selectDiskPhotoButton.addEventListener('click', function() {
-      el.filePicker.click(function() {
-        el.onlineImage.style.display = 'none';
-        el.onlineImageCheckbox.checked = false;
-        el.selectOnlinePhoto.className = '';
-      });
-    });
 
     if (navigator.geolocation) {
       el.geolocationRadio.addEventListener('click', function () {
@@ -154,6 +152,41 @@ var PostForm = (function() {
 
     el.locationDetectButton.addEventListener('click', pickLocationDetectMethod);
     el.postButton.addEventListener('click', createPost);
+  }
+
+  function PhotoToggler() {
+    var state = {
+      onlineImage: false
+    };
+
+    function hideOnlineImage() {
+      state.onlineImage = false;
+      el.onlineImageCheckbox.checked = false;
+      el.onlineImage.style.display = 'none';
+      el.selectOnlinePhoto.className = '';
+      el.onlineImage.value = '';
+    }
+
+    function toggle(what) {
+      if (what === "diskPhoto") {
+        hideOnlineImage();
+      }
+      else if (what === "onlineImage") {
+        if (state.onlineImage) {
+          hideOnlineImage();
+        } else {
+          state.onlineImage = true;
+          el.onlineImageCheckbox.checked = true;
+          el.onlineImage.style.display = 'inline-block';
+          el.selectOnlinePhoto.className = 'sign-child';
+          el.filePicker.clearPhoto();
+        }
+      }
+    }
+
+    return {
+      toggle: toggle
+    };
   }
 
   function createPost() {
@@ -237,30 +270,6 @@ var PostForm = (function() {
     function failCallback() {
       console.log(state.xhr.responseText);
     }
-  }
-
-  function OnlinePhotoToggle() {
-    var state = {
-      checked: false
-    };
-
-    function toggle() {
-      if (state.checked) {
-        state.checked = false;
-        el.onlineImage.style.display = 'none';
-        el.selectOnlinePhoto.className = '';
-        el.onlineImage.value = '';
-      } else {
-        state.checked = true;
-        el.onlineImage.style.display = 'inline-block';
-        el.selectOnlinePhoto.className = 'sign-child';
-        el.filePicker.clearPhoto();
-      }
-    }
-
-    return {
-      toggle: toggle
-    };
   }
 
   return {
