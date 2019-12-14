@@ -60,9 +60,9 @@ var PostForm = (function() {
         nonav.appendChild(postFormSection);
       }
       else {
-        var accountParent = document.getElementById('account-parent');
-        accountParent.removeChild(accountParent.children[2]);
-        accountParent.appendChild(postFormSection);
+        var accountSubsection = document.getElementById('account-subsection');
+        accountSubsection. innerHTML = '';
+        accountSubsection.appendChild(postFormSection);
       }
 
       el.createPostMsg = document.getElementById('signupin-msg');

@@ -11,8 +11,7 @@ var ShowProfile = (function() {
   var el = {
     showProfileButton: null,
     showPostsButton: null,
-    editAccountButton: null,
-    accountParent: null
+    editAccountButton: null
   };
 
   function init(username, firstTime) {
@@ -47,13 +46,10 @@ var ShowProfile = (function() {
       }
 
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
-
       var profile = newElements.createSignupSummary(state.xhrResponse, Init.dataNames, false);
-      el.accountParent = document.getElementById('account-parent');
-      if (!firstTime) {
-        el.accountParent.removeChild(el.accountParent.children[2]);
-      }
-      el.accountParent.appendChild(profile);
+      var accountSubsection = document.getElementById('account-subsection');
+      accountSubsection.innerHTML = '';
+      accountSubsection.appendChild(profile);
     }
 
     function failCallback() {
@@ -73,7 +69,7 @@ var ShowProfile = (function() {
 
     if (el.editAccountButton) {
       el.editAccountButton.addEventListener('click', function () {
-        ShowAccount.init(el.accountParent.children[2]);
+        EditAccount.init();
         showBorders(el.editAccountButton, el.showProfileButton, el.showPostsButton);
       });
     }

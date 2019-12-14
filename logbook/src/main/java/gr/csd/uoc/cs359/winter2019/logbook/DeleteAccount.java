@@ -8,11 +8,13 @@ package gr.csd.uoc.cs359.winter2019.logbook;
 import gr.csd.uoc.cs359.winter2019.logbook.db.PostDB;
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Post;
+import gr.csd.uoc.cs359.winter2019.logbook.model.User;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,9 +24,9 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
 
-@WebServlet(name = "DeletePost", urlPatterns = "/DeletePost")
+@WebServlet(name = "DeleteAccount", urlPatterns = "/DeleteAccount")
 @MultipartConfig
-public class DeletePost extends HttpServlet {
+public class DeleteAccount extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,42 +44,34 @@ public class DeletePost extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONObject jsonFinal = new JSONObject();
 
-        if (request.getAttribute("forwarded") != null) {
-            PostDB.deleteAllPostsBy(UserDB.getUser((String) request.getAttribute("username")));
-            List<Post> posts = PostDB.getTop10RecentPostsOfUser((String) request.getAttribute("username"));
-            if (posts.size() > 0) {
-                request.setAttribute("ERROR", "DELETE_POSTS");
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession == null || oldSession.getAttribute("username") == null) {
+            jsonFinal.put("ERROR", "NO_SESSION");
+            out.print(jsonFinal.toJSONString());
+            return;
+        }
+
+        request.setAttribute("forwarded", "1");
+        request.setAttribute("username", oldSession.getAttribute("username"));
+        RequestDispatcher dispatcher = request.getRequestDispatcher("DeletePost");
+        dispatcher.include(request, response);
+
+        if (request.getAttribute("SUCCESS") != null) {
+            UserDB.deleteUser((String) oldSession.getAttribute("username"));
+            User user = UserDB.getUser((String) oldSession.getAttribute("username"));
+            if (user == null) {
+                jsonFinal.put("SUCCESS", "1");
             }
             else {
-                request.setAttribute("SUCCESS", "1");
+                response.setStatus(500);
+                jsonFinal.put("ERROR", "DELETE_ACCOUNT");
             }
         }
         else {
-            HttpSession oldSession = request.getSession(false);
-            if (oldSession == null || oldSession.getAttribute("username") == null) {
-                jsonFinal.put("ERROR", "NO_SESSION");
-                out.print(jsonFinal.toJSONString());
-                return;
-            }
-
-            if (!oldSession.getAttribute("username").equals(request.getAttribute("username"))) {
-                jsonFinal.put("ERROR", "INVALID_USER");
-                out.print(jsonFinal.toJSONString());
-                return;
-            }
-            PostDB.deletePost(Integer.parseInt(request.getParameter("postID")));
-            Post post = PostDB.getPost(Integer.parseInt(request.getParameter("postID")));
-
-            if (post != null) {
-                jsonFinal.put("SUCCESS", "0");
-                response.setStatus(500);
-                out.print(jsonFinal.toJSONString());
-            }
-            else {
-                jsonFinal.put("SUCCESS", "1");
-                out.print(jsonFinal.toJSONString());
-            }
+            response.setStatus(500);
+            jsonFinal.put("ERROR", "DELETE_POSTS");
         }
+        out.print(jsonFinal.toJSONString());
     }
 
     /**

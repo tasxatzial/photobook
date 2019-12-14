@@ -2,7 +2,8 @@
 
 var ShowPosts = (function() {
   var el = {
-    postsSection: null
+    postsSection: null,
+    loader: null
   };
 
   var data = {
@@ -12,6 +13,7 @@ var ShowPosts = (function() {
   function init(username) {
     data.username = username;
     el.postsSection = newElements.createPostsSection(username);
+
     var nonav = document.getElementById('no-nav');
     if (username === false) {
       nonav.innerHTML = '';
@@ -20,10 +22,11 @@ var ShowPosts = (function() {
     else {
       el.postsSection.children[0].style.paddingLeft = '0';
       el.postsSection.children[0].style.paddingRight = '0';
-      var accountParent = document.getElementById('account-parent');
-      accountParent.children[2].innerHTML = '';
-      accountParent.children[2].appendChild(el.postsSection);
+      var accountSubsection = document.getElementById('account-subsection');
+      accountSubsection.innerHTML = '';
+      accountSubsection.appendChild(el.postsSection);
     }
+
     if (!username) {
       var newPostButton = el.postsSection.children[0].children[0];
       newPostButton.addEventListener('click', function() {
@@ -49,12 +52,13 @@ var ShowPosts = (function() {
       formData.append('username', data.username);
     }
 
+    var loaderParent = document.getElementById('posts-loader');
     var loader = newElements.createLoader("images/loader.gif");
-    el.postsSection.children[0].children[2].appendChild(loader);
+    loaderParent.appendChild(loader);
 
     state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
     function successCallback() {
-      el.postsSection.children[0].children[2].removeChild(loader);
+      loaderParent.removeChild(loader);
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       var shortPost = null;
       Object.keys(state.xhrResponse).forEach(function(key,index) {
@@ -65,7 +69,7 @@ var ShowPosts = (function() {
     }
 
     function failCallback() {
-      el.postsSection.children[0].children[2].removeChild(loader);
+      loaderParent.removeChild(loader);
       console.log(state.xhr.responseText);
     }
   }

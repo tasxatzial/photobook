@@ -178,11 +178,14 @@ var newElements = (function NewElements() {
     header.appendChild(headerH2);
 
     var navTabs = createNavTabs(owner);
+    var content = document.createElement('div');
+    content.id = 'account-subsection';
 
     var div = document.createElement('div');
     div.id = 'account-parent';
     div.appendChild(header);
     div.appendChild(navTabs);
+    div.appendChild(content);
 
     var accountSection = document.createElement('div');
     accountSection.id = 'account-section';
@@ -279,7 +282,7 @@ var newElements = (function NewElements() {
     navTabs.appendChild(showPostsButton);
 
     if (owner) {
-      var editAccountButton = createNavTab('Edit Account');
+      var editAccountButton = createNavTab('Account');
       navTabs.appendChild(editAccountButton);
     }
 
@@ -530,6 +533,51 @@ var newElements = (function NewElements() {
     callback(shortPost);
   }
 
+  function createEditAccountSection() {
+    var editAccount = createBlueButton('Edit Account', 'edit-account-button');
+    var deleteAccount = createBlueButton('Delete Account', 'delete-account-button');
+    var deleteAccountMsg = document.createElement('div');
+    deleteAccountMsg.id = 'delete-account-msg';
+    deleteAccount.appendChild(deleteAccountMsg);
+
+    var div = document.createElement('div');
+    div.id = 'edit-account-parent';
+
+    div.appendChild(editAccount);
+    div.appendChild(deleteAccount);
+
+    var section = document.createElement('div');
+    section.id = 'edit-account-section';
+    section.appendChild(div);
+
+    return section;
+  }
+
+  function createYesNoButtons(id) {
+    var yesButton = document.createElement('button');
+    yesButton.innerHTML = 'Yes';
+    yesButton.className = 'yes-no-button';
+    yesButton.id = id + '-yes-button';
+
+    var noButton = document.createElement('button');
+    noButton.innerHTML = 'No';
+    noButton.className = 'yes-no-button';
+    noButton.id = id + '-no-button';
+
+    var text = document.createElement('div');
+    text.innerHTML = 'Please confirm';
+    text.id = id + '-text';
+
+    var div = document.createElement('div');
+    div.id = id;
+
+    div.appendChild(text);
+    div.appendChild(yesButton);
+    div.appendChild(noButton);
+
+    return div;
+  }
+
   return {
     createMapButton: createMapButton,
     createSignInPhotoSection: createSignInPhotoSection,
@@ -543,6 +591,8 @@ var newElements = (function NewElements() {
     createAccountSection: createAccountSection,
     createPostsSection: createPostsSection,
     createPostFormSection: createPostFormSection,
-    createShortPost: createShortPost
+    createShortPost: createShortPost,
+    createYesNoButtons: createYesNoButtons,
+    createEditAccountSection: createEditAccountSection
   };
 }());

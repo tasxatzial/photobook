@@ -6,6 +6,8 @@
 package gr.csd.uoc.cs359.winter2019.logbook.db;
 
 import gr.csd.uoc.cs359.winter2019.logbook.model.Post;
+import gr.csd.uoc.cs359.winter2019.logbook.model.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,6 +46,58 @@ public class PostDB {
             StringBuilder insQuery = new StringBuilder();
 
             insQuery.append("SELECT * FROM posts;");
+
+            stmt.execute(insQuery.toString());
+
+            ResultSet res = stmt.getResultSet();
+
+            while (res.next() == true) {
+                Post post = new Post();
+                post.setPostID(res.getInt("post_id"));
+                post.setUserName(res.getString("user_name"));
+                post.setDescription(res.getString("description"));
+                post.setResourceURL(res.getString("resource_URL"));
+                post.setImageURL(res.getString("image_URL"));
+                post.setImageBase64(res.getString("image_base64"));
+                post.setLatitude(res.getString("latitude"));
+                post.setLongitude(res.getString("longitude"));
+                post.setCreatedAt(res.getString("created_at"));
+                posts.add(post);
+            }
+
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            closeDBConnection(stmt, con);
+        }
+
+        return posts;
+    }
+
+    /**
+     * Get all posts by user
+     *
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public static List<Post> getAllPostsBy(User user) throws ClassNotFoundException {
+        List<Post> posts = new ArrayList<>();
+
+        Statement stmt = null;
+        Connection con = null;
+
+        try {
+
+            con = CS359DB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM posts ")
+                    .append(" WHERE ")
+                    .append(" user_name = ").append("'").append(user.getUserName()).append("';");
 
             stmt.execute(insQuery.toString());
 
@@ -396,6 +450,38 @@ public class PostDB {
 
             stmt.executeUpdate(insQuery.toString());
             System.out.println("#DB: The post was successfully deleted from the database.");
+
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(PostDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            closeDBConnection(stmt, con);
+        }
+    }
+
+    /**
+     * Delete all posts of user
+     *
+     * @param post
+     * @throws ClassNotFoundException
+     */
+    public static void deleteAllPostsBy(User user) throws ClassNotFoundException {
+        Statement stmt = null;
+        Connection con = null;
+        try {
+
+            con = CS359DB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("DELETE FROM posts ")
+                    .append(" WHERE ")
+                    .append(" user_name = ").append("'").append(user.getUserName()).append("';");
+
+            stmt.executeUpdate(insQuery.toString());
+            System.out.println("#DB: The posts by " + user.getUserName() + " were successfully deleted from the database.");
 
         } catch (SQLException ex) {
             // Log exception
