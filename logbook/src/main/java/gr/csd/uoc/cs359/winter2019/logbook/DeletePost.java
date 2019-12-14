@@ -58,7 +58,7 @@ public class DeletePost extends HttpServlet {
         Post post = PostDB.getPost(Integer.parseInt(request.getParameter("postID")));
 
         if (post != null) {
-            jsonFinal.put("ERROR", "DELETE_FAIL");
+            jsonFinal.put("SUCCESS", "0");
             response.setStatus(500);
             out.print(jsonFinal.toJSONString());
         }

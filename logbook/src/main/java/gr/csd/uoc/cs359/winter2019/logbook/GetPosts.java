@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -70,13 +71,13 @@ public class GetPosts extends HttpServlet {
             json.put("userName", post.getUserName());
             json.put("description", post.getDescription());
             if (isValidURL(post.getResourceURL())) {
-                json.put("resourceURL", post.getResourceURL());
+                json.put("resourceURL", addHttp(post.getResourceURL()));
             }
             else {
                 json.put("resourceURL", "");
             }
             if (isValidURL(post.getImageURL())) {
-                json.put("imageURL", post.getImageURL());
+                json.put("imageURL", addHttp(post.getImageURL()));
             }
             else {
                 json.put("imageURL", "");
@@ -113,15 +114,22 @@ public class GetPosts extends HttpServlet {
         return false;
     }
 
-    protected Boolean isValidURL(String imageURL) {
-        String trimmedURL = imageURL.trim();
-        int trimmedURLLength = trimmedURL.length();
-        if (trimmedURLLength < 7 ||
-                (!trimmedURL.substring(0, 7).equals("http://") && !trimmedURL.substring(0, 8).equals("https://") && !trimmedURL.substring(0, 4).equals("www."))) {
-            return false;
-        }
+    protected Boolean isValidURL(String URL) {
+        String trimmedURL = URL.trim();
+        String http = "(?i)^http://.*";
+        String https = "(?i)^https://.*";
+        String www = "(?i)^www\\..*";
+        return trimmedURL.matches(http) || trimmedURL.matches(https) || trimmedURL.matches(www);
+    }
 
-        return true;
+    protected String addHttp(String URL) {
+        String trimmedURL = URL.trim();
+        String http = "(?i)^http://.*";
+        String https = "(?i)^https://.*";
+        if (!trimmedURL.matches(http) && !trimmedURL.matches(https)) {
+            return "http://" + trimmedURL;
+        }
+        return trimmedURL;
     }
 
     /**
