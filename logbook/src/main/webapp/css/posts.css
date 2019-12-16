@@ -43,14 +43,13 @@
   overflow: hidden;
 }
 
-.post-footer {
+.posted-by {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  font-size: .9rem;
 }
 
-.post-footer p {
+.posted-by span {
   padding-right: 6px;
 }
 
@@ -66,4 +65,15 @@
   width: 1rem;
   margin-left: auto;
   margin-right: auto;
+}
+
+.post-footer {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+#rating-select {
+  margin-left: 5px;
 }

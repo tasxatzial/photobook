@@ -373,9 +373,6 @@ var newElements = (function NewElements() {
     }
     var imageParent = document.createElement('div');
     imageParent.className = 'short-post-photo-parent';
-    if (image.src) {
-      imageParent.style.marginTop = '1rem';
-    }
     imageParent.appendChild(image);
 
     var readMore = document.createElement('p');
@@ -400,7 +397,7 @@ var newElements = (function NewElements() {
       ShowProfile.init(postJSON['userName'], 1);
     };
 
-    var at = document.createElement('p');
+    var at = document.createElement('span');
     at.innerHTML = ' at ';
     at.style.fontWeight = 'bold';
 
@@ -408,15 +405,24 @@ var newElements = (function NewElements() {
     postedBy.innerHTML = 'Posted by:';
     postedBy.style.fontWeight = 'bold';
 
-    var timestamp = document.createElement('p');
+    var timestamp = document.createElement('span');
     timestamp.innerHTML = postJSON['createdAt'].substring(0, postJSON['createdAt'].lastIndexOf(":"));
 
     var username = document.createElement('div');
-    username.className = 'post-footer';
+    username.className = 'posted-by';
     username.appendChild(postedBy);
     username.appendChild(button);
     username.appendChild(at);
     username.appendChild(timestamp);
+
+    var rating = document.createElement('div');
+    rating.innerHTML = "Rating: ";
+    rating.className = 'post-rating';
+
+    var footer = document.createElement('div');
+    footer.className = 'post-footer';
+    footer.appendChild(username);
+    footer.appendChild(rating);
 
     var location = createKeyValue('Location', 'Querying...');
 
@@ -426,10 +432,10 @@ var newElements = (function NewElements() {
     var postContainer = document.createElement('div');
     postContainer.id = 'postID' + postJSON['postID'];
     postContainer.username = postJSON['userName'];
+    postContainer.appendChild(location);
     postContainer.appendChild(imageParent);
     postContainer.appendChild(description);
-    postContainer.appendChild(location);
-    postContainer.appendChild(username);
+    postContainer.appendChild(footer);
     postContainer.appendChild(readMoreButton);
 
     readMoreButton.addEventListener('click', function () {
@@ -490,17 +496,38 @@ var newElements = (function NewElements() {
     return postContainer;
   }
 
+
   function turnToFullPost(shortPost, data, callback, mapObj) {
-    var photoParent = shortPost.children[0];
-    var description = shortPost.children[1];
-    var location = shortPost.children[2];
+    var photoParent = shortPost.children[1];
+    var description = shortPost.children[2];
     var postedBy = shortPost.children[3];
     var readMore = shortPost.children[4];
+    var rating = postedBy.children[1];
 
     photoParent.children[0].className = 'full-post-photo';
     description.innerHTML = data['description'].trim().replace('\n', '<br><br>');
     shortPost.removeChild(readMore);
+    
+    if (!data['owner']) {
+      rating.innerHTML = 'Rate';
+      var select = document.createElement('select');
+      select.id = 'rating-select';
 
+      var defaultSelect = document.createElement('option');
+      defaultSelect.selected = true;
+      defaultSelect.value = '0';
+      defaultSelect.innerHTML = '-';
+
+      select.appendChild(defaultSelect);
+      for (var i = 1; i <= 5; i++) {
+        var option = document.createElement('option');
+        option.value = String(i);
+        option.innerHTML = String(i);
+        select.appendChild(option);
+      }
+
+      rating.appendChild(select);
+    }
 
     if (data['resourceURL']) {
       var url = document.createElement('a');
@@ -508,7 +535,7 @@ var newElements = (function NewElements() {
       url.target = 'blank';
       url.innerHTML = data['resourceURL'];
       var onlineURL = createKeyValue('See also', url, 1);
-      shortPost.insertBefore(onlineURL, location);
+      shortPost.insertBefore(onlineURL, postedBy);
     }
 
     if (data['location']) {
