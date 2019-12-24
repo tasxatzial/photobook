@@ -152,7 +152,7 @@ var Signup = (function() {
     el.signupButton = document.querySelector('#signup-button input');
     el.signinMsg = document.getElementById('signupin-msg');
 
-    ValidChecker.init();
+    ValidChecker.init(action);
     SignUpLocation.init();
     SignUpFace.init();
     

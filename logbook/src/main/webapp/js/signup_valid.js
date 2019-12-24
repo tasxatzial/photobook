@@ -3,12 +3,11 @@
 var ValidChecker = (function() {
 
   var state = {
-    checkedInputs: []
+    checkedInputs: [],
+    oldEmail: null
   };
 
-  function init() {
-    state.checkedInputs = [];
-
+  function init(action) {
     var username = document.getElementById('signup-username');
     var email = document.getElementById('signup-email');
     var passwd1 = document.getElementById('signup-password');
@@ -24,7 +23,10 @@ var ValidChecker = (function() {
     var signupMsg = document.getElementById('signupin-msg');
     var signupButton = document.querySelector('#signup-button input');
 
-    /* collect all elements --------------------------------------- */
+    state.checkedInputs = [];
+    state.oldEmail = email.value;
+
+        /* collect all elements --------------------------------------- */
     state.checkedInputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
         occupation, city, country, interests, about);
 
@@ -65,8 +67,8 @@ var ValidChecker = (function() {
     }
 
     /* add listeners ----------------------------------------------- */
-    addUsernameEmailListeners(username, 'CheckUsernameDB');
-    addUsernameEmailListeners(email, 'CheckEmailDB');
+    addUsernameEmailListeners(username);
+    addUsernameEmailListeners(email);
     addValidPatternListeners(passwd1);
     addPasswdConfirmListeners();
     addValidPatternListeners(firstName);
@@ -136,7 +138,7 @@ var ValidChecker = (function() {
     }
 
     /* username and email check listeners (includes both regex checks and db checks */
-    function addUsernameEmailListeners(element, action) {
+    function addUsernameEmailListeners(element) {
       element.checkedValid = 0;
       element.isTaken = -1;
       element.invalidMsg = 'Invalid';
@@ -164,12 +166,13 @@ var ValidChecker = (function() {
             showInvalidMsg(x, x.invalidMsg);
             return;
           }
-          formSubmit.disable(signupButton);
           if (x.name === 'signup-username') {
-            checkTaken(username, action, successCallback, failCallback);
+            formSubmit.disable(signupButton);
+            checkTaken(username, 'CheckUsernameDB', successCallback, failCallback);
           }
-          if (x.name === 'signup-email') {
-            checkTaken(email, action, successCallback, failCallback);
+          if (x.name === 'signup-email' && (action !== 'UpdateAccount' || state.oldEmail !== x.value)) {
+            formSubmit.disable(signupButton);
+            checkTaken(email, 'CheckEmailDB', successCallback, failCallback);
           }
 
           function successCallback() {
