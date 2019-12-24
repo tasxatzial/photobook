@@ -19,9 +19,9 @@ import javax.servlet.annotation.MultipartConfig;
 /**
  *
  */
-@WebServlet(name = "CheckUsernameDB", urlPatterns = {"/CheckUsernameDB"})
+@WebServlet(name = "CheckOnDB", urlPatterns = {"/CheckOnDB"})
 @MultipartConfig
-public class CheckUsernameDB extends HttpServlet {
+public class CheckOnDB extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,44 +35,67 @@ public class CheckUsernameDB extends HttpServlet {
             throws IOException, ClassNotFoundException {
 
         response.setContentType("application/json;charset=UTF-8");
-        String username = request.getParameter("username");
-        if (request.getAttribute("CheckUsernameDB") != null) {
-            if (username == null) {
-                request.setAttribute("username", "0");
-            }
-            else {
-                checkUsername(request, username);
-            }
+        PrintWriter out = response.getWriter();
+
+        if (request.getParameter("action") == null) {
+            out.print((new JSONObject()).toJSONString());
+            return;
         }
-        else {
-            JSONObject json = new JSONObject();
-            if (username == null) {
-                json.put("username", "0");
+
+        String parameter = null;
+        String parameterValue = null;
+        String attributeValue = null;
+        if (request.getParameter("action").equals("CheckEmailDB")) {
+            parameter = "email";
+            parameterValue = request.getParameter("email");
+            attributeValue = (String) request.getAttribute("CheckEmailDB");
+        }
+        else if (request.getParameter("action").equals("CheckUsernameDB") ||
+                request.getParameter("action").equals("Signin")) {
+            parameter = "username";
+            parameterValue = request.getParameter("username");
+            attributeValue = (String) request.getAttribute("CheckUsernameDB");
+        }
+        if (attributeValue != null) {
+            if (parameterValue == null) {
+                request.setAttribute(parameter, "0");
             } else {
-                checkUsernameJSON(request, username, json);
+                check(request, parameterValue, parameter);
             }
-            PrintWriter out = response.getWriter();
+        } else {
+            JSONObject json = new JSONObject();
+            if (parameterValue == null) {
+                json.put(parameter, "0");
+            } else {
+                checkJSON(request, parameterValue, parameter, json);
+            }
             out.print(json.toJSONString());
         }
     }
 
-    protected void checkUsernameJSON(HttpServletRequest request, String username, JSONObject json) throws ClassNotFoundException {
-        checkUsername(request, username);
-        if (request.getAttribute("username").equals("1")) {
-            json.put("username", "1");
+    protected void checkJSON(HttpServletRequest request, String parameterValue, String parameter, JSONObject json) throws ClassNotFoundException {
+        check(request, parameterValue, parameter);
+        if (request.getAttribute(parameter).equals("0")) {
+            json.put(parameter, "0");
         }
         else {
-            json.put("username", "0");
+            json.put(parameter, "1");
         }
     }
 
-    protected void checkUsername(HttpServletRequest request, String username) throws ClassNotFoundException {
-        boolean validUsername = UserDB.checkValidUserName(username);
-        if (!validUsername) {
-            request.setAttribute("username", "0");
+    protected void check(HttpServletRequest request, String parameterValue, String parameter) throws ClassNotFoundException {
+        boolean valid = false;
+        if (parameter.equals("email")) {
+            valid = UserDB.checkValidEmail(parameterValue);
+        }
+        else if (parameter.equals("username")){
+            valid = UserDB.checkValidUserName(parameterValue);
+        }
+        if (!valid) {
+            request.setAttribute(parameter, "0");
         }
         else {
-            request.setAttribute("username", "1");
+            request.setAttribute(parameter, "1");
         }
     }
 

@@ -47,7 +47,7 @@ public class Signin extends HttpServlet {
 
         JSONObject jsonSignin = new JSONObject();
         request.setAttribute("CheckUsernameDB", "1");
-        dispatcher = request.getRequestDispatcher("CheckUsernameDB");
+        dispatcher = request.getRequestDispatcher("CheckOnDB");
         dispatcher.include(request, response);
         if (request.getParameter("username") != null && request.getAttribute("username").equals("0")) {
             jsonSignin.put("username", "1");

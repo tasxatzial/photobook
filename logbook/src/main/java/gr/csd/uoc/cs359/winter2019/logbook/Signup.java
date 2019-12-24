@@ -121,7 +121,7 @@ public class Signup extends HttpServlet {
         HttpSession oldSession = request.getSession(false);
         if (jsonSignup.get("username").equals("") && request.getParameter("action").equals("Signup")) {
             request.setAttribute("CheckUsernameDB", "1");
-            dispatcher = request.getRequestDispatcher("CheckUsernameDB");
+            dispatcher = request.getRequestDispatcher("CheckOnDB");
             dispatcher.include(request, response);
             if (request.getAttribute("username").equals("0")) {
                 jsonSignup.put("username", "Already taken");
@@ -133,7 +133,7 @@ public class Signup extends HttpServlet {
                 !request.getParameter("action").equals("UpdateAccount")  ||
                 !request.getParameter("email").equals(UserDB.getUser(request.getParameter("username")).getEmail()))) {
             request.setAttribute("CheckEmailDB", "1");
-            dispatcher = request.getRequestDispatcher("CheckEmailDB");
+            dispatcher = request.getRequestDispatcher("CheckOnDB");
             dispatcher.include(request, response);
             if (request.getAttribute("email").equals("0")) {
                 jsonSignup.put("email", "Already taken");
