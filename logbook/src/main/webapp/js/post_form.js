@@ -157,7 +157,7 @@ var PostForm = (function() {
     });
 
     el.locationDetectButton.addEventListener('click', pickLocationDetectMethod);
-    el.postButton.addEventListener('click', createPost);
+    el.postButton.children[0].addEventListener('click', createPost);
   }
 
   function PhotoToggler() {

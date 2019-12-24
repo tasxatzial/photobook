@@ -371,9 +371,11 @@ var newElements = (function NewElements() {
     else if (postJSON['imageBase64']) {
       image.src = postJSON['imageBase64'];
     }
-    var imageParent = document.createElement('div');
-    imageParent.className = 'short-post-photo-parent';
-    imageParent.appendChild(image);
+    if (image.src) {
+      var imageParent = document.createElement('div');
+      imageParent.className = 'short-post-photo-parent';
+      imageParent.appendChild(image);
+    }
 
     var readMore = document.createElement('p');
     readMore.className = 'read-more';
@@ -433,7 +435,9 @@ var newElements = (function NewElements() {
     postContainer.id = 'postID' + postJSON['postID'];
     postContainer.username = postJSON['userName'];
     postContainer.appendChild(location);
-    postContainer.appendChild(imageParent);
+    if (image.src) {
+      postContainer.appendChild(imageParent);
+    }
     postContainer.appendChild(description);
     postContainer.appendChild(footer);
     postContainer.appendChild(readMoreButton);
@@ -498,16 +502,28 @@ var newElements = (function NewElements() {
 
 
   function turnToFullPost(shortPost, data, callback, mapObj) {
-    var photoParent = shortPost.children[1];
-    var description = shortPost.children[2];
-    var postedBy = shortPost.children[3];
-    var readMore = shortPost.children[4];
+    var photoParent = null;
+    var description = null;
+    var postedBy = null;
+    var readMore = null;
+    if (shortPost.children[1].className === 'short-post-photo-parent') {
+      photoParent = shortPost.children[1];
+      photoParent.children[0].className = 'full-post-photo';
+      description = shortPost.children[2];
+      postedBy = shortPost.children[3];
+      readMore = shortPost.children[4];
+    }
+    else {
+      description = shortPost.children[1];
+      postedBy = shortPost.children[2];
+      readMore = shortPost.children[3];
+    }
+
     var rating = postedBy.children[1];
 
-    photoParent.children[0].className = 'full-post-photo';
     description.innerHTML = data['description'].trim().replace('\n', '<br><br>');
     shortPost.removeChild(readMore);
-    
+
     if (!data['owner']) {
       rating.innerHTML = 'Rate';
       var select = document.createElement('select');
