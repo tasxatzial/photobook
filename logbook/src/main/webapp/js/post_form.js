@@ -91,6 +91,7 @@ var PostForm = (function() {
         el.geolocationRadio.innerHTML = 'Geolocation not supported';
         el.geolocationRadio.disabled = true;
         el.placeRadio.checked = true;
+        selectPlace();
       }
 
       addListeners();
@@ -145,19 +146,21 @@ var PostForm = (function() {
       });
     }
 
-    el.placeRadio.addEventListener('click', function() {
-      loc.lat = null;
-      loc.lon = null;
-      el.locationDetectButton.disabled = true;
-      el.locationPlace.style.display = 'block';
-      if (state.lastDetectionMethod !== 'place') {
-        formMsg.clear(el.locationDetectMsg);
-      }
-      state.lastDetectionMethod = 'place';
-    });
+    el.placeRadio.addEventListener('click', selectPlace);
 
     el.locationDetectButton.addEventListener('click', pickLocationDetectMethod);
     el.postButton.children[0].addEventListener('click', createPost);
+  }
+
+  function selectPlace() {
+    loc.lat = null;
+    loc.lon = null;
+    el.locationDetectButton.disabled = true;
+    el.locationPlace.style.display = 'block';
+    if (state.lastDetectionMethod !== 'place') {
+      formMsg.clear(el.locationDetectMsg);
+    }
+    state.lastDetectionMethod = 'place';
   }
 
   function PhotoToggler() {
