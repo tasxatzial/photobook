@@ -157,7 +157,7 @@ var newElements = (function NewElements() {
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';
 
-    if (!username) {
+    if (username === false || username === null) {
       var postButton = createBlueButton('+ New Post', 'new-post-button');
       postsParent.appendChild(postButton);
     }

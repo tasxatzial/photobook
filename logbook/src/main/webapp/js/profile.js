@@ -21,7 +21,9 @@ var ShowProfile = (function() {
 
     var data = new FormData();
     data.append("action", "GetProfile");
-    data.append("username", state.username);
+    if (state.username !== null) {
+      data.append("username", state.username);
+    }
     state.xhr = ajaxRequest("POST", "Main", data, successCallback, failCallback);
 
     function successCallback() {

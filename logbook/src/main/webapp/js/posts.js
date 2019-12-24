@@ -31,7 +31,7 @@ var ShowPosts = (function() {
       accountSubsection.appendChild(el.postsSection);
     }
 
-    if (!username) {
+    if (username === false || username === null) {
       var newPostButton = el.postsSection.children[0].children[0];
       newPostButton.addEventListener('click', function() {
         PostForm.init(username);
@@ -49,10 +49,10 @@ var ShowPosts = (function() {
 
     var formData = new FormData();
     formData.append("action", "GetPosts");
-    if (data.username === false) {
-      formData.append('username', '0');
+    if (data.username === null) {
+      formData.append('owner', '1');
     }
-    else {
+    else if (data.username !== false) {
       formData.append('username', data.username);
     }
 

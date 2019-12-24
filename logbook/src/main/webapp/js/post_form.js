@@ -63,7 +63,7 @@ var PostForm = (function() {
       else {
         postFormSection.children[0].className = 'parent-in-myaccount';
         var accountSubsection = document.getElementById('account-subsection');
-        accountSubsection. innerHTML = '';
+        accountSubsection.innerHTML = '';
         accountSubsection.appendChild(postFormSection);
       }
 

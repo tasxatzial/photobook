@@ -7,7 +7,7 @@ var Homepage = (function() {
 
     var accountButton = newElements.createSignBarButton('My account', 'profile-button');
     accountButton.addEventListener('click', function() {
-      ShowProfile.init('', true);
+      ShowProfile.init(null, true);
     });
     navbarContent.appendChild(accountButton);
 

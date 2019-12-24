@@ -49,7 +49,7 @@ public class GetProfile extends HttpServlet {
         }
 
         User user;
-        if (request.getParameter("username").equals("")) {
+        if (request.getParameter("username") == null) {
             user = UserDB.getUser((String) oldSession.getAttribute("username"));
         }
         else {
