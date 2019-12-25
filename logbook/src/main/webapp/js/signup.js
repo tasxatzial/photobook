@@ -181,14 +181,6 @@ var Signup = (function() {
             break;
           }
         }
-
-        var genderHidden = document.getElementById('gender-hidden');
-        var gender = document.querySelectorAll('input[type="radio"]');
-        for (var i = 0; i < gender.length; i++) {
-          if (gender[i].value === genderHidden.innerHTML) {
-            gender[i].checked = 'true';
-          }
-        }
       }
 
       el.username = document.getElementById('signup-username');

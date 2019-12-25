@@ -49,7 +49,8 @@ public class AccountInfo extends HttpServlet {
             request.setAttribute("city", user.getTown());
             request.setAttribute("address", user.getAddress());
             request.setAttribute("job", user.getOccupation());
-            request.setAttribute("gender", user.getGender());
+            request.setAttribute("gender", user.getGender().toString());
+            setGender(request);
             request.setAttribute("interests", user.getInterests());
             request.setAttribute("about", user.getInfo());
             request.setAttribute("title", "");
@@ -71,6 +72,7 @@ public class AccountInfo extends HttpServlet {
             request.setAttribute("address", "");
             request.setAttribute("job", "");
             request.setAttribute("gender", "Unknown");
+            setGender(request);
             request.setAttribute("interests", "");
             request.setAttribute("about", "");
             request.setAttribute("title", "Sign up");
@@ -80,6 +82,20 @@ public class AccountInfo extends HttpServlet {
         }
     }
 
+    void setGender(HttpServletRequest request) {
+        request.setAttribute("male-checked", "");
+        request.setAttribute("female-checked", "");
+        request.setAttribute("unknown-checked", "");
+        if (request.getAttribute("gender").equals("Male")) {
+            request.setAttribute("male-checked", "checked");
+        }
+        else if (request.getAttribute("gender").equals("Female")) {
+            request.setAttribute("female-checked", "checked");
+        }
+        else {
+            request.setAttribute("unknown-checked", "checked");
+        }
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

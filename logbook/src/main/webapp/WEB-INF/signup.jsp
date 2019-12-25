@@ -63,11 +63,10 @@
         </div>
         <div class="sign-child" id="signup-gender">
           <p class="sign-label">Gender</p>
-          <div id="gender-hidden" style="display: none"><%= request.getAttribute("gender") %></div>
           <ul>
-            <li><label><input type="radio" name="signup-gender" value="Male">Male</label></li>
-            <li><label><input type="radio" name="signup-gender" value="Female">Female</label></li>
-            <li><label><input type="radio" name="signup-gender" value="Unknown" checked>It's a secret</label></li>
+            <li><label><input type="radio" name="signup-gender" value="Male" <%= request.getAttribute("male-checked") %>>Male</label></li>
+            <li><label><input type="radio" name="signup-gender" value="Female" <%= request.getAttribute("female-checked") %>>Female</label></li>
+            <li><label><input type="radio" name="signup-gender" value="Unknown" <%= request.getAttribute("unknown-checked") %>>It's a secret</label></li>
           </ul>
         </div>
         <div class="sign-child">
