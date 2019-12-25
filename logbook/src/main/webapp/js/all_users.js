@@ -8,7 +8,8 @@ var ShowAllUsers = (function() {
   };
 
   var el = {
-    userListParent: null
+    userListParent: null,
+    userListNav: null
   };
 
   function init() {
@@ -31,6 +32,7 @@ var ShowAllUsers = (function() {
       state.pages = Object.keys(state.xhrResponse).length;
       var userlistSection = newElements.createUsersList(state.pages);
       el.userListParent = userlistSection.children[0];
+      el.userListNav = el.userListParent.children[1];
       addListeners();
       showPage(1);
       nonav.innerHTML = '';
@@ -78,10 +80,10 @@ var ShowAllUsers = (function() {
   function showPage(pageNo) {
     if (pageNo <= state.pages && pageNo >= 1) {
       if (el.userListParent.children[2]) {
-        el.userListParent.removeChild(el.userListParent.children[2]);
+        el.userListParent.removeChild(el.userListParent.children[1]);
       }
       var userPage = newElements.createAllUsers(state.xhrResponse[pageNo]);
-      el.userListParent.appendChild(userPage);
+      el.userListParent.insertBefore(userPage, el.userListNav);
     }
   }
 
