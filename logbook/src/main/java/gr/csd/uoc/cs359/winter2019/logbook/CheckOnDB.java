@@ -44,25 +44,18 @@ public class CheckOnDB extends HttpServlet {
 
         String parameter = null;
         String parameterValue = null;
-        String attributeValue = null;
-        if (request.getParameter("action").equals("CheckEmailDB")) {
-            parameter = "email";
-            parameterValue = request.getParameter("email");
-            attributeValue = (String) request.getAttribute("CheckEmailDB");
-        }
-        else if (request.getParameter("action").equals("CheckUsernameDB") ||
-                request.getParameter("action").equals("Signin")) {
-            parameter = "username";
-            parameterValue = request.getParameter("username");
-            attributeValue = (String) request.getAttribute("CheckUsernameDB");
-        }
-        if (attributeValue != null) {
+
+        if (request.getAttribute("parameter") != null) {
+            parameter = (String) request.getAttribute("parameter");
+            parameterValue = (String) request.getAttribute("parameterValue");
             if (parameterValue == null) {
                 request.setAttribute(parameter, "0");
             } else {
                 check(request, parameterValue, parameter);
             }
         } else {
+            parameter = request.getParameter("parameter");
+            parameterValue = request.getParameter("parameterValue");
             JSONObject json = new JSONObject();
             if (parameterValue == null) {
                 json.put(parameter, "0");

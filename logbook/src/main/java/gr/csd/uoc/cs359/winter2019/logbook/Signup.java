@@ -120,7 +120,8 @@ public class Signup extends HttpServlet {
         RequestDispatcher dispatcher;
         HttpSession oldSession = request.getSession(false);
         if (jsonSignup.get("username").equals("") && request.getParameter("action").equals("Signup")) {
-            request.setAttribute("CheckUsernameDB", "1");
+            request.setAttribute("parameter", "username");
+            request.setAttribute("parameterValue", request.getParameter("username"));
             dispatcher = request.getRequestDispatcher("CheckOnDB");
             dispatcher.include(request, response);
             if (request.getAttribute("username").equals("0")) {
@@ -132,7 +133,8 @@ public class Signup extends HttpServlet {
                 (oldSession == null || request.getParameter("action").equals("Signup") ||
                 !request.getParameter("action").equals("UpdateAccount")  ||
                 !request.getParameter("email").equals(UserDB.getUser(request.getParameter("username")).getEmail()))) {
-            request.setAttribute("CheckEmailDB", "1");
+            request.setAttribute("parameter", "email");
+            request.setAttribute("parameterValue", request.getParameter("email"));
             dispatcher = request.getRequestDispatcher("CheckOnDB");
             dispatcher.include(request, response);
             if (request.getAttribute("email").equals("0")) {

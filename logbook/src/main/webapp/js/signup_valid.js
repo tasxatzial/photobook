@@ -168,11 +168,11 @@ var ValidChecker = (function() {
           }
           if (x.name === 'signup-username') {
             formSubmit.disable(signupButton);
-            checkTaken(username, 'CheckUsernameDB', successCallback, failCallback);
+            checkTaken(username, 'CheckUsernameDB', 'username', x.value, successCallback, failCallback);
           }
           if (x.name === 'signup-email' && (action !== 'AccountInfo' || state.oldEmail !== x.value)) {
             formSubmit.disable(signupButton);
-            checkTaken(email, 'CheckEmailDB', successCallback, failCallback);
+            checkTaken(email, 'CheckEmailDB', 'email', x.value, successCallback, failCallback);
           }
 
           function successCallback() {
@@ -187,13 +187,15 @@ var ValidChecker = (function() {
     }
 
     /* checks that username/email do not exist on database */
-    function checkTaken(element, action, successFunc, failFunc) {
+    function checkTaken(element, action, parameter, value, successFunc, failFunc) {
       var state = {
         xhr: null
       };
 
       var data = new FormData();
       data.append('action', action);
+      data.append('parameter', parameter);
+      data.append('parameterValue', value);
       data.append(element.name.split('-')[1], element.value);
       state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failFunc);
 
