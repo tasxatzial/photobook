@@ -58,6 +58,8 @@ public class CreatePost extends HttpServlet {
         post.setLongitude(request.getParameter("longitude"));
 
         PostDB.addPost(post);
+
+        out.print(jsonFinal.toJSONString());
     }
 
     /**

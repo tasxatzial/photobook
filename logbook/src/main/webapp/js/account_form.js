@@ -38,7 +38,15 @@ var EditAccount = (function() {
     var loader = newElements.createLoader('images/loader.gif');
     formMsg.showElement(el.deleteAccountMsg, loader);
 
-    state.xhr = ajaxRequest("POST", "Main", formData, logout, failCallback);
+    state.xhr = ajaxRequest("POST", "Main", formData, successCallback, failCallback);
+
+    function successCallback() {
+      if (JSON.parse(state.xhr.responseText).ERROR) {
+        formMsg.showError(el.deleteAccountMsg, 'Session expired, please re-login and try again');
+        return;
+      }
+      logout();
+    }
 
     function failCallback() {
       formMsg.showError(el.deleteAccountMsg, 'Error');

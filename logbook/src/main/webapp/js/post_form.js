@@ -225,6 +225,10 @@ var PostForm = (function() {
     state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
 
     function successCallback() {
+      if (JSON.parse(state.xhr.responseText).ERROR) {
+        logout();
+        return;
+      }
       ShowPosts.init(data.username);
     }
 

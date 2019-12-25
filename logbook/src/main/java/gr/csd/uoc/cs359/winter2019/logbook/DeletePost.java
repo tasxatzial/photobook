@@ -62,6 +62,7 @@ public class DeletePost extends HttpServlet {
 
             if (!oldSession.getAttribute("username").equals(request.getAttribute("username"))) {
                 jsonFinal.put("ERROR", "INVALID_USER");
+                response.setStatus(500);
                 out.print(jsonFinal.toJSONString());
                 return;
             }

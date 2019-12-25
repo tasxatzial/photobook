@@ -62,8 +62,13 @@ var ShowPosts = (function() {
 
     state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
     function successCallback() {
-      loaderParent.removeChild(loader);
       state.xhrResponse = JSON.parse(state.xhr.responseText);
+      if (state.xhrResponse.ERROR) {
+        logout();
+        return;
+      }
+
+      loaderParent.removeChild(loader);
       var shortPost = null;
       Object.keys(state.xhrResponse).forEach(function(key,index) {
         shortPost = newElements.createShortPost(state.xhrResponse[key], showFullPost, obj.mapObj);
@@ -108,6 +113,11 @@ var ShowPosts = (function() {
     state.xhr = ajaxRequest('POST', "Main", formData, successCallback, failCallback);
 
     function successCallback() {
+      if (JSON.parse(state.xhr.responseText).ERROR) {
+        logout();
+        return;
+      }
+
       ShowPosts.init(data.username);
     }
 
