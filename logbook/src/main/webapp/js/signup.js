@@ -162,7 +162,7 @@ var Signup = (function() {
 
     if (action === 'Signup') {
       var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
-      signinButton.addEventListener('click', Landing.showSignin);
+      signinButton.addEventListener('click', Signin.init);
       signinButton.style.marginLeft = 'auto';
       document.getElementById('navbar-content').appendChild(signinButton);
       signupParent.className = 'parent-in-main';

@@ -1,6 +1,10 @@
 'use strict';
 
 var Signin = (function() {
+  var state = {
+    xhr: null
+  };
+
   var el = {
     signinButton: null,
     username: null,
@@ -66,31 +70,55 @@ var Signin = (function() {
   }
 
   function init() {
-    el.signinButton = document.querySelector('#signin-button input');
-    el.username = document.getElementById('signin-username');
-    el.password = document.getElementById('signin-password');
-    el.signinContent = document.getElementById('signin-content');
     el.navbarContent = document.getElementById('navbar-content');
-    el.signinMsg = document.getElementById('signupin-msg');
     el.nonav = document.getElementById('no-nav');
-    el.signupButton = newElements.createSignBarButton('Sign up', 'signup-nav-button');
 
-    el.username.addEventListener('input', function() {
-      el.signinMsg.innerHTML = '';
-    });
-    el.password.addEventListener('input', function() {
-      el.signinMsg.innerHTML = '';
-    });
-    el.signinButton.addEventListener('click', function() {
-      el.signinMsg.innerHTML = '';
-    });
-    el.signinButton.addEventListener('click', doSignin);
-    el.signupButton.addEventListener('click', Landing.showSignup);
-    el.signupButton.style.marginLeft = 'auto';
-    el.signinButton.disabled = false;
-    el.navbarContent.appendChild(el.signupButton);
-    
-    SignInFace.init();
+    /* prepare the data */
+    var data = new FormData();
+    data.append('action', 'GetSignin');
+
+    /* make the call to the main servlet */
+    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+
+    function successCallback() {
+      el.nonav.innerHTML = state.xhr.responseText;
+
+      /* remove the top right signup button (if there is one) */
+      if (el.navbarContent.children[1]) {
+        el.navbarContent.removeChild(el.navbarContent.children[1]);
+      }
+
+      el.signinButton = document.querySelector('#signin-button input');
+      el.username = document.getElementById('signin-username');
+      el.password = document.getElementById('signin-password');
+      el.signinContent = document.getElementById('signin-content');
+      el.signinMsg = document.getElementById('signupin-msg');
+
+      el.signupButton = newElements.createSignBarButton('Sign up', 'signup-nav-button');
+
+      el.username.addEventListener('input', function() {
+        el.signinMsg.innerHTML = '';
+      });
+      el.password.addEventListener('input', function() {
+        el.signinMsg.innerHTML = '';
+      });
+      el.signinButton.addEventListener('click', function() {
+        el.signinMsg.innerHTML = '';
+      });
+      el.signinButton.addEventListener('click', doSignin);
+      el.signupButton.addEventListener('click', function() {
+        Landing.showSignup();
+      });
+      el.signupButton.style.marginLeft = 'auto';
+      el.signinButton.disabled = false;
+      el.navbarContent.appendChild(el.signupButton);
+
+      SignInFace.init();
+    }
+
+    function failCallback() {
+      console.log(state.xhr.responseText);
+    }
   }
 
   return {
