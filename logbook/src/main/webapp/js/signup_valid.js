@@ -170,7 +170,7 @@ var ValidChecker = (function() {
             formSubmit.disable(signupButton);
             checkTaken(username, 'CheckUsernameDB', successCallback, failCallback);
           }
-          if (x.name === 'signup-email' && (action !== 'UpdateAccount' || state.oldEmail !== x.value)) {
+          if (x.name === 'signup-email' && (action !== 'AccountInfo' || state.oldEmail !== x.value)) {
             formSubmit.disable(signupButton);
             checkTaken(email, 'CheckEmailDB', successCallback, failCallback);
           }

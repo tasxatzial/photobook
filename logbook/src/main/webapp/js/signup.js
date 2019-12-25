@@ -11,7 +11,8 @@ var Signup = (function() {
     address: null,
     gender: null,
     signupButton: null,
-    signinMsg: null
+    signinMsg: null,
+    navbarContent: null
   };
 
   function clickSignup(action) {
@@ -141,36 +142,88 @@ var Signup = (function() {
   }
 
   function init(action) {
-    el.username = document.getElementById('signup-username');
-    el.email = document.getElementById('signup-email');
-    el.signupMiddle = document.getElementById('signup-middle');
-    el.header = el.signupMiddle.children[0].children[0];
-    el.signupContent = el.signupMiddle.children[1];
-    var signupParent = document.getElementById('signup-parent');
-    el.address = document.getElementById('signup-address');
-    el.gender = document.querySelectorAll('input[type="radio"]');
-    el.signupButton = document.querySelector('#signup-button input');
-    el.signinMsg = document.getElementById('signupin-msg');
+    var state = {
+      xhr: null
+    };
 
-    ValidChecker.init(action);
-    SignUpLocation.init();
-    SignUpFace.init();
-    
-    el.signupButton.addEventListener('click', function () {
-      clickSignup(action);
-    });
+    var data = new FormData();
+    data.append('action', action);
 
-    if (action === 'Signup') {
-      var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
-      signinButton.addEventListener('click', Signin.init);
-      signinButton.style.marginLeft = 'auto';
-      document.getElementById('navbar-content').appendChild(signinButton);
-      signupParent.className = 'parent-in-main';
+    /* make the call to the main servlet */
+    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+
+    function successCallback() {
+      if (action === 'GetSignup') {
+        el.navbarContent = document.getElementById('navbar-content');
+        document.getElementById('no-nav').innerHTML = state.xhr.responseText;
+
+        /* remove the top right signin button (if there is one) */
+        if (el.navbarContent.children[1]) {
+          el.navbarContent.removeChild(el.navbarContent.children[1]);
+        }
+
+        var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
+        signinButton.addEventListener('click', Signin.init);
+        signinButton.style.marginLeft = 'auto';
+        el.navbarContent.appendChild(signinButton);
+      }
+      else if (action === 'AccountInfo') {
+        document.getElementById('account-subsection').innerHTML = state.xhr.responseText;
+        formInput.disable(document.getElementById('signup-username'));
+
+        var countryHidden = document.getElementById('country-hidden');
+        var country = document.getElementById('signup-country');
+        country.children[0].selected = 'false';
+        for (var j = 0; j < country.children.length; j++) {
+          if (country.children[j].value === countryHidden.innerHTML ||
+              country.children[j].name === countryHidden.innerHTML) {
+            country.children[j].selected = 'true';
+            break;
+          }
+        }
+
+        var genderHidden = document.getElementById('gender-hidden');
+        var gender = document.querySelectorAll('input[type="radio"]');
+        for (var i = 0; i < gender.length; i++) {
+          if (gender[i].value === genderHidden.innerHTML) {
+            gender[i].checked = 'true';
+          }
+        }
+      }
+
+      el.username = document.getElementById('signup-username');
+      el.email = document.getElementById('signup-email');
+      el.signupMiddle = document.getElementById('signup-middle');
+      el.header = el.signupMiddle.children[0].children[0];
+      el.signupContent = el.signupMiddle.children[1];
+      el.address = document.getElementById('signup-address');
+      el.gender = document.querySelectorAll('input[type="radio"]');
+      el.signupButton = document.querySelector('#signup-button input');
+      el.signinMsg = document.getElementById('signupin-msg');
+
+      ValidChecker.init(action);
+      SignUpLocation.init();
+      SignUpFace.init();
+
+      if (action === 'GetSignup') {
+        document.getElementById('signup-parent').className = 'parent-in-main';
+        el.signupButton.addEventListener('click', function() {
+          clickSignup('Signup');
+        });
+      }
+      else {
+        document.getElementById('signup-parent').className = 'parent-in-myaccount';
+        el.signupButton.addEventListener('click', function() {
+          clickSignup('UpdateAccount');
+        });
+      }
+
+      el.signupButton.disabled = false;
     }
-    else {
-      signupParent.className = 'parent-in-myaccount';
+
+    function failCallback() {
+      console.log(state.xhr.responseText);
     }
-    el.signupButton.disabled = false;
   }
 
   return {

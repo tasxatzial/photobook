@@ -107,7 +107,7 @@ var Signin = (function() {
       });
       el.signinButton.addEventListener('click', doSignin);
       el.signupButton.addEventListener('click', function() {
-        Landing.showSignup();
+        Signup.init('GetSignup');
       });
       el.signupButton.style.marginLeft = 'auto';
       el.signinButton.disabled = false;

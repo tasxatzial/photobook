@@ -1,11 +1,6 @@
 'use strict';
 
 var EditAccount = (function() {
-  var state = {
-    xhr: null,
-    xhrResponse: null
-  };
-
   var el = {
     confirmDelete: null,
     deleteAccountMsg: null
@@ -20,50 +15,14 @@ var EditAccount = (function() {
     accountSubsection.appendChild(editAccountSection);
 
     var editAccountButton = document.querySelector('#edit-account-button input');
-    editAccountButton.addEventListener('click', editAccount);
+    editAccountButton.addEventListener('click', function() {
+      Signup.init('AccountInfo');
+    });
 
     var deleteAccountButton = document.querySelector('#delete-account-button input');
     deleteAccountButton.addEventListener('click', confirmDelete);
 
     el.deleteAccountMsg = document.getElementById('delete-account-msg');
-  }
-
-  function editAccount() {
-    state.xhrResponse = null;
-
-    var data = new FormData();
-    data.append("action", "AccountInfo");
-    state.xhr = ajaxRequest("POST", "Main", data, successCallback, failCallback);
-
-    function successCallback() {
-      document.getElementById('account-subsection').innerHTML = state.xhr.responseText;
-      formInput.disable(document.getElementById('signup-username'));
-
-      var countryHidden = document.getElementById('country-hidden');
-      var country = document.getElementById('signup-country');
-      country.children[0].selected = 'false';
-      for (var j = 0; j < country.children.length; j++) {
-        if (country.children[j].value === countryHidden.innerHTML ||
-            country.children[j].name === countryHidden.innerHTML) {
-          country.children[j].selected = 'true';
-          break;
-        }
-      }
-
-      var genderHidden = document.getElementById('gender-hidden');
-      var gender = document.querySelectorAll('input[type="radio"]');
-      for (var i = 0; i < gender.length; i++) {
-        if (gender[i].value === genderHidden.innerHTML) {
-          gender[i].checked = 'true';
-        }
-      }
-
-      Signup.init('UpdateAccount');
-    }
-
-    function failCallback() {
-      console.log(state.xhr.responseText);
-    }
   }
 
   function deleteAccount() {
