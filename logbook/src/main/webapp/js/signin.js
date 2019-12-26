@@ -69,7 +69,7 @@ var Signin = (function() {
     }
   }
 
-  function init() {
+  function init(from) {
     el.navbarContent = document.getElementById('navbar-content');
     el.nonav = document.getElementById('no-nav');
 
@@ -78,15 +78,15 @@ var Signin = (function() {
     data.append('action', 'GetSignin');
 
     /* make the call to the main servlet */
-    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+    state.xhr = ajaxRequest('POST', 'Main', data, function() {
+      if (from === 'Signup') {
+        Signup.clear();
+      }
+      successCallback();
+    }, failCallback);
 
     function successCallback() {
       el.nonav.innerHTML = state.xhr.responseText;
-
-      /* remove the top right signup button (if there is one) */
-      if (el.navbarContent.children[1]) {
-        el.navbarContent.removeChild(el.navbarContent.children[1]);
-      }
 
       el.signinButton = document.querySelector('#signin-button input');
       el.username = document.getElementById('signin-username');
@@ -107,7 +107,7 @@ var Signin = (function() {
       });
       el.signinButton.addEventListener('click', doSignin);
       el.signupButton.addEventListener('click', function() {
-        Signup.init('GetSignup');
+        Signup.init('GetSignup', 'Signin');
       });
       el.signupButton.style.marginLeft = 'auto';
       el.signinButton.disabled = false;
@@ -121,7 +121,14 @@ var Signin = (function() {
     }
   }
 
+  function clear() {
+    /* remove the top right button */
+    var navbarContent = document.getElementById('navbar-content');
+    navbarContent.removeChild(navbarContent.children[1]);
+  }
+
   return {
-    init: init
+    init: init,
+    clear: clear
   };
 }());

@@ -16,7 +16,7 @@ var EditAccount = (function() {
 
     var editAccountButton = document.querySelector('#edit-account-button input');
     editAccountButton.addEventListener('click', function() {
-      Signup.init('AccountInfo');
+      Signup.init('AccountInfo', 'MyAccount');
     });
 
     var deleteAccountButton = document.querySelector('#delete-account-button input');

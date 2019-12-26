@@ -7,9 +7,11 @@ var Landing = (function() {
     var landingSigninButton = document.querySelector('#landing-signin-button input');
 
     landingSignupButton.addEventListener('click', function() {
-      Signup.init('GetSignup');
+      Signup.init('GetSignup', 'Landing');
     });
-    landingSigninButton.addEventListener('click', Signin.init);
+    landingSigninButton.addEventListener('click', function() {
+      Signin.init('Landing');
+    });
     landingSigninButton.disabled = false;
     landingSignupButton.disabled = false;
   }
