@@ -71,7 +71,7 @@ var ShowPosts = (function() {
       loaderParent.removeChild(loader);
       var shortPost = null;
       Object.keys(state.xhrResponse).forEach(function(key,index) {
-        shortPost = createShortPost(state.xhrResponse[key], showFullPost, obj.mapObj);
+        shortPost = createShortPost(state.xhrResponse[key]);
         el.postsSection.children[0].appendChild(document.createElement('hr'));
         el.postsSection.children[0].appendChild(shortPost);
       });
@@ -80,20 +80,6 @@ var ShowPosts = (function() {
     function failCallback() {
       loaderParent.removeChild(loader);
       console.log(state.xhr.responseText);
-    }
-  }
-
-  function showFullPost(fullPost, mapObj) {
-    obj.mapObj = mapObj;
-    el.postsSection.children[0].innerHTML = '';
-    el.postsSection.children[0].appendChild(fullPost);
-    window.scrollTo(0, 0);
-
-    var deleteButton = document.getElementById('delete-post-button');
-    if (deleteButton) {
-      deleteButton.children[0].addEventListener('click', function () {
-        deletePost(fullPost);
-      });
     }
   }
 
@@ -153,7 +139,7 @@ var ShowPosts = (function() {
     return postsSection;
   }
 
-  function createShortPost(postJSON, callback, mapObj) {
+  function createShortPost(postJSON) {
     var state = {
       xhr: null,
       xhrResponse: null,
@@ -267,7 +253,7 @@ var ShowPosts = (function() {
       else {
         data.zoom = 11;
       }
-      turnToFullPost(postContainer, data, callback, mapObj);
+      turnToFullPost(postContainer, data);
     });
 
     var input = LocationSearch.createLatLonInput(postJSON['latitude'], postJSON['longitude']);
@@ -310,7 +296,7 @@ var ShowPosts = (function() {
     return postContainer;
   }
 
-  function turnToFullPost(shortPost, data, callback, mapObj) {
+  function turnToFullPost(shortPost, data) {
     var photoParent = null;
     var description = null;
     var postedBy = null;
@@ -366,7 +352,7 @@ var ShowPosts = (function() {
     if (data['location']) {
 
       /* creates a map object only once */
-      if (!mapObj) {
+      if (!obj.mapObj) {
         var mapDiv = document.createElement('div');
         mapDiv.id = 'map-post';
         var mapParent = document.createElement('div');
@@ -375,16 +361,16 @@ var ShowPosts = (function() {
         shortPost.insertBefore(mapParent, postedBy);
 
         mapDiv.style.height = '20rem';
-        mapObj = new OLMap(mapDiv.id);
+        obj.mapObj = new OLMap(mapDiv.id);
       }
       else {
-        shortPost.insertBefore(mapObj.getDiv().parentElement, postedBy);
-        mapObj.resetState();
+        shortPost.insertBefore(obj.mapObj.getDiv().parentElement, postedBy);
+        obj.mapObj.resetState();
       }
 
-      mapObj.setZoom(data['zoom']);
-      mapObj.addLocation({lat: data['lat'], lon: data['lon']});
-      mapObj.drawMap();
+      obj.mapObj.setZoom(data['zoom']);
+      obj.mapObj.addLocation({lat: data['lat'], lon: data['lon']});
+      obj.mapObj.drawMap();
       /* creates a new map object every time a full post is shown */
       /*var mapDiv = document.createElement('div');
       mapDiv.id = 'map-post';
@@ -406,9 +392,14 @@ var ShowPosts = (function() {
       var deleteMsg = document.createElement('div');
       deleteMsg.id = 'delete-post-msg';
       deleteButton.appendChild(deleteMsg);
+      deleteButton.children[0].addEventListener('click', function () {
+        deletePost(shortPost);
+      });
     }
 
-    callback(shortPost, mapObj);
+    el.postsSection.children[0].innerHTML = '';
+    el.postsSection.children[0].appendChild(shortPost);
+    window.scrollTo(0, 0);
   }
 
   return {
