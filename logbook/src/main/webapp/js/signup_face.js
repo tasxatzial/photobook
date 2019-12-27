@@ -130,7 +130,7 @@ var SignUpFace = (function () {
 
     /* initialize the photo section once */
     if (!el.photoSection) {
-      el.photoSection = newElements.createSignUpPhotoSection();
+      el.photoSection = createSignUpPhotoSection();
       el.photoSectionParent.appendChild(el.photoSection);
       el.selectButton = document.getElementById('signup-pick-photo-button');
       el.uploadButton = document.getElementById('signup-upload-photo-button');
@@ -175,6 +175,52 @@ var SignUpFace = (function () {
       el.checkBox.checked = false;
     }
     el.checkBox.disabled = !usernameRegex.test(el.username.value);
+  }
+
+  function createSignUpPhotoSection() {
+    var selectButton = document.createElement('button');
+    selectButton.id = 'signup-pick-photo-button';
+    selectButton.disabled = true;
+    selectButton.type = 'button';
+    selectButton.className = 'sign-internal-button';
+    selectButton.innerHTML = 'Choose photo';
+
+    var input = document.createElement('input');
+    input.id = 'file-input';
+    input.type = 'file';
+    input.name = 'name';
+    input.style.display = 'none';
+
+    var uploadButton = document.createElement('button');
+    uploadButton.id = 'signup-upload-photo-button';
+    uploadButton.disabled = true;
+    uploadButton.type = 'button';
+    uploadButton.innerHTML = 'Upload photo';
+    uploadButton.className = 'sign-internal-button';
+
+    var divButtons = document.createElement('div');
+    divButtons.id = 'signup-photo-control-buttons';
+    divButtons.appendChild(selectButton);
+    divButtons.appendChild(input);
+    divButtons.appendChild(uploadButton);
+
+    var uploadMsg = document.createElement('div');
+    uploadMsg.id = 'signup-upload-photo-msg';
+    uploadMsg.className="sign-process-msg";
+
+    var controls = document.createElement('div');
+    controls.id = 'signup-photo-controls';
+    controls.appendChild(divButtons);
+    controls.appendChild(uploadMsg);
+
+    var divPhoto = document.createElement('div');
+    divPhoto.id = 'signup-photo-parent';
+
+    var divContent = document.createElement('div');
+    divContent.id = 'signup-photo-section-hidden';
+    divContent.appendChild(controls);
+    divContent.appendChild(divPhoto);
+    return divContent;
   }
 
   function init() {

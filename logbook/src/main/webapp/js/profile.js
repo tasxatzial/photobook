@@ -35,7 +35,7 @@ var ShowProfile = (function() {
 
       if (firstTime) {
         state.owner = state.xhrResponse["owner"] === "1";
-        el.accountSection = newElements.createAccountSection(state.xhrResponse[Init.dataNames[0][0]], state.owner);
+        el.accountSection = createAccountSection(state.xhrResponse[Init.dataNames[0][0]], state.owner);
         nonav.innerHTML = '';
         nonav.appendChild(el.accountSection);
 
@@ -48,7 +48,7 @@ var ShowProfile = (function() {
       }
 
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
-      var profileSection = newElements.createProfileSection(state.xhrResponse, Init.dataNames, false);
+      var profileSection = createProfileSection(state.xhrResponse, Init.dataNames, false);
       var accountSubsection = document.getElementById('account-subsection');
       accountSubsection.innerHTML = '';
       accountSubsection.appendChild(profileSection);
@@ -83,6 +83,69 @@ var ShowProfile = (function() {
     if (button3) {
       button3.className = 'account-nav-button inactive-tab';
     }
+  }
+
+  function createAccountSection(username, owner) {
+    var header = document.createElement('header');
+    var headerH2 = document.createElement('h2');
+    headerH2.innerHTML = username;
+    header.appendChild(headerH2);
+
+    var navTabs = createNavTabs(owner);
+    var content = document.createElement('div');
+    content.id = 'account-subsection';
+
+    var div = document.createElement('div');
+    div.id = 'account-parent';
+    div.className = 'parent-in-main';
+
+    div.appendChild(header);
+    div.appendChild(navTabs);
+    div.appendChild(content);
+
+    var accountSection = document.createElement('div');
+    accountSection.id = 'account-section';
+    accountSection.appendChild(div);
+
+    return accountSection;
+  }
+
+  function createProfileSection(response, dataNames, skipEmpty) {
+    var profileParent = newElements.createSignupSummary(response, dataNames, skipEmpty);
+    profileParent.id = 'profile-parent';
+    profileParent.className = 'parent-in-myaccount';
+
+    var profileSection = document.createElement('div');
+    profileSection.id = 'profile-section';
+    profileSection.appendChild(profileParent);
+
+    return profileSection;
+  }
+
+  function createNavTab(name) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.innerHTML = name;
+    button.className = 'account-nav-button';
+    return button;
+  }
+
+  function createNavTabs(owner) {
+    var navTabs = document.createElement('div');
+    navTabs.id = 'account-nav';
+
+    var showProfileButton = createNavTab('Profile');
+    var showPostsButton = createNavTab('Posts');
+
+    navTabs.appendChild(showProfileButton);
+    navTabs.appendChild(showPostsButton);
+
+    if (owner) {
+      var editAccountButton = createNavTab('Account');
+      navTabs.appendChild(editAccountButton);
+    }
+
+    return navTabs;
   }
 
   return {

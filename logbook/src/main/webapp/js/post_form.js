@@ -53,7 +53,7 @@ var PostForm = (function() {
     state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
 
     function successCallback() {
-      var postFormSection = newElements.createPostFormSection();
+      var postFormSection = createPostFormSection();
       postFormSection.children[0].innerHTML = state.xhr.responseText;
       if (username === false) {
         postFormSection.children[0].className = 'parent-in-main';
@@ -266,7 +266,7 @@ var PostForm = (function() {
     };
 
     var input = LocationSearch.createInput('', el.place, el.country);
-    state.xhr = state.xhr = ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback);
+    state.xhr = ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback);
 
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText)[0];
@@ -283,6 +283,17 @@ var PostForm = (function() {
     function failCallback() {
       console.log(state.xhr.responseText);
     }
+  }
+
+  function createPostFormSection() {
+    var postFormParent = document.createElement('div');
+    postFormParent.id = 'post-form-parent';
+
+    var postFormSection = document.createElement('div');
+    postFormSection.id = 'post-form-section';
+    postFormSection.appendChild(postFormParent);
+
+    return postFormSection;
   }
 
   return {

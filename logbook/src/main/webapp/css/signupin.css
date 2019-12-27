@@ -32,7 +32,7 @@
   margin-top: 0;
 }
 
-/* increase distance between all direct childs of the form */
+/* increase distance between all direct children of the form */
 .sign-child {
   margin-bottom: 1.2rem;
 }

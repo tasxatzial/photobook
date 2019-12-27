@@ -99,7 +99,7 @@ var SignInFace = (function () {
 
     /* initialize once */
     if (!el.photoPicker) {
-      el.photoSection = newElements.createSignInPhotoSection();
+      el.photoSection = createSignInPhotoSection();
       var fileInput = document.getElementById('file-input');
       var photoParent = el.photoSection.childNodes[0];
       el.uploadMsgParent = el.photoSection.childNodes[1];
@@ -120,6 +120,22 @@ var SignInFace = (function () {
       formMsg.clear(el.uploadMsgParent);
       el.photoPicker.clearPhoto();
     }
+  }
+
+  function createSignInPhotoSection() {
+    var photoContainer = document.createElement('div');
+    photoContainer.id = 'signin-photo-parent';
+
+    var uploadMsg = document.createElement('div');
+    uploadMsg.className = 'sign-process-msg';
+
+    var section = document.createElement('div');
+    section.id = 'signin-photo-section';
+    section.className = 'sign-child';
+    section.appendChild(photoContainer);
+    section.appendChild(uploadMsg);
+
+    return section;
   }
 
   function init() {

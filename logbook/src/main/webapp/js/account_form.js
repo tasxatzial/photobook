@@ -10,7 +10,7 @@ var EditAccount = (function() {
     el.confirmDelete = null;
 
     var accountSubsection = document.getElementById('account-subsection');
-    var editAccountSection = newElements.createEditAccountSection();
+    var editAccountSection = createEditAccountSection();
     accountSubsection.innerHTML = '';
     accountSubsection.appendChild(editAccountSection);
 
@@ -64,6 +64,27 @@ var EditAccount = (function() {
         el.confirmDelete = null;
       });
     }
+  }
+
+  function createEditAccountSection() {
+    var editAccount = newElements.createBlueButton('Edit Account', 'edit-account-button');
+    var deleteAccount = newElements.createBlueButton('Delete Account', 'delete-account-button');
+    var deleteAccountMsg = document.createElement('div');
+    deleteAccountMsg.id = 'delete-account-msg';
+    deleteAccount.appendChild(deleteAccountMsg);
+
+    var div = document.createElement('div');
+    div.id = 'edit-account-parent';
+    div.className = 'parent-in-myaccount';
+
+    div.appendChild(editAccount);
+    div.appendChild(deleteAccount);
+
+    var section = document.createElement('div');
+    section.id = 'edit-account-section';
+    section.appendChild(div);
+
+    return section;
   }
 
   return {

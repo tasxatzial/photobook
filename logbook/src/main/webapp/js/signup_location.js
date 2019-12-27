@@ -84,7 +84,7 @@ var SignUpLocation = (function () {
       state.map.addLocation(state.xhrResponse);
 
       /* create the map button */
-      el.mapButton = newElements.createMapButton();
+      el.mapButton = createMapButton();
       el.mapButton.addEventListener('click', toggleMap);
       formMsg.showElement(el.nominatimSearchMsg, el.mapButton);
     }
@@ -255,7 +255,17 @@ var SignUpLocation = (function () {
     formMsg.showElement(el.geolocSearchMsg, loader);
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
   }
-  
+
+  function createMapButton() {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.id = 'signup-show-map-button';
+    button.innerHTML = 'Show map';
+    button.className = 'sign-internal-button';
+
+    return button;
+  }
+
   return {
     init: init
   };

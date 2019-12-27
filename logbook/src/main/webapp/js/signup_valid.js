@@ -241,13 +241,21 @@ var ValidChecker = (function() {
   function showInvalidMsg(element, value) {
     if (!element.parentNode.children[0].children[1]) {
       var label = element.parentNode.children[0];
-      var msg = newElements.createInvalidValueMsg(value);
+      var msg = createInvalidValueMsg(value);
       label.appendChild(msg);
     }
   }
 
   function getCheckedInputs() {
     return state.checkedInputs;
+  }
+
+  function createInvalidValueMsg(text) {
+    var msg = document.createElement('div');
+    msg.innerHTML = text;
+    msg.className = 'invalid-value';
+
+    return msg;
   }
 
   return {
