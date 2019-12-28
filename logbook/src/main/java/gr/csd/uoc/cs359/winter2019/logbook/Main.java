@@ -82,7 +82,6 @@ public class Main extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("CreatePost");
                 break;
             case "DeletePost":
-                request.setAttribute("username", request.getParameter("username"));
                 dispatcher = request.getRequestDispatcher("DeletePost");
                 break;
             case "DeleteAccount":

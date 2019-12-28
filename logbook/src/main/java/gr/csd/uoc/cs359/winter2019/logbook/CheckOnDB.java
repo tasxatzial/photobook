@@ -37,11 +37,6 @@ public class CheckOnDB extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        if (request.getParameter("action") == null) {
-            out.print((new JSONObject()).toJSONString());
-            return;
-        }
-
         String parameter = null;
         String parameterValue = null;
 

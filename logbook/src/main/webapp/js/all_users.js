@@ -1,42 +1,41 @@
 'use strict';
 
-var ShowAllUsers = (function() {
+var AllUsers = (function() {
   var state = {
-    xhr: null,
-    xhrResponse: null,
-    pages: 1
+    response: null,
+    pages: 0
   };
 
   var el = {
+    userlistSection: null,
     userListParent: null,
-    userListNav: null
+    navBar: null
   };
 
   function init() {
-    var nonav = document.getElementById('no-nav');
-
-    state.pages = 1;
-    state.xhrResponse = null;
-
     var data = new FormData();
     data.append("action", "GetAllUsers");
     state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
 
     function successCallback() {
-      state.xhrResponse = JSON.parse(state.xhr.responseText);
-      if (state.xhrResponse.ERROR) {
-        logout();
+      var response = JSON.parse(state.xhr.responseText);
+      if (response.ERROR) {
+        Logout();
         return;
       }
 
-      state.pages = Object.keys(state.xhrResponse).length;
-      var userlistSection = createUsersList(state.pages);
-      el.userListParent = userlistSection.children[0];
-      el.userListNav = el.userListParent.children[1];
-      addListeners();
+      var userlistSection = createAllUsersSection();
+      Init.nonav.innerHTML = '';
+      Init.nonav.appendChild(userlistSection);
+
+      state.response = response;
+      state.pages = Object.keys(response).length;
+      el.userlistSection = document.getElementById('userlist-section');
+      el.userListParent = el.userlistSection.children[0];
+      el.navBar = createNavBar(state.pages);
+      addNavBarListeners();
+      el.userListParent.appendChild(el.navBar);
       showPage(1);
-      nonav.innerHTML = '';
-      nonav.appendChild(userlistSection);
     }
 
     function failCallback() {
@@ -44,11 +43,10 @@ var ShowAllUsers = (function() {
     }
   }
 
-  function addListeners() {
-    var navButtons = el.userListParent.children[1];
-    var leftButton = navButtons.children[0];
-    var selectButton = navButtons.children[1].children[0];
-    var rightButton = navButtons.children[2];
+  function addNavBarListeners() {
+    var leftButton = el.navBar.children[0];
+    var selectButton = el.navBar.children[1].children[0];
+    var rightButton = el.navBar.children[2];
 
     leftButton.disabled = true;
     if (state.pages <= 1) {
@@ -82,21 +80,15 @@ var ShowAllUsers = (function() {
       if (el.userListParent.children[2]) {
         el.userListParent.removeChild(el.userListParent.children[1]);
       }
-      var userPage = createAllUsers(state.xhrResponse[pageNo]);
-      el.userListParent.insertBefore(userPage, el.userListNav);
+      var userPage = createUserPage(state.response[pageNo]);
+      el.userListParent.insertBefore(userPage, el.navBar);
     }
   }
 
-  function createUsersList(pages) {
+  function createNavBar(pages) {
     if (!pages) {
       pages = 1;
     }
-
-    var headerH2 = document.createElement('h2');
-    headerH2.innerHTML = 'Users';
-
-    var header = document.createElement('header');
-    header.appendChild(headerH2);
 
     var prevButton = newElements.createArrowButton('images/left.png');
     prevButton.className = 'userlist-arrow-button transparent-button';
@@ -114,12 +106,20 @@ var ShowAllUsers = (function() {
     buttonSection.appendChild(selectPages);
     buttonSection.appendChild(nextButton);
 
+    return buttonSection;
+  }
+
+  function createAllUsersSection() {
+    var headerH2 = document.createElement('h2');
+    headerH2.innerHTML = 'Users';
+
+    var header = document.createElement('header');
+    header.appendChild(headerH2);
+
     var div = document.createElement('div');
     div.id = 'userlist-parent';
     div.className = 'parent-in-main';
-
     div.appendChild(header);
-    div.appendChild(buttonSection);
 
     var userlistSection = document.createElement('div');
     userlistSection.id = 'userlist-section';
@@ -128,7 +128,7 @@ var ShowAllUsers = (function() {
     return userlistSection;
   }
 
-  function createAllUsers(page) {
+  function createUserPage(page) {
     var hrBottom = document.createElement('hr');
     hrBottom.className = 'userlist-hr-bottom';
 
@@ -151,7 +151,7 @@ var ShowAllUsers = (function() {
       button.className = 'username-button';
       button.appendChild(user);
       button.onclick = function() {
-        ShowProfile.init(page[key], 1);
+        ShowProfile.init(page[key], true);
       };
 
       var hr = document.createElement('hr');
@@ -165,6 +165,7 @@ var ShowAllUsers = (function() {
   }
 
   return {
+    createAllUsersSection: createAllUsersSection,
     init: init
   };
 }());

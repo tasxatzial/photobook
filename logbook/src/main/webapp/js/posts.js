@@ -1,6 +1,6 @@
 'use strict';
 
-var ShowPosts = (function() {
+var Posts = (function() {
   var obj = {
     mapObj: null
   };
@@ -14,15 +14,15 @@ var ShowPosts = (function() {
     username: null
   };
 
-  function init(username) {
+  function init(username, owner) {
     data.username = username;
-    el.postsSection = createPostsSection(username);
-    var nonav = document.getElementById('no-nav');
+
+    el.postsSection = createPostsSection(username, owner);
 
     if (username === false) {
       el.postsSection.children[0].className = 'parent-in-main';
-      nonav.innerHTML = '';
-      nonav.appendChild(el.postsSection);
+      Init.nonav.innerHTML = '';
+      Init.nonav.appendChild(el.postsSection);
     }
     else {
       el.postsSection.children[0].className = 'parent-in-myaccount';
@@ -31,17 +31,17 @@ var ShowPosts = (function() {
       accountSubsection.appendChild(el.postsSection);
     }
 
-    if (username === false || username === null) {
+    if (username === false || username === null || owner === true) {
       var newPostButton = el.postsSection.children[0].children[0];
       newPostButton.addEventListener('click', function() {
         PostForm.init(username);
       });
     }
 
-    getPosts();
+    getPosts(username);
   }
 
-  function getPosts() {
+  function getPosts(username) {
     var state = {
       xhr: null,
       xhrResponse: null
@@ -49,11 +49,11 @@ var ShowPosts = (function() {
 
     var formData = new FormData();
     formData.append("action", "GetPosts");
-    if (data.username === null) {
+    if (username === null) {
       formData.append('owner', '1');
     }
-    else if (data.username !== false) {
-      formData.append('username', data.username);
+    else if (username !== false) {
+      formData.append('username', username);
     }
 
     var loaderParent = document.getElementById('posts-loader');
@@ -64,7 +64,7 @@ var ShowPosts = (function() {
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       if (state.xhrResponse.ERROR) {
-        logout();
+        Logout();
         return;
       }
 
@@ -88,23 +88,20 @@ var ShowPosts = (function() {
       xhr: null
     };
 
-    var postID = fullPost.id.substring(6);
-    var username = fullPost.username;
-
     var formData = new FormData();
     formData.append("action", "DeletePost");
-    formData.append("postID", postID);
-    formData.append("username", username);
+    formData.append("postID", fullPost.id.substring(6));
+    formData.append("username", fullPost.username);
 
     state.xhr = ajaxRequest('POST', "Main", formData, successCallback, failCallback);
 
     function successCallback() {
       if (JSON.parse(state.xhr.responseText).ERROR) {
-        logout();
+        Logout();
         return;
       }
 
-      ShowPosts.init(data.username);
+      Posts.init(data.username);
     }
 
     function failCallback() {
@@ -113,7 +110,7 @@ var ShowPosts = (function() {
     }
   }
 
-  function createPostsSection(username) {
+  function createPostsSection(username, owner) {
     var header = document.createElement('header');
     var headerH2 = document.createElement('h2');
     headerH2.innerHTML = 'Latest posts';
@@ -125,7 +122,7 @@ var ShowPosts = (function() {
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';
 
-    if (username === false || username === null) {
+    if (username === false || username === null || owner === true) {
       var postButton = newElements.createBlueButton('+ New Post', 'new-post-button');
       postsParent.appendChild(postButton);
     }
@@ -192,7 +189,7 @@ var ShowPosts = (function() {
     button.innerHTML = postJSON['userName'];
     button.style.textDecoration = 'underline';
     button.onclick = function() {
-      ShowProfile.init(postJSON['userName'], 1);
+      ShowProfile.init(postJSON['userName'], true);
     };
 
     var at = document.createElement('span');

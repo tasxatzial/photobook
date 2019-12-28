@@ -198,6 +198,7 @@ public class Signup extends HttpServlet {
 
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null && oldSession.getAttribute("username") != null) {
+            System.out.println("updating user");
             UserDB.updateUser(user);
         }
         else {
@@ -242,7 +243,7 @@ public class Signup extends HttpServlet {
     protected String getRegexPattern(String field) {
         switch(field) {
             case "username":
-                return "^[A-Za-z]{8,}$";
+                return "^[A-Za-z]{8,50}$";
             case "password":
                 return "^[\\w0-9!#$%&'*+/=?^`{|}\\[\\]_\\\\~<>., -]{8,10}$";
             case "email":

@@ -55,7 +55,6 @@ public class GetPosts extends HttpServlet {
         List<Post> posts;
         if (owner != null) {
             posts = PostDB.getTop10RecentPostsOfUser((String) oldSession.getAttribute("username"));
-
         }
         else if (username != null) {
             posts = PostDB.getTop10RecentPostsOfUser(username);

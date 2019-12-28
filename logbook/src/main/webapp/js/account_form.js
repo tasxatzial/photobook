@@ -1,6 +1,6 @@
 'use strict';
 
-var EditAccount = (function() {
+var AccountInfo = (function() {
   var el = {
     confirmDelete: null,
     deleteAccountMsg: null
@@ -16,7 +16,7 @@ var EditAccount = (function() {
 
     var editAccountButton = document.querySelector('#edit-account-button input');
     editAccountButton.addEventListener('click', function() {
-      Signup.init('AccountInfo', 'MyAccount');
+      Signup.init('AccountInfo');
     });
 
     var deleteAccountButton = document.querySelector('#delete-account-button input');
@@ -45,7 +45,7 @@ var EditAccount = (function() {
         formMsg.showError(el.deleteAccountMsg, 'Session expired, please re-login and try again');
         return;
       }
-      logout();
+      Logout();
     }
 
     function failCallback() {

@@ -1,38 +1,33 @@
 'use strict';
 
-var Homepage = (function() {
+function homepage() {
+  var accountButton = newElements.createSignBarButton('My account', 'profile-button');
+  accountButton.addEventListener('click', function() {
+    ShowProfile.init(null, true);
+  });
+  Init.navbarContent.appendChild(accountButton);
 
-  function init() {
-    var navbarContent = document.getElementById('navbar-content');
+  var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button');
+  allUsersButton.addEventListener('click', AllUsers.init);
+  Init.navbarContent.appendChild(allUsersButton);
 
-    var accountButton = newElements.createSignBarButton('My account', 'profile-button');
-    accountButton.addEventListener('click', function() {
-      ShowProfile.init(null, true);
-    });
-    navbarContent.appendChild(accountButton);
+  var postsButton = newElements.createSignBarButton('Posts', 'show-posts');
+  postsButton.addEventListener('click', function() {
+    Posts.init(false, false);
+  });
+  Init.navbarContent.appendChild(postsButton);
 
-    var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button');
-    allUsersButton.addEventListener('click', ShowAllUsers.init);
-    navbarContent.appendChild(allUsersButton);
+  var logoutButton = newElements.createSignBarButton('Log out', 'logout-button');
+  logoutButton.addEventListener('click', Logout);
+  Init.navbarContent.appendChild(logoutButton);
+  logoutButton.style.marginLeft = 'auto';
 
-    var postsButton = newElements.createSignBarButton('Posts', 'show-posts');
-    postsButton.addEventListener('click', function() {
-      ShowPosts.init(false);
-    });
-    navbarContent.appendChild(postsButton);
+  allUsersButton.addEventListener('click', underline(allUsersButton, accountButton, postsButton));
+  accountButton.addEventListener('click', underline(accountButton, allUsersButton, postsButton));
+  postsButton.addEventListener('click', underline(postsButton, allUsersButton, accountButton));
 
-    var logoutButton = newElements.createSignBarButton('Log out', 'logout-button');
-    logoutButton.addEventListener('click', logout);
-    navbarContent.appendChild(logoutButton);
-    logoutButton.style.marginLeft = 'auto';
-
-    allUsersButton.addEventListener('click', underline(allUsersButton, accountButton, postsButton));
-    accountButton.addEventListener('click', underline(accountButton, allUsersButton, postsButton));
-    postsButton.addEventListener('click', underline(postsButton, allUsersButton, accountButton));
-
-    underline(postsButton, allUsersButton, accountButton)();
-    ShowPosts.init(false);
-  }
+  underline(postsButton, allUsersButton, accountButton)();
+  Posts.init(false, false);
 
   function underline(element1, element2, element3) {
     return function() {
@@ -41,8 +36,4 @@ var Homepage = (function() {
       element3.style.borderBottom = '0';
     };
   }
-
-  return {
-    init: init
-  };
-}());
+}

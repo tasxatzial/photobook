@@ -1,6 +1,6 @@
 'use strict';
 
-function logout() {
+function Logout() {
   var state = {
     xhr: null
   };
@@ -21,7 +21,7 @@ function logout() {
     navbarContent.removeChild(logoutButton);
     navbarContent.removeChild(postsButton);
 
-    document.getElementById('no-nav').innerHTML = state.xhr.responseText;
+    Init.nonav.innerHTML = state.xhr.responseText;
     Landing.init();
   }
 

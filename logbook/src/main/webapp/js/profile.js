@@ -2,10 +2,7 @@
 
 var ShowProfile = (function() {
   var state = {
-    xhr: null,
-    xhrResponse: null,
-    username: null,
-    owner: false
+    xhr: null
   };
 
   var el = {
@@ -15,40 +12,36 @@ var ShowProfile = (function() {
   };
 
   function init(username, firstTime) {
-    var nonav = document.getElementById('no-nav');
-    state.username = username;
-    state.xhrResponse = null;
-
     var data = new FormData();
     data.append("action", "GetProfile");
-    if (state.username !== null) {
-      data.append("username", state.username);
+    if (username !== null) {
+      data.append("username", username);
     }
     state.xhr = ajaxRequest("POST", "Main", data, successCallback, failCallback);
 
     function successCallback() {
-      state.xhrResponse = JSON.parse(state.xhr.responseText);
-      if (state.xhrResponse.ERROR) {
-        logout();
+      var response = JSON.parse(state.xhr.responseText);
+      if (response.ERROR) {
+        Logout();
         return;
       }
 
-      if (firstTime) {
-        state.owner = state.xhrResponse["owner"] === "1";
-        el.accountSection = createAccountSection(state.xhrResponse[Init.dataNames[0][0]], state.owner);
-        nonav.innerHTML = '';
-        nonav.appendChild(el.accountSection);
+      if (firstTime === true) {
+        var owner = response["owner"] === "1";
+        var accountSection = createAccountSection(response[Init.dataNames[0][0]], owner);
+        Init.nonav.innerHTML = '';
+        Init.nonav.appendChild(accountSection);
 
         var navTabs = document.getElementById('account-nav');
         el.showProfileButton = navTabs.children[0];
         el.showPostsButton = navTabs.children[1];
         el.editAccountButton = navTabs.children[2];
 
-        addListeners();
+        addListeners(username, owner);
       }
 
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
-      var profileSection = createProfileSection(state.xhrResponse, Init.dataNames, false);
+      var profileSection = createProfileSection(response, Init.dataNames, false);
       var accountSubsection = document.getElementById('account-subsection');
       accountSubsection.innerHTML = '';
       accountSubsection.appendChild(profileSection);
@@ -59,19 +52,19 @@ var ShowProfile = (function() {
     }
   }
 
-  function addListeners() {
+  function addListeners(username, owner) {
     el.showProfileButton.addEventListener('click', function () {
-      ShowProfile.init(state.username, false);
+      ShowProfile.init(username, false);
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
     });
     el.showPostsButton.addEventListener('click', function () {
-      ShowPosts.init(state.username, state.owner);
+      Posts.init(username, owner);
       showBorders(el.showPostsButton, el.showProfileButton, el.editAccountButton);
     });
 
     if (el.editAccountButton) {
       el.editAccountButton.addEventListener('click', function () {
-        EditAccount.init();
+        AccountInfo.init();
         showBorders(el.editAccountButton, el.showProfileButton, el.showPostsButton);
       });
     }

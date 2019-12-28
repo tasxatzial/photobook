@@ -11,8 +11,8 @@
           <div class="flex-label">
             <label for="signup-username" class="signup-necessary sign-label">Username</label>
           </div>
-          <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("username")%>" name="signup-username" id="signup-username" pattern="^[A-Za-z]{8,}$" required>
-          <p class="signup-require-info">At least 8 characters, only letters</p>
+          <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("username")%>" name="signup-username" id="signup-username" pattern="^[A-Za-z]{8,50}$" required>
+          <p class="signup-require-info">8 to 50 characters, only letters</p>
         </div>
         <div class="sign-child" id="signup-photo-section">
           <p>

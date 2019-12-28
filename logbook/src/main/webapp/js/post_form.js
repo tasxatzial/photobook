@@ -3,7 +3,6 @@
 var PostForm = (function() {
   var state = {
     xhr: null,
-    xhrResponse: null,
     lastDetectionMethod: null
   };
 
@@ -45,7 +44,6 @@ var PostForm = (function() {
     loc.lon = null;
     state.lastDetectionMethod = null;
 
-    var nonav = document.getElementById('no-nav');
     data.username = username;
 
     var formData = new FormData();
@@ -57,8 +55,8 @@ var PostForm = (function() {
       postFormSection.children[0].innerHTML = state.xhr.responseText;
       if (username === false) {
         postFormSection.children[0].className = 'parent-in-main';
-        nonav.innerHTML = '';
-        nonav.appendChild(postFormSection);
+        Init.nonav.innerHTML = '';
+        Init.nonav.appendChild(postFormSection);
       }
       else {
         postFormSection.children[0].className = 'parent-in-myaccount';
@@ -148,7 +146,7 @@ var PostForm = (function() {
 
     el.placeRadio.addEventListener('click', selectPlace);
 
-    el.locationDetectButton.addEventListener('click', pickLocationDetectMethod);
+    el.locationDetectButton.addEventListener('click', locationDetectMethod);
     el.postButton.children[0].addEventListener('click', createPost);
   }
 
@@ -226,10 +224,10 @@ var PostForm = (function() {
 
     function successCallback() {
       if (JSON.parse(state.xhr.responseText).ERROR) {
-        logout();
+        Logout();
         return;
       }
-      ShowPosts.init(data.username);
+      Posts.init(data.username);
     }
 
     function failCallback() {
@@ -237,7 +235,7 @@ var PostForm = (function() {
     }
   }
 
-  function pickLocationDetectMethod() {
+  function locationDetectMethod() {
     formMsg.clear(el.createPostMsg);
     if (navigator.geolocation && el.geolocationRadio.checked) {
       geolocationSearch();
@@ -261,19 +259,18 @@ var PostForm = (function() {
 
   function locationSearch() {
     var state = {
-      xhr: null,
-      xhrResponse: null
+      xhr: null
     };
 
     var input = LocationSearch.createInput('', el.place, el.country);
     state.xhr = ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback);
 
     function successCallback() {
-      state.xhrResponse = JSON.parse(state.xhr.responseText)[0];
-      if (state.xhrResponse) {
-        loc.lat = state.xhrResponse.lat;
-        loc.lon = state.xhrResponse.lon;
-        formMsg.showOK(el.locationDetectMsg, '(' + loc.lat + ', ' + loc.lon + ')');
+      var response = JSON.parse(state.xhr.responseText)[0];
+      if (response) {
+        loc.lat = response.lat;
+        loc.lon = response.lon;
+        formMsg.showOK(el.locationDetectMsg, '(' + loc.lat.substring(0, loc.lat.length - 4) + ', ' + loc.lon.substring(0, loc.lon.length - 4) + ')');
       }
       else {
         formMsg.showError(el.locationDetectMsg, 'Not found');

@@ -10,9 +10,7 @@ var Signin = (function() {
     username: null,
     password: null,
     signinContent: null,
-    navbarContent: null,
-    signinMsg: null,
-    nonav: null
+    signinMsg: null
   };
 
   function disableInputs() {
@@ -46,20 +44,18 @@ var Signin = (function() {
     function successCallback() {
       if (state.xhr.getResponseHeader("content-type").split(';')[0] === 'application/json') {
         var response = JSON.parse(state.xhr.responseText);
-        var invalid = null;
         if (response['username'] === '0') {
-          invalid = 'username';
+          formMsg.showError(el.signinMsg, 'Invalid username');
         }
         else {
-          invalid = 'password';
+          formMsg.showError(el.signinMsg, 'Invalid password');
         }
-        formMsg.showError(el.signinMsg, 'Invalid ' + invalid);
         enableInputs();
       }
       else {
-        el.nonav.innerHTML = state.xhr.responseText;
-        el.navbarContent.removeChild(el.signupButton);
-        Homepage.init();
+        Init.nonav.innerHTML = state.xhr.responseText;
+        Init.navbarContent.removeChild(el.signupButton);
+        homepage();
       }
     }
 
@@ -70,23 +66,19 @@ var Signin = (function() {
   }
 
   function init(from) {
-    el.navbarContent = document.getElementById('navbar-content');
-    el.nonav = document.getElementById('no-nav');
 
     /* prepare the data */
     var data = new FormData();
     data.append('action', 'GetSignin');
 
     /* make the call to the main servlet */
-    state.xhr = ajaxRequest('POST', 'Main', data, function() {
-      if (from === 'Signup') {
-        Signup.clear();
-      }
-      successCallback();
-    }, failCallback);
+    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
 
     function successCallback() {
-      el.nonav.innerHTML = state.xhr.responseText;
+      if (from === 'Signup') {
+        Init.navbarContent.removeChild(Init.navbarContent.children[1]);
+      }
+      Init.nonav.innerHTML = state.xhr.responseText;
 
       el.signinButton = document.querySelector('#signin-button input');
       el.username = document.getElementById('signin-username');
@@ -111,7 +103,7 @@ var Signin = (function() {
       });
       el.signupButton.style.marginLeft = 'auto';
       el.signinButton.disabled = false;
-      el.navbarContent.appendChild(el.signupButton);
+      Init.navbarContent.appendChild(el.signupButton);
 
       SignInFace.init();
     }
@@ -121,14 +113,7 @@ var Signin = (function() {
     }
   }
 
-  function clear() {
-    /* remove the top right button */
-    var navbarContent = document.getElementById('navbar-content');
-    navbarContent.removeChild(navbarContent.children[1]);
-  }
-
   return {
-    init: init,
-    clear: clear
+    init: init
   };
 }());

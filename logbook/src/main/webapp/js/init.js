@@ -22,18 +22,21 @@ var Init = (function() {
     ["about", "General Info"]
   ];
 
+  var navbarContent = document.getElementById('navbar-content');
+  var nonav = document.getElementById('no-nav');
+
   var data = new FormData();
   data.append("action", "GetLanding");
   state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
 
   function successCallback() {
-    document.getElementById('no-nav').innerHTML = state.xhr.responseText;
+    nonav.innerHTML = state.xhr.responseText;
     var id = document.getElementById('landing-section');
     if (id) {
       Landing.init();
     }
     else {
-      Homepage.init();
+      homepage();
     }
   }
 
@@ -42,6 +45,8 @@ var Init = (function() {
   }
 
   return {
-    dataNames: dataNames
+    dataNames: dataNames,
+    nonav: nonav,
+    navbarContent: navbarContent
   };
 }());
