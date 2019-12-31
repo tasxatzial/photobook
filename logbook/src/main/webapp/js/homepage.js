@@ -18,7 +18,7 @@ function homepage() {
   Init.navbarContent.appendChild(postsButton);
 
   var logoutButton = newElements.createSignBarButton('Log out', 'logout-button');
-  logoutButton.addEventListener('click', Logout);
+  logoutButton.addEventListener('click', Logout.init);
   Init.navbarContent.appendChild(logoutButton);
   logoutButton.style.marginLeft = 'auto';
 

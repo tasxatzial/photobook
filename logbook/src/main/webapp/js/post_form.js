@@ -224,7 +224,7 @@ var PostForm = (function() {
 
     function successCallback() {
       if (JSON.parse(state.xhr.responseText).ERROR) {
-        Logout();
+        Logout.showExpired();
         return;
       }
       Posts.init(data.username);

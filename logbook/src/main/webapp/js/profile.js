@@ -22,7 +22,7 @@ var ShowProfile = (function() {
     function successCallback() {
       var response = JSON.parse(state.xhr.responseText);
       if (response.ERROR) {
-        Logout();
+        Logout.showExpired();
         return;
       }
 

@@ -64,7 +64,7 @@ var Posts = (function() {
     function successCallback() {
       state.xhrResponse = JSON.parse(state.xhr.responseText);
       if (state.xhrResponse.ERROR) {
-        Logout();
+        Logout.showExpired();
         return;
       }
 
@@ -97,7 +97,7 @@ var Posts = (function() {
 
     function successCallback() {
       if (JSON.parse(state.xhr.responseText).ERROR) {
-        Logout();
+        Logout.showExpired();
         return;
       }
 

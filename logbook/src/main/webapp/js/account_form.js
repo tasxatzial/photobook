@@ -42,10 +42,10 @@ var AccountInfo = (function() {
 
     function successCallback() {
       if (JSON.parse(state.xhr.responseText).ERROR) {
-        formMsg.showError(el.deleteAccountMsg, 'Session expired, please re-login and try again');
+        Logout.showExpired();
         return;
       }
-      Logout();
+      Logout.init();
     }
 
     function failCallback() {

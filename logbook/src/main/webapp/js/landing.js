@@ -3,6 +3,8 @@
 var Landing = (function() {
 
   function init() {
+
+
     var landingSignupButton = document.querySelector('#landing-signup-button input');
     var landingSigninButton = document.querySelector('#landing-signin-button input');
 

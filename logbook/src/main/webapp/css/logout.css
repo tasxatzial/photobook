@@ -1,0 +1,32 @@
+#expired-screen {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background-color: rgba(128, 128, 128, 0.5);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#expired-body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+#expired-window {
+  text-align: center;
+  padding: 0 24px 20px;
+  background-color: white;
+  border: 1px solid silver;
+  border-radius: 3px;
+}
+
+#expired-button {
+  font-family: inherit;
+  padding: 5px 14px;
+}
