@@ -41,7 +41,7 @@ public class Signin extends HttpServlet {
 
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null && oldSession.getAttribute("username") != null) {
-            dispatcher = request.getRequestDispatcher("WEB-INF/homepage");
+            dispatcher = request.getRequestDispatcher("Init");
             dispatcher.forward(request, response);
         }
 
@@ -70,14 +70,13 @@ public class Signin extends HttpServlet {
             out.print(jsonSignin.toJSONString());
         }
         else {
-            response.setContentType("text/html;charset=UTF-8");
             HttpSession newSession = request.getSession(true);
             newSession.setAttribute("username", request.getParameter("username"));
             Cookie cookie = new Cookie("JSESSIONID", newSession.getId());
             cookie.setMaxAge(365 * 24 * 3600);
             newSession.setMaxInactiveInterval(600);
             response.addCookie(cookie);
-            dispatcher = request.getRequestDispatcher("WEB-INF/homepage");
+            dispatcher = request.getRequestDispatcher("Init");
             dispatcher.forward(request, response);
         }
     }

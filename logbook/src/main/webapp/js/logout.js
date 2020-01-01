@@ -30,7 +30,6 @@ var Logout = (function() {
       navbarContent.removeChild(logoutButton);
       navbarContent.removeChild(postsButton);
 
-      Init.nonav.innerHTML = state.xhr.responseText;
       Landing.init();
     }
 

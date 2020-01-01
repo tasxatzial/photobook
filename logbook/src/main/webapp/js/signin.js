@@ -42,8 +42,12 @@ var Signin = (function() {
     state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
 
     function successCallback() {
-      if (state.xhr.getResponseHeader("content-type").split(';')[0] === 'application/json') {
-        var response = JSON.parse(state.xhr.responseText);
+      var response = JSON.parse(state.xhr.responseText);
+      if (response.HOMEPAGE) {
+        Init.navbarContent.removeChild(el.signupButton);
+        Homepage.init();
+      }
+      else {
         if (response['username'] === '0') {
           formMsg.showError(el.signinMsg, 'Invalid username');
         }
@@ -51,11 +55,6 @@ var Signin = (function() {
           formMsg.showError(el.signinMsg, 'Invalid password');
         }
         enableInputs();
-      }
-      else {
-        Init.nonav.innerHTML = state.xhr.responseText;
-        Init.navbarContent.removeChild(el.signupButton);
-        homepage();
       }
     }
 

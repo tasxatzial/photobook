@@ -26,17 +26,16 @@ var Init = (function() {
   var nonav = document.getElementById('no-nav');
 
   var data = new FormData();
-  data.append("action", "GetLanding");
+  data.append("action", "Init");
   state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
 
   function successCallback() {
-    nonav.innerHTML = state.xhr.responseText;
-    var id = document.getElementById('landing-section');
-    if (id) {
+    var response = JSON.parse(state.xhr.responseText);
+    if (response.LANDING) {
       Landing.init();
     }
     else {
-      homepage();
+      Homepage.init();
     }
   }
 
