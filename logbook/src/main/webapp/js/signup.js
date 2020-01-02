@@ -172,6 +172,10 @@ var Signup = (function() {
         });
       }
       else if (action === 'AccountInfo') {
+        if (state.xhr.getResponseHeader("content-type").split(';')[0] === 'application/json') {
+          Logout.showExpired();
+          return;
+        }
         document.getElementById('account-subsection').innerHTML = state.xhr.responseText;
         formInput.disable(document.getElementById('signup-username'));
 

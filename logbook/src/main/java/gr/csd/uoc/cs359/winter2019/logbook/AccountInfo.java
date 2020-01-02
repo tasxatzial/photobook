@@ -7,8 +7,10 @@ package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.User;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.WebServlet;
@@ -35,28 +37,36 @@ public class AccountInfo extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException {
 
         HttpSession oldSession = request.getSession(false);
-        if (oldSession != null && oldSession.getAttribute("username") != null) {
-            response.setContentType("text/html;charset=UTF-8");
-            User user = UserDB.getUser((String) oldSession.getAttribute("username"));
-            request.setAttribute("username", oldSession.getAttribute("username"));
-            request.setAttribute("password", user.getPassword());
-            request.setAttribute("passwordConfirm", user.getPassword());
-            request.setAttribute("email", user.getEmail());
-            request.setAttribute("firstName", user.getFirstName());
-            request.setAttribute("lastName", user.getLastName());
-            request.setAttribute("birthDate", user.getBirthDate().split(" ")[0]);
-            request.setAttribute("country", user.getCountry());
-            request.setAttribute("city", user.getTown());
-            request.setAttribute("address", user.getAddress());
-            request.setAttribute("job", user.getOccupation());
-            request.setAttribute("gender", user.getGender().toString());
-            setGender(request);
-            request.setAttribute("interests", user.getInterests());
-            request.setAttribute("about", user.getInfo());
-            request.setAttribute("title", "");
-            request.setAttribute("button", "Update");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/signup.jsp");
-            dispatcher.forward(request, response);
+        if (request.getParameter("action") != null && request.getParameter("action").equals("AccountInfo")) {
+            if (oldSession != null && oldSession.getAttribute("username") != null) {
+                response.setContentType("text/html;charset=UTF-8");
+                User user = UserDB.getUser((String) oldSession.getAttribute("username"));
+                request.setAttribute("username", oldSession.getAttribute("username"));
+                request.setAttribute("password", user.getPassword());
+                request.setAttribute("passwordConfirm", user.getPassword());
+                request.setAttribute("email", user.getEmail());
+                request.setAttribute("firstName", user.getFirstName());
+                request.setAttribute("lastName", user.getLastName());
+                request.setAttribute("birthDate", user.getBirthDate().split(" ")[0]);
+                request.setAttribute("country", user.getCountry());
+                request.setAttribute("city", user.getTown());
+                request.setAttribute("address", user.getAddress());
+                request.setAttribute("job", user.getOccupation());
+                request.setAttribute("gender", user.getGender().toString());
+                setGender(request);
+                request.setAttribute("interests", user.getInterests());
+                request.setAttribute("about", user.getInfo());
+                request.setAttribute("title", "");
+                request.setAttribute("button", "Update");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/signup.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                response.setContentType("application/json;charset=UTF-8");
+                PrintWriter out = response.getWriter();
+                JSONObject json = new JSONObject();
+                json.put("ERROR", "NO_SESSION");
+                out.print(json.toJSONString());
+            }
         }
         else {
             response.setContentType("text/html;charset=UTF-8");
