@@ -42,10 +42,7 @@ var Posts = (function() {
   }
 
   function getPosts(username) {
-    var state = {
-      xhr: null,
-      xhrResponse: null
-    };
+    Requests.cancelAll();
 
     var formData = new FormData();
     formData.append("action", "GetPosts");
@@ -60,18 +57,19 @@ var Posts = (function() {
     var loader = newElements.createLoader("images/loader.gif");
     loaderParent.appendChild(loader);
 
-    state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
+
     function successCallback() {
-      state.xhrResponse = JSON.parse(state.xhr.responseText);
-      if (state.xhrResponse.ERROR) {
+      var response = JSON.parse(Requests.get(ID).responseText);
+      if (response.ERROR) {
         Logout.showExpired();
         return;
       }
 
       loaderParent.removeChild(loader);
       var shortPost = null;
-      Object.keys(state.xhrResponse).forEach(function(key,index) {
-        shortPost = createShortPost(state.xhrResponse[key]);
+      Object.keys(response).forEach(function(key,index) {
+        shortPost = createShortPost(response[key]);
         el.postsSection.children[0].appendChild(document.createElement('hr'));
         el.postsSection.children[0].appendChild(shortPost);
       });
@@ -79,24 +77,22 @@ var Posts = (function() {
 
     function failCallback() {
       loaderParent.removeChild(loader);
-      console.log(state.xhr.responseText);
+      console.log(Requests.get(ID).responseText);
     }
   }
 
   function deletePost(fullPost) {
-    var state = {
-      xhr: null
-    };
+    Requests.cancelAll();
 
     var formData = new FormData();
     formData.append("action", "DeletePost");
     formData.append("postID", fullPost.id.substring(6));
     formData.append("username", fullPost.username);
 
-    state.xhr = ajaxRequest('POST', "Main", formData, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('POST', "Main", formData, successCallback, failCallback));
 
     function successCallback() {
-      if (JSON.parse(state.xhr.responseText).ERROR) {
+      if (JSON.parse(Requests.get(ID).responseText).ERROR) {
         Logout.showExpired();
         return;
       }

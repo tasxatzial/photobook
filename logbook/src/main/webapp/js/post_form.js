@@ -2,7 +2,6 @@
 
 var PostForm = (function() {
   var state = {
-    xhr: null,
     lastDetectionMethod: null
   };
 
@@ -40,6 +39,8 @@ var PostForm = (function() {
   };
 
   function init(username) {
+    Requests.cancelAll();
+
     loc.lat = null;
     loc.lon = null;
     state.lastDetectionMethod = null;
@@ -48,11 +49,11 @@ var PostForm = (function() {
 
     var formData = new FormData();
     formData.append("action", "GetPostForm");
-    state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
 
     function successCallback() {
       var postFormSection = createPostFormSection();
-      postFormSection.children[0].innerHTML = state.xhr.responseText;
+      postFormSection.children[0].innerHTML = Requests.get(ID).responseText;
       if (username === false) {
         postFormSection.children[0].className = 'parent-in-main';
         Init.nonav.innerHTML = '';
@@ -96,7 +97,7 @@ var PostForm = (function() {
     }
 
     function failCallback() {
-      console.log(state.xhr.responseText);
+      console.log(Requests.get(ID).responseText);
     }
   }
 
@@ -197,9 +198,7 @@ var PostForm = (function() {
   }
 
   function createPost() {
-    var state = {
-      xhr: null
-    };
+    Requests.cancelAll();
 
     if (loc.lat === null || loc.lon === null || el.description.value.trim() === '') {
       formMsg.showError(el.createPostMsg, 'Please provide all required fields');
@@ -220,10 +219,10 @@ var PostForm = (function() {
       formData.append("imageBase64", '');
     }
 
-    state.xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
 
     function successCallback() {
-      if (JSON.parse(state.xhr.responseText).ERROR) {
+      if (JSON.parse(Requests.get(ID).responseText).ERROR) {
         Logout.showExpired();
         return;
       }
@@ -231,7 +230,7 @@ var PostForm = (function() {
     }
 
     function failCallback() {
-      console.log(state.xhr.responseText);
+      console.log(Requests.get(ID).responseText);
     }
   }
 
@@ -258,15 +257,13 @@ var PostForm = (function() {
   }
 
   function locationSearch() {
-    var state = {
-      xhr: null
-    };
+    Requests.cancelAll();
 
     var input = LocationSearch.createInput('', el.place, el.country);
-    state.xhr = ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback));
 
     function successCallback() {
-      var response = JSON.parse(state.xhr.responseText)[0];
+      var response = JSON.parse(Requests.get(ID).responseText)[0];
       if (response) {
         loc.lat = response.lat;
         loc.lon = response.lon;
@@ -278,7 +275,7 @@ var PostForm = (function() {
     }
 
     function failCallback() {
-      console.log(state.xhr.responseText);
+      console.log(Requests.get(ID).responseText);
     }
   }
 

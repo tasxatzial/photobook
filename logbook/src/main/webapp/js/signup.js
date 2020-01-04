@@ -75,23 +75,20 @@ var Signup = (function() {
   }
 
   function doSignup(action) {
-    var state = {
-      xhr: null
-    };
-
+    Requests.cancelAll();
     disableInputs();
 
     var data = gatherData();
 
     data.append('action', action);
-    state.xhr = ajaxRequest('POST', 'Main', data,
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data,
         function() {return successCallback(action);},
         function() {return failCallback(action);}
-    );
+    ));
 
     function successCallback(action) {
       if (action === 'Signup') {
-        var response = JSON.parse(state.xhr.responseText);
+        var response = JSON.parse(Requests.get(ID).responseText);
         var accountInfoTitle = document.createElement('p');
         var accountInfo = newElements.createSignupSummary(response, Init.dataNames, false);
         el.header.innerHTML = 'Sign up completed';
@@ -110,15 +107,15 @@ var Signup = (function() {
     function failCallback(action) {
       el.signupContent.innerHTML = '';
       el.signupMiddle.style.maxWidth = '65rem';
-      if (state.xhr.status >= 500) {
+      if (Requests.get(ID).status >= 500) {
         var errorMsg = document.createElement('p');
         errorMsg.innerHTML = 'Oops, something went wrong. Please try again in a while';
-        el.header.innerHTML = state.xhr.status + ' - Server Error';
+        el.header.innerHTML = Requests.get(ID).status + ' - Server Error';
         el.signupContent.appendChild(errorMsg);
       } else {
-        var response = JSON.parse(state.xhr.responseText);
+        var response = JSON.parse(Requests.get(ID).responseText);
         var accountInfo = newElements.createSignupSummary(response, Init.dataNames, true);
-        el.header.innerHTML = state.xhr.status + ' - Bad Request';
+        el.header.innerHTML = Requests.get(ID).status + ' - Bad Request';
         el.signupContent.appendChild(accountInfo);
       }
       enableInputs(action);
@@ -141,22 +138,20 @@ var Signup = (function() {
   }
 
   function init(action, from) {
-    var state = {
-      xhr: null
-    };
+    Requests.cancelAll();
 
     var data = new FormData();
     data.append('action', action);
 
     /* make the call to the main servlet */
-    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
       if (action === 'GetSignup') {
         if (from === 'Signin') {
           Init.navbarContent.removeChild(Init.navbarContent.children[1]);
         }
-        Init.nonav.innerHTML = state.xhr.responseText;
+        Init.nonav.innerHTML = Requests.get(ID).responseText;
 
         var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
         signinButton.addEventListener('click', function() {
@@ -172,11 +167,11 @@ var Signup = (function() {
         });
       }
       else if (action === 'AccountInfo') {
-        if (state.xhr.getResponseHeader("content-type").split(';')[0] === 'application/json') {
+        if (Requests.get(ID).getResponseHeader("content-type").split(';')[0] === 'application/json') {
           Logout.showExpired();
           return;
         }
-        document.getElementById('account-subsection').innerHTML = state.xhr.responseText;
+        document.getElementById('account-subsection').innerHTML = Requests.get(ID).responseText;
         formInput.disable(document.getElementById('signup-username'));
 
         var countryHidden = document.getElementById('country-hidden');
@@ -214,7 +209,7 @@ var Signup = (function() {
     }
 
     function failCallback() {
-      console.log(state.xhr.responseText);
+      console.log(Requests.get(ID).responseText);
     }
   }
 

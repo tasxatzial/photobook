@@ -1,10 +1,6 @@
 'use strict';
 
 var ShowProfile = (function() {
-  var state = {
-    xhr: null
-  };
-
   var el = {
     showProfileButton: null,
     showPostsButton: null,
@@ -12,15 +8,17 @@ var ShowProfile = (function() {
   };
 
   function init(username, firstTime) {
+    Requests.cancelAll();
+
     var data = new FormData();
     data.append("action", "GetProfile");
     if (username !== null) {
       data.append("username", username);
     }
-    state.xhr = ajaxRequest("POST", "Main", data, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest("POST", "Main", data, successCallback, failCallback));
 
     function successCallback() {
-      var response = JSON.parse(state.xhr.responseText);
+      var response = JSON.parse(Requests.get(ID).responseText);
       if (response.ERROR) {
         Logout.showExpired();
         return;
@@ -48,7 +46,7 @@ var ShowProfile = (function() {
     }
 
     function failCallback() {
-      console.log(state.xhr.responseText);
+      console.log(Requests.get(ID).responseText);
     }
   }
 

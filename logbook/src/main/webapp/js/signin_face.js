@@ -22,6 +22,7 @@ var SignInFace = (function () {
     photoSection: null,
 
     username: null,
+    password: null,
     passwordParent: null,
     form: null,
     photoButton: null,
@@ -145,6 +146,8 @@ var SignInFace = (function () {
     el.form = document.getElementById('signin-content');
     el.photoButton = document.getElementsByClassName('signin-photo-button')[0];
     el.submit = document.querySelector('#signin-button input');
+    el.photoSection = null;
+    el.uploadMsgParent = null;
 
     state.photoSectionVisible = false;
     formButton.enable(el.photoButton);

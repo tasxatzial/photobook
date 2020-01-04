@@ -2,8 +2,7 @@
 
 var SignUpLocation = (function () {
   var state = {
-    xhr: null,
-    xhrResponse: null,
+    response: null,
     mapVisible: false,
     mapObj: null,
 
@@ -29,7 +28,7 @@ var SignUpLocation = (function () {
   };
 
   function init() {
-    state.xhrResponse = null;
+    state.response = null;
     state.mapVisible = false;
     state.map = null;
     state.newLocation = true;
@@ -42,6 +41,10 @@ var SignUpLocation = (function () {
     el.country = document.getElementById('signup-country');
     el.city = document.getElementById('signup-city');
     el.mapParent = document.getElementById('signup-map-parent');
+
+    el.mapButton = null;
+    formMsg.clear(el.nominatimSearchMsg);
+    formMsg.clear(el.geolocSearchMsg);
 
     el.nominatimSearchButton.addEventListener('click', locationSearch);
     el.geolocSearchButton.addEventListener('click', geolocSearch);
@@ -81,7 +84,7 @@ var SignUpLocation = (function () {
       }
 
       /* add the location to the map */
-      state.map.addLocation(state.xhrResponse);
+      state.map.addLocation(state.response);
 
       /* create the map button */
       el.mapButton = createMapButton();
@@ -149,8 +152,8 @@ var SignUpLocation = (function () {
 
     /* ajax request success callback */
     function successCallback() {
-      state.xhrResponse = JSON.parse(state.xhr.responseText)[0];
-      if (state.xhrResponse) {
+      state.response = JSON.parse(Requests.get(ID).responseText)[0];
+      if (state.response) {
         toggleMap();
       }
       else {
@@ -172,6 +175,8 @@ var SignUpLocation = (function () {
       formButton.enable(el.geolocSearchButton);
     }
 
+    Requests.cancelAll();
+
     /* initialize */
     var input = LocationSearch.createInput(el.address, el.city, el.country);
     formInput.disable(el.country);
@@ -182,7 +187,7 @@ var SignUpLocation = (function () {
     formMsg.clear(el.geolocSearchMsg);
     var loader = newElements.createLoader('images/loader.gif');
     formMsg.showElement(el.nominatimSearchMsg, loader);
-    state.xhr = ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback));
   }
 
   /* geolocation detect + reverse nominatim search. called when user clicks
@@ -191,10 +196,10 @@ var SignUpLocation = (function () {
 
     /* reverse nominatim search success callback */
     function successCallback() {
-      state.xhrResponse = JSON.parse(state.xhr.responseText);
+      state.response = JSON.parse(Requests.get(ID).responseText);
 
       /* calculate country/city/address from the ajax response */
-      var location = LocationSearch.parseReverseSearch(state.xhrResponse);
+      var location = LocationSearch.parseReverseSearch(state.response);
 
       formInput.enable(el.country);
       formInput.enable(el.city);
@@ -202,7 +207,7 @@ var SignUpLocation = (function () {
 
       /* show error if 1) all country/city/address are empty
                       2) reverse nominatim search returns an unknown location */
-      if (state.xhrResponse.error || !location) {
+      if (state.response.error || !location) {
         formMsg.showError(el.geolocSearchMsg, 'Not found');
         if (LocationSearch.isSearchDataReady(el.city, el.country)) {
           formButton.enable(el.nominatimSearchButton);
@@ -241,8 +246,11 @@ var SignUpLocation = (function () {
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
       var input = LocationSearch.createLatLonInput(lat, lon);
-      state.xhr = ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, failCallback);
+      ID = Requests.add(ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, failCallback));
     }
+
+    Requests.cancelAll();
+    var ID = null;
 
     /* initialize */
     formInput.disable(el.country);

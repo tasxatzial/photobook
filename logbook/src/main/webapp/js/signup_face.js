@@ -107,6 +107,7 @@ var SignUpFace = (function () {
     formButton.disable(el.selectButton);
     formButton.disable(el.uploadButton);
     el.checkBox.disabled = true;
+    Requests.cancelAll();
     tasks.detect = FaceAPI.detect(photo, detectSuccess, detectFail);
   }
 
@@ -228,6 +229,11 @@ var SignUpFace = (function () {
     el.username = document.getElementById('signup-username');
     el.checkBox = document.querySelector('#signup-photo-section input');
     el.photoSectionParent = document.getElementById('signup-photo-section');
+    el.photoSection = null;
+    el.uploadMsgParent = null;
+    el.uploadButton = null;
+    el.photoParent = null;
+    el.selectButton = null;
     var usernameRegex = new RegExp(el.username.pattern);
 
     el.username.addEventListener('input', function () {

@@ -1,15 +1,13 @@
 'use strict';
 
 var Logout = (function() {
-  var state = {
-    xhr: null
-  };
-
   function init() {
+    Requests.cancelAll();
+
     var data = new FormData();
     data.append("action", "Logout");
 
-    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
       var body = document.getElementsByTagName('body')[0];
@@ -34,7 +32,7 @@ var Logout = (function() {
     }
 
     function failCallback() {
-      console.log(state.xhr.responseText);
+      console.log(Requests.get(ID).responseText);
     }
   }
 

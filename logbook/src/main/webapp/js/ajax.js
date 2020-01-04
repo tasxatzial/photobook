@@ -9,7 +9,7 @@ function ajaxRequest(method, url, data, successFunction, failFunction) {
       if (this.status >= 200 && this.status < 300) {
         successFunction();
       }
-      else {
+      else if (this.status) {
         failFunction();
       }
     }
@@ -23,3 +23,34 @@ function ajaxRequest(method, url, data, successFunction, failFunction) {
   }
   return xhr;
 }
+
+var Requests = (function() {
+  var xhr = new Map();
+
+  function getID() {
+    return (Math.random() + 1).toString(36).substring(2, 5);
+  }
+
+  function add(request) {
+    var ID = getID();
+    xhr.set(ID, request);
+    return ID;
+  }
+
+  function get(ID) {
+    return xhr.get(ID);
+  }
+
+  function cancelAll() {
+    xhr.forEach(function(i) {
+      i.abort();
+    });
+    xhr.clear();
+  }
+
+  return {
+    add: add,
+    get: get,
+    cancelAll: cancelAll
+  };
+}());

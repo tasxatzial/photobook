@@ -1,10 +1,6 @@
 'use strict';
 
 var Signin = (function() {
-  var state = {
-    xhr: null
-  };
-
   var el = {
     signinButton: null,
     username: null,
@@ -26,9 +22,7 @@ var Signin = (function() {
   }
 
   function doSignin() {
-    var state = {
-      xhr: null
-    };
+    Requests.cancelAll();
 
     disableInputs();
 
@@ -39,10 +33,10 @@ var Signin = (function() {
     data.append('action', 'Signin');
 
     /* make the call */
-    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
-      var response = JSON.parse(state.xhr.responseText);
+      var response = JSON.parse(Requests.get(ID).responseText);
       if (response.HOMEPAGE) {
         Init.navbarContent.removeChild(el.signupButton);
         Homepage.init();
@@ -60,24 +54,25 @@ var Signin = (function() {
 
     function failCallback() {
       enableInputs();
-      console.log(state.xhr.responseText);
+      console.log(Requests.get(ID).responseText);
     }
   }
 
   function init(from) {
+    Requests.cancelAll();
 
     /* prepare the data */
     var data = new FormData();
     data.append('action', 'GetSignin');
 
     /* make the call to the main servlet */
-    state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
       if (from === 'Signup') {
         Init.navbarContent.removeChild(Init.navbarContent.children[1]);
       }
-      Init.nonav.innerHTML = state.xhr.responseText;
+      Init.nonav.innerHTML = Requests.get(ID).responseText;
 
       el.signinButton = document.querySelector('#signin-button input');
       el.username = document.getElementById('signin-username');
@@ -108,7 +103,7 @@ var Signin = (function() {
     }
 
     function failCallback() {
-      console.log(state.xhr.responseText);
+      console.log(Requests.get(ID).responseText);
     }
   }
 

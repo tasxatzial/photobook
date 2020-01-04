@@ -47,8 +47,8 @@ var FaceAPI = (function() {
   /* common callback for all services */
   function failCallback(state, failFunc) {
     return function() {
-      if (state.xhr.responseText) {
-        state.response =  JSON.parse(state.xhr.responseText);
+      if (Requests.get(state.ID).responseText) {
+        state.response =  JSON.parse(Requests.get(state.ID).responseText);
         if (state.response.error_message) {
           state.errMsg = state.response.error_message.split(':')[0];
         }
@@ -62,13 +62,14 @@ var FaceAPI = (function() {
 
   function detect(photoB64, successFunc, failFunc) {
     var state = {
+      ID: null,
       xhr: null,
       response: null,
       faceToken: null,
       errMsg: null
     };
     function successCallback() {
-      state.response = JSON.parse(state.xhr.responseText);
+      state.response = JSON.parse(Requests.get(state.ID).responseText);
       if (state.response.faces.length) {
         state.faceToken = state.response.faces[0].face_token;
       }
@@ -88,7 +89,7 @@ var FaceAPI = (function() {
     data.append('api_key', faceAPI.apiKey);
     data.append('api_secret', faceAPI.apiSecret);
     data.append('image_base64', photoB64);
-    state.xhr = ajaxRequest('POST', faceAPI.detect, data, successCallback, failCallback(state, failFunc));
+    state.ID = Requests.add(ajaxRequest('POST', faceAPI.detect, data, successCallback, failCallback(state, failFunc)));
 
     return {
       hasCompleted: hasCompleted,
@@ -99,12 +100,12 @@ var FaceAPI = (function() {
 
   function setID(userId, faceToken, successFunc, failFunc) {
     var state = {
-      xhr: null,
+      ID: null,
       response: null,
       errMsg: null
     };
     function successCallback() {
-      state.response =  JSON.parse(state.xhr.responseText);
+      state.response =  JSON.parse(Requests.get(state.ID).responseText);
       successFunc();
     }
     function hasCompleted() {
@@ -119,7 +120,7 @@ var FaceAPI = (function() {
     data.append('api_secret', faceAPI.apiSecret);
     data.append('face_token', faceToken);
     data.append('user_id', userId);
-    state.xhr = ajaxRequest('POST', faceAPI.setuserId, data, successCallback, failCallback(state, failFunc));
+    state.ID = Requests.add(ajaxRequest('POST', faceAPI.setuserId, data, successCallback, failCallback(state, failFunc)));
 
     return {
       hasCompleted: hasCompleted,
@@ -129,12 +130,12 @@ var FaceAPI = (function() {
 
   function addFace(faceToken, successFunc, failFunc) {
     var state = {
-      xhr: null,
+      ID: null,
       response: null,
       errMsg: null
     };
     function successCallback() {
-      state.response = JSON.parse(state.xhr.responseText);
+      state.response = JSON.parse(Requests.get(state.ID).responseText);
       successFunc();
     }
     function hasCompleted() {
@@ -149,7 +150,7 @@ var FaceAPI = (function() {
     data.append('api_key', faceAPI.apiKey);
     data.append('api_secret', faceAPI.apiSecret);
     data.append('face_tokens', faceToken);
-    state.xhr = ajaxRequest('POST', faceAPI.addFace, data, successCallback, failCallback(state, failFunc));
+    state.ID = Requests.add(ajaxRequest('POST', faceAPI.addFace, data, successCallback, failCallback(state, failFunc)));
 
     return {
       hasCompleted: hasCompleted,
@@ -159,13 +160,13 @@ var FaceAPI = (function() {
 
   function analyze(returnAttributes, faceTokens, successFunc, failFunc) {
     var state = {
-      xhr: null,
+      ID: null,
       response: null,
       errMsg: null,
       emotion: null
     };
     function successCallback() {
-      state.response =  JSON.parse(state.xhr.responseText);
+      state.response =  JSON.parse(Requests.get(state.ID).responseText);
       if (state.response.faces.length) {
         var emotions = state.response.faces[0].attributes['emotion'];
         var emotionValue = 0;
@@ -201,7 +202,7 @@ var FaceAPI = (function() {
     data.append('api_secret', faceAPI.apiSecret);
     data.append('face_tokens', faceTokens);
     data.append('return_attributes', returnAttributes);
-    state.xhr = ajaxRequest('POST', faceAPI.analyze, data, successCallback, failCallback(state, failFunc));
+    state.ID = Requests.add(ajaxRequest('POST', faceAPI.analyze, data, successCallback, failCallback(state, failFunc)));
 
     return {
       getEmotion: getEmotion,
@@ -212,7 +213,7 @@ var FaceAPI = (function() {
 
   function search(photoB64, successFunc, failFunc){
     var state = {
-      xhr: null,
+      ID: null,
       response: null,
       userID: null,
       faceToken: null,
@@ -220,7 +221,7 @@ var FaceAPI = (function() {
       confidence: null
     };
     function successCallback() {
-      state.response = JSON.parse(state.xhr.responseText);
+      state.response = JSON.parse(Requests.get(state.ID).responseText);
       if (state.response.faces.length && state.response.results) {
         state.faceToken = state.response.faces[0].face_token;
         state.confidence = 0;
@@ -255,7 +256,7 @@ var FaceAPI = (function() {
     data.append('api_secret', faceAPI.apiSecret);
     data.append('outer_id', faceAPI.app);
     data.append('image_base64', photoB64);
-    state.xhr = ajaxRequest('POST', faceAPI.search, data, successCallback, failCallback(state, failFunc));
+    state.ID = Requests.add(ajaxRequest('POST', faceAPI.search, data, successCallback, failCallback(state, failFunc)));
 
     return {
       hasCompleted: hasCompleted,

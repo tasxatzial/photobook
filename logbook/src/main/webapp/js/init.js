@@ -1,10 +1,6 @@
 'use strict';
 
 var Init = (function() {
-  var state = {
-    xhr: null
-  };
-
   var dataNames = [
     ["username", "Username"],
     ["password", "Password"],
@@ -27,10 +23,10 @@ var Init = (function() {
 
   var data = new FormData();
   data.append("action", "Init");
-  state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failCallback);
+  var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
   function successCallback() {
-    var response = JSON.parse(state.xhr.responseText);
+    var response = JSON.parse(Requests.get(ID).responseText);
     if (response.LANDING) {
       Landing.init();
     }
@@ -40,7 +36,7 @@ var Init = (function() {
   }
 
   function failCallback() {
-    console.log(state.xhr.responseText);
+    console.log(Requests.get(ID).responseText);
   }
 
   return {
