@@ -15,14 +15,36 @@ var AccountInfo = (function() {
     accountSubsection.appendChild(editAccountSection);
 
     var editAccountButton = document.querySelector('#edit-account-button input');
-    editAccountButton.addEventListener('click', function() {
-      Signup.init('AccountInfo');
-    });
+    editAccountButton.addEventListener('click', editAccount);
 
     var deleteAccountButton = document.querySelector('#delete-account-button input');
     deleteAccountButton.addEventListener('click', confirmDelete);
 
     el.deleteAccountMsg = document.getElementById('delete-account-msg');
+  }
+
+  function editAccount() {
+    Requests.cancelAll();
+
+    var data = new FormData();
+    data.append("action", "AccountInfo");
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
+
+    function successCallback() {
+      if (Requests.get(ID).getResponseHeader("content-type").split(';')[0] === 'application/json') {
+        Logout.showExpired();
+        return;
+      }
+
+      document.getElementById('account-subsection').innerHTML = Requests.get(ID).responseText;
+      document.getElementById('signup-parent').className = 'parent-in-myaccount';
+
+      Signup.init('AccountInfo');
+    }
+
+    function failCallback() {
+      console.log(Requests.get(ID).responseText);
+    }
   }
 
   function deleteAccount() {

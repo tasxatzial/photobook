@@ -5,15 +5,9 @@ var Landing = (function() {
   function init() {
     Init.nonav.innerHTML = '';
     Init.nonav.appendChild(createLanding());
-
-    var landingSignupButton = document.querySelector('#landing-signup-button input');
-
-    landingSignupButton.addEventListener('click', function() {
-      Signup.init('GetSignup', 'Landing');
-    });
   }
 
-  function showSignin(from) {
+  function showSignin() {
     Requests.cancelAll();
 
     var data = new FormData();
@@ -24,12 +18,45 @@ var Landing = (function() {
     function successCallback() {
       Init.nonav.innerHTML = Requests.get(ID).responseText;
 
-      /* remove the top right signup button (if there is one) */
-      if (from === 'Signup') {
-        Init.navbarContent.removeChild(Init.navbarContent.children[1]);
+      var signinButton = document.getElementById('signin-nav-button');
+      if (signinButton) {
+        Init.navbarContent.removeChild(signinButton);
       }
+      var signupButton = newElements.createSignBarButton('Sign up', 'signup-nav-button');
+      signupButton.addEventListener('click', showSignup);
+      signupButton.style.marginLeft = 'auto';
+      Init.navbarContent.appendChild(signupButton);
 
       Signin.init();
+    }
+
+    function failCallback() {
+      console.log(Requests.get(ID).responseText);
+    }
+  }
+
+  function showSignup() {
+    Requests.cancelAll();
+
+    var data = new FormData();
+    data.append('action', 'GetSignup');
+
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
+
+    function successCallback() {
+      Init.nonav.innerHTML = Requests.get(ID).responseText;
+      document.getElementById('signup-parent').className = 'parent-in-main';
+
+      var signupButton = document.getElementById('signup-nav-button');
+      if (signupButton) {
+        Init.navbarContent.removeChild(signupButton);
+      }
+      var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
+      signinButton.addEventListener('click', showSignin);
+      signinButton.style.marginLeft = 'auto';
+      Init.navbarContent.appendChild(signinButton);
+
+      Signup.init('GetSignup');
     }
 
     function failCallback() {
@@ -41,6 +68,7 @@ var Landing = (function() {
     var signupButton = document.createElement('input');
     signupButton.type = 'button';
     signupButton.value = 'Sign up';
+    signupButton.addEventListener('click', showSignup);
 
     var signupButtonContainer = document.createElement('div');
     signupButtonContainer.id = 'landing-signup-button';
@@ -54,9 +82,7 @@ var Landing = (function() {
     var signinButton = document.createElement('input');
     signinButton.type = 'button';
     signinButton.value = 'Sign in';
-    signinButton.addEventListener('click', function() {
-      Landing.showSignin('Landing');
-    });
+    signinButton.addEventListener('click', showSignin);
 
     var signinButtonContainer = document.createElement('div');
     signinButtonContainer.id = 'landing-signin-button';
@@ -86,7 +112,6 @@ var Landing = (function() {
   }
 
   return {
-    init: init,
-    showSignin: showSignin
+    init: init
   };
 }());

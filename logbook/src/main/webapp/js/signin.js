@@ -2,10 +2,8 @@
 
 var Signin = (function() {
   var el = {
-    signinButton: null,
     username: null,
     password: null,
-    signinContent: null,
     signinMsg: null
   };
 
@@ -38,7 +36,8 @@ var Signin = (function() {
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
       if (response.HOMEPAGE) {
-        Init.navbarContent.removeChild(el.signupButton);
+        var signupButton = document.getElementById('signup-nav-button');
+        Init.navbarContent.removeChild(signupButton);
         Init.setUser(response.USER);
         Homepage.init();
       }
@@ -59,18 +58,11 @@ var Signin = (function() {
     }
   }
 
-  function init(from) {
-    if (from === 'Signup') {
-      Init.navbarContent.removeChild(Init.navbarContent.children[1]);
-    }
-
+  function init() {
     el.signinButton = document.querySelector('#signin-button input');
     el.username = document.getElementById('signin-username');
     el.password = document.getElementById('signin-password');
-    el.signinContent = document.getElementById('signin-content');
     el.signinMsg = document.getElementById('signupin-msg');
-
-    el.signupButton = newElements.createSignBarButton('Sign up', 'signup-nav-button');
 
     el.username.addEventListener('input', function() {
       el.signinMsg.innerHTML = '';
@@ -80,14 +72,9 @@ var Signin = (function() {
     });
     el.signinButton.addEventListener('click', function() {
       el.signinMsg.innerHTML = '';
+      doSignin();
     });
-    el.signinButton.addEventListener('click', doSignin);
-    el.signupButton.addEventListener('click', function() {
-      Signup.init('GetSignup', 'Signin');
-    });
-    el.signupButton.style.marginLeft = 'auto';
     el.signinButton.disabled = false;
-    Init.navbarContent.appendChild(el.signupButton);
 
     SignInFace.init();
   }
