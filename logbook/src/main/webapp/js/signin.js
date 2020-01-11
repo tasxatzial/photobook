@@ -60,52 +60,36 @@ var Signin = (function() {
   }
 
   function init(from) {
-    Requests.cancelAll();
-
-    /* prepare the data */
-    var data = new FormData();
-    data.append('action', 'GetSignin');
-
-    /* make the call to the main servlet */
-    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
-
-    function successCallback() {
-      if (from === 'Signup') {
-        Init.navbarContent.removeChild(Init.navbarContent.children[1]);
-      }
-      Init.nonav.innerHTML = Requests.get(ID).responseText;
-
-      el.signinButton = document.querySelector('#signin-button input');
-      el.username = document.getElementById('signin-username');
-      el.password = document.getElementById('signin-password');
-      el.signinContent = document.getElementById('signin-content');
-      el.signinMsg = document.getElementById('signupin-msg');
-
-      el.signupButton = newElements.createSignBarButton('Sign up', 'signup-nav-button');
-
-      el.username.addEventListener('input', function() {
-        el.signinMsg.innerHTML = '';
-      });
-      el.password.addEventListener('input', function() {
-        el.signinMsg.innerHTML = '';
-      });
-      el.signinButton.addEventListener('click', function() {
-        el.signinMsg.innerHTML = '';
-      });
-      el.signinButton.addEventListener('click', doSignin);
-      el.signupButton.addEventListener('click', function() {
-        Signup.init('GetSignup', 'Signin');
-      });
-      el.signupButton.style.marginLeft = 'auto';
-      el.signinButton.disabled = false;
-      Init.navbarContent.appendChild(el.signupButton);
-
-      SignInFace.init();
+    if (from === 'Signup') {
+      Init.navbarContent.removeChild(Init.navbarContent.children[1]);
     }
 
-    function failCallback() {
-      console.log(Requests.get(ID).responseText);
-    }
+    el.signinButton = document.querySelector('#signin-button input');
+    el.username = document.getElementById('signin-username');
+    el.password = document.getElementById('signin-password');
+    el.signinContent = document.getElementById('signin-content');
+    el.signinMsg = document.getElementById('signupin-msg');
+
+    el.signupButton = newElements.createSignBarButton('Sign up', 'signup-nav-button');
+
+    el.username.addEventListener('input', function() {
+      el.signinMsg.innerHTML = '';
+    });
+    el.password.addEventListener('input', function() {
+      el.signinMsg.innerHTML = '';
+    });
+    el.signinButton.addEventListener('click', function() {
+      el.signinMsg.innerHTML = '';
+    });
+    el.signinButton.addEventListener('click', doSignin);
+    el.signupButton.addEventListener('click', function() {
+      Signup.init('GetSignup', 'Signin');
+    });
+    el.signupButton.style.marginLeft = 'auto';
+    el.signinButton.disabled = false;
+    Init.navbarContent.appendChild(el.signupButton);
+
+    SignInFace.init();
   }
 
   return {

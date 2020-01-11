@@ -155,7 +155,7 @@ var Signup = (function() {
 
         var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
         signinButton.addEventListener('click', function() {
-          Signin.init('Signup');
+          Landing.showSignin('Signup');
         });
         signinButton.style.marginLeft = 'auto';
         Init.navbarContent.appendChild(signinButton);

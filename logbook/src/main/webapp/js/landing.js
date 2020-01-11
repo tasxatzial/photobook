@@ -7,16 +7,34 @@ var Landing = (function() {
     Init.nonav.appendChild(createLanding());
 
     var landingSignupButton = document.querySelector('#landing-signup-button input');
-    var landingSigninButton = document.querySelector('#landing-signin-button input');
 
     landingSignupButton.addEventListener('click', function() {
       Signup.init('GetSignup', 'Landing');
     });
-    landingSigninButton.addEventListener('click', function() {
-      Signin.init('Landing');
-    });
-    landingSigninButton.disabled = false;
-    landingSignupButton.disabled = false;
+  }
+
+  function showSignin(from) {
+    Requests.cancelAll();
+
+    var data = new FormData();
+    data.append('action', 'GetSignin');
+
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
+
+    function successCallback() {
+      Init.nonav.innerHTML = Requests.get(ID).responseText;
+
+      /* remove the top right signup button (if there is one) */
+      if (from === 'Signup') {
+        Init.navbarContent.removeChild(Init.navbarContent.children[1]);
+      }
+
+      Signin.init();
+    }
+
+    function failCallback() {
+      console.log(Requests.get(ID).responseText);
+    }
   }
 
   function createLanding() {
@@ -36,6 +54,9 @@ var Landing = (function() {
     var signinButton = document.createElement('input');
     signinButton.type = 'button';
     signinButton.value = 'Sign in';
+    signinButton.addEventListener('click', function() {
+      Landing.showSignin('Landing');
+    });
 
     var signinButtonContainer = document.createElement('div');
     signinButtonContainer.id = 'landing-signin-button';
@@ -65,6 +86,7 @@ var Landing = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    showSignin: showSignin
   };
 }());
