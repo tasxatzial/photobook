@@ -44,6 +44,10 @@ var Posts = (function() {
   function getPosts(username) {
     Requests.cancelAll();
 
+    var loaderParent = document.getElementById('content-loader');
+    var loader = newElements.createLoader("images/loader.gif");
+    loaderParent.appendChild(loader);
+
     var formData = new FormData();
     formData.append("action", "GetPosts");
     if (username === null) {
@@ -52,11 +56,6 @@ var Posts = (function() {
     else if (username !== false) {
       formData.append('username', username);
     }
-
-    var loaderParent = document.getElementById('posts-loader');
-    var loader = newElements.createLoader("images/loader.gif");
-    loaderParent.appendChild(loader);
-
     var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
 
     function successCallback() {
@@ -113,7 +112,7 @@ var Posts = (function() {
     header.appendChild(headerH2);
 
     var loader = document.createElement('div');
-    loader.id = 'posts-loader';
+    loader.id = 'content-loader';
 
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';

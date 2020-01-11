@@ -7,7 +7,6 @@ var AllUsers = (function() {
   };
 
   var el = {
-    userlistSection: null,
     userListParent: null,
     navBar: null
   };
@@ -18,6 +17,10 @@ var AllUsers = (function() {
     var userlistSection = createAllUsersSection();
     Init.nonav.innerHTML = '';
     Init.nonav.appendChild(userlistSection);
+
+    var loaderParent = document.getElementById('content-loader');
+    var loader = newElements.createLoader("images/loader.gif");
+    loaderParent.appendChild(loader);
 
     var data = new FormData();
     data.append("action", "GetAllUsers");
@@ -30,10 +33,11 @@ var AllUsers = (function() {
         return;
       }
 
+      /* loaderParent.removeChild(loader); */
       state.response = response;
       state.pages = Object.keys(response).length;
-      el.userlistSection = document.getElementById('userlist-section');
-      el.userListParent = el.userlistSection.children[0];
+      el.userListParent = userlistSection.children[0];
+      el.userListParent.removeChild(loaderParent);
       el.navBar = createNavBar(state.pages);
       addNavBarListeners();
       el.userListParent.appendChild(el.navBar);
@@ -41,6 +45,7 @@ var AllUsers = (function() {
     }
 
     function failCallback() {
+      loaderParent.removeChild(loader);
       console.log(Requests.get(ID).responseText);
     }
   }
@@ -118,10 +123,14 @@ var AllUsers = (function() {
     var header = document.createElement('header');
     header.appendChild(headerH2);
 
+    var loader = document.createElement('div');
+    loader.id = 'content-loader';
+
     var div = document.createElement('div');
     div.id = 'userlist-parent';
     div.className = 'parent-in-main';
     div.appendChild(header);
+    div.appendChild(loader);
 
     var userlistSection = document.createElement('div');
     userlistSection.id = 'userlist-section';
@@ -135,6 +144,7 @@ var AllUsers = (function() {
     hrBottom.className = 'userlist-hr-bottom';
 
     var div = document.createElement('div');
+    div.id = 'userlist';
     div.appendChild(hrBottom);
 
     Object.keys(page).forEach(function(key, index) {
