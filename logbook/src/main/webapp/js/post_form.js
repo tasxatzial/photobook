@@ -54,7 +54,7 @@ var PostForm = (function() {
     function successCallback() {
       var postFormSection = createPostFormSection();
       postFormSection.children[0].innerHTML = Requests.get(ID).responseText;
-      if (username === false) {
+      if (username === null) {
         postFormSection.children[0].className = 'parent-in-main';
         Init.nonav.innerHTML = '';
         Init.nonav.appendChild(postFormSection);

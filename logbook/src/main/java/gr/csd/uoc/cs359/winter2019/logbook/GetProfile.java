@@ -50,10 +50,10 @@ public class GetProfile extends HttpServlet {
 
         User user;
         if (request.getParameter("username") == null) {
-            user = UserDB.getUser((String) oldSession.getAttribute("username"));
+            return; /* not enough */
         }
         else {
-            user = UserDB.getUser(request.getParameter("username"));
+            user = UserDB.getUser(request.getParameter("username")); /* check if exists */
         }
 
         json.put("username", user.getUserName());
@@ -74,12 +74,6 @@ public class GetProfile extends HttpServlet {
         json.put("gender", user.getGender().toString());
         json.put("interests", user.getInterests());
         json.put("about", user.getInfo());
-        if (oldSession.getAttribute("username").equals(user.getUserName())) {
-            json.put("owner", "1");
-        }
-        else {
-            json.put("owner", "0");
-        }
         out.print(json.toJSONString());
     }
 

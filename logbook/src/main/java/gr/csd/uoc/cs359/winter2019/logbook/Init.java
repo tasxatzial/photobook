@@ -39,6 +39,7 @@ public class Init extends HttpServlet {
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null && oldSession.getAttribute("username") != null) {
             json.put("HOMEPAGE", "1");
+            json.put("USER", oldSession.getAttribute("username"));
         }
         else {
             json.put("LANDING", "1");

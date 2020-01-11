@@ -39,6 +39,7 @@ var Signin = (function() {
       var response = JSON.parse(Requests.get(ID).responseText);
       if (response.HOMEPAGE) {
         Init.navbarContent.removeChild(el.signupButton);
+        Init.setUser(response.USER);
         Homepage.init();
       }
       else {

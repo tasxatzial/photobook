@@ -6,7 +6,7 @@ var Homepage = (function() {
 
     var accountButton = newElements.createSignBarButton('My account', 'profile-button');
     accountButton.addEventListener('click', function() {
-      ShowProfile.init(null, true);
+      ShowProfile.init(Init.getUser(), true);
     });
     Init.navbarContent.appendChild(accountButton);
 
@@ -16,7 +16,7 @@ var Homepage = (function() {
 
     var postsButton = newElements.createSignBarButton('Posts', 'show-posts');
     postsButton.addEventListener('click', function() {
-      Posts.init(false, false);
+      Posts.init(null);
     });
     Init.navbarContent.appendChild(postsButton);
 
@@ -30,7 +30,7 @@ var Homepage = (function() {
     postsButton.addEventListener('click', underline(postsButton, allUsersButton, accountButton));
 
     underline(postsButton, allUsersButton, accountButton)();
-    Posts.init(false, false);
+    Posts.init(null);
   }
 
   function underline(element1, element2, element3) {

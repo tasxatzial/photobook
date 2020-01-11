@@ -50,13 +50,9 @@ public class GetPosts extends HttpServlet {
         }
 
         String username = request.getParameter("username");
-        String owner = request.getParameter("owner");
 
         List<Post> posts;
-        if (owner != null) {
-            posts = PostDB.getTop10RecentPostsOfUser((String) oldSession.getAttribute("username"));
-        }
-        else if (username != null) {
+        if (username != null) {
             posts = PostDB.getTop10RecentPostsOfUser(username);
         }
         else {
@@ -69,7 +65,7 @@ public class GetPosts extends HttpServlet {
         for (int i = 0; i < posts.size(); i++) {
             post = posts.get(i);
             json = new JSONObject();
-            json.put("userName", post.getUserName());
+            json.put("username", post.getUserName());
             json.put("description", post.getDescription());
             if (isValidURL(post.getResourceURL())) {
                 json.put("resourceURL", addHttp(post.getResourceURL()));
@@ -93,12 +89,6 @@ public class GetPosts extends HttpServlet {
             json.put("longitude", post.getLongitude());
             json.put("createdAt", post.getCreatedAt());
             json.put("postID", post.getPostID());
-            if (oldSession.getAttribute("username").equals(post.getUserName())) {
-                json.put("owner", "1");
-            }
-            else {
-                json.put("owner", "");
-            }
             jsonFinal.put(Integer.toString(i), json);
         }
         out.println(jsonFinal.toJSONString());

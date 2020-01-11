@@ -20,6 +20,7 @@ var Init = (function() {
 
   var navbarContent = document.getElementById('navbar-content');
   var nonav = document.getElementById('no-nav');
+  var user = null;
 
   var data = new FormData();
   data.append("action", "Init");
@@ -31,6 +32,7 @@ var Init = (function() {
       Landing.init();
     }
     else {
+      user = response.USER;
       Homepage.init();
     }
   }
@@ -39,9 +41,19 @@ var Init = (function() {
     console.log(Requests.get(ID).responseText);
   }
 
+  function setUser(username) {
+    user = username;
+  }
+
+  function getUser() {
+    return user;
+  }
+
   return {
     dataNames: dataNames,
     nonav: nonav,
-    navbarContent: navbarContent
+    navbarContent: navbarContent,
+    getUser: getUser,
+    setUser: setUser
   };
 }());

@@ -9,9 +9,11 @@ var ShowProfile = (function() {
 
   function init(username, firstTime) {
     Requests.cancelAll();
-    
+
+    /* var loaderParent = newElements.createLoaderParent("images/loader.gif"); */
     if (firstTime === true) {
       Init.nonav.innerHTML = '';
+      /* Init.nonav.appendChild(loaderParent); */
     }
 
     var data = new FormData();
@@ -29,8 +31,8 @@ var ShowProfile = (function() {
       }
 
       if (firstTime === true) {
-        var owner = response["owner"] === "1";
-        var accountSection = createAccountSection(response[Init.dataNames[0][0]], owner);
+        /* Init.nonav.removeChild(loaderParent); */
+        var accountSection = createAccountSection(username);
         Init.nonav.appendChild(accountSection);
 
         var navTabs = document.getElementById('account-nav');
@@ -38,7 +40,7 @@ var ShowProfile = (function() {
         el.showPostsButton = navTabs.children[1];
         el.editAccountButton = navTabs.children[2];
 
-        addListeners(username, owner);
+        addListeners(username);
       }
 
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
@@ -49,17 +51,18 @@ var ShowProfile = (function() {
     }
 
     function failCallback() {
+      /* Init.nonav.removeChild(loaderParent); */
       console.log(Requests.get(ID).responseText);
     }
   }
 
-  function addListeners(username, owner) {
+  function addListeners(username) {
     el.showProfileButton.addEventListener('click', function () {
       ShowProfile.init(username, false);
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
     });
     el.showPostsButton.addEventListener('click', function () {
-      Posts.init(username, owner);
+      Posts.init(username);
       showBorders(el.showPostsButton, el.showProfileButton, el.editAccountButton);
     });
 
@@ -79,13 +82,13 @@ var ShowProfile = (function() {
     }
   }
 
-  function createAccountSection(username, owner) {
+  function createAccountSection(username) {
     var header = document.createElement('header');
     var headerH2 = document.createElement('h2');
     headerH2.innerHTML = username;
     header.appendChild(headerH2);
 
-    var navTabs = createNavTabs(owner);
+    var navTabs = createNavTabs(username);
     var content = document.createElement('div');
     content.id = 'account-subsection';
 
@@ -124,7 +127,7 @@ var ShowProfile = (function() {
     return button;
   }
 
-  function createNavTabs(owner) {
+  function createNavTabs(username) {
     var navTabs = document.createElement('div');
     navTabs.id = 'account-nav';
 
@@ -134,7 +137,7 @@ var ShowProfile = (function() {
     navTabs.appendChild(showProfileButton);
     navTabs.appendChild(showPostsButton);
 
-    if (owner) {
+    if (username === Init.getUser()) {
       var editAccountButton = createNavTab('Account');
       navTabs.appendChild(editAccountButton);
     }

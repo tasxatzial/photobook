@@ -15,13 +15,13 @@ var Posts = (function() {
     username: null
   };
 
-  function init(username, owner) {
+  function init(username) {
     data.username = username;
 
-    el.postsSection = createPostsSection(username, owner);
+    el.postsSection = createPostsSection(username);
     el.postsParent = el.postsSection.children[0];
     
-    if (username === false) {
+    if (username === null) {
       el.postsParent.className = 'parent-in-main';
       Init.nonav.innerHTML = '';
       Init.nonav.appendChild(el.postsSection);
@@ -31,13 +31,6 @@ var Posts = (function() {
       var accountSubsection = document.getElementById('account-subsection');
       accountSubsection.innerHTML = '';
       accountSubsection.appendChild(el.postsSection);
-    }
-
-    if (username === false || username === null || owner === true) {
-      var newPostButton = el.postsParent.children[0];
-      newPostButton.addEventListener('click', function() {
-        PostForm.init(username);
-      });
     }
 
     getPosts(username);
@@ -52,10 +45,7 @@ var Posts = (function() {
 
     var formData = new FormData();
     formData.append("action", "GetPosts");
-    if (username === null) {
-      formData.append('owner', '1');
-    }
-    else if (username !== false) {
+    if (username !== null) {
       formData.append('username', username);
     }
     var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
@@ -82,13 +72,13 @@ var Posts = (function() {
     }
   }
 
-  function deletePost(fullPost) {
+  function deletePost(fullPost, username, postID) {
     Requests.cancelAll();
 
     var formData = new FormData();
     formData.append("action", "DeletePost");
-    formData.append("postID", fullPost.id.substring(6));
-    formData.append("username", fullPost.username);
+    formData.append("postID", postID);
+    formData.append("username", username);
 
     var ID = Requests.add(ajaxRequest('POST', "Main", formData, successCallback, failCallback));
 
@@ -107,7 +97,7 @@ var Posts = (function() {
     }
   }
 
-  function createPostsSection(username, owner) {
+  function createPostsSection(username) {
     var header = document.createElement('header');
     var headerH2 = document.createElement('h2');
     headerH2.innerHTML = 'Latest posts';
@@ -119,8 +109,11 @@ var Posts = (function() {
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';
 
-    if (username === false || username === null || owner === true) {
+    if (username === Init.getUser() || username === null) {
       var postButton = newElements.createBlueButton('+ New Post', 'new-post-button');
+      postButton.addEventListener('click', function() {
+        PostForm.init(username);
+      });
       postsParent.appendChild(postButton);
     }
     postsParent.appendChild(header);
@@ -183,10 +176,10 @@ var Posts = (function() {
 
     var button = document.createElement('button');
     button.className = 'transparent-button';
-    button.innerHTML = postJSON['userName'];
+    button.innerHTML = postJSON['username'];
     button.style.textDecoration = 'underline';
     button.onclick = function() {
-      ShowProfile.init(postJSON['userName'], true);
+      ShowProfile.init(postJSON['username'], true);
     };
 
     var at = document.createElement('span');
@@ -222,8 +215,6 @@ var Posts = (function() {
     nextButton.className = 'transparent-button';
 
     var postContainer = document.createElement('div');
-    postContainer.id = 'postID' + postJSON['postID'];
-    postContainer.username = postJSON['userName'];
     postContainer.appendChild(location);
     if (image.src) {
       postContainer.appendChild(imageParent);
@@ -239,7 +230,8 @@ var Posts = (function() {
         location: state.responseLocation,
         lat: postJSON['latitude'],
         lon: postJSON['longitude'],
-        owner: postJSON['owner']
+        username: postJSON['username'],
+        postID: postJSON['postID']
       };
       if (state.responseLocation && state.responseLocation.address) {
         data.zoom = 15;
@@ -313,7 +305,7 @@ var Posts = (function() {
     description.innerHTML = data['description'].trim().replace('\n', '<br><br>');
     shortPost.removeChild(readMore);
 
-    if (!data['owner']) {
+    if (data['username'] !== Init.getUser()) {
       rating.innerHTML = 'Rate';
       var select = document.createElement('select');
       select.id = 'rating-select';
@@ -380,14 +372,14 @@ var Posts = (function() {
       map.drawMap();*/
     }
 
-    if (data['owner']) {
+    if (data['username'] === Init.getUser()) {
       var deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
       shortPost.appendChild(deleteButton);
       var deleteMsg = document.createElement('div');
       deleteMsg.id = 'delete-post-msg';
       deleteButton.appendChild(deleteMsg);
       deleteButton.children[0].addEventListener('click', function () {
-        deletePost(shortPost);
+        deletePost(shortPost, data['username'], data['postID']);
       });
     }
 
