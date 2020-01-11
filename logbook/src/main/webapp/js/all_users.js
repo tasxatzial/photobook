@@ -15,6 +15,10 @@ var AllUsers = (function() {
   function init() {
     Requests.cancelAll();
 
+    var userlistSection = createAllUsersSection();
+    Init.nonav.innerHTML = '';
+    Init.nonav.appendChild(userlistSection);
+
     var data = new FormData();
     data.append("action", "GetAllUsers");
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
@@ -25,10 +29,6 @@ var AllUsers = (function() {
         Logout.showExpired();
         return;
       }
-
-      var userlistSection = createAllUsersSection();
-      Init.nonav.innerHTML = '';
-      Init.nonav.appendChild(userlistSection);
 
       state.response = response;
       state.pages = Object.keys(response).length;

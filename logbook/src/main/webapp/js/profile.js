@@ -10,6 +10,10 @@ var ShowProfile = (function() {
   function init(username, firstTime) {
     Requests.cancelAll();
 
+    if (firstTime === true) {
+      Init.nonav.innerHTML = '';
+    }
+
     var data = new FormData();
     data.append("action", "GetProfile");
     if (username !== null) {
@@ -27,7 +31,6 @@ var ShowProfile = (function() {
       if (firstTime === true) {
         var owner = response["owner"] === "1";
         var accountSection = createAccountSection(response[Init.dataNames[0][0]], owner);
-        Init.nonav.innerHTML = '';
         Init.nonav.appendChild(accountSection);
 
         var navTabs = document.getElementById('account-nav');
