@@ -24,7 +24,7 @@
 }
 
 .inactive-tab {
-  border-bottom: 1px dashed silver;
+  border-bottom: 1px dashed gray;
 }
 
 #delete-account-button input {

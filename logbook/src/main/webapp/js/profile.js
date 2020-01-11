@@ -4,17 +4,30 @@ var ShowProfile = (function() {
   var el = {
     showProfileButton: null,
     showPostsButton: null,
-    editAccountButton: null
+    editAccountButton: null,
+    accountSubsection: null
   };
 
   function init(username, firstTime) {
     Requests.cancelAll();
 
-    /* var loaderParent = newElements.createLoaderParent("images/loader.gif"); */
     if (firstTime === true) {
       Init.nonav.innerHTML = '';
-      /* Init.nonav.appendChild(loaderParent); */
+      initializeAccount(username);
     }
+    else {
+      el.accountSubsection.innerHTML = '';
+    }
+
+    var profileSection = createProfileSection();
+    var profileParent = profileSection.children[0];
+    var loaderMsg = profileParent.children[0];
+    var loader = newElements.createLoader("images/loader.gif");
+    formMsg.showElement(loaderMsg, loader);
+
+    el.accountSubsection.appendChild(profileSection);
+
+    showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
 
     var data = new FormData();
     data.append("action", "GetProfile");
@@ -30,33 +43,28 @@ var ShowProfile = (function() {
         return;
       }
 
-      if (firstTime === true) {
-        /* Init.nonav.removeChild(loaderParent); */
-        var accountSection = createAccountSection(username);
-        Init.nonav.appendChild(accountSection);
-
-        var navTabs = document.getElementById('account-nav');
-        el.showProfileButton = navTabs.children[0];
-        el.showPostsButton = navTabs.children[1];
-        el.editAccountButton = navTabs.children[2];
-
-        addListeners(username);
-      }
-
-      showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
-      var profileSection = createProfileSection(response, Init.dataNames, false);
-      var accountSubsection = document.getElementById('account-subsection');
-      accountSubsection.innerHTML = '';
-      accountSubsection.appendChild(profileSection);
+      formMsg.clear(loaderMsg);
+      var profile = newElements.createSignupSummary(response,  Init.dataNames, false);
+      profileParent.appendChild(profile);
     }
 
     function failCallback() {
-      /* Init.nonav.removeChild(loaderParent); */
+      formMsg.clear(loaderMsg);
       console.log(Requests.get(ID).responseText);
     }
   }
 
-  function addListeners(username) {
+  function initializeAccount(username) {
+    var accountSection = createAccountSection(username);
+    Init.nonav.appendChild(accountSection);
+
+    var navTabs = document.getElementById('account-nav');
+    el.showProfileButton = navTabs.children[0];
+    el.showPostsButton = navTabs.children[1];
+    el.editAccountButton = navTabs.children[2];
+
+    el.accountSubsection = document.getElementById('account-subsection');
+
     el.showProfileButton.addEventListener('click', function () {
       ShowProfile.init(username, false);
       showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
@@ -89,6 +97,7 @@ var ShowProfile = (function() {
     header.appendChild(headerH2);
 
     var navTabs = createNavTabs(username);
+
     var content = document.createElement('div');
     content.id = 'account-subsection';
 
@@ -107,10 +116,14 @@ var ShowProfile = (function() {
     return accountSection;
   }
 
-  function createProfileSection(response, dataNames, skipEmpty) {
-    var profileParent = newElements.createSignupSummary(response, dataNames, skipEmpty);
+  function createProfileSection() {
+    var loaderMsg = document.createElement('div');
+    loaderMsg.id = 'sign-process-msg';
+
+    var profileParent = document.createElement('div');
     profileParent.id = 'profile-parent';
     profileParent.className = 'parent-in-myaccount';
+    profileParent.appendChild(loaderMsg);
 
     var profileSection = document.createElement('div');
     profileSection.id = 'profile-section';
