@@ -7,6 +7,7 @@ var Posts = (function() {
 
   var el = {
     postsSection: null,
+    postsParent: null,
     loader: null
   };
 
@@ -18,21 +19,22 @@ var Posts = (function() {
     data.username = username;
 
     el.postsSection = createPostsSection(username, owner);
-
+    el.postsParent = el.postsSection.children[0];
+    
     if (username === false) {
-      el.postsSection.children[0].className = 'parent-in-main';
+      el.postsParent.className = 'parent-in-main';
       Init.nonav.innerHTML = '';
       Init.nonav.appendChild(el.postsSection);
     }
     else {
-      el.postsSection.children[0].className = 'parent-in-myaccount';
+      el.postsParent.className = 'parent-in-myaccount';
       var accountSubsection = document.getElementById('account-subsection');
       accountSubsection.innerHTML = '';
       accountSubsection.appendChild(el.postsSection);
     }
 
     if (username === false || username === null || owner === true) {
-      var newPostButton = el.postsSection.children[0].children[0];
+      var newPostButton = el.postsParent.children[0];
       newPostButton.addEventListener('click', function() {
         PostForm.init(username);
       });
@@ -44,9 +46,9 @@ var Posts = (function() {
   function getPosts(username) {
     Requests.cancelAll();
 
-    var loaderParent = document.getElementById('content-loader');
     var loader = newElements.createLoader("images/loader.gif");
-    loaderParent.appendChild(loader);
+    var loaderMsg = el.postsParent.children[1];
+    formMsg.showElement(loaderMsg, loader);
 
     var formData = new FormData();
     formData.append("action", "GetPosts");
@@ -65,17 +67,17 @@ var Posts = (function() {
         return;
       }
 
-      loaderParent.removeChild(loader);
+      formMsg.clear(loaderMsg);
       var shortPost = null;
       Object.keys(response).forEach(function(key,index) {
         shortPost = createShortPost(response[key]);
-        el.postsSection.children[0].appendChild(document.createElement('hr'));
-        el.postsSection.children[0].appendChild(shortPost);
+        el.postsParent.appendChild(document.createElement('hr'));
+        el.postsParent.appendChild(shortPost);
       });
     }
 
     function failCallback() {
-      loaderParent.removeChild(loader);
+      formMsg.clear(loaderMsg);
       console.log(Requests.get(ID).responseText);
     }
   }
@@ -111,8 +113,8 @@ var Posts = (function() {
     headerH2.innerHTML = 'Latest posts';
     header.appendChild(headerH2);
 
-    var loader = document.createElement('div');
-    loader.id = 'content-loader';
+    var loaderMsg = document.createElement('div');
+    loaderMsg.id = 'sign-process-msg';
 
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';
@@ -122,7 +124,7 @@ var Posts = (function() {
       postsParent.appendChild(postButton);
     }
     postsParent.appendChild(header);
-    postsParent.appendChild(loader);
+    postsParent.appendChild(loaderMsg);
 
     var postsSection = document.createElement('div');
     postsSection.id = 'posts-section';
@@ -389,8 +391,8 @@ var Posts = (function() {
       });
     }
 
-    el.postsSection.children[0].innerHTML = '';
-    el.postsSection.children[0].appendChild(shortPost);
+    el.postsParent.innerHTML = '';
+    el.postsParent.appendChild(shortPost);
     window.scrollTo(0, 0);
   }
 

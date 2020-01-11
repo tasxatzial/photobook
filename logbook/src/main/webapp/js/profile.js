@@ -9,7 +9,7 @@ var ShowProfile = (function() {
 
   function init(username, firstTime) {
     Requests.cancelAll();
-
+    
     if (firstTime === true) {
       Init.nonav.innerHTML = '';
     }

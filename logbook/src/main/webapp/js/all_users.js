@@ -18,9 +18,11 @@ var AllUsers = (function() {
     Init.nonav.innerHTML = '';
     Init.nonav.appendChild(userlistSection);
 
-    var loaderParent = document.getElementById('content-loader');
+    el.userListParent = userlistSection.children[0];
+    var loaderMsg = el.userListParent.children[1];
+
     var loader = newElements.createLoader("images/loader.gif");
-    loaderParent.appendChild(loader);
+    formMsg.showElement(loaderMsg, loader);
 
     var data = new FormData();
     data.append("action", "GetAllUsers");
@@ -33,11 +35,9 @@ var AllUsers = (function() {
         return;
       }
 
-      /* loaderParent.removeChild(loader); */
       state.response = response;
       state.pages = Object.keys(response).length;
-      el.userListParent = userlistSection.children[0];
-      el.userListParent.removeChild(loaderParent);
+      formMsg.clear(loaderMsg);
       el.navBar = createNavBar(state.pages);
       addNavBarListeners();
       el.userListParent.appendChild(el.navBar);
@@ -45,7 +45,7 @@ var AllUsers = (function() {
     }
 
     function failCallback() {
-      loaderParent.removeChild(loader);
+      formMsg.clear(loaderMsg);
       console.log(Requests.get(ID).responseText);
     }
   }
@@ -84,8 +84,8 @@ var AllUsers = (function() {
 
   function showPage(pageNo) {
     if (pageNo <= state.pages && pageNo >= 1) {
-      if (el.userListParent.children[2]) {
-        el.userListParent.removeChild(el.userListParent.children[1]);
+      if (el.userListParent.children[3]) {
+        el.userListParent.removeChild(el.userListParent.children[2]);
       }
       var userPage = createUserPage(state.response[pageNo]);
       el.userListParent.insertBefore(userPage, el.navBar);
@@ -123,14 +123,14 @@ var AllUsers = (function() {
     var header = document.createElement('header');
     header.appendChild(headerH2);
 
-    var loader = document.createElement('div');
-    loader.id = 'content-loader';
+    var loaderMsg = document.createElement('div');
+    loaderMsg.id = 'sign-process-msg';
 
     var div = document.createElement('div');
     div.id = 'userlist-parent';
     div.className = 'parent-in-main';
     div.appendChild(header);
-    div.appendChild(loader);
+    div.appendChild(loaderMsg);
 
     var userlistSection = document.createElement('div');
     userlistSection.id = 'userlist-section';
