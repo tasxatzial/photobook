@@ -4,7 +4,8 @@ var Signin = (function() {
   var el = {
     username: null,
     password: null,
-    signinMsg: null
+    signinMsg: null,
+    signinButton: null
   };
 
   function disableInputs() {
@@ -21,9 +22,11 @@ var Signin = (function() {
 
   function doSignin() {
     Requests.cancelAll();
-
     disableInputs();
-
+    var loader = newElements.createLoader("images/loader.gif");
+    formMsg.showElement(el.signinMsg, loader);
+    el.signinButton.scrollIntoView();
+    
     /* prepare data */
     var data = new FormData();
     data.append(el.username.name.split('-')[1], el.username.value);
@@ -62,16 +65,16 @@ var Signin = (function() {
     el.signinButton = document.querySelector('#signin-button input');
     el.username = document.getElementById('signin-username');
     el.password = document.getElementById('signin-password');
-    el.signinMsg = document.getElementById('signupin-msg');
+    el.signinMsg = document.getElementById('sign-process-msg');
 
     el.username.addEventListener('input', function() {
-      el.signinMsg.innerHTML = '';
+      formMsg.clear(el.signinMsg);
     });
     el.password.addEventListener('input', function() {
-      el.signinMsg.innerHTML = '';
+      formMsg.clear(el.signinMsg);
     });
     el.signinButton.addEventListener('click', function() {
-      el.signinMsg.innerHTML = '';
+      formMsg.clear(el.signinMsg);
       doSignin();
     });
     el.signinButton.disabled = false;

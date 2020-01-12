@@ -17,6 +17,7 @@ var SignInFace = (function () {
     photoPicker: null,
 
     uploadMsgParent: null,
+    signinMsg: null,
 
     /* hidden photo section that appears when photo button is clicked */
     photoSection: null,
@@ -83,6 +84,7 @@ var SignInFace = (function () {
     state.photoSectionVisible = true;
     el.form.insertBefore(el.photoSection, el.passwordParent);
     formMsg.clear(el.uploadMsgParent);
+    formMsg.clear(el.signinMsg);
     if (photo) {
       var loader = newElements.createLoader('images/loader.gif');
       formMsg.showElement(el.uploadMsgParent, loader);
@@ -146,6 +148,7 @@ var SignInFace = (function () {
     el.form = document.getElementById('signin-content');
     el.photoButton = document.getElementsByClassName('signin-photo-button')[0];
     el.submit = document.querySelector('#signin-button input');
+    el.signinMsg = document.getElementById('sign-process-msg');
     el.photoSection = null;
     el.uploadMsgParent = null;
 

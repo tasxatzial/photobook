@@ -16,9 +16,9 @@
         <label for="signin-password" class="sign-label">Password</label><br>
         <input type="password" class="sign-tofill" name="signin-password" id="signin-password" required>
       </div>
-      <div id="signupin-msg"></div>
       <div class="sign-button" id="signin-button">
         <input type="button" value="Sign in" disabled>
+        <div id="sign-process-msg"></div>
       </div>
     </div>
   </div>
