@@ -6,9 +6,7 @@ var Posts = (function() {
   };
 
   var el = {
-    postsSection: null,
-    postsParent: null,
-    loader: null
+    postsParent: null
   };
 
   var data = {
@@ -18,19 +16,19 @@ var Posts = (function() {
   function init(username) {
     data.username = username;
 
-    el.postsSection = createPostsSection(username);
-    el.postsParent = el.postsSection.children[0];
+    var postsSection = createPostsSection(username);
+    el.postsParent = postsSection.children[0];
     
     if (username === null) {
       el.postsParent.className = 'parent-in-main';
       Init.nonav.innerHTML = '';
-      Init.nonav.appendChild(el.postsSection);
+      Init.nonav.appendChild(postsSection);
     }
     else {
       el.postsParent.className = 'parent-in-myaccount';
       var accountSubsection = document.getElementById('account-subsection');
       accountSubsection.innerHTML = '';
-      accountSubsection.appendChild(el.postsSection);
+      accountSubsection.appendChild(postsSection);
     }
 
     getPosts(username);
@@ -112,7 +110,7 @@ var Posts = (function() {
     if (username === Init.getUser() || username === null) {
       var postButton = newElements.createBlueButton('+ New Post', 'new-post-button');
       postButton.addEventListener('click', function() {
-        PostForm.init(username);
+        getPostForm(username);
       });
       postsParent.appendChild(postButton);
     }
@@ -386,6 +384,46 @@ var Posts = (function() {
     el.postsParent.innerHTML = '';
     el.postsParent.appendChild(shortPost);
     window.scrollTo(0, 0);
+  }
+
+  function getPostForm(username) {
+    Requests.cancelAll();
+
+    var formData = new FormData();
+    formData.append("action", "GetPostForm");
+    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
+
+    function successCallback() {
+      var postFormSection = createPostFormSection();
+      postFormSection.children[0].innerHTML = Requests.get(ID).responseText;
+      if (username === null) {
+        postFormSection.children[0].className = 'parent-in-main';
+        Init.nonav.innerHTML = '';
+        Init.nonav.appendChild(postFormSection);
+      }
+      else {
+        postFormSection.children[0].className = 'parent-in-myaccount';
+        var accountSubsection = document.getElementById('account-subsection');
+        accountSubsection.innerHTML = '';
+        accountSubsection.appendChild(postFormSection);
+      }
+      PostForm.init(username);
+    }
+
+    function failCallback() {
+      console.log(Requests.get(ID).responseText);
+    }
+  }
+
+  function createPostFormSection() {
+    var postFormParent = document.createElement('div');
+    postFormParent.id = 'post-form-parent';
+
+    var postFormSection = document.createElement('div');
+    postFormSection.id = 'post-form-section';
+    postFormSection.appendChild(postFormParent);
+
+    return postFormSection;
   }
 
   return {

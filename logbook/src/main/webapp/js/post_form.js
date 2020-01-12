@@ -39,66 +39,40 @@ var PostForm = (function() {
   };
 
   function init(username) {
-    Requests.cancelAll();
-
     loc.lat = null;
     loc.lon = null;
     state.lastDetectionMethod = null;
 
     data.username = username;
 
-    var formData = new FormData();
-    formData.append("action", "GetPostForm");
-    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
+    el.createPostMsg = document.getElementById('sign-process-msg');
+    el.description = document.getElementById('post-form-description');
+    el.onlineResource = document.getElementById('post-form-online-page');
+    el.selectOnlinePhoto = document.getElementById('select-online-photo');
+    el.onlineImage = el.selectOnlinePhoto.children[1];
+    el.onlineImageCheckbox = el.selectOnlinePhoto.children[0].children[0];
+    el.photoToggle = PhotoToggler();
+    el.selectDiskPhoto = document.getElementById('select-disk-photo');
+    el.selectDiskPhotoButton = el.selectDiskPhoto.children[0];
+    el.filePicker = new PhotoPicker(el.selectDiskPhoto.children[2], el.selectDiskPhoto.children[1]);
+    var locationDetect = document.querySelector('.post-form-options');
+    el.geolocationRadio = locationDetect.children[0].children[0];
+    el.placeRadio = locationDetect.children[2].children[0];
+    el.locationDetectButton = document.getElementById('post-form-detect-button');
+    el.locationPlace = document.getElementById('post-form-country-hidden');
+    el.country = el.locationPlace.children[0].children[1];
+    el.place = el.locationPlace.children[1].children[1];
+    el.postButton = document.getElementById('post-button');
+    el.locationDetectMsg = document.getElementById('post-form-detect-msg');
 
-    function successCallback() {
-      var postFormSection = createPostFormSection();
-      postFormSection.children[0].innerHTML = Requests.get(ID).responseText;
-      if (username === null) {
-        postFormSection.children[0].className = 'parent-in-main';
-        Init.nonav.innerHTML = '';
-        Init.nonav.appendChild(postFormSection);
-      }
-      else {
-        postFormSection.children[0].className = 'parent-in-myaccount';
-        var accountSubsection = document.getElementById('account-subsection');
-        accountSubsection.innerHTML = '';
-        accountSubsection.appendChild(postFormSection);
-      }
-
-      el.createPostMsg = document.getElementById('sign-process-msg');
-      el.description = document.getElementById('post-form-description');
-      el.onlineResource = document.getElementById('post-form-online-page');
-      el.selectOnlinePhoto = document.getElementById('select-online-photo');
-      el.onlineImage = el.selectOnlinePhoto.children[1];
-      el.onlineImageCheckbox = el.selectOnlinePhoto.children[0].children[0];
-      el.photoToggle = PhotoToggler();
-      el.selectDiskPhoto = document.getElementById('select-disk-photo');
-      el.selectDiskPhotoButton = el.selectDiskPhoto.children[0];
-      el.filePicker = new PhotoPicker(el.selectDiskPhoto.children[2], el.selectDiskPhoto.children[1]);
-      var locationDetect = document.querySelector('.post-form-options');
-      el.geolocationRadio = locationDetect.children[0].children[0];
-      el.placeRadio = locationDetect.children[2].children[0];
-      el.locationDetectButton = document.getElementById('post-form-detect-button');
-      el.locationPlace = document.getElementById('post-form-country-hidden');
-      el.country = el.locationPlace.children[0].children[1];
-      el.place = el.locationPlace.children[1].children[1];
-      el.postButton = document.getElementById('post-button');
-      el.locationDetectMsg = document.getElementById('post-form-detect-msg');
-
-      if (!navigator.geolocation) {
-        el.geolocationRadio.innerHTML = 'Geolocation not supported';
-        el.geolocationRadio.disabled = true;
-        el.placeRadio.checked = true;
-        selectPlace();
-      }
-
-      addListeners();
+    if (!navigator.geolocation) {
+      el.geolocationRadio.innerHTML = 'Geolocation not supported';
+      el.geolocationRadio.disabled = true;
+      el.placeRadio.checked = true;
+      selectPlace();
     }
 
-    function failCallback() {
-      console.log(Requests.get(ID).responseText);
-    }
+    addListeners();
   }
 
   function addListeners() {
@@ -283,17 +257,6 @@ var PostForm = (function() {
     function failCallback() {
       console.log(Requests.get(ID).responseText);
     }
-  }
-
-  function createPostFormSection() {
-    var postFormParent = document.createElement('div');
-    postFormParent.id = 'post-form-parent';
-
-    var postFormSection = document.createElement('div');
-    postFormSection.id = 'post-form-section';
-    postFormSection.appendChild(postFormParent);
-
-    return postFormSection;
   }
 
   return {
