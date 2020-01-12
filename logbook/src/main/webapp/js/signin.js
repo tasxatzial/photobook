@@ -26,7 +26,7 @@ var Signin = (function() {
     var loader = newElements.createLoader("images/loader.gif");
     formMsg.showElement(el.signinMsg, loader);
     el.signinButton.scrollIntoView();
-    
+
     /* prepare data */
     var data = new FormData();
     data.append(el.username.name.split('-')[1], el.username.value);

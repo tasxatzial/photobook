@@ -11,11 +11,10 @@ var Signup = (function() {
     address: null,
     gender: null,
     signupButton: null,
-    signinMsg: null
+    signupMsg: null
   };
 
   function clickSignup(action) {
-    el.signinMsg.innerHTML = '';
     var invalidElement = checkInvalidElements();
     if (invalidElement) {
       ValidChecker.scrollToParent(invalidElement);
@@ -77,6 +76,9 @@ var Signup = (function() {
   function doSignup(action) {
     Requests.cancelAll();
     disableInputs();
+    var loader = newElements.createLoader("images/loader.gif");
+    formMsg.showElement(el.signupMsg, loader);
+    el.signupButton.scrollIntoView();
 
     var data = gatherData();
     data.append('action', action);
@@ -98,7 +100,7 @@ var Signup = (function() {
         el.signupContent.appendChild(accountInfo);
       }
       else {
-        formMsg.showOK(el.signinMsg, 'Success');
+        formMsg.showOK(el.signupMsg, 'Success');
       }
       enableInputs(action);
     }
@@ -144,11 +146,12 @@ var Signup = (function() {
     el.signupContent = el.signupMiddle.children[1];
     el.address = document.getElementById('signup-address');
     el.gender = document.querySelectorAll('input[type="radio"]');
-    el.signinMsg = document.getElementById('signupin-msg');
+    el.signupMsg = document.getElementById('sign-process-msg');
     el.signupButton = document.querySelector('#signup-button input');
 
     if (action === 'GetSignup') {
       el.signupButton.addEventListener('click', function() {
+        formMsg.clear(el.signupMsg);
         clickSignup('Signup');
       });
     }
@@ -167,6 +170,7 @@ var Signup = (function() {
       }
 
       el.signupButton.addEventListener('click', function() {
+        formMsg.clear(el.signupMsg);
         clickSignup('UpdateAccount');
       });
     }

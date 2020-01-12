@@ -123,7 +123,7 @@
         </div>
         <div class="sign-button" id="signup-button">
           <input type="button" value="<%= (String) request.getAttribute("button") %>" disabled>
-          <div id="signupin-msg"></div>
+          <div id="sign-process-msg"></div>
         </div>
       </div>
     </div>

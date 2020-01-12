@@ -20,7 +20,7 @@ var ValidChecker = (function() {
     var country = document.getElementById('signup-country');
     var interests = document.querySelector('textarea[name="signup-interests"]');
     var about = document.querySelector('textarea[name="signup-about"]');
-    var signupMsg = document.getElementById('signupin-msg');
+    var signupMsg = document.getElementById('sign-process-msg');
     var signupButton = document.querySelector('#signup-button input');
 
     state.checkedInputs = [];
