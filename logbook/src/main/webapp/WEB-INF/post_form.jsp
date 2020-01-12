@@ -49,5 +49,5 @@
 </div>
 <div class="sign-button" id="post-button">
   <input type="button" value="Create post">
-  <div id="signupin-msg"></div>
+  <div id="sign-process-msg"></div>
 </div>

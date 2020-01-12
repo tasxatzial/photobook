@@ -66,7 +66,7 @@ var PostForm = (function() {
         accountSubsection.appendChild(postFormSection);
       }
 
-      el.createPostMsg = document.getElementById('signupin-msg');
+      el.createPostMsg = document.getElementById('sign-process-msg');
       el.description = document.getElementById('post-form-description');
       el.onlineResource = document.getElementById('post-form-online-page');
       el.selectOnlinePhoto = document.getElementById('select-online-photo');
@@ -205,6 +205,10 @@ var PostForm = (function() {
       return;
     }
 
+    var loader = newElements.createLoader("images/loader.gif");
+    formMsg.showElement(el.createPostMsg, loader);
+    el.postButton.scrollIntoView();
+
     var formData = new FormData();
     formData.append("action", "CreatePost");
     formData.append("latitude", loc.lat);
@@ -258,6 +262,8 @@ var PostForm = (function() {
 
   function locationSearch() {
     Requests.cancelAll();
+    var loader = newElements.createLoader("images/loader.gif");
+    formMsg.showElement(el.locationDetectMsg, loader);
 
     var input = LocationSearch.createInput('', el.place, el.country);
     var ID = Requests.add(ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback));
