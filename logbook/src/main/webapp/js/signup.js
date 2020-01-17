@@ -11,7 +11,9 @@ var Signup = (function() {
     address: null,
     gender: null,
     signupButton: null,
-    signupMsg: null
+    signupMsg: null,
+    geolocSearchButton: null,
+    nominatimSearchButton: null
   };
 
   function clickSignup(action) {
@@ -59,6 +61,8 @@ var Signup = (function() {
     formInput.enable(el.gender[2]);
     formInput.enable(el.address);
     formSubmit.enable(el.signupButton);
+    formButton.enable(el.geolocSearchButton);
+    formButton.enable(el.nominatimSearchButton);
   }
 
   function disableInputs() {
@@ -71,6 +75,8 @@ var Signup = (function() {
     formInput.disable(el.gender[2]);
     formInput.disable(el.address);
     formSubmit.disable(el.signupButton);
+    formButton.disable(el.geolocSearchButton);
+    formButton.disable(el.nominatimSearchButton);
   }
 
   function doSignup(action) {
@@ -148,6 +154,8 @@ var Signup = (function() {
     el.gender = document.querySelectorAll('input[type="radio"]');
     el.signupMsg = document.getElementById('sign-process-msg');
     el.signupButton = document.querySelector('#signup-button input');
+    el.geolocSearchButton = document.getElementsByClassName('signup-geolocation-search-button')[0];
+    el.nominatimSearchButton = document.getElementsByClassName('signup-location-search-button')[0];
 
     if (action === 'GetSignup') {
       el.signupButton.addEventListener('click', function() {
