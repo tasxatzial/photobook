@@ -3,7 +3,8 @@
 var AccountInfo = (function() {
   var el = {
     confirmDelete: null,
-    deleteAccountMsg: null
+    deleteAccountMsg: null,
+    deleteAccountButton: null
   };
 
   function init() {
@@ -17,8 +18,8 @@ var AccountInfo = (function() {
     var editAccountButton = document.querySelector('#edit-account-button input');
     editAccountButton.addEventListener('click', editAccount);
 
-    var deleteAccountButton = document.querySelector('#delete-account-button input');
-    deleteAccountButton.addEventListener('click', confirmDelete);
+    el.deleteAccountButton = document.querySelector('#delete-account-button input');
+    el.deleteAccountButton.addEventListener('click', confirmDelete);
 
     el.deleteAccountMsg = document.getElementById('delete-account-msg');
   }
@@ -48,6 +49,7 @@ var AccountInfo = (function() {
   }
 
   function deleteAccount() {
+    redButton.disable(el.deleteAccountButton);
     Requests.cancelAll();
 
     el.confirmDelete = null;
@@ -69,6 +71,7 @@ var AccountInfo = (function() {
     }
 
     function failCallback() {
+      redButton.enable(el.deleteAccountButton);
       formMsg.showError(el.deleteAccountMsg, 'Error');
       console.log(Requests.get(ID).responseText);
     }

@@ -75,7 +75,7 @@ var PostForm = (function() {
 
     formButton.enable(el.selectDiskPhotoButton);
     formSubmit.enable(el.postButton);
-    
+
     addListeners();
   }
 

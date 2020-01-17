@@ -78,3 +78,19 @@ var formSubmit = (function() {
     disable: disable
   };
 }());
+
+var redButton = (function() {
+  function enable(input) {
+    input.disabled = false;
+    input.style.background = '#ff4e56';
+  }
+  function disable(input) {
+    input.disabled = true;
+    input.style.background = 'gray';
+  }
+
+  return {
+    enable: enable,
+    disable: disable
+  };
+}());
