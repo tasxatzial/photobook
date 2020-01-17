@@ -198,14 +198,14 @@ var Posts = (function() {
     username.appendChild(at);
     username.appendChild(timestamp);
 
-    var rating = document.createElement('div');
+    /* var rating = document.createElement('div');
     rating.innerHTML = "Rating: ";
-    rating.className = 'post-rating';
+    rating.className = 'post-rating';*/
 
     var footer = document.createElement('div');
     footer.className = 'post-footer';
     footer.appendChild(username);
-    footer.appendChild(rating);
+    /* footer.appendChild(rating); */
 
     var location = newElements.createKeyValue('Location', 'Querying...');
 
@@ -298,12 +298,12 @@ var Posts = (function() {
       readMore = shortPost.children[3];
     }
 
-    var rating = postedBy.children[1];
+    /* var rating = postedBy.children[1]; */
 
     description.innerHTML = data['description'].trim().replace('\n', '<br><br>');
     shortPost.removeChild(readMore);
 
-    if (data['username'] !== Init.getUser()) {
+    /* if (data['username'] !== Init.getUser()) {
       rating.innerHTML = 'Rate';
       var select = document.createElement('select');
       select.id = 'rating-select';
@@ -322,7 +322,7 @@ var Posts = (function() {
       }
 
       rating.appendChild(select);
-    }
+    } */
 
     if (data['resourceURL']) {
       var url = document.createElement('a');
