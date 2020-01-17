@@ -2,9 +2,6 @@
 
 var ShowProfile = (function() {
   var el = {
-    showProfileButton: null,
-    showPostsButton: null,
-    editAccountButton: null,
     accountSubsection: null
   };
 
@@ -13,7 +10,8 @@ var ShowProfile = (function() {
 
     if (firstTime === true) {
       Init.nonav.innerHTML = '';
-      initializeAccount(username);
+      Init.nonav.appendChild(createAccountSection(username));
+      el.accountSubsection = document.getElementById('account-subsection');
     }
     else {
       el.accountSubsection.innerHTML = '';
@@ -27,7 +25,8 @@ var ShowProfile = (function() {
 
     el.accountSubsection.appendChild(profileSection);
 
-    showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
+    var navTabs = document.getElementById('account-nav');
+    showBorders(navTabs.children[0], navTabs.children[1], navTabs.children[2]);
 
     var data = new FormData();
     data.append("action", "GetProfile");
@@ -51,34 +50,6 @@ var ShowProfile = (function() {
     function failCallback() {
       formMsg.clear(loaderMsg);
       console.log(Requests.get(ID).responseText);
-    }
-  }
-
-  function initializeAccount(username) {
-    var accountSection = createAccountSection(username);
-    Init.nonav.appendChild(accountSection);
-
-    var navTabs = document.getElementById('account-nav');
-    el.showProfileButton = navTabs.children[0];
-    el.showPostsButton = navTabs.children[1];
-    el.editAccountButton = navTabs.children[2];
-
-    el.accountSubsection = document.getElementById('account-subsection');
-
-    el.showProfileButton.addEventListener('click', function () {
-      ShowProfile.init(username, false);
-      showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
-    });
-    el.showPostsButton.addEventListener('click', function () {
-      Posts.init(username);
-      showBorders(el.showPostsButton, el.showProfileButton, el.editAccountButton);
-    });
-
-    if (el.editAccountButton) {
-      el.editAccountButton.addEventListener('click', function () {
-        AccountInfo.init();
-        showBorders(el.editAccountButton, el.showProfileButton, el.showPostsButton);
-      });
     }
   }
 
@@ -146,12 +117,29 @@ var ShowProfile = (function() {
 
     var showProfileButton = createNavTab('Profile');
     var showPostsButton = createNavTab('Posts');
+    var editAccountButton = null;
+    if (username === Init.getUser()) {
+      editAccountButton = createNavTab('Account');
+    }
+
+    showProfileButton.addEventListener('click', function () {
+      ShowProfile.init(username, false);
+      showBorders(showProfileButton, showPostsButton, editAccountButton);
+    });
+    showPostsButton.addEventListener('click', function () {
+      Posts.init(username);
+      showBorders(showPostsButton, showProfileButton, editAccountButton);
+    });
+    if (editAccountButton) {
+      editAccountButton.addEventListener('click', function () {
+        AccountInfo.init();
+        showBorders(editAccountButton, showProfileButton, showPostsButton);
+      });
+    }
 
     navTabs.appendChild(showProfileButton);
     navTabs.appendChild(showPostsButton);
-
     if (username === Init.getUser()) {
-      var editAccountButton = createNavTab('Account');
       navTabs.appendChild(editAccountButton);
     }
 
