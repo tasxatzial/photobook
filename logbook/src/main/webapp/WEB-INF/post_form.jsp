@@ -7,7 +7,7 @@
 </div>
 <div class="sign-child">
   <p class="sign-label signup-necessary">2. Please enter a (latitude, longitude). You can use Geolocation or manually provide a Country/Place</p>
-  <div class="post-form-options">
+  <div class="post-form-options" id="post-form-location-choose">
     <label class="sign-label"><input type="radio" name="detect-method" id="post-form-auto-detect" checked>Geolocation</label><br>
     <label class="sign-label"><input type="radio" name="detect-method" id="post-form-place-detect">Country/Place</label>
   </div>
@@ -24,7 +24,7 @@
   </div>
   <div id="post-form-detect">
     <div id="flex-post-location">
-      <button type="button" class="sign-internal-button" id="post-form-detect-button">Detect my location</button>
+      <button type="button" class="sign-internal-button" id="post-form-detect-button" disabled>Detect my location</button>
       <div id="post-form-detect-msg"></div>
     </div>
   </div>
@@ -41,13 +41,13 @@
       <input type="text" class="sign-tofill" name="post-form-online-image" id="post-form-online-image" style="display: none">
     </div>
     <div id="select-disk-photo">
-      <button type="button" class="sign-internal-button" id="post-form-disk-select">Select from disk</button>
+      <button type="button" class="sign-internal-button" id="post-form-disk-select" disabled>Select from disk</button>
       <input type="file" name="post-form-disk-image" style="display: none">
       <div id="post-form-photo-parent"></div>
     </div>
   </div>
 </div>
 <div class="sign-button" id="post-button">
-  <input type="button" value="Create post">
+  <input type="button" value="Create post" disabled>
   <div id="sign-process-msg"></div>
 </div>

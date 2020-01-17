@@ -62,8 +62,9 @@ var PostForm = (function() {
     el.locationPlace = document.getElementById('post-form-country-hidden');
     el.country = el.locationPlace.children[0].children[1];
     el.place = el.locationPlace.children[1].children[1];
-    el.postButton = document.getElementById('post-button');
+    el.postButton = document.getElementById('post-button').children[0];
     el.locationDetectMsg = document.getElementById('post-form-detect-msg');
+
 
     if (!navigator.geolocation) {
       el.geolocationRadio.innerHTML = 'Geolocation not supported';
@@ -72,6 +73,9 @@ var PostForm = (function() {
       selectPlace();
     }
 
+    formButton.enable(el.selectDiskPhotoButton);
+    formSubmit.enable(el.postButton);
+    
     addListeners();
   }
 
@@ -94,10 +98,10 @@ var PostForm = (function() {
       formMsg.clear(el.createPostMsg);
       formMsg.clear(el.locationDetectMsg);
       if (el.country.value !== '' && el.place.value.trim() !== '') {
-        el.locationDetectButton.disabled = false;
+        formButton.enable(el.locationDetectButton);
       }
       else {
-        el.locationDetectButton.disabled = true;
+        formButton.disable(el.locationDetectButton);
       }
     }
 
@@ -105,10 +109,10 @@ var PostForm = (function() {
     el.place.addEventListener('input', addPlaceInputListeners);
 
     if (navigator.geolocation) {
+      formButton.enable(el.locationDetectButton);
       el.geolocationRadio.addEventListener('click', function () {
         loc.lat = null;
         loc.lon = null;
-        el.locationDetectButton.disabled = false;
         el.locationPlace.style.display = 'none';
         el.place.value = '';
         el.country.value = '';
@@ -122,13 +126,13 @@ var PostForm = (function() {
     el.placeRadio.addEventListener('click', selectPlace);
 
     el.locationDetectButton.addEventListener('click', locationDetectMethod);
-    el.postButton.children[0].addEventListener('click', createPost);
+    el.postButton.addEventListener('click', createPost);
   }
 
   function selectPlace() {
     loc.lat = null;
     loc.lon = null;
-    el.locationDetectButton.disabled = true;
+    formButton.disable(el.locationDetectButton);
     el.locationPlace.style.display = 'block';
     if (state.lastDetectionMethod !== 'place') {
       formMsg.clear(el.locationDetectMsg);
@@ -179,9 +183,9 @@ var PostForm = (function() {
       return;
     }
 
+    disableInputs();
     var loader = newElements.createLoader("images/loader.gif");
     formMsg.showElement(el.createPostMsg, loader);
-    el.postButton.scrollIntoView();
 
     var formData = new FormData();
     formData.append("action", "CreatePost");
@@ -208,12 +212,14 @@ var PostForm = (function() {
     }
 
     function failCallback() {
+      enableInputs();
       console.log(Requests.get(ID).responseText);
     }
   }
 
   function locationDetectMethod() {
     formMsg.clear(el.createPostMsg);
+    formButton.disable(el.locationDetectButton);
     if (navigator.geolocation && el.geolocationRadio.checked) {
       geolocationSearch();
     }
@@ -225,11 +231,13 @@ var PostForm = (function() {
   function geolocationSearch() {
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
     function successNavCallback(position) {
+      formButton.enable(el.locationDetectButton);
       loc.lat = String(position.coords.latitude);
       loc.lon = String(position.coords.longitude);
       formMsg.showOK(el.locationDetectMsg, '(' + loc.lat.substring(0, loc.lat.length - 4) + ', ' + loc.lon.substring(0, loc.lon.length - 4) + ')');
     }
     function failCallback() {
+      formButton.enable(el.locationDetectButton);
       formMsg.showError(el.locationDetectMsg, "Error");
     }
   }
@@ -243,6 +251,7 @@ var PostForm = (function() {
     var ID = Requests.add(ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback));
 
     function successCallback() {
+      formButton.enable(el.locationDetectButton);
       var response = JSON.parse(Requests.get(ID).responseText)[0];
       if (response) {
         loc.lat = response.lat;
@@ -255,8 +264,37 @@ var PostForm = (function() {
     }
 
     function failCallback() {
+      formButton.enable(el.locationDetectButton);
       console.log(Requests.get(ID).responseText);
     }
+  }
+
+  function enableInputs() {
+    formSubmit.enable(el.postButton);
+    formInput.enable(el.description);
+    el.geolocationRadio.disabled = false;
+    el.placeRadio.disabled = false;
+    formButton.enable(el.locationDetectButton);
+    formInput.enable(el.country);
+    formInput.enable(el.place);
+    formInput.enable(el.onlineResource);
+    el.onlineImageCheckbox.disabled = false;
+    formInput.enable(el.onlineImage);
+    formButton.enable(el.selectDiskPhotoButton);
+  }
+
+  function disableInputs() {
+    formSubmit.disable(el.postButton);
+    formInput.disable(el.description);
+    el.geolocationRadio.disabled = true;
+    el.placeRadio.disabled = true;
+    formButton.disable(el.locationDetectButton);
+    formInput.disable(el.country);
+    formInput.disable(el.place);
+    formInput.disable(el.onlineResource);
+    el.onlineImageCheckbox.disabled = true;
+    formInput.disable(el.onlineImage);
+    formButton.disable(el.selectDiskPhotoButton);
   }
 
   return {
