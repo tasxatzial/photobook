@@ -107,6 +107,7 @@ var Signup = (function() {
       }
       else {
         formMsg.showOK(el.signupMsg, 'Success');
+        el.signupButton.scrollIntoView();
       }
       enableInputs(action);
     }

@@ -41,7 +41,6 @@ var AccountInfo = (function() {
   function deleteAccount() {
     redButton.disable(el.deleteAccountButton);
     Requests.cancelAll();
-
     el.confirmDelete = null;
 
     var formData = new FormData();
@@ -63,6 +62,7 @@ var AccountInfo = (function() {
     function failCallback() {
       redButton.enable(el.deleteAccountButton);
       formMsg.showError(el.deleteAccountMsg, 'Error');
+      el.deleteAccountButton.scrollIntoView();
       console.log(Requests.get(ID).responseText);
     }
   }
@@ -71,6 +71,7 @@ var AccountInfo = (function() {
     if (!el.confirmDelete) {
       el.confirmDelete = newElements.createYesNoButtons('account-delete-confirm');
       formMsg.showElement(el.deleteAccountMsg, el.confirmDelete);
+      el.deleteAccountButton.scrollIntoView();
       document.getElementById('account-delete-confirm-yes-button').addEventListener('click', deleteAccount);
       document.getElementById('account-delete-confirm-no-button').addEventListener('click', function() {
         formMsg.clear(el.deleteAccountMsg);

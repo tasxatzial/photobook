@@ -51,6 +51,7 @@ var Signin = (function() {
         else {
           formMsg.showError(el.signinMsg, 'Invalid password');
         }
+        el.signinButton.scrollIntoView();
         enableInputs();
       }
     }

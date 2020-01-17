@@ -177,6 +177,7 @@ var PostForm = (function() {
 
   function createPost() {
     Requests.cancelAll();
+    el.postButton.scrollIntoView();
 
     if (loc.lat === null || loc.lon === null || el.description.value.trim() === '') {
       formMsg.showError(el.createPostMsg, 'Please provide all required fields');
