@@ -20,7 +20,6 @@ var AllUsers = (function() {
 
     el.userListParent = userlistSection.children[0];
     var loaderMsg = el.userListParent.children[1];
-
     var loader = newElements.createLoader("images/loader.gif");
     formMsg.showElement(loaderMsg, loader);
 
@@ -61,7 +60,7 @@ var AllUsers = (function() {
     }
     leftButton.addEventListener('click', function () {
       selectButton.value = Number(selectButton.value) - 1;
-      if (selectButton.value == 1) {
+      if (selectButton.value === '1') {
         leftButton.disabled = true;
       }
       rightButton.disabled = false;
@@ -69,7 +68,7 @@ var AllUsers = (function() {
     });
     rightButton.addEventListener('click', function () {
       selectButton.value = Number(selectButton.value) + 1;
-      if (selectButton.value == state.pages) {
+      if (Number(selectButton.value) === state.pages) {
         rightButton.disabled = true;
       }
       leftButton.disabled = false;
@@ -77,8 +76,8 @@ var AllUsers = (function() {
     });
     selectButton.addEventListener('change', function () {
       showPage(selectButton.value);
-      leftButton.disabled = selectButton.value == 1;
-      rightButton.disabled = selectButton.value == state.pages;
+      leftButton.disabled = selectButton.value === '1';
+      rightButton.disabled = Number(selectButton.value) === state.pages;
     });
   }
 
