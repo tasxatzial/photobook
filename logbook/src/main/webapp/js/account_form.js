@@ -9,19 +9,9 @@ var AccountInfo = (function() {
 
   function init() {
     el.confirmDelete = null;
-
     var accountSubsection = document.getElementById('account-subsection');
-    var editAccountSection = createEditAccountSection();
     accountSubsection.innerHTML = '';
-    accountSubsection.appendChild(editAccountSection);
-
-    var editAccountButton = document.querySelector('#edit-account-button input');
-    editAccountButton.addEventListener('click', editAccount);
-
-    el.deleteAccountButton = document.querySelector('#delete-account-button input');
-    el.deleteAccountButton.addEventListener('click', confirmDelete);
-
-    el.deleteAccountMsg = document.getElementById('delete-account-msg');
+    accountSubsection.appendChild(createEditAccountSection());
   }
 
   function editAccount() {
@@ -90,18 +80,23 @@ var AccountInfo = (function() {
   }
 
   function createEditAccountSection() {
-    var editAccount = newElements.createBlueButton('Edit Account', 'edit-account-button');
-    var deleteAccount = newElements.createBlueButton('Delete Account', 'delete-account-button');
-    var deleteAccountMsg = document.createElement('div');
-    deleteAccountMsg.id = 'delete-account-msg';
-    deleteAccount.appendChild(deleteAccountMsg);
+    var editAccountDiv = newElements.createBlueButton('Edit Account', 'edit-account-button');
+    editAccountDiv.children[0].addEventListener('click', editAccount);
+
+    var deleteAccountDiv = newElements.createBlueButton('Delete Account', 'delete-account-button');
+    el.deleteAccountButton = deleteAccountDiv.children[0];
+    el.deleteAccountButton.addEventListener('click', confirmDelete);
+
+    el.deleteAccountMsg = document.createElement('div');
+    el.deleteAccountMsg.id = 'delete-account-msg';
+    deleteAccountDiv.appendChild(el.deleteAccountMsg);
 
     var div = document.createElement('div');
     div.id = 'edit-account-parent';
     div.className = 'parent-in-myaccount';
 
-    div.appendChild(editAccount);
-    div.appendChild(deleteAccount);
+    div.appendChild(editAccountDiv);
+    div.appendChild(deleteAccountDiv);
 
     var section = document.createElement('div');
     section.id = 'edit-account-section';
