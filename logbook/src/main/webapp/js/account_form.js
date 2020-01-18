@@ -70,13 +70,13 @@ var AccountInfo = (function() {
   function confirmDelete() {
     if (!el.confirmDelete) {
       el.confirmDelete = newElements.createYesNoButtons('account-delete-confirm');
-      formMsg.showElement(el.deleteAccountMsg, el.confirmDelete);
-      el.deleteAccountButton.scrollIntoView();
-      document.getElementById('account-delete-confirm-yes-button').addEventListener('click', deleteAccount);
-      document.getElementById('account-delete-confirm-no-button').addEventListener('click', function() {
+      el.confirmDelete.children[1].addEventListener('click', deleteAccount);
+      el.confirmDelete.children[2].addEventListener('click', function() {
         formMsg.clear(el.deleteAccountMsg);
         el.confirmDelete = null;
       });
+      formMsg.showElement(el.deleteAccountMsg, el.confirmDelete);
+      el.deleteAccountButton.scrollIntoView();
     }
   }
 

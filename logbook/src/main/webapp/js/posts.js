@@ -135,6 +135,8 @@ var Posts = (function() {
       reverseUrl: 'https://nominatim.openstreetmap.org/reverse'
     };
 
+    var postContainer = null;
+
     var description = document.createElement('p');
     description.className = 'post-description';
     if (postJSON['description'].length > 350) {
@@ -171,6 +173,24 @@ var Posts = (function() {
     readMoreButton.appendChild(readMore);
     readMoreButton.appendChild(img);
     readMoreButton.disabled = true;
+    readMoreButton.addEventListener('click', function () {
+      var data = {
+        description: postJSON['description'],
+        resourceURL: postJSON['resourceURL'],
+        location: state.responseLocation,
+        lat: postJSON['latitude'],
+        lon: postJSON['longitude'],
+        username: postJSON['username'],
+        postID: postJSON['postID']
+      };
+      if (state.responseLocation && state.responseLocation.address) {
+        data.zoom = 15;
+      }
+      else {
+        data.zoom = 11;
+      }
+      turnToFullPost(postContainer, data);
+    });
 
     var button = document.createElement('button');
     button.className = 'transparent-button';
@@ -212,7 +232,7 @@ var Posts = (function() {
     var nextButton = newElements.createArrowButton('images/right.png');
     nextButton.className = 'transparent-button';
 
-    var postContainer = document.createElement('div');
+    postContainer = document.createElement('div');
     postContainer.appendChild(location);
     if (image.src) {
       postContainer.appendChild(imageParent);
@@ -220,25 +240,6 @@ var Posts = (function() {
     postContainer.appendChild(description);
     postContainer.appendChild(footer);
     postContainer.appendChild(readMoreButton);
-
-    readMoreButton.addEventListener('click', function () {
-      var data = {
-        description: postJSON['description'],
-        resourceURL: postJSON['resourceURL'],
-        location: state.responseLocation,
-        lat: postJSON['latitude'],
-        lon: postJSON['longitude'],
-        username: postJSON['username'],
-        postID: postJSON['postID']
-      };
-      if (state.responseLocation && state.responseLocation.address) {
-        data.zoom = 15;
-      }
-      else {
-        data.zoom = 11;
-      }
-      turnToFullPost(postContainer, data);
-    });
 
     var input = LocationSearch.createLatLonInput(postJSON['latitude'], postJSON['longitude']);
     if (input) {
@@ -372,13 +373,13 @@ var Posts = (function() {
 
     if (data['username'] === Init.getUser()) {
       var deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
+      deleteButton.children[0].addEventListener('click', function () {
+        deletePost(shortPost, data['username'], data['postID']);
+      });
       shortPost.appendChild(deleteButton);
       var deleteMsg = document.createElement('div');
       deleteMsg.id = 'delete-post-msg';
       deleteButton.appendChild(deleteMsg);
-      deleteButton.children[0].addEventListener('click', function () {
-        deletePost(shortPost, data['username'], data['postID']);
-      });
     }
 
     el.postsParent.innerHTML = '';
