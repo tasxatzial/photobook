@@ -15,7 +15,7 @@ var AccountInfo = (function() {
   }
 
   function editAccount() {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     var data = new FormData();
     data.append("action", "AccountInfo");
@@ -40,7 +40,7 @@ var AccountInfo = (function() {
 
   function deleteAccount() {
     redButton.disable(el.deleteAccountButton);
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
     el.confirmDelete = null;
 
     var formData = new FormData();

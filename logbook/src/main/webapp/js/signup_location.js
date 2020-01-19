@@ -175,7 +175,7 @@ var SignUpLocation = (function () {
       formButton.enable(el.geolocSearchButton);
     }
 
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     /* initialize */
     var input = LocationSearch.createInput(el.address, el.city, el.country);
@@ -249,7 +249,7 @@ var SignUpLocation = (function () {
       ID = Requests.add(ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, failCallback));
     }
 
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
     var ID = null;
 
     /* initialize */

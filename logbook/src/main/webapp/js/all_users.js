@@ -12,7 +12,7 @@ var AllUsers = (function() {
   };
 
   function init() {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     var userlistSection = createAllUsersSection();
     Init.nonav.innerHTML = '';

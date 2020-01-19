@@ -41,16 +41,18 @@ var Requests = (function() {
     return xhr.get(ID);
   }
 
-  function cancelAll() {
-    xhr.forEach(function(i) {
-      i.abort();
+  function cancelExcept(ID) {
+    xhr.forEach(function(value, key) {
+      if (key !== ID) {
+        value.abort();
+        xhr.delete(key);
+      }
     });
-    xhr.clear();
   }
 
   return {
     add: add,
     get: get,
-    cancelAll: cancelAll
+    cancelExcept: cancelExcept
   };
 }());

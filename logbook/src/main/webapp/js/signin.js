@@ -21,7 +21,7 @@ var Signin = (function() {
   }
 
   function doSignin() {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
     disableInputs();
     var loader = newElements.createLoader("images/loader.gif");
     formMsg.showElement(el.signinMsg, loader);

@@ -80,7 +80,7 @@ var Signup = (function() {
   }
 
   function doSignup(action) {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
     disableInputs();
     var loader = newElements.createLoader("images/loader.gif");
     formMsg.showElement(el.signupMsg, loader);

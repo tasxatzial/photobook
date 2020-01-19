@@ -2,7 +2,7 @@
 
 var Logout = (function() {
   function init() {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     var data = new FormData();
     data.append("action", "Logout");

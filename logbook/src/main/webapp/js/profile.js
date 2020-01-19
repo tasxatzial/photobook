@@ -6,7 +6,7 @@ var ShowProfile = (function() {
   };
 
   function init(username, firstTime) {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     if (firstTime === true) {
       Init.nonav.innerHTML = '';

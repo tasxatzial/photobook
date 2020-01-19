@@ -176,7 +176,7 @@ var PostForm = (function() {
   }
 
   function createPost() {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
     el.postButton.scrollIntoView();
 
     if (loc.lat === null || loc.lon === null || el.description.value.trim() === '') {
@@ -244,7 +244,7 @@ var PostForm = (function() {
   }
 
   function locationSearch() {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
     var loader = newElements.createLoader("images/loader.gif");
     formMsg.showElement(el.locationDetectMsg, loader);
 

@@ -107,7 +107,7 @@ var SignUpFace = (function () {
     formButton.disable(el.selectButton);
     formButton.disable(el.uploadButton);
     el.checkBox.disabled = true;
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
     tasks.detect = FaceAPI.detect(photo, detectSuccess, detectFail);
   }
 

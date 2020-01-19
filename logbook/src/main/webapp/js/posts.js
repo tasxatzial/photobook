@@ -1,20 +1,30 @@
 'use strict';
 
 var Posts = (function() {
-  var obj = {
-    mapObj: null
-  };
-
   var el = {
-    postsParent: null
+    postsParent: null,
+    mapParent: null
   };
 
   var data = {
     username: null
   };
 
+  var state = {
+    clickedFullPost: null
+  };
+
+  var obj = {
+    map: null
+  };
+
+  var nominatimAPI = {
+    reverseUrl: 'https://nominatim.openstreetmap.org/reverse'
+  };
+
   function init(username) {
     data.username = username;
+    state.clickedFullPost = null;
 
     var postsSection = createPostsSection(username);
     el.postsParent = postsSection.children[0];
@@ -35,7 +45,7 @@ var Posts = (function() {
   }
 
   function getPosts(username) {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     var loader = newElements.createLoader("images/loader.gif");
     var loaderMsg = el.postsParent.children[1];
@@ -71,7 +81,7 @@ var Posts = (function() {
   }
 
   function deletePost(fullPost, username, postID) {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     var formData = new FormData();
     formData.append("action", "DeletePost");
@@ -125,17 +135,8 @@ var Posts = (function() {
   }
 
   function createShortPost(postJSON) {
-    var state = {
-      xhr: null,
-      xhrResponse: null,
-      responseLocation: null
-    };
-
-    var nominatimAPI = {
-      reverseUrl: 'https://nominatim.openstreetmap.org/reverse'
-    };
-
-    var postContainer = null;
+    var postDiv = null;
+    var queryLatLon = null;
 
     var description = document.createElement('p');
     description.className = 'post-description';
@@ -172,24 +173,22 @@ var Posts = (function() {
     readMoreButton.className = 'read-more-button';
     readMoreButton.appendChild(readMore);
     readMoreButton.appendChild(img);
-    readMoreButton.disabled = true;
     readMoreButton.addEventListener('click', function () {
-      var data = {
+      var fullPostData = {
         description: postJSON['description'],
         resourceURL: postJSON['resourceURL'],
-        location: state.responseLocation,
         lat: postJSON['latitude'],
         lon: postJSON['longitude'],
         username: postJSON['username'],
-        postID: postJSON['postID']
+        postID: postJSON['postID'],
+        locationQuery: queryLatLon.getLocation(),
+        descriptionDiv: description,
+        readMoreButtonDiv: readMoreButton,
+        footerDiv: footer,
+        queryID: queryLatLon.getQueryID(),
+        postDiv: postDiv
       };
-      if (state.responseLocation && state.responseLocation.address) {
-        data.zoom = 15;
-      }
-      else {
-        data.zoom = 11;
-      }
-      turnToFullPost(postContainer, data);
+      turnToFullPost(fullPostData);
     });
 
     var button = document.createElement('button');
@@ -232,79 +231,106 @@ var Posts = (function() {
     var nextButton = newElements.createArrowButton('images/right.png');
     nextButton.className = 'transparent-button';
 
-    postContainer = document.createElement('div');
-    postContainer.appendChild(location);
+    postDiv = document.createElement('div');
+    postDiv.appendChild(location);
     if (image.src) {
-      postContainer.appendChild(imageParent);
+      postDiv.appendChild(imageParent);
     }
-    postContainer.appendChild(description);
-    postContainer.appendChild(footer);
-    postContainer.appendChild(readMoreButton);
+    postDiv.appendChild(description);
+    postDiv.appendChild(footer);
 
-    var input = LocationSearch.createLatLonInput(postJSON['latitude'], postJSON['longitude']);
-    if (input) {
-      state.xhr = ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, failCallback);
-    }
-    else {
-      failCallback();
-    }
-    function successCallback() {
-      state.xhrResponse = JSON.parse(state.xhr.responseText);
-      state.responseLocation = LocationSearch.parseReverseSearch(state.xhrResponse);
-      if (!state.responseLocation) {
-        failCallback();
-        return;
-      }
+    var queryLatLonData = {
+      lat: postJSON['latitude'],
+      lon: postJSON['longitude'],
+      postDiv: postDiv,
+      footerDiv: footer,
+      locationDiv: location
+    };
+    queryLatLon = new QueryLatLon(queryLatLonData);
 
-      var loc = '';
-      if (state.responseLocation.country) {
-        loc += state.responseLocation.country;
-      }
-      else if (state.responseLocation.country_code) {
-        loc += state.responseLocation.country_code;
-      }
-      if (state.responseLocation.city) {
-        loc += ', ' + state.responseLocation.city;
-      }
-      if (state.responseLocation.address) {
-        loc += ', ' + state.responseLocation.address;
-      }
-      location.children[0].innerHTML = loc;
-      readMoreButton.disabled = false;
-    }
-
-    function failCallback() {
-      location.children[0].innerHTML = 'Not available';
-      readMoreButton.disabled = false;
-    }
-
-    return postContainer;
+    postDiv.appendChild(readMoreButton);
+    
+    return postDiv;
   }
 
-  function turnToFullPost(shortPost, data) {
-    var photoParent = null;
-    var description = null;
-    var postedBy = null;
-    var readMore = null;
-    if (shortPost.children[1].className === 'short-post-photo-parent') {
-      photoParent = shortPost.children[1];
-      photoParent.children[0].className = 'full-post-photo';
-      description = shortPost.children[2];
-      postedBy = shortPost.children[3];
-      readMore = shortPost.children[4];
+  function QueryLatLon(data) {
+    var queryID = null;
+    var locationQuery = null;
+
+    (function init() {
+      var input = LocationSearch.createLatLonInput(data['lat'], data['lon']);
+      if (input) {
+        queryID = Requests.add(ajaxRequest('GET', nominatimAPI.reverseUrl + input, null, successCallback, failCallback));
+      }
+      else {
+        failCallback();
+      }
+
+      function successCallback() {
+        var response = JSON.parse(Requests.get(queryID).responseText);
+        locationQuery = LocationSearch.parseReverseSearch(response);
+        if (!locationQuery) {
+          failCallback();
+          return;
+        }
+
+        var loc = '';
+        if (locationQuery.country) {
+          loc += locationQuery.country;
+        }
+        else if (locationQuery.country_code) {
+          loc += locationQuery.country_code;
+        }
+        if (locationQuery.city) {
+          loc += ', ' + locationQuery.city;
+        }
+        if (locationQuery.address) {
+          loc += ', ' + locationQuery.address;
+        }
+        data['locationDiv'].children[0].innerHTML = loc;
+        if (state.clickedFullPost) {
+          var mapData = {
+            locationQuery: locationQuery,
+            lat: data['lat'],
+            lon: data['lon'],
+            postDiv: data['postDiv'],
+            footerDiv: data['footerDiv']
+          };
+          showMap(mapData);
+        }
+      }
+
+      function failCallback() {
+        data['locationDiv'].children[0].innerHTML = 'Not available';
+      }
+    }());
+
+    function getQueryID() {
+      return queryID;
     }
-    else {
-      description = shortPost.children[1];
-      postedBy = shortPost.children[2];
-      readMore = shortPost.children[3];
+
+    function getLocation() {
+      return locationQuery;
     }
 
-    /* var rating = postedBy.children[1]; */
+    return {
+      getQueryID: getQueryID,
+      getLocation: getLocation
+    };
+  }
 
-    description.innerHTML = data['description'].trim().replace('\n', '<br><br>');
-    shortPost.removeChild(readMore);
+  function turnToFullPost(data) {
+    state.clickedFullPost = true;
+    Requests.cancelExcept(data['queryID']);
 
-    /* if (data['username'] !== Init.getUser()) {
+    if (data['postDiv'].children[1].className === 'short-post-photo-parent') {
+      data['postDiv'].children[1].children[0].className = 'full-post-photo';
+    }
+    data['descriptionDiv'].innerHTML = data['description'].trim().replace('\n', '<br><br>');
+    data['postDiv'].removeChild(data['readMoreButtonDiv']);
+
+    /*var rating = postedBy.children[1];
+      if (data['username'] !== Init.getUser()) {
       rating.innerHTML = 'Rate';
       var select = document.createElement('select');
       select.id = 'rating-select';
@@ -331,64 +357,70 @@ var Posts = (function() {
       url.target = 'blank';
       url.innerHTML = data['resourceURL'];
       var onlineURL = newElements.createKeyValue('See also', url, 1);
-      shortPost.insertBefore(onlineURL, postedBy);
+      data['postDiv'].insertBefore(onlineURL, data['postedBy']);
     }
 
-    if (data['location']) {
-
-      /* creates a map object only once */
-      if (!obj.mapObj) {
-        var mapDiv = document.createElement('div');
-        mapDiv.id = 'map-post';
-        var mapParent = document.createElement('div');
-        mapParent.id = 'post-map-parent';
-        mapParent.appendChild(mapDiv);
-        shortPost.insertBefore(mapParent, postedBy);
-
-        mapDiv.style.height = '20rem';
-        obj.mapObj = new OLMap(mapDiv.id);
-      }
-      else {
-        shortPost.insertBefore(obj.mapObj.getDiv().parentElement, postedBy);
-        obj.mapObj.resetState();
-      }
-
-      obj.mapObj.setZoom(data['zoom']);
-      obj.mapObj.addLocation({lat: data['lat'], lon: data['lon']});
-      obj.mapObj.drawMap();
-      /* creates a new map object every time a full post is shown */
-      /*var mapDiv = document.createElement('div');
-      mapDiv.id = 'map-post';
-      var mapParent = document.createElement('div');
-      mapParent.id = 'post-map-parent';
-      mapParent.appendChild(mapDiv);
-      shortPost.insertBefore(mapParent, postedBy);
-
-      mapDiv.style.height = '20rem';
-      var map = new OLMap(mapDiv.id);
-      map.setZoom(data['zoom']);
-      map.addLocation({lat: data['lat'], lon: data['lon']});
-      map.drawMap();*/
+    if (data['locationQuery']) {
+      var mapData = {
+        locationQuery: data['locationQuery'],
+        lat: data['lat'],
+        lon: data['lon'],
+        postDiv: data['postDiv'],
+        footerDiv: data['footerDiv']
+      };
+      showMap(mapData);
     }
 
     if (data['username'] === Init.getUser()) {
       var deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
       deleteButton.children[0].addEventListener('click', function () {
-        deletePost(shortPost, data['username'], data['postID']);
+        deletePost(data['postDiv'], data['username'], data['postID']);
       });
-      shortPost.appendChild(deleteButton);
+      data['postDiv'].appendChild(deleteButton);
       var deleteMsg = document.createElement('div');
       deleteMsg.id = 'delete-post-msg';
       deleteButton.appendChild(deleteMsg);
     }
 
     el.postsParent.innerHTML = '';
-    el.postsParent.appendChild(shortPost);
+    el.postsParent.appendChild(data['postDiv']);
     window.scrollTo(0, 0);
   }
 
+  function showMap(data) {
+    if (!data['locationQuery']) {
+      return;
+    }
+    var zoom = null;
+    if (data['locationQuery'].address) {
+      zoom = 16;
+    }
+    else {
+      zoom = 12;
+    }
+
+    if (!el.mapParent) {
+      var mapDiv = document.createElement('div');
+      mapDiv.id = 'map-post';
+      el.mapParent = document.createElement('div');
+      el.mapParent.id = 'post-map-parent';
+      el.mapParent.appendChild(mapDiv);
+      data['postDiv'].insertBefore(el.mapParent, data['footerDiv']);
+      mapDiv.style.height = '20rem';
+      obj.map = new OLMap(mapDiv.id);
+    }
+    else {
+      obj.map.resetState();
+      data['postDiv'].insertBefore(el.mapParent, data['footerDiv']);
+    }
+
+    obj.map.setZoom(zoom);
+    obj.map.addLocation({lat: data['lat'], lon: data['lon']});
+    obj.map.drawMap();
+  }
+
   function getPostForm(username) {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     var formData = new FormData();
     formData.append("action", "GetPostForm");

@@ -8,7 +8,7 @@ var Landing = (function() {
   }
 
   function showSignin() {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     var data = new FormData();
     data.append('action', 'GetSignin');
@@ -36,7 +36,7 @@ var Landing = (function() {
   }
 
   function showSignup() {
-    Requests.cancelAll();
+    Requests.cancelExcept(null);
 
     var data = new FormData();
     data.append('action', 'GetSignup');
