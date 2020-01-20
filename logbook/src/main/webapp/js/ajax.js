@@ -25,7 +25,7 @@ function ajaxRequest(method, url, data, successFunction, failFunction) {
 }
 
 var Requests = (function() {
-  var xhr = new Map();
+  var xhr = {};
 
   function getID() {
     return (Math.random() + 1).toString(36).substring(2, 5);
@@ -33,21 +33,21 @@ var Requests = (function() {
 
   function add(request) {
     var ID = getID();
-    xhr.set(ID, request);
+    xhr[ID] = request;
     return ID;
   }
 
   function get(ID) {
-    return xhr.get(ID);
+    return xhr[ID];
   }
 
   function cancelExcept(ID) {
-    xhr.forEach(function(value, key) {
+    for (let key in xhr) {
       if (key !== ID) {
-        value.abort();
-        xhr.delete(key);
+        xhr[key].abort();
+        delete xhr[key];
       }
-    });
+    }
   }
 
   return {
