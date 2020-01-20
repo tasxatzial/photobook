@@ -6,14 +6,13 @@ var PostForm = (function() {
   };
 
   var data = {
-    username: null
+    username: null,
+    loc: {
+      lat: null,
+      lon: null
+    }
   };
-
-  var loc = {
-    lat: null,
-    lon: null
-  };
-
+  
   var nominatimAPI = {
     url: 'https://nominatim.openstreetmap.org/search'
   };
@@ -39,10 +38,9 @@ var PostForm = (function() {
   };
 
   function init(username) {
-    loc.lat = null;
-    loc.lon = null;
+    data.loc.lat = null;
+    data.loc.lon = null;
     state.lastDetectionMethod = null;
-
     data.username = username;
 
     el.createPostMsg = document.getElementById('sign-process-msg');
@@ -55,7 +53,7 @@ var PostForm = (function() {
     el.selectDiskPhoto = document.getElementById('select-disk-photo');
     el.selectDiskPhotoButton = el.selectDiskPhoto.children[0];
     el.filePicker = new PhotoPicker(el.selectDiskPhoto.children[2], el.selectDiskPhoto.children[1]);
-    var locationDetect = document.querySelector('.post-form-options');
+    var locationDetect = document.getElementById('post-form-location-choose');
     el.geolocationRadio = locationDetect.children[0].children[0];
     el.placeRadio = locationDetect.children[2].children[0];
     el.locationDetectButton = document.getElementById('post-form-detect-button');
@@ -65,21 +63,25 @@ var PostForm = (function() {
     el.postButton = document.getElementById('post-button').children[0];
     el.locationDetectMsg = document.getElementById('post-form-detect-msg');
 
-
     if (!navigator.geolocation) {
       el.geolocationRadio.innerHTML = 'Geolocation not supported';
       el.geolocationRadio.disabled = true;
       el.placeRadio.checked = true;
-      selectPlace();
+      selectPlaceInit();
     }
-
-    formButton.enable(el.selectDiskPhotoButton);
-    formSubmit.enable(el.postButton);
 
     addListeners();
   }
 
   function addListeners() {
+    el.placeRadio.addEventListener('click', function() {
+      Requests.cancelExcept(null);
+      selectPlaceInit();
+    });
+
+    el.postButton.addEventListener('click', createPost);
+    formSubmit.enable(el.postButton);
+
     el.description.addEventListener('input', function() {
       formMsg.clear(el.createPostMsg);
     });
@@ -93,6 +95,7 @@ var PostForm = (function() {
         el.photoToggle.toggle("diskPhoto");
       });
     });
+    formButton.enable(el.selectDiskPhotoButton);
 
     function addPlaceInputListeners() {
       formMsg.clear(el.createPostMsg);
@@ -107,31 +110,29 @@ var PostForm = (function() {
 
     el.country.addEventListener('input', addPlaceInputListeners);
     el.place.addEventListener('input', addPlaceInputListeners);
+    el.locationDetectButton.addEventListener('click', locationSearchInit);
 
     if (navigator.geolocation) {
       formButton.enable(el.locationDetectButton);
       el.geolocationRadio.addEventListener('click', function () {
-        loc.lat = null;
-        loc.lon = null;
+        formButton.enable(el.locationDetectButton);
+        data.loc.lat = null;
+        data.loc.lon = null;
         el.locationPlace.style.display = 'none';
         el.place.value = '';
         el.country.value = '';
         if (state.lastDetectionMethod !== 'geolocation') {
+          Requests.cancelExcept(null);
           formMsg.clear(el.locationDetectMsg);
         }
         state.lastDetectionMethod = 'geolocation';
       });
     }
-
-    el.placeRadio.addEventListener('click', selectPlace);
-
-    el.locationDetectButton.addEventListener('click', locationDetectMethod);
-    el.postButton.addEventListener('click', createPost);
   }
 
-  function selectPlace() {
-    loc.lat = null;
-    loc.lon = null;
+  function selectPlaceInit() {
+    data.loc.lat = null;
+    data.loc.lon = null;
     formButton.disable(el.locationDetectButton);
     el.locationPlace.style.display = 'block';
     if (state.lastDetectionMethod !== 'place') {
@@ -179,7 +180,7 @@ var PostForm = (function() {
     Requests.cancelExcept(null);
     el.postButton.scrollIntoView();
 
-    if (loc.lat === null || loc.lon === null || el.description.value.trim() === '') {
+    if (data.loc.lat === null || data.loc.lon === null || el.description.value.trim() === '') {
       formMsg.showError(el.createPostMsg, 'Please provide all required fields');
       return;
     }
@@ -190,8 +191,8 @@ var PostForm = (function() {
 
     var formData = new FormData();
     formData.append("action", "CreatePost");
-    formData.append("latitude", loc.lat);
-    formData.append("longitude", loc.lon);
+    formData.append("latitude", data.loc.lat);
+    formData.append("longitude", data.loc.lon);
     formData.append("description", el.description.value);
     formData.append("resourceURL", el.onlineResource.value);
     formData.append("imageURL", el.onlineImage.value);
@@ -218,7 +219,7 @@ var PostForm = (function() {
     }
   }
 
-  function locationDetectMethod() {
+  function locationSearchInit() {
     formMsg.clear(el.createPostMsg);
     formButton.disable(el.locationDetectButton);
     if (navigator.geolocation && el.geolocationRadio.checked) {
@@ -230,12 +231,15 @@ var PostForm = (function() {
   }
 
   function geolocationSearch() {
+    var loader = newElements.createLoader("images/loader.gif");
+    formMsg.showElement(el.locationDetectMsg, loader);
+    
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
     function successNavCallback(position) {
       formButton.enable(el.locationDetectButton);
-      loc.lat = String(position.coords.latitude);
-      loc.lon = String(position.coords.longitude);
-      formMsg.showOK(el.locationDetectMsg, '(' + loc.lat.substring(0, loc.lat.length - 4) + ', ' + loc.lon.substring(0, loc.lon.length - 4) + ')');
+      data.loc.lat = String(position.coords.latitude);
+      data.loc.lon = String(position.coords.longitude);
+      formMsg.showOK(el.locationDetectMsg, '(' + data.loc.lat.substring(0, data.loc.lat.length - 4) + ', ' + data.loc.lon.substring(0, data.loc.lon.length - 4) + ')');
     }
     function failCallback() {
       formButton.enable(el.locationDetectButton);
@@ -255,11 +259,12 @@ var PostForm = (function() {
       formButton.enable(el.locationDetectButton);
       var response = JSON.parse(Requests.get(ID).responseText)[0];
       if (response) {
-        loc.lat = response.lat;
-        loc.lon = response.lon;
-        formMsg.showOK(el.locationDetectMsg, '(' + loc.lat.substring(0, loc.lat.length - 4) + ', ' + loc.lon.substring(0, loc.lon.length - 4) + ')');
+        data.loc.lat = response.lat;
+        data.loc.lon = response.lon;
+        formMsg.showOK(el.locationDetectMsg, '(' + data.loc.lat.substring(0, data.loc.lat.length - 4) + ', ' + data.loc.lon.substring(0, data.loc.lon.length - 4) + ')');
       }
       else {
+        formButton.enable(el.locationDetectButton);
         formMsg.showError(el.locationDetectMsg, 'Not found');
       }
     }

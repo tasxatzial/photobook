@@ -249,7 +249,7 @@ var Posts = (function() {
     queryLatLon = new QueryLatLon(queryLatLonData);
 
     postDiv.appendChild(readMoreButton);
-    
+
     return postDiv;
   }
 
