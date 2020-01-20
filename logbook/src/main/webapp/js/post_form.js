@@ -233,13 +233,13 @@ var PostForm = (function() {
   function geolocationSearch() {
     var loader = newElements.createLoader("images/loader.gif");
     formMsg.showElement(el.locationDetectMsg, loader);
-    
+
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
     function successNavCallback(position) {
       formButton.enable(el.locationDetectButton);
       data.loc.lat = String(position.coords.latitude);
       data.loc.lon = String(position.coords.longitude);
-      formMsg.showOK(el.locationDetectMsg, '(' + data.loc.lat.substring(0, data.loc.lat.length - 4) + ', ' + data.loc.lon.substring(0, data.loc.lon.length - 4) + ')');
+      formMsg.showOK(el.locationDetectMsg, '(' + fourDecimal(data.loc.lat) + ', ' + fourDecimal(data.loc.lon) + ')');
     }
     function failCallback() {
       formButton.enable(el.locationDetectButton);
@@ -261,7 +261,7 @@ var PostForm = (function() {
       if (response) {
         data.loc.lat = response.lat;
         data.loc.lon = response.lon;
-        formMsg.showOK(el.locationDetectMsg, '(' + data.loc.lat.substring(0, data.loc.lat.length - 4) + ', ' + data.loc.lon.substring(0, data.loc.lon.length - 4) + ')');
+        formMsg.showOK(el.locationDetectMsg, '(' + fourDecimal(data.loc.lat) + ', ' + fourDecimal(data.loc.lon) + ')');
       }
       else {
         formButton.enable(el.locationDetectButton);
@@ -303,6 +303,9 @@ var PostForm = (function() {
     formButton.disable(el.selectDiskPhotoButton);
   }
 
+  function fourDecimal(string) {
+    return 0.001 * Math.round(parseFloat(string) * 1000)
+  }
   return {
     init: init
   };
