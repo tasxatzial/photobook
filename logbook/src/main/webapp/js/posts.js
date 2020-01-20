@@ -67,11 +67,16 @@ var Posts = (function() {
 
       formMsg.clear(loaderMsg);
       var shortPost = null;
+      var numPosts = 0;
       Object.keys(response).forEach(function(key,index) {
         shortPost = createShortPost(response[key]);
         el.postsParent.appendChild(document.createElement('hr'));
         el.postsParent.appendChild(shortPost);
+        numPosts++;
       });
+      if (numPosts === 0) {
+        loaderMsg.innerHTML = 'This user hasn\'t posted anything.';
+      }
     }
 
     function failCallback() {
