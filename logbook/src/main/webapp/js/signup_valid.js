@@ -1,13 +1,11 @@
 'use strict';
 
 var ValidChecker = (function() {
-
-  var state = {
-    checkedInputs: [],
-    oldEmail: null
+  var data = {
+    checkedInputs: []
   };
 
-  function init(action) {
+  function init() {
     var username = document.getElementById('signup-username');
     var email = document.getElementById('signup-email');
     var passwd1 = document.getElementById('signup-password');
@@ -21,13 +19,11 @@ var ValidChecker = (function() {
     var interests = document.querySelector('textarea[name="signup-interests"]');
     var about = document.querySelector('textarea[name="signup-about"]');
     var signupMsg = document.getElementById('sign-process-msg');
-    var signupButton = document.querySelector('#signup-button input');
 
-    state.checkedInputs = [];
-    state.oldEmail = email.value;
+    data.checkedInputs = [];
 
         /* collect all elements --------------------------------------- */
-    state.checkedInputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
+    data.checkedInputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
         occupation, city, country, interests, about);
 
     /* valid regex check functions --------------------------------- */
@@ -67,8 +63,8 @@ var ValidChecker = (function() {
     }
 
     /* add listeners ----------------------------------------------- */
-    addUsernameEmailListeners(username);
-    addUsernameEmailListeners(email);
+    addValidPatternListeners(username);
+    addValidPatternListeners(email);
     addValidPatternListeners(passwd1);
     addPasswdConfirmListeners();
     addValidPatternListeners(firstName);
@@ -136,85 +132,9 @@ var ValidChecker = (function() {
         }
       }
     }
-
-    /* username and email check listeners (includes both regex checks and db checks */
-    function addUsernameEmailListeners(element) {
-      element.checkedValid = 0;
-      element.isTaken = -1;
-      element.invalidMsg = 'Invalid';
-      element.scrollElem = element;
-      element.addEventListener('input', function (x) {
-        return function () {
-          signupMsg.innerHTML = '';
-          x.checkedValid = 0;
-          x.isTaken = -1;
-          if (x.parentNode.children[0].children[1]) {
-            x.parentNode.children[0].removeChild(x.parentNode.children[0].children[1]);
-          }
-        };
-      }(element));
-      element.addEventListener('focusout', function(x) {
-        return function() {
-          if (x.checkedValid) {
-            return;
-          }
-          checkValid(x);
-          if (!x.value) {
-            return;
-          }
-          if (!x.isValid) {
-            showInvalidMsg(x, x.invalidMsg);
-            return;
-          }
-          if (x.name === 'signup-username') {
-            formSubmit.disable(signupButton);
-            checkTaken(username, 'CheckUsernameDB', 'username', x.value, successCallback, failCallback);
-          }
-          if (x.name === 'signup-email' && (action !== 'AccountInfo' || state.oldEmail !== x.value)) {
-            formSubmit.disable(signupButton);
-            checkTaken(email, 'CheckEmailDB', 'email', x.value, successCallback, failCallback);
-          }
-
-          function successCallback() {
-            formSubmit.enable(signupButton);
-          }
-          function failCallback() {
-            formSubmit.enable(signupButton);
-            showInvalidMsg(x, 'Error checking');
-          }
-        };
-      }(element));
-    }
-
-    /* checks that username/email do not exist on database */
-    function checkTaken(element, action, parameter, value, successFunc, failFunc) {
-      var state = {
-        xhr: null
-      };
-
-      var data = new FormData();
-      data.append('action', action);
-      data.append('parameter', parameter);
-      data.append('parameterValue', value);
-      data.append(element.name.split('-')[1], element.value);
-      state.xhr = ajaxRequest('POST', 'Main', data, successCallback, failFunc);
-
-      function successCallback() {
-        var response = JSON.parse(state.xhr.responseText);
-        if (response[element.name.split('-')[1]] === '0') {
-          element.isTaken = 1;
-          showInvalidMsg(element, 'Already taken');
-        }
-        else {
-          element.isTaken = 0;
-        }
-        successFunc();
-      }
-    }
-
   }
 
-  /* checks if an element has a valid value (db checks are excluded) and modifies its isValid attribute */
+  /* checks if an element has a valid value and modifies its isValid attribute */
   function checkValid(element) {
     if (element.checkedValid) {
       return;
@@ -228,42 +148,36 @@ var ValidChecker = (function() {
     }
   }
 
-  /* scrolls to an element */
-  function scrollToParent(element) {
-    if (window.scrollY) {
-      var html = document.getElementsByTagName('html')[0];
-      var fontSize = parseFloat(getComputedStyle(html).getPropertyValue('font-size'));
-      window.scroll(0, element.parentNode.offsetTop - 2.8 * fontSize);
-    }
-  }
-
   /* displays an invalid message next to the element label */
   function showInvalidMsg(element, value) {
     if (!element.parentNode.children[0].children[1]) {
-      var label = element.parentNode.children[0];
-      var msg = createInvalidValueMsg(value);
-      label.appendChild(msg);
+      var msg = document.createElement('div');
+      msg.innerHTML = value;
+      msg.className = 'invalid-value';
+
+      element.parentNode.children[0].appendChild(msg);
+    }
+  }
+
+  function checkInvalidElements() {
+    for (var j = 0; j < data.checkedInputs.length; j++) {
+      checkValid(data.checkedInputs[j]);
+      if (!data.checkedInputs[j].isValid) {
+        showInvalidMsg(data.checkedInputs[j], data.checkedInputs[j].invalidMsg);
+        return data.checkedInputs[j].scrollElem;
+      }
     }
   }
 
   function getCheckedInputs() {
-    return state.checkedInputs;
-  }
-
-  function createInvalidValueMsg(text) {
-    var msg = document.createElement('div');
-    msg.innerHTML = text;
-    msg.className = 'invalid-value';
-
-    return msg;
+    return data.checkedInputs;
   }
 
   return {
     init: init,
-    getCheckedInputs: getCheckedInputs,
-    checkValid: checkValid,
+    checkInvalidElements: checkInvalidElements,
     showInvalidMsg: showInvalidMsg,
-    scrollToParent: scrollToParent
+    getCheckedInputs: getCheckedInputs
   };
 
 }());

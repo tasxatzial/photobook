@@ -50,9 +50,8 @@ public class Main extends HttpServlet {
             case "AccountInfo":
                 dispatcher = request.getRequestDispatcher("AccountInfo");
                 break;
-            case "CheckEmailDB":
-            case "CheckUsernameDB":
-                dispatcher = request.getRequestDispatcher("CheckOnDB");
+            case "CheckUsernameEmailDB":
+                dispatcher = request.getRequestDispatcher("CheckUsernameEmailDB");
                 break;
             case "Signup":
             case "UpdateAccount":

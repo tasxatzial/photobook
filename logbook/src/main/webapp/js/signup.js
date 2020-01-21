@@ -1,6 +1,9 @@
 'use strict';
 
 var Signup = (function() {
+  var data = {
+    oldEmail: null
+  };
 
   var el = {
     username: null,
@@ -17,18 +20,13 @@ var Signup = (function() {
   };
 
   function clickSignup(action) {
-    var invalidElement = checkInvalidElements();
+    formMsg.clear(el.signupMsg);
+    var invalidElement = ValidChecker.checkInvalidElements();
     if (invalidElement) {
-      ValidChecker.scrollToParent(invalidElement);
+      scrollToParent(invalidElement);
     }
-    else if (el.username.isTaken === 1) {
-      ValidChecker.scrollToParent(el.username);
-    }
-    else if (el.email.isTaken === 1) {
-      ValidChecker.scrollToParent(el.email);
-    }
-    else if (!el.signupButton.disabled) {
-      doSignup(action);
+    else {
+      checkUsernameEmailDB(action);
     }
   }
 
@@ -130,19 +128,74 @@ var Signup = (function() {
     }
   }
 
-  function checkInvalidElements() {
-    var inputs = ValidChecker.getCheckedInputs();
-    var topElement = null;
-    for (var j = 0; j < inputs.length; j++) {
-      ValidChecker.checkValid(inputs[j]);
-      if (!inputs[j].isValid) {
-        ValidChecker.showInvalidMsg(inputs[j], inputs[j].invalidMsg);
-        if (!topElement) {
-          topElement = inputs[j].scrollElem;
+  /* scrolls to an element */
+  function scrollToParent(element) {
+    if (window.scrollY) {
+      var html = document.getElementsByTagName('html')[0];
+      var fontSize = parseFloat(getComputedStyle(html).getPropertyValue('font-size'));
+      window.scroll(0, element.parentNode.offsetTop - 2.8 * fontSize);
+    }
+  }
+
+  function checkUsernameEmailDB(action) {
+    if (action === 'UpdateAccount' && el.email.value === data.oldEmail) {
+      doSignup(action);
+      return;
+    }
+    Requests.cancelExcept(null);
+    formInput.disable(el.username);
+    formInput.disable(el.email);
+    formSubmit.disable(el.signupButton);
+
+    var loader = newElements.createLoader("images/loader.gif");
+    formMsg.showElement(el.signupMsg, loader);
+    el.signupButton.scrollIntoView();
+
+    var formData = new FormData();
+    formData.append('action', 'CheckUsernameEmailDB');
+    if (action !== 'UpdateAccount') {
+      formData.append('username', el.username.value);
+    }
+    formData.append('email', el.email.value);
+
+    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
+
+    function successCallback() {
+      var response = JSON.parse(Requests.get(ID).responseText);
+      formMsg.clear(el.signupMsg);
+      if (!response.username && !response.email) {
+        doSignup(action);
+      }
+      else {
+        if (response.username) {
+          ValidChecker.showInvalidMsg(el.username, response.username);
+        }
+        if (response.email) {
+          ValidChecker.showInvalidMsg(el.email, response.email);
+        }
+        if (response.username) {
+          scrollToParent(el.username);
+        }
+        else {
+          scrollToParent(el.email);
         }
       }
+      formSubmit.enable(el.signupButton);
+      if (action === 'Signup') {
+        formInput.enable(el.username);
+      }
+      formInput.enable(el.email);
     }
-    return topElement;
+
+    function failCallback() {
+      formMsg.clear(el.signupMsg);
+      formSubmit.enable(el.signupButton);
+      if (action === 'Signup') {
+        formInput.enable(el.username);
+      }
+      formInput.enable(el.email);
+      console.log(Requests.get(ID).responseText);
+    }
   }
 
   function init(action) {
@@ -160,7 +213,6 @@ var Signup = (function() {
 
     if (action === 'GetSignup') {
       el.signupButton.addEventListener('click', function() {
-        formMsg.clear(el.signupMsg);
         clickSignup('Signup');
       });
     }
@@ -179,15 +231,14 @@ var Signup = (function() {
       }
 
       el.signupButton.addEventListener('click', function() {
-        formMsg.clear(el.signupMsg);
         clickSignup('UpdateAccount');
       });
     }
 
-    ValidChecker.init(action);
+    ValidChecker.init();
     SignUpLocation.init();
     SignUpFace.init();
-
+    data.oldEmail = el.email.value;
     el.signupButton.disabled = false;
   }
 
