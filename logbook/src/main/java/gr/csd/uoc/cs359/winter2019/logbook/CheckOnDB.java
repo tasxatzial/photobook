@@ -34,56 +34,26 @@ public class CheckOnDB extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ClassNotFoundException {
 
-        response.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        String parameter = null;
-        String parameterValue = null;
-
         if (request.getAttribute("parameter") != null) {
-            parameter = (String) request.getAttribute("parameter");
-            parameterValue = (String) request.getAttribute("parameterValue");
+            String parameter = (String) request.getAttribute("parameter");
+            String parameterValue = (String) request.getAttribute("parameterValue");
             if (parameterValue == null) {
                 request.setAttribute(parameter, "0");
             } else {
-                check(request, parameterValue, parameter);
+                boolean valid = false;
+                if (parameter.equals("email")) {
+                    valid = UserDB.checkValidEmail(parameterValue);
+                }
+                else if (parameter.equals("username")){
+                    valid = UserDB.checkValidUserName(parameterValue);
+                }
+                if (!valid) {
+                    request.setAttribute(parameter, "0");
+                }
+                else {
+                    request.setAttribute(parameter, "1");
+                }
             }
-        } else {
-            parameter = request.getParameter("parameter");
-            parameterValue = request.getParameter("parameterValue");
-            JSONObject json = new JSONObject();
-            if (parameterValue == null) {
-                json.put(parameter, "0");
-            } else {
-                checkJSON(request, parameterValue, parameter, json);
-            }
-            out.print(json.toJSONString());
-        }
-    }
-
-    protected void checkJSON(HttpServletRequest request, String parameterValue, String parameter, JSONObject json) throws ClassNotFoundException {
-        check(request, parameterValue, parameter);
-        if (request.getAttribute(parameter).equals("0")) {
-            json.put(parameter, "0");
-        }
-        else {
-            json.put(parameter, "1");
-        }
-    }
-
-    protected void check(HttpServletRequest request, String parameterValue, String parameter) throws ClassNotFoundException {
-        boolean valid = false;
-        if (parameter.equals("email")) {
-            valid = UserDB.checkValidEmail(parameterValue);
-        }
-        else if (parameter.equals("username")){
-            valid = UserDB.checkValidUserName(parameterValue);
-        }
-        if (!valid) {
-            request.setAttribute(parameter, "0");
-        }
-        else {
-            request.setAttribute(parameter, "1");
         }
     }
 
