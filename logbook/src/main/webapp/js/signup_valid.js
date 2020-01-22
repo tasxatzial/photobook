@@ -81,27 +81,21 @@ var ValidChecker = (function() {
       element.checkedValid = 0;
       element.invalidMsg = 'Invalid';
       element.scrollElem = element;
-      element.oldValue = element.value;
-      element.addEventListener('input', function (x) {
-        return function () {
-          signupMsg.innerHTML = '';
-          x.checkedValid = 0;
-          if (x.parentNode.children[0].children[1]) {
-            x.parentNode.children[0].removeChild(x.parentNode.children[0].children[1]);
+      element.addEventListener('input', function () {
+        signupMsg.innerHTML = '';
+        element.checkedValid = 0;
+        if (element.parentNode.children[0].children[1]) {
+          element.parentNode.children[0].removeChild(element.parentNode.children[0].children[1]);
+        }
+      });
+      element.addEventListener('focusout', function () {
+        if (!element.checkedValid) {
+          checkValid(element);
+          if (element.value && !element.isValid) {
+            showInvalidMsg(element, element.invalidMsg);
           }
-        };
-      }(element));
-      element.addEventListener('focusout', function (x) {
-        return function () {
-          if (x.checkedValid) {
-            return;
-          }
-          checkValid(x);
-          if (x.value && !x.isValid) {
-            showInvalidMsg(x, x.invalidMsg);
-          }
-        };
-      }(element));
+        }
+      });
     }
 
     /* same value listeners for password and passwordConfirm */
@@ -116,12 +110,11 @@ var ValidChecker = (function() {
       passwd2.addEventListener('focusout', checkMismatch);
 
       function checkMismatch() {
-        if (passwd1.checkedValid && passwd2.checkedValid) {
-          return;
-        }
-        checkValid(passwd2);
-        if (passwd1.value && passwd2.value && passwd1.isValid && !passwd2.isValid) {
-          showInvalidMsg(passwd2, passwd2.invalidMsg);
+        if (!passwd1.checkedValid || !passwd2.checkedValid) {
+          checkValid(passwd2);
+          if (passwd1.value && passwd2.value && passwd1.isValid && !passwd2.isValid) {
+            showInvalidMsg(passwd2, passwd2.invalidMsg);
+          }
         }
       }
       function clearMismatchMsg() {
@@ -136,15 +129,14 @@ var ValidChecker = (function() {
 
   /* checks if an element has a valid value and modifies its isValid attribute */
   function checkValid(element) {
-    if (element.checkedValid) {
-      return;
-    }
-    element.checkedValid = 1;
-    if (element.valid()) {
-      element.isValid = 1;
-    }
-    else {
-      element.isValid = 0;
+    if (!element.checkedValid) {
+      element.checkedValid = 1;
+      if (element.valid()) {
+        element.isValid = 1;
+      }
+      else {
+        element.isValid = 0;
+      }
     }
   }
 
