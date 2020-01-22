@@ -53,11 +53,10 @@ var newElements = (function NewElements() {
     return msg;
   }
 
-  function createSignupSummary(response, dataNames, skipEmpty) {
+  function createSignupSummary(response, dataNames) {
     var div = document.createElement('div');
     for (var i = 0; i < dataNames.length; i++) {
-      if (response[dataNames[i][0]] !== undefined &&
-          (skipEmpty === false || response[dataNames[i][0]] !== '' )) {
+      if (response[dataNames[i][0]] !== undefined) {
         var msg = createKeyValue(dataNames[i][1], response[dataNames[i][0]]);
         div.appendChild(msg);
       }

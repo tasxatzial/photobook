@@ -43,7 +43,7 @@ var ShowProfile = (function() {
       }
 
       formMsg.clear(loaderMsg);
-      var profile = newElements.createSignupSummary(response,  Init.dataNames, false);
+      var profile = newElements.createSignupSummary(response,  Init.dataNames);
       profileParent.appendChild(profile);
     }
 

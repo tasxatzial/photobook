@@ -67,49 +67,31 @@ public class Signup extends HttpServlet {
                     if (!paramValues[0].matches(getRegexPattern(paramName))) {
                         jsonSignup.put(paramName, "Invalid pattern");
                     }
-                    else {
-                        jsonSignup.put(paramName, "");
-                    }
                     break;
                 case "passwordConfirm":
                     if (passwd1.matches(getRegexPattern("password")) &&
                             !passwd1.equals(paramValues[0])) {
                         jsonSignup.put(paramName, "Passwords don't match");
                     }
-                    else {
-                        jsonSignup.put(paramName, "");
-                    }
                     break;
                 case "birthDate":
                     if (!isValidDate(paramValues[0])) {
                         jsonSignup.put(paramName, "Invalid pattern");
-                    }
-                    else {
-                        jsonSignup.put(paramName, "");
                     }
                     break;
                 case "country":
                     if (Countries.getNameOf(paramValues[0]) == null) {
                         jsonSignup.put(paramName, "Invalid value");
                     }
-                    else {
-                        jsonSignup.put(paramName, "");
-                    }
                     break;
                 case "interests":
                     if (paramValues[0].length() > 100) {
                         jsonSignup.put(paramName, "Exceeds maximum size (100)");
                     }
-                    else {
-                        jsonSignup.put(paramName, "");
-                    }
                     break;
                 case "about":
                     if (paramValues[0].length() > 500) {
                         jsonSignup.put(paramName, "Exceeds maximum size (500)");
-                    }
-                    else {
-                        jsonSignup.put(paramName, "");
                     }
                     break;
                 default:
@@ -119,7 +101,7 @@ public class Signup extends HttpServlet {
 
         RequestDispatcher dispatcher;
         HttpSession oldSession = request.getSession(false);
-        if (jsonSignup.get("username").equals("") && request.getParameter("action").equals("Signup")) {
+        if (jsonSignup.get("username") == null && request.getParameter("action").equals("Signup")) {
             request.setAttribute("parameter", "username");
             request.setAttribute("parameterValue", request.getParameter("username"));
             dispatcher = request.getRequestDispatcher("CheckOnDB");
@@ -129,7 +111,7 @@ public class Signup extends HttpServlet {
             }
         }
 
-        if (jsonSignup.get("email").equals("") &&
+        if (jsonSignup.get("email") == null &&
                 (oldSession == null || request.getParameter("action").equals("Signup") ||
                 !request.getParameter("action").equals("UpdateAccount")  ||
                 !request.getParameter("email").equals(UserDB.getUser(request.getParameter("username")).getEmail()))) {
@@ -142,16 +124,7 @@ public class Signup extends HttpServlet {
             }
         }
 
-        boolean error = false;
-        for(Iterator iterator = jsonSignup.keySet().iterator(); iterator.hasNext();) {
-            String key = (String) iterator.next();
-            if (!jsonSignup.get(key).equals("")) {
-                error = true;
-                break;
-            }
-        }
-
-        if (error) {
+        if (!jsonSignup.isEmpty()) {
             try (PrintWriter out = response.getWriter()) {
                 out.print(jsonSignup.toJSONString());
                 response.setStatus(400);
@@ -160,7 +133,6 @@ public class Signup extends HttpServlet {
         else {
             doSignup(request, response);
         }
-
     }
 
     protected JSONObject checkFields(HttpServletRequest request) {

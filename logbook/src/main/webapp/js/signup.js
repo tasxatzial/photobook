@@ -95,7 +95,7 @@ var Signup = (function() {
       if (action === 'Signup') {
         var response = JSON.parse(Requests.get(ID).responseText);
         var accountInfoTitle = document.createElement('p');
-        var accountInfo = newElements.createSignupSummary(response, Init.dataNames, false);
+        var accountInfo = newElements.createSignupSummary(response, Init.dataNames);
         el.header.innerHTML = 'Sign up completed';
         accountInfoTitle.innerHTML = 'You provided the following information: ';
         el.signupContent.innerHTML = '';
@@ -120,7 +120,7 @@ var Signup = (function() {
         el.signupContent.appendChild(errorMsg);
       } else {
         var response = JSON.parse(Requests.get(ID).responseText);
-        var accountInfo = newElements.createSignupSummary(response, Init.dataNames, true);
+        var accountInfo = newElements.createSignupSummary(response, Init.dataNames);
         el.header.innerHTML = Requests.get(ID).status + ' - Bad Request';
         el.signupContent.appendChild(accountInfo);
       }
