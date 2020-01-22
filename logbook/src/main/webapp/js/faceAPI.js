@@ -37,13 +37,6 @@ var FaceAPI = (function() {
     analyze: 'https://api-us.faceplusplus.com/facepp/v3/face/analyze'
   };
 
-  /* called before each ajax request */
-  function initState(state) {
-    Object.keys(state).forEach(function(key,index) {
-      state[key] = null;
-    });
-  }
-
   /* common callback for all services */
   function failCallback(state, failFunc) {
     return function() {
@@ -84,7 +77,6 @@ var FaceAPI = (function() {
     function getErrorMsg() {
       return state.errMsg;
     }
-    initState(state);
     var data = new FormData();
     data.append('api_key', faceAPI.apiKey);
     data.append('api_secret', faceAPI.apiSecret);
@@ -114,7 +106,6 @@ var FaceAPI = (function() {
     function getErrorMsg() {
       return state.errMsg;
     }
-    initState(state);
     var data = new FormData();
     data.append('api_key', faceAPI.apiKey);
     data.append('api_secret', faceAPI.apiSecret);
@@ -144,7 +135,6 @@ var FaceAPI = (function() {
     function getErrorMsg() {
       return state.errMsg;
     }
-    initState(state);
     var data = new FormData();
     data.append('outer_id', faceAPI.app);
     data.append('api_key', faceAPI.apiKey);
@@ -195,8 +185,7 @@ var FaceAPI = (function() {
     function getErrorMsg() {
       return state.errMsg;
     }
-  
-    initState(state);
+
     var data = new FormData();
     data.append('api_key', faceAPI.apiKey);
     data.append('api_secret', faceAPI.apiSecret);
@@ -250,7 +239,6 @@ var FaceAPI = (function() {
       return state.confidence;
     }
 
-    initState(state);
     var data = new FormData();
     data.append('api_key', faceAPI.apiKey);
     data.append('api_secret', faceAPI.apiSecret);
