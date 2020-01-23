@@ -163,6 +163,7 @@ var SignUpLocation = (function () {
       formInput.enable(el.city);
       formInput.enable(el.address);
       formButton.enable(el.geolocSearchButton);
+      formButton.enable(el.nominatimSearchButton);
     }
 
     /* ajax request fail callback */
@@ -178,6 +179,7 @@ var SignUpLocation = (function () {
     Requests.cancelExcept(null);
 
     /* initialize */
+    initMap();
     var input = LocationSearch.createInput(el.address, el.city, el.country);
     formInput.disable(el.country);
     formInput.disable(el.city);
@@ -204,14 +206,15 @@ var SignUpLocation = (function () {
       formInput.enable(el.country);
       formInput.enable(el.city);
       formInput.enable(el.address);
+      formButton.enable(el.geolocSearchButton);
+      if (LocationSearch.isSearchDataReady(el.city, el.country)) {
+        formButton.enable(el.nominatimSearchButton);
+      }
 
       /* show error if 1) all country/city/address are empty
                       2) reverse nominatim search returns an unknown location */
       if (state.response.error || !location) {
         formMsg.showError(el.geolocSearchMsg, 'Not found');
-        if (LocationSearch.isSearchDataReady(el.city, el.country)) {
-          formButton.enable(el.nominatimSearchButton);
-        }
       }
       else {
         /* else update country/city/address fields */
@@ -253,6 +256,7 @@ var SignUpLocation = (function () {
     var ID = null;
 
     /* initialize */
+    initMap();
     formInput.disable(el.country);
     formInput.disable(el.city);
     formInput.disable(el.address);
