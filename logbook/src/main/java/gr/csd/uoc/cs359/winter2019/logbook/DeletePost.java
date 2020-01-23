@@ -38,21 +38,22 @@ public class DeletePost extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
 
-        response.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        JSONObject jsonFinal = new JSONObject();
-
-        if (request.getAttribute("forwarded") != null) {
-            PostDB.deleteAllPostsBy(UserDB.getUser((String) request.getAttribute("username")));
-            List<Post> posts = PostDB.getTop10RecentPostsOfUser((String) request.getAttribute("username"));
+        String username = (String) request.getAttribute("username");
+        if (username != null) {
+            PostDB.deleteAllPostsBy(UserDB.getUser(username));
+            List<Post> posts = PostDB.getTop10RecentPostsOfUser(username);
             if (posts.size() > 0) {
-                request.setAttribute("ERROR", "DELETE_POSTS");
+                request.setAttribute("DELETE_POSTS", "0");
             }
             else {
-                request.setAttribute("SUCCESS", "1");
+                request.setAttribute("DELETE_POSTS", "1");
             }
         }
         else {
+            response.setContentType("application/json;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            JSONObject jsonFinal = new JSONObject();
+
             HttpSession oldSession = request.getSession(false);
             if (oldSession == null || oldSession.getAttribute("username") == null) {
                 jsonFinal.put("ERROR", "NO_SESSION");
@@ -70,12 +71,12 @@ public class DeletePost extends HttpServlet {
             Post post = PostDB.getPost(Integer.parseInt(request.getParameter("postID")));
 
             if (post != null) {
-                jsonFinal.put("SUCCESS", "0");
+                jsonFinal.put("DELETE_POST", "0");
                 response.setStatus(500);
                 out.print(jsonFinal.toJSONString());
             }
             else {
-                jsonFinal.put("SUCCESS", "1");
+                jsonFinal.put("DELETE_POST", "1");
                 out.print(jsonFinal.toJSONString());
             }
         }

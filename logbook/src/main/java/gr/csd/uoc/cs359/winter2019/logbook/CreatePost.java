@@ -46,7 +46,7 @@ public class CreatePost extends HttpServlet {
             out.print(jsonFinal.toJSONString());
             return;
         }
-
+        /* verify that all necessary parameters are present */
         Post post = new Post();
         String username = (String) oldSession.getAttribute("username");
         post.setUserName(username);

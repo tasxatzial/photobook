@@ -51,25 +51,24 @@ public class DeleteAccount extends HttpServlet {
             return;
         }
 
-        request.setAttribute("forwarded", "1");
         request.setAttribute("username", oldSession.getAttribute("username"));
         RequestDispatcher dispatcher = request.getRequestDispatcher("DeletePost");
         dispatcher.include(request, response);
 
-        if (request.getAttribute("SUCCESS") != null) {
+        if (request.getAttribute("DELETE_POSTS").equals("1")) {
             UserDB.deleteUser((String) oldSession.getAttribute("username"));
             User user = UserDB.getUser((String) oldSession.getAttribute("username"));
             if (user == null) {
-                jsonFinal.put("SUCCESS", "1");
+                jsonFinal.put("DELETE_ACCOUNT", "1");
             }
             else {
                 response.setStatus(500);
-                jsonFinal.put("ERROR", "DELETE_ACCOUNT");
+                jsonFinal.put("DELETE_ACCOUNT", "0");
             }
         }
         else {
             response.setStatus(500);
-            jsonFinal.put("ERROR", "DELETE_POSTS");
+            jsonFinal.put("DELETE_POSTS", "0");
         }
         out.print(jsonFinal.toJSONString());
     }
