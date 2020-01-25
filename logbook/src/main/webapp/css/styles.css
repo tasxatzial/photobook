@@ -101,7 +101,7 @@ input[type="button"]:focus, button:focus {
   border: 0;
 }
 
-.transparent-button img {
+.transparent-button img, .signin-photo-button img {
   width: 100%;
   height: auto;
 }

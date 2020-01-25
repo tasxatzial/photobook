@@ -61,8 +61,6 @@
   background: #ff4e56;
 }
 
-
-
 .post-footer {
   display: flex;
   flex-flow: row wrap;
@@ -72,4 +70,16 @@
 
 #rating-select {
   margin-left: 5px;
+}
+
+#post-options-button {
+  width: 1.5rem;
+  padding: 0;
+}
+
+#post-options-bar {
+  margin-top: 1rem;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
 }

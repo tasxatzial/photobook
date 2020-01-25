@@ -191,7 +191,8 @@ var Posts = (function() {
         readMoreButtonDiv: readMoreButton,
         footerDiv: footer,
         queryID: queryLatLon.getQueryID(),
-        postDiv: postDiv
+        postDiv: postDiv,
+        locationDiv: location
       };
       turnToFullPost(fullPostData);
     });
@@ -377,14 +378,17 @@ var Posts = (function() {
     }
 
     if (data['username'] === Init.getUser()) {
-      var deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
+      var optionsBar = createPostOptionsBar();
+      data['postDiv'].insertBefore(optionsBar, data['locationDiv']);
+
+      /* var deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
       deleteButton.children[0].addEventListener('click', function () {
         deletePost(data['postDiv'], data['username'], data['postID']);
       });
       data['postDiv'].appendChild(deleteButton);
       var deleteMsg = document.createElement('div');
       deleteMsg.id = 'delete-post-msg';
-      deleteButton.appendChild(deleteMsg);
+      deleteButton.appendChild(deleteMsg);*/
     }
 
     el.postsParent.innerHTML = '';
@@ -462,6 +466,24 @@ var Posts = (function() {
     postFormSection.appendChild(postFormParent);
 
     return postFormSection;
+  }
+
+  function createPostOptionsBar() {
+    var img = document.createElement('img');
+    img.src = "images/settings.png";
+    img.alt = "Post options";
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'transparent-button';
+    button.id = 'post-options-button';
+    button.appendChild(img);
+
+    var div = document.createElement('div');
+    div.id = 'post-options-bar';
+    div.appendChild(button);
+
+    return div;
   }
 
   return {

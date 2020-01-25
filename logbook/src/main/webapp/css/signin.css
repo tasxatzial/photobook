@@ -19,12 +19,6 @@
   padding-right: 5px;
 }
 
-/* image of the photo button & face photo */
-.signin-photo-button img, #signin-photo-parent img {
-  width: 100%;
-  height: auto;
-}
-
 /* the hidden photo section element */
 #signin-photo-section {
   display: flex;
