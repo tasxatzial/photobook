@@ -174,29 +174,6 @@ var Posts = (function() {
     img.className = 'post-show-more-arrow';
     img.src = 'images/right.png';
 
-    var readMoreButton = document.createElement('button');
-    readMoreButton.className = 'read-more-button';
-    readMoreButton.appendChild(readMore);
-    readMoreButton.appendChild(img);
-    readMoreButton.addEventListener('click', function () {
-      var fullPostData = {
-        description: postJSON['description'],
-        resourceURL: postJSON['resourceURL'],
-        lat: postJSON['latitude'],
-        lon: postJSON['longitude'],
-        username: postJSON['username'],
-        postID: postJSON['postID'],
-        locationQuery: queryLatLon.getLocation(),
-        descriptionDiv: description,
-        readMoreButtonDiv: readMoreButton,
-        footerDiv: footer,
-        queryID: queryLatLon.getQueryID(),
-        postDiv: postDiv,
-        locationDiv: location
-      };
-      turnToFullPost(fullPostData);
-    });
-
     var button = document.createElement('button');
     button.className = 'transparent-button';
     button.innerHTML = postJSON['username'];
@@ -246,14 +223,31 @@ var Posts = (function() {
     postDiv.appendChild(description);
     postDiv.appendChild(footer);
 
-    var queryLatLonData = {
+    var readMoreButton = document.createElement('button');
+    readMoreButton.className = 'read-more-button';
+    readMoreButton.appendChild(readMore);
+    readMoreButton.appendChild(img);
+    readMoreButton.addEventListener('click', function () {
+      data['locationQuery'] = queryLatLon.getLocation();
+      data['queryID'] =  queryLatLon.getQueryID();
+      turnToFullPost(data);
+    });
+
+    var data = {
+      description: postJSON['description'],
+      resourceURL: postJSON['resourceURL'],
       lat: postJSON['latitude'],
       lon: postJSON['longitude'],
-      postDiv: postDiv,
+      username: postJSON['username'],
+      postID: postJSON['postID'],
+      descriptionDiv: description,
+      readMoreButtonDiv: readMoreButton,
       footerDiv: footer,
+      postDiv: postDiv,
       locationDiv: location
     };
-    queryLatLon = new QueryLatLon(queryLatLonData);
+
+    queryLatLon = new QueryLatLon(data);
 
     postDiv.appendChild(readMoreButton);
 
@@ -296,14 +290,8 @@ var Posts = (function() {
         }
         data['locationDiv'].children[0].innerHTML = loc;
         if (state.clickedFullPost) {
-          var mapData = {
-            locationQuery: locationQuery,
-            lat: data['lat'],
-            lon: data['lon'],
-            postDiv: data['postDiv'],
-            footerDiv: data['footerDiv']
-          };
-          showMap(mapData);
+          data['locationQuery'] = locationQuery;
+          showMap(data);
         }
       }
 
@@ -368,25 +356,18 @@ var Posts = (function() {
     }
 
     if (data['username'] === Init.getUser()) {
-      var optionsData = {
-        locationDiv: data['locationDiv'],
-        postDiv: data['postDiv'],
-        username: data['username'],
-        postID: data['postID']
-      };
-      var optionsBar = createPostOptionsBar(optionsData);
+      var optionsBar = document.createElement('div');
+      optionsBar.id = 'post-options-bar';
+      data['optionsBar'] = optionsBar;
+
+      var button = createPostOptionsShowButton(data);
+      optionsBar.appendChild(button);
+
       data['postDiv'].insertBefore(optionsBar, data['locationDiv']);
     }
 
     if (data['locationQuery']) {
-      var mapData = {
-        locationQuery: data['locationQuery'],
-        lat: data['lat'],
-        lon: data['lon'],
-        postDiv: data['postDiv'],
-        footerDiv: data['footerDiv']
-      };
-      showMap(mapData);
+      showMap(data);
     }
 
     el.postsParent.innerHTML = '';
@@ -466,17 +447,7 @@ var Posts = (function() {
     return postFormSection;
   }
 
-  function createPostOptionsBar(data) {
-    var div = document.createElement('div');
-    div.id = 'post-options-bar';
-
-    var button = createPostOptionsShowButton(data, div);
-    div.appendChild(button);
-
-    return div;
-  }
-
-  function createPostOptionsShowButton(data, div) {
+  function createPostOptionsShowButton(data) {
     var img = document.createElement('img');
     img.src = "images/settings.png";
     img.alt = "Show Post options";
@@ -487,12 +458,16 @@ var Posts = (function() {
     button.id = 'post-options-button';
     button.appendChild(img);
     button.addEventListener('click', function() {
-      showPostOptionsMenu(data, div);
+      data['optionsBar'].innerHTML = '';
+      var menu = createPostOptionsMenu(data);
+      var closeButton = createPostOptionsCloseButton(data);
+      data['optionsBar'].appendChild(closeButton);
+      data['optionsBar'].appendChild(menu);
     });
     return button;
   }
 
-  function createPostOptionsCloseButton(data, menu, div) {
+  function createPostOptionsCloseButton(data) {
     var img = document.createElement('img');
     img.src = "images/x.png";
     img.alt = "Hide Post options";
@@ -503,28 +478,12 @@ var Posts = (function() {
     button.id = 'post-options-button';
     button.appendChild(img);
     button.addEventListener('click', function() {
-      closePostOptionsMenu(data, menu, div);
+      data['optionsBar'].innerHTML = '';
+      var openButton = createPostOptionsShowButton(data);
+      data['optionsBar'].appendChild(openButton);
     });
 
     return button;
-  }
-
-  function closePostOptionsMenu(data, menu, div) {
-    div.innerHTML = '';
-    data['postDiv'].removeChild(menu);
-
-    var openButton = createPostOptionsShowButton(data, div);
-    div.appendChild(openButton);
-  }
-
-  function showPostOptionsMenu(data, div) {
-    div.innerHTML = '';
-    var menu = createPostOptionsMenu(data);
-    var closeButton = createPostOptionsCloseButton(data, menu, div);
-    div.appendChild(closeButton);
-
-
-    data['postDiv'].insertBefore(menu, data['locationDiv']);
   }
 
   function createPostOptionsMenu(data) {

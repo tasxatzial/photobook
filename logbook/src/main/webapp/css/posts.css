@@ -80,8 +80,8 @@
 #post-options-bar {
   margin-top: 1rem;
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
+  flex-flow: column nowrap;
+  align-items: center;
 }
 
 #post-options-menu {
@@ -90,4 +90,5 @@
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
