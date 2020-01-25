@@ -83,3 +83,11 @@
   flex-flow: row nowrap;
   justify-content: center;
 }
+
+#post-options-menu {
+  border: 1px solid silver;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}

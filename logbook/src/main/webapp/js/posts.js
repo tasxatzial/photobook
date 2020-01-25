@@ -233,6 +233,7 @@ var Posts = (function() {
     /* footer.appendChild(rating); */
 
     var location = newElements.createKeyValue('Location', 'Querying...');
+    location.id = 'post-location';
 
     var nextButton = newElements.createArrowButton('images/right.png');
     nextButton.className = 'transparent-button';
@@ -366,6 +367,17 @@ var Posts = (function() {
       data['postDiv'].insertBefore(onlineURL, data['postedBy']);
     }
 
+    if (data['username'] === Init.getUser()) {
+      var optionsData = {
+        locationDiv: data['locationDiv'],
+        postDiv: data['postDiv'],
+        username: data['username'],
+        postID: data['postID']
+      };
+      var optionsBar = createPostOptionsBar(optionsData);
+      data['postDiv'].insertBefore(optionsBar, data['locationDiv']);
+    }
+
     if (data['locationQuery']) {
       var mapData = {
         locationQuery: data['locationQuery'],
@@ -375,20 +387,6 @@ var Posts = (function() {
         footerDiv: data['footerDiv']
       };
       showMap(mapData);
-    }
-
-    if (data['username'] === Init.getUser()) {
-      var optionsBar = createPostOptionsBar();
-      data['postDiv'].insertBefore(optionsBar, data['locationDiv']);
-
-      /* var deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
-      deleteButton.children[0].addEventListener('click', function () {
-        deletePost(data['postDiv'], data['username'], data['postID']);
-      });
-      data['postDiv'].appendChild(deleteButton);
-      var deleteMsg = document.createElement('div');
-      deleteMsg.id = 'delete-post-msg';
-      deleteButton.appendChild(deleteMsg);*/
     }
 
     el.postsParent.innerHTML = '';
@@ -468,20 +466,80 @@ var Posts = (function() {
     return postFormSection;
   }
 
-  function createPostOptionsBar() {
+  function createPostOptionsBar(data) {
+    var div = document.createElement('div');
+    div.id = 'post-options-bar';
+
+    var button = createPostOptionsShowButton(data, div);
+    div.appendChild(button);
+
+    return div;
+  }
+
+  function createPostOptionsShowButton(data, div) {
     var img = document.createElement('img');
     img.src = "images/settings.png";
-    img.alt = "Post options";
+    img.alt = "Show Post options";
 
     var button = document.createElement('button');
     button.type = 'button';
     button.className = 'transparent-button';
     button.id = 'post-options-button';
     button.appendChild(img);
+    button.addEventListener('click', function() {
+      showPostOptionsMenu(data, div);
+    });
+    return button;
+  }
+
+  function createPostOptionsCloseButton(data, menu, div) {
+    var img = document.createElement('img');
+    img.src = "images/x.png";
+    img.alt = "Hide Post options";
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'transparent-button';
+    button.id = 'post-options-button';
+    button.appendChild(img);
+    button.addEventListener('click', function() {
+      closePostOptionsMenu(data, menu, div);
+    });
+
+    return button;
+  }
+
+  function closePostOptionsMenu(data, menu, div) {
+    div.innerHTML = '';
+    data['postDiv'].removeChild(menu);
+
+    var openButton = createPostOptionsShowButton(data, div);
+    div.appendChild(openButton);
+  }
+
+  function showPostOptionsMenu(data, div) {
+    div.innerHTML = '';
+    var menu = createPostOptionsMenu(data);
+    var closeButton = createPostOptionsCloseButton(data, menu, div);
+    div.appendChild(closeButton);
+
+
+    data['postDiv'].insertBefore(menu, data['locationDiv']);
+  }
+
+  function createPostOptionsMenu(data) {
+    var deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
+    deleteButton.children[0].addEventListener('click', function () {
+      deletePost(data['postDiv'], data['username'], data['postID']);
+    });
+    data['postDiv'].appendChild(deleteButton);
+    var deleteMsg = document.createElement('div');
+    deleteMsg.id = 'delete-post-msg';
+    deleteButton.appendChild(deleteMsg);
 
     var div = document.createElement('div');
-    div.id = 'post-options-bar';
-    div.appendChild(button);
+    div.id = 'post-options-menu';
+    div.appendChild(deleteButton);
 
     return div;
   }

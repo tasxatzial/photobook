@@ -18,7 +18,7 @@ body {
 /* blue button container */
 .sign-button {
   text-align: center;
-  max-width: 15rem;
+  max-width: 12rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -26,10 +26,10 @@ body {
 /* blue button */
 .sign-button input {
   font-family: inherit;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   letter-spacing: .05rem;
   color: white;
-  padding: 7px 12px;
+  padding: 6px 11px;
   background: linear-gradient(to bottom, #43628b, #324a69);
   border: 1px solid #1b5e2e;
   border-radius: 3px;
@@ -37,7 +37,7 @@ body {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
   text-align: center;
   width: 100%;
-  margin: 1.5rem auto 1rem;
+  margin: 16px auto 16px;
 }
 
 /* button press effect */
