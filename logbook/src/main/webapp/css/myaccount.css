@@ -5,6 +5,7 @@
 }
 
 .account-nav-button {
+  font-family: inherit;
   box-sizing: content-box;
   background-color: transparent;
   padding-top: 8px;
@@ -29,14 +30,4 @@
 
 #delete-account-button input {
   background: #ff4e56;
-}
-
-#account-delete-confirm-text {
-  margin-bottom: 16px;
-}
-
-.yes-no-button {
-  margin-left: .5rem;
-  margin-right: .5rem;
-  width: 3rem;
 }

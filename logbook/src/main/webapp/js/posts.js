@@ -3,7 +3,10 @@
 var Posts = (function() {
   var el = {
     postsParent: null,
-    mapParent: null
+    mapParent: null,
+    confirmDelete: null,
+    deleteButton: null,
+    deleteMsg: null
   };
 
   var data = {
@@ -24,6 +27,7 @@ var Posts = (function() {
 
   function init(username) {
     data.username = username;
+    el.confirmDelete = null;
     state.clickedFullPost = null;
 
     var postsSection = createPostsSection(username);
@@ -88,6 +92,9 @@ var Posts = (function() {
   function deletePost(fullPost, username, postID) {
     Requests.cancelExcept(null);
 
+    var loader = newElements.createLoader('images/loader.gif');
+    formMsg.showElement(el.deleteMsg, loader);
+
     var formData = new FormData();
     formData.append("action", "DeletePost");
     formData.append("postID", postID);
@@ -105,8 +112,8 @@ var Posts = (function() {
     }
 
     function failCallback() {
-      var deleteMsg = document.getElementById('delete-post-msg');
-      formMsg.showError(deleteMsg, 'Error');
+      formMsg.showError(el.deleteMsg, 'Error');
+      console.log(Requests.get(ID).responseText);
     }
   }
 
@@ -478,6 +485,7 @@ var Posts = (function() {
     button.id = 'post-options-button';
     button.appendChild(img);
     button.addEventListener('click', function() {
+      el.confirmDelete = null;
       data['optionsBar'].innerHTML = '';
       var openButton = createPostOptionsShowButton(data);
       data['optionsBar'].appendChild(openButton);
@@ -487,20 +495,37 @@ var Posts = (function() {
   }
 
   function createPostOptionsMenu(data) {
-    var deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
-    deleteButton.children[0].addEventListener('click', function () {
-      deletePost(data['postDiv'], data['username'], data['postID']);
+    el.deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
+    el.deleteButton.children[0].addEventListener('click', function() {
+      confirmDelete(data);
     });
-    data['postDiv'].appendChild(deleteButton);
-    var deleteMsg = document.createElement('div');
-    deleteMsg.id = 'delete-post-msg';
-    deleteButton.appendChild(deleteMsg);
+
+    data['postDiv'].appendChild(el.deleteButton);
+    el.deleteMsg = document.createElement('div');
+    el.deleteMsg.id = 'delete-post-msg';
+    el.deleteButton.appendChild(el.deleteMsg);
 
     var div = document.createElement('div');
     div.id = 'post-options-menu';
-    div.appendChild(deleteButton);
+    div.appendChild(el.deleteButton);
 
     return div;
+  }
+
+  function confirmDelete(data) {
+    if (!el.confirmDelete) {
+      el.confirmDelete = newElements.createYesNoButtons('post-delete-confirm');
+      el.confirmDelete.children[1].addEventListener('click', function() {
+        el.confirmDelete = null;
+        deletePost(data['postDiv'], data['username'], data['postID']);
+      });
+      el.confirmDelete.children[2].addEventListener('click', function() {
+        formMsg.clear(el.deleteMsg);
+        el.confirmDelete = null;
+      });
+      formMsg.showElement(el.deleteMsg, el.confirmDelete);
+      el.deleteButton.scrollIntoView();
+    }
   }
 
   return {

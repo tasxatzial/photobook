@@ -41,7 +41,6 @@ var AccountInfo = (function() {
   function deleteAccount() {
     redButton.disable(el.deleteAccountButton);
     Requests.cancelExcept(null);
-    el.confirmDelete = null;
 
     var formData = new FormData();
     formData.append("action", "DeleteAccount");
@@ -70,7 +69,10 @@ var AccountInfo = (function() {
   function confirmDelete() {
     if (!el.confirmDelete) {
       el.confirmDelete = newElements.createYesNoButtons('account-delete-confirm');
-      el.confirmDelete.children[1].addEventListener('click', deleteAccount);
+      el.confirmDelete.children[1].addEventListener('click', function () {
+        el.confirmDelete = null;
+        deleteAccount();
+      });
       el.confirmDelete.children[2].addEventListener('click', function() {
         formMsg.clear(el.deleteAccountMsg);
         el.confirmDelete = null;
