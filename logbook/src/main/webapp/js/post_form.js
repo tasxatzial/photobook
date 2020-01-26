@@ -62,6 +62,7 @@ var PostForm = (function() {
     el.place = el.locationPlace.children[1].children[1];
     el.postButton = document.getElementById('post-button').children[0];
     el.locationDetectMsg = document.getElementById('post-form-detect-msg');
+    el.postFormPhoto = document.getElementById('post-form-photo-parent');
 
     if (!navigator.geolocation) {
       el.geolocationRadio.innerHTML = 'Geolocation not supported';
@@ -92,6 +93,12 @@ var PostForm = (function() {
 
     el.selectDiskPhotoButton.addEventListener('click', function() {
       el.filePicker.click(function() {
+        var button = newElements.createCloseButton('remove-disk-photo-button');
+        button.addEventListener('click', function() {
+          el.filePicker.clearPhoto();
+          el.postFormPhoto.innerHTML = '';
+        });
+        el.postFormPhoto.insertBefore(button, el.postFormPhoto.children[0]);
         el.photoToggle.toggle("diskPhoto");
       });
     });

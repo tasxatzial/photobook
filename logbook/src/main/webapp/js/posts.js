@@ -455,15 +455,7 @@ var Posts = (function() {
   }
 
   function createPostOptionsShowButton(data) {
-    var img = document.createElement('img');
-    img.src = "images/settings.png";
-    img.alt = "Show Post options";
-
-    var button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'transparent-button';
-    button.id = 'post-options-button';
-    button.appendChild(img);
+    var button = newElements.createGearButton('show-post-options-button');
     button.addEventListener('click', function() {
       data['optionsBar'].innerHTML = '';
       var menu = createPostOptionsMenu(data);
@@ -475,15 +467,7 @@ var Posts = (function() {
   }
 
   function createPostOptionsCloseButton(data) {
-    var img = document.createElement('img');
-    img.src = "images/x.png";
-    img.alt = "Hide Post options";
-
-    var button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'transparent-button';
-    button.id = 'post-options-button';
-    button.appendChild(img);
+    var button = newElements.createCloseButton('remove-post-options-button');
     button.addEventListener('click', function() {
       el.confirmDelete = null;
       data['optionsBar'].innerHTML = '';

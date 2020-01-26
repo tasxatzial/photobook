@@ -122,6 +122,33 @@ var newElements = (function NewElements() {
     return div;
   }
 
+  function createOptionButton(id) {
+    var img = document.createElement('img');
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'transparent-button option-button';
+    button.id = id;
+    button.appendChild(img);
+
+    return button;
+  }
+
+  function createGearButton(id) {
+    var button = createOptionButton(id);
+    button.children[0].src = "images/settings.png";
+    button.children[0].alt = "Options";
+
+    return button;
+  }
+  function createCloseButton(id) {
+    var button = createOptionButton(id);
+    button.children[0].src = "images/x.png";
+    button.children[0].alt = "Remove";
+
+    return button;
+  }
+
   return {
     createLoader: createLoader,
     createSignBarButton: createSignBarButton,
@@ -130,6 +157,8 @@ var newElements = (function NewElements() {
     createBlueButton: createBlueButton,
     createArrowButton: createArrowButton,
     createSelectPage: createSelectPage,
-    createKeyValue: createKeyValue
+    createKeyValue: createKeyValue,
+    createGearButton: createGearButton,
+    createCloseButton: createCloseButton
   };
 }());
