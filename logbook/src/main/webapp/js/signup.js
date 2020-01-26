@@ -131,9 +131,8 @@ var Signup = (function() {
   /* scrolls to an element */
   function scrollToParent(element) {
     if (window.scrollY) {
-      var html = document.getElementsByTagName('html')[0];
-      var fontSize = parseFloat(getComputedStyle(html).getPropertyValue('font-size'));
-      window.scroll(0, element.parentNode.offsetTop - 2.8 * fontSize);
+      var nonavMargin = parseFloat(getComputedStyle(Init.nonav).getPropertyValue('margin-top'));
+      window.scroll(0, element.parentNode.offsetTop - nonavMargin);
     }
   }
 
