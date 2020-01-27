@@ -22,7 +22,7 @@ var Landing = (function() {
       if (signinButton) {
         Init.navbarContent.removeChild(signinButton);
       }
-      var signupButton = newElements.createSignBarButton('Sign up', 'signup-nav-button');
+      var signupButton = newElements.createSignBarButton('Sign up', 'signup-nav-button', "images/signup.svg");
       signupButton.addEventListener('click', showSignup);
       signupButton.style.marginLeft = 'auto';
       Init.navbarContent.appendChild(signupButton);
@@ -51,7 +51,7 @@ var Landing = (function() {
       if (signupButton) {
         Init.navbarContent.removeChild(signupButton);
       }
-      var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button');
+      var signinButton = newElements.createSignBarButton('Sign in', 'signin-nav-button', "images/login.svg");
       signinButton.addEventListener('click', showSignin);
       signinButton.style.marginLeft = 'auto';
       Init.navbarContent.appendChild(signinButton);

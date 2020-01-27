@@ -1,18 +1,18 @@
 #navbar h1 {
   font-size: 1.6rem;
   color: white;
-  margin: 0 2rem 0 0;
+  margin: 0 32px 0 0;
 }
 
 #navbar-content h1 a {
-  color: white;
+  color: #324a69;
   text-decoration: none;
 }
 
 #navbar {
   width: 100%;
-  height: 2.6rem;
-  background-color: #324a69;
+  height: 2.8rem;
+  background-color: #a7bed6;
   position: fixed;
   top: 0;
 }
@@ -33,20 +33,49 @@
 
 .navbar-button {
   margin: 0;
-  color: white;
-  background-color: #324a69;
+  color: black;
+  background-color: #a7bed6;
   font-size: 1.1rem;
   border: 0;
-  padding: 5px 12px;
+  padding: 1px 8px;
+  font-family: inherit;
+  height: 100%;
+  width: 9rem;
+}
+
+.test-div {
+  display: flex;
+  flex-flow: row nowrap;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-button-text {
+  margin-left: .3rem;
+  white-space: nowrap;
 }
 
 .navbar-button:hover {
-  background-color: #4d968a;
+  background-color: #bcd0e9;
+}
+
+#logout-button {
+  margin-left: auto;
 }
 
 @media only screen and (max-width: 45rem) {
   #navbar-content {
     padding-left: 24px;
     padding-right: 24px;
+  }
+  #navbar h1 {
+    margin: 0 24px 0 0;
+  }
+  #profile-button .navbar-button-text,
+  #show-users-button .navbar-button-text,
+  #show-posts .navbar-button-text,
+  #logout-button .navbar-button-text {
+    display: none;
   }
 }

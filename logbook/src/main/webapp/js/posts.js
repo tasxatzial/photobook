@@ -179,7 +179,7 @@ var Posts = (function() {
 
     var img = document.createElement('img');
     img.className = 'post-show-more-arrow';
-    img.src = 'images/right.png';
+    img.src = 'images/showmore.svg';
 
     var button = document.createElement('button');
     button.className = 'transparent-button';
@@ -218,9 +218,6 @@ var Posts = (function() {
 
     var location = newElements.createKeyValue('Location', 'Querying...');
     location.id = 'post-location';
-
-    var nextButton = newElements.createArrowButton('images/right.png');
-    nextButton.className = 'transparent-button';
 
     postDiv = document.createElement('div');
     postDiv.appendChild(location);

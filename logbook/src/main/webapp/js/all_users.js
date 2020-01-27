@@ -96,11 +96,11 @@ var AllUsers = (function() {
       pages = 1;
     }
 
-    var prevButton = newElements.createArrowButton('images/left.png');
+    var prevButton = newElements.createArrowButton('images/left.svg');
     prevButton.className = 'userlist-arrow-button transparent-button';
     prevButton.id = 'userlist-left-arrow-button';
 
-    var nextButton = newElements.createArrowButton('images/right.png');
+    var nextButton = newElements.createArrowButton('images/right.svg');
     nextButton.className = 'userlist-arrow-button transparent-button';
     nextButton.id = 'userlist-right-arrow-button';
 
@@ -151,7 +151,7 @@ var AllUsers = (function() {
 
       var img = document.createElement('img');
       img.className = 'user-show-more-arrow';
-      img.src = 'images/right.png';
+      img.src = 'images/showmore.svg';
 
       var user = document.createElement('div');
       user.className = "username-line";

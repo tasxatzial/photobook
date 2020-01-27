@@ -24,13 +24,25 @@ var newElements = (function NewElements() {
     return loader;
   }
 
-  function createSignBarButton(value, id) {
-    var button = document.createElement('input');
-    button.type = 'button';
+  function createSignBarButton(value, id, pathToFile) {
+    var button = document.createElement('button');
     button.className = 'navbar-button';
-    button.value = value;
     button.id = id;
 
+    var cont = document.createElement('div');
+    cont.className = 'test-div';
+    if (pathToFile) {
+      var img = document.createElement('img');
+      img.src = pathToFile;
+      img.className = 'option-button';
+      cont.appendChild(img);
+    }
+
+    var div = document.createElement('div');
+    div.className = 'navbar-button-text';
+    div.innerHTML = value;
+    cont.appendChild(div);
+    button.appendChild(cont);
     return button;
   }
 
@@ -136,14 +148,15 @@ var newElements = (function NewElements() {
 
   function createGearButton(id) {
     var button = createOptionButton(id);
-    button.children[0].src = "images/settings.png";
+    button.children[0].src = "images/settings.svg";
     button.children[0].alt = "Options";
 
     return button;
   }
+
   function createCloseButton(id) {
     var button = createOptionButton(id);
-    button.children[0].src = "images/x.png";
+    button.children[0].src = "images/close.svg";
     button.children[0].alt = "Remove";
 
     return button;
