@@ -52,7 +52,13 @@ var Posts = (function() {
     Requests.cancelExcept(null);
 
     var loader = newElements.createLoader("images/loader.gif");
-    var loaderMsg = el.postsParent.children[1];
+    var loaderMsg = null;
+    if (username === Init.getUser() || username === null) {
+      loaderMsg = el.postsParent.children[2];
+    }
+    else {
+      loaderMsg = el.postsParent.children[1];
+    }
     formMsg.showElement(loaderMsg, loader);
 
     var formData = new FormData();
