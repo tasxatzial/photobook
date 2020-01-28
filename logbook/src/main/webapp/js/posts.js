@@ -362,7 +362,7 @@ var Posts = (function() {
       url.target = 'blank';
       url.innerHTML = data['resourceURL'];
       var onlineURL = newElements.createKeyValue('See also', url, 1);
-      data['postDiv'].insertBefore(onlineURL, data['postedBy']);
+      data['descriptionDiv'].appendChild(onlineURL);
     }
 
     if (data['username'] === Init.getUser()) {
