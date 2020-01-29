@@ -1,8 +1,7 @@
-/* form + title */
-#signup-middle {
+#signup-parent {
+  box-sizing: content-box;
+  min-height: auto;
   max-width: 21rem;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* location search (button + msg) container */

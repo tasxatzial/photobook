@@ -99,7 +99,8 @@ var Signup = (function() {
         el.header.innerHTML = 'Sign up completed';
         accountInfoTitle.innerHTML = 'You provided the following information: ';
         el.signupContent.innerHTML = '';
-        el.signupMiddle.style.maxWidth = '65rem';
+        el.signupParent.style.maxWidth = '65rem';
+        el.signupParent.style.minHeight = 'calc(100vh - 2.8rem - 42px)';
         el.signupContent.appendChild(accountInfoTitle);
         el.signupContent.appendChild(accountInfo);
       }
@@ -112,7 +113,8 @@ var Signup = (function() {
 
     function failCallback(action) {
       el.signupContent.innerHTML = '';
-      el.signupMiddle.style.maxWidth = '65rem';
+      el.signupParent.style.maxWidth = '65rem';
+      el.signupParent.style.minHeight = 'calc(100vh - 2.8rem - 42px)';
       if (Requests.get(ID).status >= 500) {
         var errorMsg = document.createElement('p');
         errorMsg.innerHTML = 'Oops, something went wrong. Please try again in a while';
@@ -200,9 +202,9 @@ var Signup = (function() {
   function init(action) {
     el.username = document.getElementById('signup-username');
     el.email = document.getElementById('signup-email');
-    el.signupMiddle = document.getElementById('signup-middle');
-    el.header = el.signupMiddle.children[0].children[0];
-    el.signupContent = el.signupMiddle.children[1];
+    el.signupParent = document.getElementById('signup-parent');
+    el.header = el.signupParent.children[0].children[0];
+    el.signupContent = el.signupParent.children[1];
     el.address = document.getElementById('signup-address');
     el.gender = document.querySelectorAll('input[type="radio"]');
     el.signupMsg = document.getElementById('sign-process-msg');

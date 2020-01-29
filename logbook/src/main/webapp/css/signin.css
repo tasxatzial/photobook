@@ -1,6 +1,7 @@
 /* form container */
 #signin-parent {
-  max-width: 18rem;
+  max-width: 20rem;
+  min-height: auto;
 }
 
 /* container of the select photo button */
@@ -29,8 +30,12 @@
 
 /* selected photo container */
 #signin-photo-parent {
-  width: 10rem;
+  max-width: 10rem;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: .4rem;
+}
+
+#signin-photo-parent img {
+  width: 100%;
 }
