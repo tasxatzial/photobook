@@ -68,7 +68,7 @@
 .post-footer {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  justify-content: flex-end;
   font-size: 0.9rem;
 }
 

@@ -198,17 +198,12 @@ var Posts = (function() {
     var at = document.createElement('span');
     at.innerHTML = ' at ';
     at.style.fontWeight = 'bold';
-
-    var postedBy = document.createElement('div');
-    postedBy.innerHTML = 'Posted by:';
-    postedBy.style.fontWeight = 'bold';
-
+    
     var timestamp = document.createElement('span');
     timestamp.innerHTML = postJSON['createdAt'].substring(0, postJSON['createdAt'].lastIndexOf(":"));
 
     var username = document.createElement('div');
     username.className = 'posted-by';
-    username.appendChild(postedBy);
     username.appendChild(button);
     username.appendChild(at);
     username.appendChild(timestamp);
