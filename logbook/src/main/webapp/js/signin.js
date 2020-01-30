@@ -5,19 +5,22 @@ var Signin = (function() {
     username: null,
     password: null,
     signinMsg: null,
-    signinButton: null
+    signinButton: null,
+    signinPhotoButton:null
   };
 
   function disableInputs() {
     formSubmit.disable(el.signinButton);
     formInput.disable(el.username);
     formInput.disable(el.password);
+    formButton.disable(el.signinPhotoButton);
   }
 
   function enableInputs() {
     formSubmit.enable(el.signinButton);
     formInput.enable(el.username);
     formInput.enable(el.password);
+    formButton.enable(el.signinPhotoButton);
   }
 
   function doSignin() {
@@ -67,6 +70,7 @@ var Signin = (function() {
     el.username = document.getElementById('signin-username');
     el.password = document.getElementById('signin-password');
     el.signinMsg = document.getElementById('sign-process-msg');
+    el.signinPhotoButton = document.querySelector('.signin-photo-button');
 
     el.username.addEventListener('input', function() {
       formMsg.clear(el.signinMsg);
