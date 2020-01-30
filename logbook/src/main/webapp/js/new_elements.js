@@ -114,11 +114,13 @@ var newElements = (function NewElements() {
     yesButton.innerHTML = 'Yes';
     yesButton.className = 'yes-no-button';
     yesButton.id = id + '-yes-button';
+    formButton.enable(yesButton);
 
     var noButton = document.createElement('button');
     noButton.innerHTML = 'No';
     noButton.className = 'yes-no-button';
     noButton.id = id + '-no-button';
+    formButton.enable(noButton);
 
     var text = document.createElement('div');
     text.innerHTML = 'Please confirm';
@@ -162,6 +164,31 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  function createFullWindow(text) {
+    var expired = document.createElement('div');
+    expired.id = 'full-screen';
+
+    var expiredMsg = document.createElement('p');
+    expiredMsg.innerHTML = text;
+
+    var expiredWindow = document.createElement('div');
+    expiredWindow.id = 'full-window';
+    expired.appendChild(expiredWindow);
+
+    expiredWindow.appendChild(expiredMsg);
+
+    return expired;
+  }
+
+  function createFullWindowButton() {
+    var button = document.createElement('button');
+    button.innerHTML = 'OK';
+    button.id = 'full-window-button';
+    formButton.enable(button);
+
+    return button;
+  }
+
   return {
     createLoader: createLoader,
     createSignBarButton: createSignBarButton,
@@ -172,6 +199,8 @@ var newElements = (function NewElements() {
     createSelectPage: createSelectPage,
     createKeyValue: createKeyValue,
     createGearButton: createGearButton,
-    createCloseButton: createCloseButton
+    createCloseButton: createCloseButton,
+    createFullWindow: createFullWindow,
+    createFullWindowButton: createFullWindowButton
   };
 }());

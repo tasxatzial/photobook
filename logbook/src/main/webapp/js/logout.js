@@ -13,7 +13,7 @@ var Logout = (function() {
       var body = document.getElementsByTagName('body')[0];
       body.removeAttribute('id');
 
-      var expired = document.getElementById('expired-screen');
+      var expired = document.getElementById('full-screen');
       if (expired) {
         body.removeChild(expired);
       }
@@ -37,33 +37,15 @@ var Logout = (function() {
   }
 
   function showExpired() {
-    var expired = createExpiredMsg();
-    var body = document.getElementsByTagName('body')[0];
-    body.id = 'expired-body';
-    document.getElementsByTagName('body')[0].appendChild(expired);
-  }
-
-  function createExpiredMsg() {
-    var expired = document.createElement('div');
-    expired.id = 'expired-screen';
-
-    var expiredMsg = document.createElement('p');
-    expiredMsg.innerHTML = 'Your session has expired';
-
-    var button = document.createElement('button');
-    button.innerHTML = 'OK';
-    button.id = 'expired-button';
+    var button = newElements.createFullWindowButton();
     button.addEventListener('click', init);
-    formButton.enable(button);
 
-    var expiredWindow = document.createElement('div');
-    expiredWindow.id = 'expired-window';
-    expired.appendChild(expiredWindow);
+    var expired = newElements.createFullWindow('Your session has expired');
+    expired.children[0].appendChild(button);
 
-    expiredWindow.appendChild(expiredMsg);
-    expiredWindow.appendChild(button);
-
-    return expired;
+    var body = document.getElementsByTagName('body')[0];
+    body.id = 'full-body';
+    document.getElementsByTagName('body')[0].appendChild(expired);
   }
 
   return {

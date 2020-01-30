@@ -1,4 +1,4 @@
-#expired-screen {
+#full-screen {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -19,7 +19,7 @@
   width: 100vw;
 }
 
-#expired-window {
+#full-window {
   text-align: center;
   padding: 0 24px 20px;
   background-color: white;
@@ -27,7 +27,7 @@
   border-radius: 3px;
 }
 
-#expired-button {
+#full-window-button {
   font-family: inherit;
   padding: 5px 14px;
 }

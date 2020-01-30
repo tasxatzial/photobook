@@ -8,7 +8,6 @@ var AccountInfo = (function() {
   };
 
   function init() {
-    el.confirmDelete = null;
     var accountSubsection = document.getElementById('account-subsection');
     accountSubsection.innerHTML = '';
     accountSubsection.appendChild(createEditAccountSection());
@@ -39,7 +38,6 @@ var AccountInfo = (function() {
   }
 
   function deleteAccount() {
-    redButton.disable(el.deleteAccountButton);
     Requests.cancelExcept(null);
 
     var formData = new FormData();
@@ -52,34 +50,53 @@ var AccountInfo = (function() {
 
     function successCallback() {
       if (JSON.parse(Requests.get(ID).responseText).ERROR) {
-        Logout.showExpired();
+        el.confirmDelete.children[0].scrollIntoView();
+        formMsg.showError(el.deleteAccountMsg, 'Error: Session has expired');
+        var button = newElements.createFullWindowButton();
+        button.addEventListener('click', function () {
+          clearFullWindow();
+          Logout.init();
+        });
+        el.confirmDelete.children[0].appendChild(button);
         return;
       }
+      clearFullWindow();
       Logout.init();
     }
 
     function failCallback() {
-      redButton.enable(el.deleteAccountButton);
+      el.confirmDelete.children[0].scrollIntoView();
       formMsg.showError(el.deleteAccountMsg, 'Error');
-      el.deleteAccountButton.scrollIntoView();
+      var button = newElements.createFullWindowButton();
+      button.addEventListener('click', clearFullWindow);
+      el.confirmDelete.children[0].appendChild(button);
       console.log(Requests.get(ID).responseText);
     }
   }
 
-  function confirmDelete() {
-    if (!el.confirmDelete) {
-      el.confirmDelete = newElements.createYesNoButtons('account-delete-confirm');
-      el.confirmDelete.children[1].addEventListener('click', function () {
-        el.confirmDelete = null;
-        deleteAccount();
-      });
-      el.confirmDelete.children[2].addEventListener('click', function() {
-        formMsg.clear(el.deleteAccountMsg);
-        el.confirmDelete = null;
-      });
-      formMsg.showElement(el.deleteAccountMsg, el.confirmDelete);
-      el.deleteAccountButton.scrollIntoView();
-    }
+  function clearFullWindow() {
+    var body = document.getElementsByTagName('body')[0];
+    body.removeAttribute('id');
+    body.removeChild(el.confirmDelete);
+  }
+
+  function showConfirmDelete() {
+    var yesNoButtons = newElements.createYesNoButtons('account-delete-confirm');
+    yesNoButtons.children[1].addEventListener('click', function () {
+      el.confirmDelete.children[0].removeChild(yesNoButtons);
+      el.deleteAccountMsg = document.createElement('p');
+      el.confirmDelete.children[0].appendChild(el.deleteAccountMsg);
+      deleteAccount();
+    });
+    yesNoButtons.children[2].addEventListener('click', clearFullWindow);
+
+    el.confirmDelete = newElements.createFullWindow('Your account & posts will be deleted!');
+    el.confirmDelete.children[0].appendChild(yesNoButtons);
+
+    var body = document.getElementsByTagName('body')[0];
+    body.id = 'full-body';
+    document.getElementsByTagName('body')[0].appendChild(el.confirmDelete);
+    el.confirmDelete.children[0].scrollIntoView();
   }
 
   function createEditAccountSection() {
@@ -88,11 +105,7 @@ var AccountInfo = (function() {
 
     var deleteAccountDiv = newElements.createBlueButton('Delete Account', 'delete-account-button');
     el.deleteAccountButton = deleteAccountDiv.children[0];
-    el.deleteAccountButton.addEventListener('click', confirmDelete);
-
-    el.deleteAccountMsg = document.createElement('div');
-    el.deleteAccountMsg.id = 'delete-account-msg';
-    deleteAccountDiv.appendChild(el.deleteAccountMsg);
+    el.deleteAccountButton.addEventListener('click', showConfirmDelete);
 
     var div = document.createElement('div');
     div.id = 'edit-account-parent';

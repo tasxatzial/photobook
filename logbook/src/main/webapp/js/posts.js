@@ -198,7 +198,7 @@ var Posts = (function() {
     var at = document.createElement('span');
     at.innerHTML = ' at ';
     at.style.fontWeight = 'bold';
-    
+
     var timestamp = document.createElement('span');
     timestamp.innerHTML = postJSON['createdAt'].substring(0, postJSON['createdAt'].lastIndexOf(":"));
 
