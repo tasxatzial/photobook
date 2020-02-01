@@ -35,40 +35,51 @@ public class AccountInfo extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
+        PrintWriter out = response.getWriter();
+        JSONObject json = new JSONObject();
 
-        HttpSession oldSession = request.getSession(false);
         if (request.getParameter("action") != null && request.getParameter("action").equals("AccountInfo")) {
+            HttpSession oldSession = request.getSession(false);
             if (oldSession != null && oldSession.getAttribute("username") != null) {
-                response.setContentType("text/html;charset=UTF-8");
-                User user = UserDB.getUser((String) oldSession.getAttribute("username"));
-                request.setAttribute("username", oldSession.getAttribute("username"));
-                request.setAttribute("password", user.getPassword());
-                request.setAttribute("passwordConfirm", user.getPassword());
-                request.setAttribute("email", user.getEmail());
-                request.setAttribute("firstName", user.getFirstName());
-                request.setAttribute("lastName", user.getLastName());
-                request.setAttribute("birthDate", user.getBirthDate().split(" ")[0]);
-                request.setAttribute("country", user.getCountry());
-                request.setAttribute("city", user.getTown());
-                request.setAttribute("address", user.getAddress());
-                request.setAttribute("job", user.getOccupation());
-                request.setAttribute("gender", user.getGender().toString());
-                setGender(request);
-                request.setAttribute("interests", user.getInterests());
-                request.setAttribute("about", user.getInfo());
-                request.setAttribute("title", "");
-                request.setAttribute("button", "Update");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/signup.jsp");
-                dispatcher.forward(request, response);
-            } else {
+                String username = (String) oldSession.getAttribute("username");
+                User user = UserDB.getUser(username);
+                if (user == null) {
+                    response.setContentType("application/json;charset=UTF-8");
+                    json.put("ERROR", "INVALID_USER");
+                    out.print(json.toJSONString());
+                    response.setStatus(400);
+                }
+                else {
+                    response.setContentType("text/html;charset=UTF-8");
+                    request.setAttribute("username", username);
+                    request.setAttribute("password", user.getPassword());
+                    request.setAttribute("passwordConfirm", user.getPassword());
+                    request.setAttribute("email", user.getEmail());
+                    request.setAttribute("firstName", user.getFirstName());
+                    request.setAttribute("lastName", user.getLastName());
+                    request.setAttribute("birthDate", user.getBirthDate().split(" ")[0]);
+                    request.setAttribute("country", user.getCountry());
+                    request.setAttribute("city", user.getTown());
+                    request.setAttribute("address", user.getAddress());
+                    request.setAttribute("job", user.getOccupation());
+                    request.setAttribute("gender", user.getGender().toString());
+                    setGender(request);
+                    request.setAttribute("interests", user.getInterests());
+                    request.setAttribute("about", user.getInfo());
+                    request.setAttribute("title", "Update account");
+                    request.setAttribute("button", "Update");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/signup.jsp");
+                    dispatcher.forward(request, response);
+                }
+            }
+            else {
                 response.setContentType("application/json;charset=UTF-8");
-                PrintWriter out = response.getWriter();
-                JSONObject json = new JSONObject();
                 json.put("ERROR", "NO_SESSION");
                 out.print(json.toJSONString());
+                response.setStatus(401);
             }
         }
-        else {
+        else if (request.getParameter("action") != null && request.getParameter("action").equals("GetSignup")) {
             response.setContentType("text/html;charset=UTF-8");
             request.setAttribute("username", "");
             request.setAttribute("password", "");
@@ -89,6 +100,12 @@ public class AccountInfo extends HttpServlet {
             request.setAttribute("button", "Sign up");
             RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/signup.jsp");
             dispatcher.forward(request, response);
+        }
+        else {
+            response.setContentType("application/json;charset=UTF-8");
+            json.put("ERROR", "INVALID_ACTION");
+            out.print(json.toJSONString());
+            response.setStatus(400);
         }
     }
 
