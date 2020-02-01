@@ -26,9 +26,7 @@ var Signin = (function() {
   function doSignin() {
     Requests.cancelExcept(null);
     disableInputs();
-    var loader = newElements.createLoader("images/loader.gif");
-    formMsg.showElement(el.signinMsg, loader);
-    el.signinButton.scrollIntoView();
+    formMsg.showElement(el.signinMsg, Init.loader);
 
     /* prepare data */
     var data = new FormData();
@@ -61,7 +59,13 @@ var Signin = (function() {
 
     function failCallback() {
       enableInputs();
-      console.log(Requests.get(ID).responseText);
+      if (Requests.get(ID).status === 0) {
+        formMsg.showError(el.signinMsg, 'Unable to send request');
+      }
+      else {
+        formMsg.showError(el.signinMsg, 'Error');
+      }
+      el.signinButton.scrollIntoView();
     }
   }
 
