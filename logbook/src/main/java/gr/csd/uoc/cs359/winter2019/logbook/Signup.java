@@ -45,10 +45,32 @@ public class Signup extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
-
         response.setContentType("application/json;charset=UTF-8");
+        JSONObject jsonSignup = new JSONObject();
+        PrintWriter out = response.getWriter();
 
-        JSONObject jsonSignup = checkFields(request);
+        if (request.getParameter("action") == null ||
+                (!request.getParameter("action").equals("Signup") &&
+                        !request.getParameter("action").equals("UpdateAccount"))) {
+            jsonSignup.put("ERROR", "INVALID_ACTION");
+            out.print(jsonSignup.toJSONString());
+            response.setStatus(400);
+            return;
+        }
+
+        String username = null;
+        if (request.getParameter("action").equals("UpdateAccount")) {
+            HttpSession oldSession = request.getSession(false);
+            if (oldSession == null || oldSession.getAttribute("username") == null) {
+                jsonSignup.put("ERROR", "NO_SESSION");
+                out.print(jsonSignup.toJSONString());
+                response.setStatus(401);
+                return;
+            }
+            username = (String) oldSession.getAttribute("username");
+        }
+
+        jsonSignup = checkFields(request);
 
         String passwd1 = request.getParameter("password");
         Enumeration paramNames = request.getParameterNames();
@@ -100,7 +122,7 @@ public class Signup extends HttpServlet {
         }
 
         RequestDispatcher dispatcher;
-        HttpSession oldSession = request.getSession(false);
+
         if (jsonSignup.get("username") == null && request.getParameter("action").equals("Signup")) {
             request.setAttribute("parameter", "username");
             request.setAttribute("parameterValue", request.getParameter("username"));
@@ -111,24 +133,44 @@ public class Signup extends HttpServlet {
             }
         }
 
-        if (jsonSignup.get("email") == null &&
-                (oldSession == null || request.getParameter("action").equals("Signup") ||
-                !request.getParameter("action").equals("UpdateAccount")  ||
-                !request.getParameter("email").equals(UserDB.getUser(request.getParameter("username")).getEmail()))) {
-            request.setAttribute("parameter", "email");
-            request.setAttribute("parameterValue", request.getParameter("email"));
-            dispatcher = request.getRequestDispatcher("CheckOnDB");
-            dispatcher.include(request, response);
-            if (request.getAttribute("email").equals("0")) {
-                jsonSignup.put("email", "Already taken");
+        if (jsonSignup.get("email") == null) {
+            if (request.getParameter("action").equals("Signup")) {
+                request.setAttribute("parameter", "email");
+                request.setAttribute("parameterValue", request.getParameter("email"));
+                dispatcher = request.getRequestDispatcher("CheckOnDB");
+                dispatcher.include(request, response);
+                if (request.getAttribute("email").equals("0")) {
+                    jsonSignup.put("email", "Already taken");
+                }
+            }
+            else {
+                User user = UserDB.getUser(username);
+                if (user != null) {
+                    if (!request.getParameter("email").equals(user.getEmail())) {
+                        request.setAttribute("parameter", "email");
+                        request.setAttribute("parameterValue", request.getParameter("email"));
+                        dispatcher = request.getRequestDispatcher("CheckOnDB");
+                        dispatcher.include(request, response);
+                        if (request.getAttribute("email").equals("0")) {
+                            jsonSignup.put("email", "Already taken");
+                        }
+                    }
+                }
+                else {
+                    JSONObject json = new JSONObject();
+                    json.put("ERROR", "SERVER_ERROR");
+                    out.print(json.toJSONString());
+                    response.setStatus(500);
+                    return;
+                }
             }
         }
 
+
         if (!jsonSignup.isEmpty()) {
-            try (PrintWriter out = response.getWriter()) {
-                out.print(jsonSignup.toJSONString());
-                response.setStatus(400);
-            }
+            jsonSignup.put("ERROR", "INVALID_PARAMETERS");
+            out.print(jsonSignup.toJSONString());
+            response.setStatus(400);
         }
         else {
             doSignup(request, response);
@@ -153,24 +195,36 @@ public class Signup extends HttpServlet {
 
     protected void doSignup(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ClassNotFoundException {
-        User user = new User();
-        user.setUserName(request.getParameter("username"));
-        user.setPassword(request.getParameter("password"));
-        user.setEmail(request.getParameter("email"));
-        user.setFirstName(request.getParameter("firstName"));
-        user.setLastName(request.getParameter("lastName"));
-        user.setBirthDate(request.getParameter("birthDate"));
-        user.setCountry(request.getParameter("country"));
-        user.setTown(request.getParameter("city"));
-        user.setAddress(request.getParameter("address"));
-        user.setOccupation(request.getParameter("job"));
-        user.setGender(request.getParameter("gender"));
-        user.setInterests(request.getParameter("interests"));
-        user.setInfo(request.getParameter("about"));
+        String r_username = request.getParameter("username");
+        String r_password = request.getParameter("password");
+        String r_email = request.getParameter("email");
+        String r_firstName = request.getParameter("firstName");
+        String r_lastName = request.getParameter("lastName");
+        String r_birthDate = request.getParameter("birthDate");
+        String r_country = request.getParameter("country");
+        String r_city = request.getParameter("city");
+        String r_address = request.getParameter("city");
+        String r_job = request.getParameter("job");
+        String r_gender = request.getParameter("gender");
+        String r_interests = request.getParameter("interests");
+        String r_about = request.getParameter("about");
 
-        HttpSession oldSession = request.getSession(false);
-        if (oldSession != null && oldSession.getAttribute("username") != null) {
-            System.out.println("updating user");
+        User user = new User();
+        user.setUserName(r_username);
+        user.setPassword(r_password);
+        user.setEmail(r_email);
+        user.setFirstName(r_firstName);
+        user.setLastName(r_lastName);
+        user.setBirthDate(r_birthDate);
+        user.setCountry(r_country);
+        user.setTown(r_city);
+        user.setAddress(r_address);
+        user.setOccupation(r_job);
+        user.setGender(r_gender);
+        user.setInterests(r_interests);
+        user.setInfo(r_about);
+
+        if (request.getParameter("action").equals("UpdateAccount")) {
             UserDB.updateUser(user);
         }
         else {
@@ -178,26 +232,63 @@ public class Signup extends HttpServlet {
         }
 
         user = UserDB.getUser(request.getParameter("username"));
-        try (PrintWriter out = response.getWriter()) {
-            JSONObject jsonSignup = new JSONObject();
-            if (user != null) {
-                jsonSignup.put("username", request.getParameter("username"));
-                jsonSignup.put("password", request.getParameter("password"));
-                jsonSignup.put("email", request.getParameter("email"));
-                jsonSignup.put("firstName", request.getParameter("firstName"));
-                jsonSignup.put("lastName", request.getParameter("lastName"));
-                jsonSignup.put("birthDate", request.getParameter("birthDate"));
-                jsonSignup.put("country", Countries.getNameOf(request.getParameter("country")));
-                jsonSignup.put("city", request.getParameter("city"));
-                jsonSignup.put("address", request.getParameter("address"));
-                jsonSignup.put("job", request.getParameter("job"));
-                jsonSignup.put("gender", request.getParameter("gender"));
-                jsonSignup.put("interests", request.getParameter("interests"));
-                jsonSignup.put("about", request.getParameter("about"));
-            } else {
-                response.setStatus(501);
+        JSONObject jsonSignup = new JSONObject();
+        PrintWriter out = response.getWriter();
+        if (user != null) {
+            String username = user.getUserName();
+            String password = user.getPassword();
+            String email = user.getEmail();
+            String firstName = user.getFirstName();
+            String lastName = user.getLastName();
+            String birthDate = user.getBirthDate().substring(0, 10);
+            String country = user.getCountry();
+            String city = user.getTown();
+            String address = user.getAddress();
+            String job = user.getOccupation();
+            String gender = user.getGender().toString();
+            String interests = user.getInterests();
+            String about = user.getInfo();
+            if (r_username.equals(username) &&
+                r_password.equals(password) &&
+                r_email.equals(email) &&
+                r_firstName.equals(firstName) &&
+                r_lastName.equals(lastName) &&
+                r_birthDate.equals(birthDate) &&
+                r_country.equals(country) &&
+                r_city.equals(city) &&
+                r_address.equals(address) &&
+                r_job.equals(job) &&
+                r_gender.equals(gender) &&
+                r_interests.equals(interests) &&
+                r_about.equals(about)) {
+                if (request.getParameter("action").equals("Signup")) {
+                    jsonSignup.put("username", username);
+                    jsonSignup.put("password", password);
+                    jsonSignup.put("email", email);
+                    jsonSignup.put("firstName", firstName);
+                    jsonSignup.put("lastName", lastName);
+                    jsonSignup.put("birthDate", birthDate);
+                    jsonSignup.put("country", Countries.getNameOf(country));
+                    jsonSignup.put("city", city);
+                    jsonSignup.put("address", address);
+                    jsonSignup.put("job", job);
+                    jsonSignup.put("gender", gender);
+                    jsonSignup.put("interests", interests);
+                    jsonSignup.put("about", about);
+                }
+                out.print(jsonSignup.toJSONString());
             }
-            out.print(jsonSignup.toJSONString());
+            else {
+                JSONObject json = new JSONObject();
+                json.put("ERROR", "SERVER_ERROR");
+                out.print(json.toJSONString());
+                response.setStatus(500);
+            }
+        } else {
+            JSONObject json = new JSONObject();
+            json.put("ERROR", "SERVER_ERROR");
+            out.print(json.toJSONString());
+            response.setStatus(500);
         }
     }
 

@@ -45,7 +45,7 @@ var Landing = (function() {
 
     function successCallback() {
       Init.nonav.innerHTML = Requests.get(ID).responseText;
-      document.getElementById('signup-parent').className = 'parent-in-main';
+      document.getElementById('signup-parent').classList.add('parent-in-main');
 
       var signupButton = document.getElementById('signup-nav-button');
       if (signupButton) {

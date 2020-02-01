@@ -21,19 +21,40 @@ var AccountInfo = (function() {
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
-      if (Requests.get(ID).getResponseHeader("content-type").split(';')[0] === 'application/json') {
-        Logout.showExpired();
-        return;
-      }
-
       document.getElementById('account-subsection').innerHTML = Requests.get(ID).responseText;
-      document.getElementById('signup-parent').className = 'parent-in-myaccount';
-
+      var signupParent = document.getElementById('signup-parent');
+      signupParent.classList.remove('parent-in-main');
+      signupParent.classList.add('parent-in-myaccount');
       Signup.init('AccountInfo');
     }
 
     function failCallback() {
-      console.log(Requests.get(ID).responseText);
+      if (Requests.get(ID).status === 401) {
+        Logout.showExpired();
+        return;
+      }
+
+      var error = null;
+      if (Requests.get(ID).status === 400) {
+        if (JSON.parse(Requests.get(ID).responseText).ERROR === 'INVALID_ACTION') {
+          error = newElements.createKeyValue('Error', 'Invalid action');
+        }
+        else {
+          error = newElements.createKeyValue('Error', 'Invalid user');
+        }
+      }
+      else if (Requests.get(ID).status === 500) {
+        error = newElements.createKeyValue('Error', 'Server error');
+      }
+      else if (Requests.get(ID).status === 0) {
+        error = newElements.createKeyValue('Error', 'Unable to send request');
+      }
+      else {
+        error = newElements.createKeyValue('Error', 'Unknown');
+      }
+      var editAccountParent = document.getElementById('edit-account-parent');
+      editAccountParent.innerHTML = '';
+      editAccountParent.appendChild(error);
     }
   }
 

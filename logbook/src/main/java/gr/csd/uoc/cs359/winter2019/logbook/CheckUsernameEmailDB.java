@@ -47,6 +47,9 @@ public class CheckUsernameEmailDB extends HttpServlet {
             if (request.getAttribute("email").equals("0")) {
                 json.put("email", "Already taken");
             }
+            else {
+                json.put("email", "unused");
+            }
         }
         if (request.getParameter("username") != null) {
             request.setAttribute("parameter", "username");
@@ -55,6 +58,9 @@ public class CheckUsernameEmailDB extends HttpServlet {
             dispatcher.include(request, response);
             if (request.getAttribute("username").equals("0")) {
                 json.put("username", "Already taken");
+            }
+            else {
+                json.put("username", "unused");
             }
         }
         

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <div id="signup-section">
-  <div id="signup-parent">
+  <div id="signup-parent" class="signup-parent-initial">
     <header>
       <h2><%= (String) request.getAttribute("title") %></h2>
     </header>

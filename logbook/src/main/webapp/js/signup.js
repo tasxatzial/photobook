@@ -80,9 +80,7 @@ var Signup = (function() {
   function doSignup(action) {
     Requests.cancelExcept(null);
     disableInputs();
-    var loader = newElements.createLoader("images/loader.gif");
-    formMsg.showElement(el.signupMsg, loader);
-    el.signupButton.scrollIntoView();
+    formMsg.showElement(el.signupMsg, Init.loader);
 
     var data = gatherData();
     data.append('action', action);
@@ -99,8 +97,7 @@ var Signup = (function() {
         el.header.innerHTML = 'Sign up completed';
         accountInfoTitle.innerHTML = 'You provided the following information: ';
         el.signupContent.innerHTML = '';
-        el.signupParent.style.maxWidth = '65rem';
-        el.signupParent.style.minHeight = 'calc(100vh - 2.8rem - 42px)';
+        el.signupParent.classList.remove('signup-parent-initial');
         el.signupContent.appendChild(accountInfoTitle);
         el.signupContent.appendChild(accountInfo);
       }
@@ -112,19 +109,37 @@ var Signup = (function() {
     }
 
     function failCallback(action) {
-      el.signupContent.innerHTML = '';
-      el.signupParent.style.maxWidth = '65rem';
-      el.signupParent.style.minHeight = 'calc(100vh - 2.8rem - 42px)';
-      if (Requests.get(ID).status >= 500) {
-        var errorMsg = document.createElement('p');
-        errorMsg.innerHTML = 'Oops, something went wrong. Please try again in a while';
-        el.header.innerHTML = Requests.get(ID).status + ' - Server Error';
-        el.signupContent.appendChild(errorMsg);
-      } else {
+      if (Requests.get(ID).status === 401) {
+        Logout.showExpired();
+        return;
+      }
+
+      if (Requests.get(ID).status === 500) {
+        formMsg.showError(el.signupMsg, 'Server error');
+        el.signupButton.scrollIntoView();
+      }
+      else if (Requests.get(ID).status === 0) {
+        formMsg.showError(el.signupMsg, 'Unable to send request');
+        el.signupButton.scrollIntoView();
+      }
+      else if (Requests.get(ID).status === 400) {
         var response = JSON.parse(Requests.get(ID).responseText);
-        var accountInfo = newElements.createSignupSummary(response, Init.dataNames);
-        el.header.innerHTML = Requests.get(ID).status + ' - Bad Request';
-        el.signupContent.appendChild(accountInfo);
+        var info = null;
+        if (response.ERROR === 'INVALID_PARAMETERS') {
+          el.signupParent.classList.remove('signup-parent-initial');
+          info = newElements.createSignupSummary(response, Init.dataNames);
+          el.header.innerHTML = '400 - Bad Request';
+          el.signupContent.innerHTML = '';
+          el.signupContent.appendChild(info);
+        }
+        else {
+          formMsg.showError(el.signupMsg, 'Invalid action');
+          el.signupButton.scrollIntoView();
+        }
+      }
+      else {
+        formMsg.showError(el.signupMsg, 'Error');
+        el.signupButton.scrollIntoView();
       }
       enableInputs(action);
     }
@@ -147,11 +162,8 @@ var Signup = (function() {
     formInput.disable(el.username);
     formInput.disable(el.email);
     formSubmit.disable(el.signupButton);
-
-    var loader = newElements.createLoader("images/loader.gif");
-    formMsg.showElement(el.signupMsg, loader);
-    el.signupButton.scrollIntoView();
-
+    formMsg.showElement(el.signupMsg, Init.loader);
+    
     var formData = new FormData();
     formData.append('action', 'CheckUsernameEmailDB');
     if (action !== 'UpdateAccount') {
@@ -164,20 +176,21 @@ var Signup = (function() {
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
       formMsg.clear(el.signupMsg);
-      if (!response.username && !response.email) {
+      if ((action === 'UpdateAccount' || response.username === 'unused') &&
+          response.email === 'unused') {
         doSignup(action);
       }
       else {
-        if (response.username) {
+        if (action === 'Signup' && response.username !== 'unused') {
           ValidChecker.showInvalidMsg(el.username, response.username);
         }
-        if (response.email) {
+        if (response.email !== 'unused') {
           ValidChecker.showInvalidMsg(el.email, response.email);
         }
-        if (response.username) {
+        if (action === 'Signup' && response.username !== 'unused') {
           scrollToParent(el.username);
         }
-        else {
+        else if (response.email !== 'unused') {
           scrollToParent(el.email);
         }
       }
@@ -189,13 +202,18 @@ var Signup = (function() {
     }
 
     function failCallback() {
-      formMsg.clear(el.signupMsg);
       formSubmit.enable(el.signupButton);
       if (action === 'Signup') {
         formInput.enable(el.username);
       }
       formInput.enable(el.email);
-      console.log(Requests.get(ID).responseText);
+      if (Requests.get(ID).status === 0) {
+        formMsg.showError(el.signupMsg, 'Unable to send request');
+      }
+      else {
+        formMsg.showError(el.signupMsg, 'Error');
+      }
+      el.signupButton.scrollIntoView();
     }
   }
 
