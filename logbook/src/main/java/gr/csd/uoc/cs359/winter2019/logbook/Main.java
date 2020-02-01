@@ -5,7 +5,10 @@
  */
 package gr.csd.uoc.cs359.winter2019.logbook;
 
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.WebServlet;
@@ -34,10 +37,16 @@ public class Main extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession oldSession = request.getSession(false);
+        PrintWriter out = response.getWriter();
+        JSONObject json = new JSONObject();
 
-
-
+        if (request.getParameter("action") == null) {
+            response.setContentType("application/json;charset=UTF-8");
+            json.put("MISSING_FIELDS", "action");
+            out.print(json.toJSONString());
+            response.setStatus(400);
+            return;
+        };
         RequestDispatcher dispatcher = null;
         switch(request.getParameter("action")) {
             case "Init":
@@ -82,13 +91,18 @@ public class Main extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("DeleteAccount");
                 break;
             case "Logout":
+                HttpSession oldSession = request.getSession(false);
                 if (oldSession != null) {
                     oldSession.invalidate();
                 }
                 dispatcher = request.getRequestDispatcher("Init");
                 break;
             default:
-                break;
+                response.setContentType("application/json;charset=UTF-8");
+                json.put("INVALID_FIELDS", "action");
+                out.print(json.toJSONString());
+                response.setStatus(400);
+                return;
         }
         if (dispatcher != null) {
             dispatcher.forward(request, response);

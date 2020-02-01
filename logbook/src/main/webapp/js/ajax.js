@@ -15,7 +15,6 @@ function ajaxRequest(method, url, data, successFunction, failFunction) {
     }
   };
   if (method === 'GET') {
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.send();
   }
   else if (method === 'POST') {
