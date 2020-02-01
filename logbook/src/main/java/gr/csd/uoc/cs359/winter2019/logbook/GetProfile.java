@@ -31,12 +31,10 @@ public class GetProfile extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ClassNotFoundException {
-
+            throws IOException, ClassNotFoundException {
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
@@ -45,15 +43,23 @@ public class GetProfile extends HttpServlet {
         if (oldSession == null || oldSession.getAttribute("username") == null) {
             json.put("ERROR", "NO_SESSION");
             out.print(json.toJSONString());
+            response.setStatus(401);
             return;
         }
 
         User user;
         if (request.getParameter("username") == null) {
-            return; /* not enough */
+            json.put("ERROR", "INVALID_PARAMETER");
+            out.print(json.toJSONString());
+            response.setStatus(400);
+            return;
         }
-        else {
-            user = UserDB.getUser(request.getParameter("username")); /* check if exists */
+        user = UserDB.getUser(request.getParameter("username"));
+        if (user == null) {
+            json.put("ERROR", "INVALID_USER");
+            out.print(json.toJSONString());
+            response.setStatus(400);
+            return;
         }
 
         json.put("username", user.getUserName());

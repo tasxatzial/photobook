@@ -20,6 +20,8 @@ var Init = (function() {
 
   var navbarContent = document.getElementById('navbar-content');
   var nonav = document.getElementById('no-nav');
+  var loader = newElements.createLoader('images/loader.gif');
+
   var user = null;
 
   var data = new FormData();
@@ -54,6 +56,7 @@ var Init = (function() {
     nonav: nonav,
     navbarContent: navbarContent,
     getUser: getUser,
-    setUser: setUser
+    setUser: setUser,
+    loader: loader
   };
 }());

@@ -20,8 +20,7 @@ var ShowProfile = (function() {
     var profileSection = createProfileSection();
     var profileParent = profileSection.children[0];
     var loaderMsg = profileParent.children[0];
-    var loader = newElements.createLoader("images/loader.gif");
-    formMsg.showElement(loaderMsg, loader);
+    formMsg.showElement(loaderMsg, Init.loader);
 
     el.accountSubsection.appendChild(profileSection);
 
@@ -37,11 +36,6 @@ var ShowProfile = (function() {
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
-      if (response.ERROR) {
-        Logout.showExpired();
-        return;
-      }
-
       formMsg.clear(loaderMsg);
       var profile = newElements.createSignupSummary(response,  Init.dataNames);
       profileParent.appendChild(profile);
@@ -49,7 +43,21 @@ var ShowProfile = (function() {
 
     function failCallback() {
       formMsg.clear(loaderMsg);
-      console.log(Requests.get(ID).responseText);
+      if (Requests.get(ID).status === 401) {
+        Logout.showExpired();
+        return;
+      }
+      var error = null;
+      if (Requests.get(ID).status === 400) {
+        error = newElements.createKeyValue('Error', 'Invalid user');
+      }
+      else if (Requests.get(ID).status === 0) {
+        error = newElements.createKeyValue('Error', 'Unable to send request');
+      }
+      else {
+        error = newElements.createKeyValue('Error', 'Unknown');
+      }
+      profileParent.appendChild(error);
     }
   }
 

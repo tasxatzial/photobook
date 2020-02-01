@@ -9,7 +9,7 @@ function ajaxRequest(method, url, data, successFunction, failFunction) {
       if (this.status >= 200 && this.status < 300) {
         successFunction();
       }
-      else if (this.status) {
+      else {
         failFunction();
       }
     }
