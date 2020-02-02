@@ -20,8 +20,7 @@ var AllUsers = (function() {
 
     el.userListParent = userlistSection.children[0];
     var loaderMsg = el.userListParent.children[1];
-    var loader = newElements.createLoader("images/loader.gif");
-    formMsg.showElement(loaderMsg, loader);
+    formMsg.showElement(loaderMsg, Init.loader);
 
     var data = new FormData();
     data.append("action", "GetAllUsers");
@@ -29,14 +28,10 @@ var AllUsers = (function() {
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
-      if (response.ERROR) {
-        Logout.showExpired();
-        return;
-      }
+      formMsg.clear(loaderMsg);
 
       state.response = response;
       state.pages = Object.keys(response).length;
-      formMsg.clear(loaderMsg);
       el.navBar = createNavBar(state.pages);
       addNavBarListeners();
       el.userListParent.appendChild(el.navBar);
@@ -45,7 +40,18 @@ var AllUsers = (function() {
 
     function failCallback() {
       formMsg.clear(loaderMsg);
-      console.log(Requests.get(ID).responseText);
+      if (Requests.get(ID).status === 401) {
+        Logout.showExpired();
+        return;
+      }
+      var error = null;
+      if (Requests.get(ID).status === 0) {
+        error = newElements.createKeyValue('Error', 'Unable to send request');
+      }
+      else {
+        error = newElements.createKeyValue('Error', 'Unknown');
+      }
+      el.userListParent.appendChild(error);
     }
   }
 
