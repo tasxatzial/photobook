@@ -34,7 +34,11 @@ var PostForm = (function() {
     onlineImage: null,
     onlineImageCheckbox: null,
     selectDiskPhotoButton: null,
-    photoToggle: null
+    photoToggle: null,
+    locationDetectMsg: null,
+    postFormPhoto: null,
+    postFormContent: null,
+    header: null
   };
 
   function init(username) {
@@ -63,6 +67,9 @@ var PostForm = (function() {
     el.postButton = document.getElementById('post-button').children[0];
     el.locationDetectMsg = document.getElementById('post-form-detect-msg');
     el.postFormPhoto = document.getElementById('post-form-photo-parent');
+    var postFormParent = document.getElementById('post-form-parent');
+    el.header = postFormParent.children[0].children[0];
+    el.postFormContent = postFormParent.children[1];
 
     if (!navigator.geolocation) {
       el.geolocationRadio.innerHTML = 'Geolocation not supported';
@@ -185,16 +192,15 @@ var PostForm = (function() {
 
   function createPost() {
     Requests.cancelExcept(null);
-    el.postButton.scrollIntoView();
 
     if (data.loc.lat === null || data.loc.lon === null || el.description.value.trim() === '') {
+      el.postButton.scrollIntoView();
       formMsg.showError(el.createPostMsg, 'Please provide all required fields');
       return;
     }
 
     disableInputs();
-    var loader = newElements.createLoader("images/loader.gif");
-    formMsg.showElement(el.createPostMsg, loader);
+    formMsg.showElement(el.createPostMsg, Init.loader);
 
     var formData = new FormData();
     formData.append("action", "CreatePost");
@@ -213,20 +219,38 @@ var PostForm = (function() {
     var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
 
     function successCallback() {
-      if (JSON.parse(Requests.get(ID).responseText).ERROR) {
-        Logout.showExpired();
-        return;
-      }
       Posts.init(data.username);
     }
 
     function failCallback() {
       enableInputs();
-      console.log(Requests.get(ID).responseText);
+      if (Requests.get(ID).status === 401) {
+        Logout.showExpired();
+        return;
+      }
+      el.postFormContent.innerHTML = '';
+      var info = null;
+      if (Requests.get(ID).status === 500) {
+        info = newElements.createKeyValue('Error', 'Server error');
+      }
+      else if (Requests.get(ID).status === 0) {
+        info = newElements.createKeyValue('Error', 'Unable to send request');
+      }
+      else if (Requests.get(ID).status === 400) {
+        var response = JSON.parse(Requests.get(ID).responseText);
+        info = newElements.createSignupSummary(response, Init.postNames);
+        el.header.innerHTML = '400 - Bad Request';
+      }
+      else {
+        info = newElements.createKeyValue('Error', 'Unknown');
+      }
+      el.postFormContent.appendChild(info);
     }
   }
 
   function locationSearchInit() {
+    data.loc.lat = null;
+    data.loc.lon = null;
     formMsg.clear(el.createPostMsg);
     formButton.disable(el.locationDetectButton);
     if (navigator.geolocation && el.geolocationRadio.checked) {
@@ -238,17 +262,17 @@ var PostForm = (function() {
   }
 
   function geolocationSearch() {
-    var loader = newElements.createLoader("images/loader.gif");
-    formMsg.showElement(el.locationDetectMsg, loader);
-
+    formMsg.showElement(el.locationDetectMsg, Init.loader);
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
     function successNavCallback(position) {
+      el.locationDetectButton.scrollIntoView();
       formButton.enable(el.locationDetectButton);
       data.loc.lat = String(position.coords.latitude);
       data.loc.lon = String(position.coords.longitude);
       formMsg.showOK(el.locationDetectMsg, '(' + fourDecimal(data.loc.lat) + ', ' + fourDecimal(data.loc.lon) + ')');
     }
     function failCallback() {
+      el.locationDetectButton.scrollIntoView();
       formButton.enable(el.locationDetectButton);
       formMsg.showError(el.locationDetectMsg, "Error");
     }
@@ -256,13 +280,13 @@ var PostForm = (function() {
 
   function locationSearch() {
     Requests.cancelExcept(null);
-    var loader = newElements.createLoader("images/loader.gif");
-    formMsg.showElement(el.locationDetectMsg, loader);
+    formMsg.showElement(el.locationDetectMsg, Init.loader);
 
     var input = LocationSearch.createInput('', el.place, el.country);
     var ID = Requests.add(ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback));
 
     function successCallback() {
+      el.locationDetectButton.scrollIntoView();
       formButton.enable(el.locationDetectButton);
       var response = JSON.parse(Requests.get(ID).responseText)[0];
       if (response) {
@@ -277,8 +301,9 @@ var PostForm = (function() {
     }
 
     function failCallback() {
+      el.locationDetectButton.scrollIntoView();
       formButton.enable(el.locationDetectButton);
-      console.log(Requests.get(ID).responseText);
+      formMsg.showError(el.locationDetectMsg, "Error");
     }
   }
 

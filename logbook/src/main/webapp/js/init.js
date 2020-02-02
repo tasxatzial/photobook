@@ -18,6 +18,15 @@ var Init = (function() {
     ["about", "General Info"]
   ];
 
+  var postNames = [
+    ["description", "Description"],
+    ["latitude", "Latitude"],
+    ["longitude", "Longitude"],
+    ["resourceURL", "Online URL"],
+    ["imageURL", "Online image"],
+    ["imageBase64", "Disk image"]
+  ];
+
   var navbarContent = document.getElementById('navbar-content');
   var nonav = document.getElementById('no-nav');
   var loader = newElements.createLoader('images/loader.gif');
@@ -53,6 +62,7 @@ var Init = (function() {
 
   return {
     dataNames: dataNames,
+    postNames: postNames,
     nonav: nonav,
     navbarContent: navbarContent,
     getUser: getUser,
