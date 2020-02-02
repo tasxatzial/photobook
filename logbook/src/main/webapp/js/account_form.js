@@ -60,38 +60,39 @@ var AccountInfo = (function() {
 
   function deleteAccount() {
     Requests.cancelExcept(null);
+    formMsg.showElement(el.deleteAccountMsg, Init.loader);
 
     var formData = new FormData();
     formData.append("action", "DeleteAccount");
-
-    var loader = newElements.createLoader('images/loader.gif');
-    formMsg.showElement(el.deleteAccountMsg, loader);
-
     var ID = Requests.add(ajaxRequest("POST", "Main", formData, successCallback, failCallback));
 
     function successCallback() {
-      if (JSON.parse(Requests.get(ID).responseText).ERROR) {
-        el.confirmDelete.children[0].scrollIntoView();
-        formMsg.showError(el.deleteAccountMsg, 'Error: Session has expired');
-        var button = newElements.createFullWindowButton();
-        button.addEventListener('click', function () {
-          clearFullWindow();
-          Logout.init();
-        });
-        el.confirmDelete.children[0].appendChild(button);
-        return;
-      }
       clearFullWindow();
       Logout.init();
     }
 
     function failCallback() {
-      el.confirmDelete.children[0].scrollIntoView();
-      formMsg.showError(el.deleteAccountMsg, 'Error');
+      if (Requests.get(ID).status === 401) {
+        formMsg.showError(el.deleteAccountMsg, 'Error: Session has expired');
+      }
+      if (Requests.get(ID).status === 0) {
+        formMsg.showError(el.deleteAccountMsg, 'Unable to send request');
+      }
+      else if (Requests.get(ID).status === 500) {
+        var response = JSON.parse(Requests.get(ID).responseText);
+        if (response.ERROR === 'DELETE_POSTS') {
+          formMsg.showError(el.deleteAccountMsg, 'Server error: Delete posts');
+        }
+        else {
+          formMsg.showError(el.deleteAccountMsg, 'Server error: Delete account');
+        }
+      }
+      else {
+        formMsg.showError(el.deleteAccountMsg, 'Error');
+      }
       var button = newElements.createFullWindowButton();
       button.addEventListener('click', clearFullWindow);
       el.confirmDelete.children[0].appendChild(button);
-      console.log(Requests.get(ID).responseText);
     }
   }
 
