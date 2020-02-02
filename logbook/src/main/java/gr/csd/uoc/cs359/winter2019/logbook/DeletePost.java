@@ -87,7 +87,7 @@ public class DeletePost extends HttpServlet {
                 pID = Integer.parseInt(postID);
             }
             catch (NumberFormatException e) {
-                jsonFinal.put("ERROR", "INVALID_POST");
+                jsonFinal.put("ERROR", "INVALID_POSTID");
                 response.setStatus(400);
                 out.print(jsonFinal.toJSONString());
                 return;

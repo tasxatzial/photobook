@@ -103,8 +103,7 @@ var Posts = (function() {
   function deletePost(fullPost, username, postID) {
     Requests.cancelExcept(null);
 
-    var loader = newElements.createLoader('images/loader.gif');
-    formMsg.showElement(el.deleteMsg, loader);
+    formMsg.showElement(el.deleteMsg, Init.loader);
 
     var formData = new FormData();
     formData.append("action", "DeletePost");
@@ -114,17 +113,36 @@ var Posts = (function() {
     var ID = Requests.add(ajaxRequest('POST', "Main", formData, successCallback, failCallback));
 
     function successCallback() {
-      if (JSON.parse(Requests.get(ID).responseText).ERROR) {
-        Logout.showExpired();
-        return;
-      }
-
       Posts.init(data.username);
     }
 
     function failCallback() {
-      formMsg.showError(el.deleteMsg, 'Error');
-      console.log(Requests.get(ID).responseText);
+      var response = JSON.parse(Requests.get(ID).responseText);
+      if (Requests.get(ID).status === 401) {
+        if (response.ERROR === 'NO_SESSION') {
+          Logout.showExpired();
+        }
+        else {
+          formMsg.showError(el.deleteMsg, 'Unauthorized');
+        }
+      }
+      else if (Requests.get(ID).status === 500) {
+        formMsg.showError(el.deleteMsg, 'Server error');
+      }
+      else if (Requests.get(ID).status === 400) {
+        if (response.ERROR === 'MISSING_USERNAME') {
+          formMsg.showError(el.deleteMsg, 'Invalid user');
+        }
+        else {
+          formMsg.showError(el.deleteMsg, 'Invalid post');
+        }
+      }
+      else if (Requests.get(ID).status === 0) {
+        formMsg.showError(el.deleteMsg, 'Unable to send request');
+      }
+      else {
+        formMsg.showError(el.deleteMsg, 'Error');
+      }
     }
   }
 
@@ -325,7 +343,6 @@ var Posts = (function() {
   }
 
   function turnToFullPost(data) {
-    console.log(data['postID']);
     state.clickedFullPost = true;
     Requests.cancelExcept(data['queryID']);
 
