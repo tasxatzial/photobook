@@ -46,6 +46,7 @@ public class GetPosts extends HttpServlet {
         if (oldSession == null || oldSession.getAttribute("username") == null) {
             jsonFinal.put("ERROR", "NO_SESSION");
             out.print(jsonFinal.toJSONString());
+            response.setStatus(401);
             return;
         }
 

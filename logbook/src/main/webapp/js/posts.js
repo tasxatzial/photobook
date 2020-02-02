@@ -6,7 +6,8 @@ var Posts = (function() {
     mapParent: null,
     confirmDelete: null,
     deleteButton: null,
-    deleteMsg: null
+    deleteMsg: null,
+    loaderMsg: null
   };
 
   var data = {
@@ -45,21 +46,19 @@ var Posts = (function() {
       accountSubsection.appendChild(postsSection);
     }
 
+    if (username === Init.getUser() || username === null) {
+      el.loaderMsg = el.postsParent.children[2];
+    }
+    else {
+      el.loaderMsg = el.postsParent.children[1];
+    }
+
     getPosts(username);
   }
 
   function getPosts(username) {
     Requests.cancelExcept(null);
-
-    var loader = newElements.createLoader("images/loader.gif");
-    var loaderMsg = null;
-    if (username === Init.getUser() || username === null) {
-      loaderMsg = el.postsParent.children[2];
-    }
-    else {
-      loaderMsg = el.postsParent.children[1];
-    }
-    formMsg.showElement(loaderMsg, loader);
+    formMsg.showElement(el.loaderMsg, Init.loader);
 
     var formData = new FormData();
     formData.append("action", "GetPosts");
@@ -70,12 +69,7 @@ var Posts = (function() {
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
-      if (response.ERROR) {
-        Logout.showExpired();
-        return;
-      }
-
-      formMsg.clear(loaderMsg);
+      formMsg.clear(el.loaderMsg);
       var shortPost = null;
       var numPosts = 0;
       Object.keys(response).forEach(function(key,index) {
@@ -85,13 +79,24 @@ var Posts = (function() {
         numPosts++;
       });
       if (numPosts === 0) {
-        loaderMsg.innerHTML = 'This user hasn\'t posted anything.';
+        el.loaderMsg.innerHTML = 'No posts.';
       }
     }
 
     function failCallback() {
-      formMsg.clear(loaderMsg);
-      console.log(Requests.get(ID).responseText);
+      formMsg.clear(el.loaderMsg);
+      if (Requests.get(ID).status === 401) {
+        Logout.showExpired();
+        return;
+      }
+      var error = null;
+      if (Requests.get(ID).status === 0) {
+        error = newElements.createKeyValue('Error', 'Unable to send request');
+      }
+      else {
+        error = newElements.createKeyValue('Error', 'Unknown');
+      }
+      el.postsParent.appendChild(error);
     }
   }
 
