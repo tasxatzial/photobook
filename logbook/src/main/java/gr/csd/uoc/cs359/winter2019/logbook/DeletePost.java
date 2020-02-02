@@ -38,10 +38,10 @@ public class DeletePost extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
 
-        String username = (String) request.getAttribute("username");
-        if (username != null) {
-            PostDB.deleteAllPostsBy(UserDB.getUser(username));
-            List<Post> posts = PostDB.getTop10RecentPostsOfUser(username);
+        String i_username = (String) request.getAttribute("username");
+        if (i_username != null) {
+            PostDB.deleteAllPostsBy(UserDB.getUser(i_username));
+            List<Post> posts = PostDB.getTop10RecentPostsOfUser(i_username);
             if (posts.size() > 0) {
                 request.setAttribute("DELETE_POSTS", "0");
             }
@@ -58,25 +58,58 @@ public class DeletePost extends HttpServlet {
             if (oldSession == null || oldSession.getAttribute("username") == null) {
                 jsonFinal.put("ERROR", "NO_SESSION");
                 out.print(jsonFinal.toJSONString());
+                response.setStatus(401);
                 return;
             }
-
-            if (!oldSession.getAttribute("username").equals(request.getParameter("username"))) {
-                jsonFinal.put("ERROR", "INVALID_USER");
-                response.setStatus(500);
+            String r_username = request.getParameter("username");
+            if (r_username == null) {
+                jsonFinal.put("ERROR", "MISSING_USERNAME");
+                out.print(jsonFinal.toJSONString());
+                response.setStatus(400);
+                return;
+            }
+            String s_username = (String) oldSession.getAttribute("username");
+            if (!r_username.equals(s_username)) {
+                jsonFinal.put("ERROR", "UNAUTHORIZED");
+                response.setStatus(401);
                 out.print(jsonFinal.toJSONString());
                 return;
             }
-            PostDB.deletePost(Integer.parseInt(request.getParameter("postID")));
-            Post post = PostDB.getPost(Integer.parseInt(request.getParameter("postID")));
+            String postID = request.getParameter("postID");
+            if (postID == null) {
+                jsonFinal.put("ERROR", "MISSING_POSTID");
+                response.setStatus(400);
+                out.print(jsonFinal.toJSONString());
+                return;
+            }
+            int pID;
+            try {
+                pID = Integer.parseInt(postID);
+            }
+            catch (NumberFormatException e) {
+                jsonFinal.put("ERROR", "INVALID_POST");
+                response.setStatus(400);
+                out.print(jsonFinal.toJSONString());
+                return;
+            }
+
+            Post post = PostDB.getPost(pID);
+            if (post == null) {
+                jsonFinal.put("ERROR", "INVALID_POST");
+                out.print(jsonFinal.toJSONString());
+                response.setStatus(400);
+                return;
+            }
+
+            PostDB.deletePost(pID);
+            post = PostDB.getPost(pID);
 
             if (post != null) {
-                jsonFinal.put("DELETE_POST", "0");
-                response.setStatus(500);
+                jsonFinal.put("ERROR", "DELETE_POST");
                 out.print(jsonFinal.toJSONString());
+                response.setStatus(500);
             }
             else {
-                jsonFinal.put("DELETE_POST", "1");
                 out.print(jsonFinal.toJSONString());
             }
         }

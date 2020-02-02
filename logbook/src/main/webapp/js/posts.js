@@ -325,6 +325,7 @@ var Posts = (function() {
   }
 
   function turnToFullPost(data) {
+    console.log(data['postID']);
     state.clickedFullPost = true;
     Requests.cancelExcept(data['queryID']);
 
