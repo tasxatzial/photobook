@@ -41,25 +41,118 @@ public class CreatePost extends HttpServlet {
         JSONObject jsonFinal = new JSONObject();
 
         HttpSession oldSession = request.getSession(false);
+        String username = null;
         if (oldSession == null || oldSession.getAttribute("username") == null) {
             jsonFinal.put("ERROR", "NO_SESSION");
             out.print(jsonFinal.toJSONString());
+            response.setStatus(401);
             return;
         }
-        /* verify that all necessary parameters are present */
+        username = (String) oldSession.getAttribute("username");
+
+        jsonFinal = checkFields(request);
+        if (jsonFinal.get("description") == null && request.getParameter("description").trim().equals("")) {
+            jsonFinal.put("description", "Invalid value");
+        }
+        if  (jsonFinal.get("latitude") == null && !validLatLon(request.getParameter("latitude"), "latitude")) {
+            jsonFinal.put("latitude", "Invalid value");
+        }
+        if  (jsonFinal.get("longitude") == null && !validLatLon(request.getParameter("longitude"), "longitude")) {
+            jsonFinal.put("longitude", "Invalid value");
+        }
+
+        if (!jsonFinal.isEmpty()) {
+            jsonFinal.put("ERROR", "INVALID_PARAMETERS");
+            out.print(jsonFinal.toJSONString());
+            response.setStatus(400);
+            return;
+        }
         Post post = new Post();
-        String username = (String) oldSession.getAttribute("username");
+        String r_description = request.getParameter("description");
+        String r_resourceURL = request.getParameter("resourceURL");
+        String r_imageURL = request.getParameter("imageURL");
+        String r_imageBase64 = request.getParameter("imageBase64");
+        String r_latitude = request.getParameter("latitude");
+        String r_longitude = request.getParameter("longitude");
         post.setUserName(username);
-        post.setDescription(request.getParameter("description"));
-        post.setResourceURL(request.getParameter("resourceURL"));
-        post.setImageURL(request.getParameter("imageURL"));
-        post.setImageBase64(request.getParameter("imageBase64"));
-        post.setLatitude(request.getParameter("latitude"));
-        post.setLongitude(request.getParameter("longitude"));
+        post.setDescription(r_description);
+        post.setResourceURL(r_resourceURL);
+        post.setImageURL(r_imageURL);
+        post.setImageBase64(r_imageBase64);
+        post.setLatitude(r_latitude);
+        post.setLongitude(r_longitude);
 
-        PostDB.addPost(post);
+        int id = PostDB.addPost(post);
+        if (id == -1) {
+            JSONObject json = new JSONObject();
+            json.put("ERROR", "SERVER_ERROR");
+            out.print(json.toJSONString());
+            response.setStatus(500);
+            return;
+        }
+        post = PostDB.getPost(id);
+        if (post == null) {
+            JSONObject json = new JSONObject();
+            json.put("ERROR", "SERVER_ERROR");
+            out.print(json.toJSONString());
+            response.setStatus(500);
+            return;
+        }
+        String d_description = post.getDescription();
+        String d_resourceURL = post.getResourceURL();
+        String d_imageURL = post.getImageURL();
+        String d_imageBase64 = post.getImageBase64();
+        String d_latitude = post.getLatitude();
+        String d_longitude = post.getLongitude();
+        if (username.equals(post.getUserName()) &&
+            d_description.equals(r_description) &&
+            d_resourceURL.equals(r_resourceURL) &&
+            d_imageURL.equals(r_imageURL) &&
+            d_imageBase64.equals(r_imageBase64) &&
+            d_latitude.equals(r_latitude) &&
+            d_longitude.equals(r_longitude)) {
+                out.print(jsonFinal.toJSONString());
+        }
+        else {
+            JSONObject json = new JSONObject();
+            json.put("ERROR", "SERVER_ERROR");
+            out.print(json.toJSONString());
+            response.setStatus(500);
+        }
+    }
 
-        out.print(jsonFinal.toJSONString());
+    protected JSONObject checkFields(HttpServletRequest request) {
+        JSONObject json = new JSONObject();
+        String[] fields = new String[] {
+                "description", "resourceURL", "imageURL", "imageBase64",
+                "latitude", "longitude"};
+
+        for (int i = 0; i < fields.length; i++) {
+            if (request.getParameter(fields[i]) == null) {
+                json.put(fields[i], "Missing parameter");
+            }
+        }
+
+        return json;
+    }
+
+    protected boolean validLatLon(String latlon, String param) {
+        if (latlon == null) {
+            return false;
+        }
+        float f_latlon;
+        try {
+            f_latlon = Float.parseFloat(latlon);
+        }
+        catch (NumberFormatException e) {
+            return false;
+        }
+        if (param.equals("latitude")) {
+            return (f_latlon < 90 && f_latlon > -90);
+        }
+        else {
+            return (f_latlon < 180 && f_latlon > -180);
+        }
     }
 
     /**

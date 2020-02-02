@@ -186,7 +186,7 @@ public class PostDB {
      * @param post
      * @throws ClassNotFoundException
      */
-    public static void addPost(Post post) throws ClassNotFoundException {
+    public static int addPost(Post post) throws ClassNotFoundException {
         // Check that we have all we need
         try {
             post.checkFields();
@@ -198,6 +198,7 @@ public class PostDB {
 
         Statement stmt = null;
         Connection con = null;
+        int id = -1;
         try {
 
             con = CS359DB.getConnection();
@@ -231,7 +232,7 @@ public class PostDB {
             ResultSet rs = stmtIns.getGeneratedKeys();
             if (rs.next()) {
                 // Update value of setID based on database
-                int id = rs.getInt(1);
+                id = rs.getInt(1);
                 post.setPostID(id);
             }
 
@@ -243,7 +244,9 @@ public class PostDB {
         } finally {
             // close connection
             closeDBConnection(stmt, con);
+
         }
+        return id;
     }
 
     /**

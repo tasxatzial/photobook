@@ -186,7 +186,7 @@ public class Signup extends HttpServlet {
 
         for (int i = 0; i < fields.length; i++) {
             if (request.getParameter(fields[i]) == null) {
-                json.put(fields[i], "Missing value");
+                json.put(fields[i], "Missing parameter");
             }
         }
 
