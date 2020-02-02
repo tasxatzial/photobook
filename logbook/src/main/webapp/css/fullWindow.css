@@ -25,6 +25,8 @@
   background-color: white;
   border: 1px solid silver;
   border-radius: 3px;
+  min-width: 13rem;
+  min-height: 6.5rem;
 }
 
 #full-window-button {

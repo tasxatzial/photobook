@@ -189,6 +189,26 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  function showFullWindowMsg(type, text, callback) {
+    var button = newElements.createFullWindowButton();
+    if (callback) {
+      button.addEventListener('click', callback);
+    }
+
+    var msg = null;
+    if (type === 0) {
+      msg = newElements.createFullWindow('Your session has expired');
+    }
+    else {
+      msg = newElements.createFullWindow(text);
+    }
+    msg.children[0].appendChild(button);
+
+    var body = document.getElementsByTagName('body')[0];
+    body.id = 'full-body';
+    document.getElementsByTagName('body')[0].appendChild(msg);
+  }
+
   return {
     createLoader: createLoader,
     createSignBarButton: createSignBarButton,
@@ -201,6 +221,7 @@ var newElements = (function NewElements() {
     createGearButton: createGearButton,
     createCloseButton: createCloseButton,
     createFullWindow: createFullWindow,
-    createFullWindowButton: createFullWindowButton
+    createFullWindowButton: createFullWindowButton,
+    showFullWindowMsg: showFullWindowMsg
   };
 }());

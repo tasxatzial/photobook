@@ -99,7 +99,7 @@ public class Main extends HttpServlet {
                 break;
             default:
                 response.setContentType("application/json;charset=UTF-8");
-                json.put("INVALID_FIELDS", "action");
+                json.put("INVALID_PARAMETERS", "action");
                 out.print(json.toJSONString());
                 response.setStatus(400);
                 return;

@@ -10,13 +10,7 @@ var Logout = (function() {
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
-      var body = document.getElementsByTagName('body')[0];
-      body.removeAttribute('id');
-
-      var expired = document.getElementById('full-screen');
-      if (expired) {
-        body.removeChild(expired);
-      }
+      clearFullWindowMsg();
 
       var navbarContent = document.getElementById('navbar-content');
       var accountButton = document.getElementById('profile-button');
@@ -32,20 +26,27 @@ var Logout = (function() {
     }
 
     function failCallback() {
-      console.log(Requests.get(ID).responseText);
+      if (Requests.get(ID).status === 0) {
+        newElements.showFullWindowMsg(-1, 'Unable to send request', clearFullWindowMsg);
+      }
+      else {
+        newElements.showFullWindowMsg(-1, 'Error', clearFullWindowMsg);
+      }
     }
   }
 
   function showExpired() {
-    var button = newElements.createFullWindowButton();
-    button.addEventListener('click', init);
+    newElements.showFullWindowMsg(0, '', init);
+  }
 
-    var expired = newElements.createFullWindow('Your session has expired');
-    expired.children[0].appendChild(button);
-
+  function clearFullWindowMsg() {
     var body = document.getElementsByTagName('body')[0];
-    body.id = 'full-body';
-    document.getElementsByTagName('body')[0].appendChild(expired);
+    body.removeAttribute('id');
+
+    var msg = document.getElementById('full-screen');
+    if (msg) {
+      body.removeChild(msg);
+    }
   }
 
   return {
