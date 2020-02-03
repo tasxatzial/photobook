@@ -118,24 +118,36 @@ var Posts = (function() {
     }
 
     function failCallback() {
-      var response = JSON.parse(Requests.get(ID).responseText);
+      var responseText = null;
       if (Requests.get(ID).status === 401) {
-        if (response.ERROR === 'NO_SESSION') {
-          Logout.showExpired();
+        responseText = Requests.get(ID).responseText;
+        if (!responseText) {
+          formMsg.showError(el.deleteMsg, 'Error');
         }
         else {
-          formMsg.showError(el.deleteMsg, 'Unauthorized');
+          if (JSON.parse(responseText).ERROR === 'NO_SESSION') {
+            Logout.showExpired();
+          }
+          else {
+            formMsg.showError(el.deleteMsg, 'Unauthorized');
+          }
         }
       }
       else if (Requests.get(ID).status === 500) {
         formMsg.showError(el.deleteMsg, 'Server error');
       }
       else if (Requests.get(ID).status === 400) {
-        if (response.ERROR === 'MISSING_USERNAME') {
-          formMsg.showError(el.deleteMsg, 'Invalid user');
+        responseText = Requests.get(ID).responseText;
+        if (!responseText) {
+          formMsg.showError(el.deleteMsg, 'Error');
         }
         else {
-          formMsg.showError(el.deleteMsg, 'Invalid post');
+          if (JSON.parse(responseText).ERROR === 'MISSING_USERNAME') {
+            formMsg.showError(el.deleteMsg, 'Invalid user');
+          }
+          else {
+            formMsg.showError(el.deleteMsg, 'Invalid post');
+          }
         }
       }
       else if (Requests.get(ID).status === 0) {

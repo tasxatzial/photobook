@@ -42,11 +42,11 @@ var ShowProfile = (function() {
     }
 
     function failCallback() {
-      formMsg.clear(loaderMsg);
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
         return;
       }
+      formMsg.clear(loaderMsg);
       var error = null;
       if (Requests.get(ID).status === 400) {
         error = newElements.createKeyValue('Error', 'Invalid user');

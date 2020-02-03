@@ -123,18 +123,24 @@ var Signup = (function() {
         Init.scrollTo(el.signupButton);
       }
       else if (Requests.get(ID).status === 400) {
-        var response = JSON.parse(Requests.get(ID).responseText);
-        var info = null;
-        if (response.ERROR === 'INVALID_PARAMETERS') {
-          el.signupParent.classList.remove('signup-parent-initial');
-          info = newElements.createSignupSummary(response, Init.dataNames);
-          el.header.innerHTML = '400 - Bad Request';
-          el.signupContent.innerHTML = '';
-          el.signupContent.appendChild(info);
+        var responseText = Requests.get(ID).responseText;
+        if (!responseText) {
+          formMsg.showError(el.signupMsg, 'Error');
+          Init.scrollTo(el.signupButton);
         }
         else {
-          formMsg.showError(el.signupMsg, 'Invalid action');
-          Init.scrollTo(el.signupButton);
+          var response = JSON.parse(responseText);
+          if (response.ERROR === 'INVALID_PARAMETERS') {
+            el.signupParent.classList.remove('signup-parent-initial');
+            var info = newElements.createSignupSummary(response, Init.dataNames);
+            el.header.innerHTML = '400 - Bad Request';
+            el.signupContent.innerHTML = '';
+            el.signupContent.appendChild(info);
+          }
+          else {
+            formMsg.showError(el.signupMsg, 'Invalid action');
+            Init.scrollTo(el.signupButton);
+          }
         }
       }
       else {

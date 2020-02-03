@@ -39,14 +39,20 @@ var AccountInfo = (function() {
         return;
       }
       formMsg.clear(el.showEditAccountMsg);
-      
+
       var error = null;
       if (Requests.get(ID).status === 400) {
-        if (JSON.parse(Requests.get(ID).responseText).ERROR === 'INVALID_ACTION') {
-          error = newElements.createKeyValue('Error', 'Invalid action');
+        var responseText = Requests.get(ID).responseText;
+        if (!responseText) {
+          error = newElements.createKeyValue('Error', 'Unknown');
         }
         else {
-          error = newElements.createKeyValue('Error', 'Invalid user');
+          if (JSON.parse(responseText).ERROR === 'INVALID_ACTION') {
+            error = newElements.createKeyValue('Error', 'Invalid action');
+          }
+          else {
+            error = newElements.createKeyValue('Error', 'Invalid user');
+          }
         }
       }
       else if (Requests.get(ID).status === 500) {
