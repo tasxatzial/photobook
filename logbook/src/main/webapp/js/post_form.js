@@ -230,21 +230,24 @@ var PostForm = (function() {
       }
       var info = null;
       if (Requests.get(ID).status === 500) {
-        info = newElements.createKeyValue('Error', 'Server error');
+        formMsg.showError(el.createPostMsg, 'Server error');
+        Init.scrollTo(el.postButton);
       }
       else if (Requests.get(ID).status === 0) {
-        info = newElements.createKeyValue('Error', 'Unable to send request');
+        formMsg.showError(el.createPostMsg, 'Unable to send request');
+        Init.scrollTo(el.postButton);
       }
       else if (Requests.get(ID).status === 400) {
         var response = JSON.parse(Requests.get(ID).responseText);
         info = newElements.createSignupSummary(response, Init.postNames);
+        el.postFormContent.innerHTML = '';
+        el.postFormContent.appendChild(info);
         el.header.innerHTML = '400 - Bad Request';
       }
       else {
-        info = newElements.createKeyValue('Error', 'Unknown');
+        formMsg.showError(el.createPostMsg, 'Error');
+        Init.scrollTo(el.postButton);
       }
-      el.postFormContent.innerHTML = '';
-      el.postFormContent.appendChild(info);
     }
   }
 
