@@ -72,7 +72,6 @@ var AccountInfo = (function() {
     var ID = Requests.add(ajaxRequest("POST", "Main", formData, successCallback, failCallback));
 
     function successCallback() {
-      clearFullWindow();
       Logout.init();
     }
 
@@ -80,7 +79,7 @@ var AccountInfo = (function() {
       if (Requests.get(ID).status === 401) {
         formMsg.showError(el.deleteAccountMsg, 'Error: Session has expired');
       }
-      if (Requests.get(ID).status === 0) {
+      else if (Requests.get(ID).status === 0) {
         formMsg.showError(el.deleteAccountMsg, 'Unable to send request');
       }
       else if (Requests.get(ID).status === 500) {
@@ -96,15 +95,9 @@ var AccountInfo = (function() {
         formMsg.showError(el.deleteAccountMsg, 'Error');
       }
       var button = newElements.createFullWindowButton();
-      button.addEventListener('click', clearFullWindow);
+      button.addEventListener('click', Init.clearFullWindowMsg);
       el.confirmDelete.children[0].appendChild(button);
     }
-  }
-
-  function clearFullWindow() {
-    var body = document.getElementsByTagName('body')[0];
-    body.removeAttribute('id');
-    body.removeChild(el.confirmDelete);
   }
 
   function showConfirmDelete() {
@@ -115,7 +108,7 @@ var AccountInfo = (function() {
       el.confirmDelete.children[0].appendChild(el.deleteAccountMsg);
       deleteAccount();
     });
-    yesNoButtons.children[2].addEventListener('click', clearFullWindow);
+    yesNoButtons.children[2].addEventListener('click', Init.clearFullWindowMsg);
 
     el.confirmDelete = newElements.createFullWindow('Your account & posts will be deleted!');
     el.confirmDelete.children[0].appendChild(yesNoButtons);
