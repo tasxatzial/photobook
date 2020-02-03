@@ -68,6 +68,16 @@ var Init = (function() {
     }
   }
 
+  function clearFullWindowMsg() {
+    var body = document.getElementsByTagName('body')[0];
+    body.removeAttribute('id');
+
+    var msg = document.getElementById('full-screen');
+    if (msg) {
+      body.removeChild(msg);
+    }
+  }
+
   return {
     dataNames: dataNames,
     postNames: postNames,
@@ -76,6 +86,7 @@ var Init = (function() {
     getUser: getUser,
     setUser: setUser,
     loader: loader,
-    scrollTo: scrollTo
+    scrollTo: scrollTo,
+    clearFullWindowMsg: clearFullWindowMsg
   };
 }());

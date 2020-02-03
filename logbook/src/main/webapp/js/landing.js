@@ -8,12 +8,16 @@ var Landing = (function() {
   }
 
   function showSignin() {
+    Init.clearFullWindowMsg();
     Requests.cancelExcept(null);
 
     var data = new FormData();
     data.append('action', 'GetSignin');
 
-    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
+    var ID = null;
+    ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
+      failCallback(ID);
+    }));
 
     function successCallback() {
       Init.nonav.innerHTML = Requests.get(ID).responseText;
@@ -29,19 +33,18 @@ var Landing = (function() {
 
       Signin.init();
     }
-
-    function failCallback() {
-      console.log(Requests.get(ID).responseText);
-    }
   }
 
   function showSignup() {
+    Init.clearFullWindowMsg();
     Requests.cancelExcept(null);
 
     var data = new FormData();
     data.append('action', 'GetSignup');
-
-    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
+    var ID = null;
+    ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
+      failCallback(ID);
+    }));
 
     function successCallback() {
       Init.nonav.innerHTML = Requests.get(ID).responseText;
@@ -58,9 +61,14 @@ var Landing = (function() {
 
       Signup.init('GetSignup');
     }
+  }
 
-    function failCallback() {
-      console.log(Requests.get(ID).responseText);
+  function failCallback(ID) {
+    if (Requests.get(ID).status === 0) {
+      newElements.showFullWindowMsg(-1, 'Unable to send request', Init.clearFullWindowMsg);
+    }
+    else {
+      newElements.showFullWindowMsg(-1, 'Error', Init.clearFullWindowMsg);
     }
   }
 

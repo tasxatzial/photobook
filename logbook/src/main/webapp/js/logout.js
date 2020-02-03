@@ -10,7 +10,7 @@ var Logout = (function() {
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
-      clearFullWindowMsg();
+      Init.clearFullWindowMsg();
 
       var navbarContent = document.getElementById('navbar-content');
       var accountButton = document.getElementById('profile-button');
@@ -27,26 +27,16 @@ var Logout = (function() {
 
     function failCallback() {
       if (Requests.get(ID).status === 0) {
-        newElements.showFullWindowMsg(-1, 'Unable to send request', clearFullWindowMsg);
+        newElements.showFullWindowMsg(-1, 'Unable to send request', Init.clearFullWindowMsg);
       }
       else {
-        newElements.showFullWindowMsg(-1, 'Error', clearFullWindowMsg);
+        newElements.showFullWindowMsg(-1, 'Error', Init.clearFullWindowMsg);
       }
     }
   }
 
   function showExpired() {
     newElements.showFullWindowMsg(0, '', init);
-  }
-
-  function clearFullWindowMsg() {
-    var body = document.getElementsByTagName('body')[0];
-    body.removeAttribute('id');
-
-    var msg = document.getElementById('full-screen');
-    if (msg) {
-      body.removeChild(msg);
-    }
   }
 
   return {
