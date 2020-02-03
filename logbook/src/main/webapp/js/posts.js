@@ -138,6 +138,7 @@ var Posts = (function() {
       else {
         formMsg.showError(el.deleteMsg, 'Error');
       }
+      Init.scrollTo(el.deleteButton);
     }
   }
 
@@ -437,6 +438,7 @@ var Posts = (function() {
 
   function getPostForm(username) {
     Requests.cancelExcept(null);
+    Init.scrollTo(el.postButton);
     formMsg.showElement(el.postFormLoadMsg, Init.loader);
 
     var formData = new FormData();
@@ -470,7 +472,7 @@ var Posts = (function() {
       else {
         formMsg.showError(el.postFormLoadMsg,'Error');
       }
-      el.postButton.scrollIntoView();
+      Init.scrollTo(el.postButton);
     }
   }
 
@@ -539,8 +541,8 @@ var Posts = (function() {
         el.confirmDelete = null;
       });
       formMsg.showElement(el.deleteMsg, el.confirmDelete);
-      el.deleteButton.scrollIntoView();
     }
+    Init.scrollTo(el.deleteButton);
   }
 
   return {

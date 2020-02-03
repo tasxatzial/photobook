@@ -192,9 +192,9 @@ var PostForm = (function() {
 
   function createPost() {
     Requests.cancelExcept(null);
+    Init.scrollTo(el.postButton);
 
     if (data.loc.lat === null || data.loc.lon === null || el.description.value.trim() === '') {
-      el.postButton.scrollIntoView();
       formMsg.showError(el.createPostMsg, 'Please provide all required fields');
       return;
     }
@@ -228,7 +228,6 @@ var PostForm = (function() {
         Logout.showExpired();
         return;
       }
-      el.postFormContent.innerHTML = '';
       var info = null;
       if (Requests.get(ID).status === 500) {
         info = newElements.createKeyValue('Error', 'Server error');
@@ -244,6 +243,7 @@ var PostForm = (function() {
       else {
         info = newElements.createKeyValue('Error', 'Unknown');
       }
+      el.postFormContent.innerHTML = '';
       el.postFormContent.appendChild(info);
     }
   }
@@ -265,14 +265,12 @@ var PostForm = (function() {
     formMsg.showElement(el.locationDetectMsg, Init.loader);
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
     function successNavCallback(position) {
-      el.locationDetectButton.scrollIntoView();
       formButton.enable(el.locationDetectButton);
       data.loc.lat = String(position.coords.latitude);
       data.loc.lon = String(position.coords.longitude);
       formMsg.showOK(el.locationDetectMsg, '(' + fourDecimal(data.loc.lat) + ', ' + fourDecimal(data.loc.lon) + ')');
     }
     function failCallback() {
-      el.locationDetectButton.scrollIntoView();
       formButton.enable(el.locationDetectButton);
       formMsg.showError(el.locationDetectMsg, "Error");
     }
@@ -286,7 +284,6 @@ var PostForm = (function() {
     var ID = Requests.add(ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback));
 
     function successCallback() {
-      el.locationDetectButton.scrollIntoView();
       formButton.enable(el.locationDetectButton);
       var response = JSON.parse(Requests.get(ID).responseText)[0];
       if (response) {
@@ -301,9 +298,8 @@ var PostForm = (function() {
     }
 
     function failCallback() {
-      el.locationDetectButton.scrollIntoView();
       formButton.enable(el.locationDetectButton);
-      formMsg.showError(el.locationDetectMsg, "Error");
+      formMsg.showError(el.locationDetectMsg, 'Error');
     }
   }
 

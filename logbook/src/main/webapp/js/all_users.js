@@ -129,7 +129,6 @@ var AllUsers = (function() {
     header.appendChild(headerH2);
 
     var loaderMsg = document.createElement('div');
-    loaderMsg.id = 'sign-process-msg';
 
     var div = document.createElement('div');
     div.id = 'userlist-parent';

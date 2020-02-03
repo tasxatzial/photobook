@@ -60,6 +60,14 @@ var Init = (function() {
     return user;
   }
 
+  /* scrolls to an element */
+  function scrollTo(element) {
+    if (window.scrollY) {
+      var nonavMargin = parseFloat(getComputedStyle(Init.nonav).getPropertyValue('margin-top'));
+      window.scroll(0, element.offsetTop - nonavMargin);
+    }
+  }
+
   return {
     dataNames: dataNames,
     postNames: postNames,
@@ -67,6 +75,7 @@ var Init = (function() {
     navbarContent: navbarContent,
     getUser: getUser,
     setUser: setUser,
-    loader: loader
+    loader: loader,
+    scrollTo: scrollTo
   };
 }());

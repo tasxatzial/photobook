@@ -123,7 +123,7 @@ var AccountInfo = (function() {
     var body = document.getElementsByTagName('body')[0];
     body.id = 'full-body';
     document.getElementsByTagName('body')[0].appendChild(el.confirmDelete);
-    el.confirmDelete.children[0].scrollIntoView();
+    Init.scrollTo(el.deleteAccountDiv);
   }
 
   function createEditAccountSection() {
@@ -135,6 +135,7 @@ var AccountInfo = (function() {
 
     el.showEditAccountMsg = document.createElement('div');
     el.showEditAccountMsg.id = 'show-edit-account-msg';
+    el.showEditAccountMsg.className = 'sign-process-msg';
 
     var div = document.createElement('div');
     div.id = 'edit-account-parent';

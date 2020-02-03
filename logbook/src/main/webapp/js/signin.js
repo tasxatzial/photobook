@@ -25,6 +25,7 @@ var Signin = (function() {
 
   function doSignin() {
     Requests.cancelExcept(null);
+    Init.scrollTo(el.signinButton);
     disableInputs();
     formMsg.showElement(el.signinMsg, Init.loader);
 
@@ -52,7 +53,7 @@ var Signin = (function() {
         else {
           formMsg.showError(el.signinMsg, 'Invalid password');
         }
-        el.signinButton.scrollIntoView();
+        Init.scrollTo(el.signinButton);
         enableInputs();
       }
     }
@@ -65,7 +66,7 @@ var Signin = (function() {
       else {
         formMsg.showError(el.signinMsg, 'Error');
       }
-      el.signinButton.scrollIntoView();
+      Init.scrollTo(el.signinButton);
     }
   }
 

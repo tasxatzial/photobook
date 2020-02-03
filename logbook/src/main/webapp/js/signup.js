@@ -23,7 +23,7 @@ var Signup = (function() {
     formMsg.clear(el.signupMsg);
     var invalidElement = ValidChecker.checkInvalidElements();
     if (invalidElement) {
-      scrollToParent(invalidElement);
+      Init.scrollTo(invalidElement.parentNode);
     }
     else {
       checkUsernameEmailDB(action);
@@ -103,7 +103,7 @@ var Signup = (function() {
       }
       else {
         formMsg.showOK(el.signupMsg, 'Success');
-        el.signupButton.scrollIntoView();
+        Init.scrollTo(el.signupButton);
       }
       enableInputs(action);
     }
@@ -116,11 +116,11 @@ var Signup = (function() {
 
       if (Requests.get(ID).status === 500) {
         formMsg.showError(el.signupMsg, 'Server error');
-        el.signupButton.scrollIntoView();
+        Init.scrollTo(el.signupButton);
       }
       else if (Requests.get(ID).status === 0) {
         formMsg.showError(el.signupMsg, 'Unable to send request');
-        el.signupButton.scrollIntoView();
+        Init.scrollTo(el.signupButton);
       }
       else if (Requests.get(ID).status === 400) {
         var response = JSON.parse(Requests.get(ID).responseText);
@@ -134,26 +134,19 @@ var Signup = (function() {
         }
         else {
           formMsg.showError(el.signupMsg, 'Invalid action');
-          el.signupButton.scrollIntoView();
+          Init.scrollTo(el.signupButton);
         }
       }
       else {
         formMsg.showError(el.signupMsg, 'Error');
-        el.signupButton.scrollIntoView();
+        Init.scrollTo(el.signupButton);
       }
       enableInputs(action);
     }
   }
 
-  /* scrolls to an element */
-  function scrollToParent(element) {
-    if (window.scrollY) {
-      var nonavMargin = parseFloat(getComputedStyle(Init.nonav).getPropertyValue('margin-top'));
-      window.scroll(0, element.parentNode.offsetTop - nonavMargin);
-    }
-  }
-
   function checkUsernameEmailDB(action) {
+    Init.scrollTo(el.signupButton);
     if (action === 'UpdateAccount' && el.email.value === data.oldEmail) {
       doSignup(action);
       return;
@@ -188,10 +181,10 @@ var Signup = (function() {
           ValidChecker.showInvalidMsg(el.email, response.email);
         }
         if (action === 'Signup' && response.username !== 'unused') {
-          scrollToParent(el.username);
+          Init.scrollTo(el.username.parentNode);
         }
         else if (response.email !== 'unused') {
-          scrollToParent(el.email);
+          Init.scrollTo(el.email.parentNode);
         }
       }
       formSubmit.enable(el.signupButton);
@@ -213,7 +206,7 @@ var Signup = (function() {
       else {
         formMsg.showError(el.signupMsg, 'Error');
       }
-      el.signupButton.scrollIntoView();
+      Init.scrollTo(el.signupButton);
     }
   }
 

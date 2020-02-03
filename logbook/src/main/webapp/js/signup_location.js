@@ -187,8 +187,7 @@ var SignUpLocation = (function () {
     formButton.disable(el.nominatimSearchButton);
     formButton.disable(el.geolocSearchButton);
     formMsg.clear(el.geolocSearchMsg);
-    var loader = newElements.createLoader('images/loader.gif');
-    formMsg.showElement(el.nominatimSearchMsg, loader);
+    formMsg.showElement(el.nominatimSearchMsg, Init.loader);
     var ID = Requests.add(ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback));
   }
 
@@ -263,8 +262,7 @@ var SignUpLocation = (function () {
     formButton.disable(el.nominatimSearchButton);
     formButton.disable(el.geolocSearchButton);
     formMsg.clear(el.nominatimSearchMsg);
-    var loader = newElements.createLoader('images/loader.gif');
-    formMsg.showElement(el.geolocSearchMsg, loader);
+    formMsg.showElement(el.geolocSearchMsg, Init.loader);
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
   }
 
