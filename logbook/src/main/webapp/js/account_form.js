@@ -4,7 +4,9 @@ var AccountInfo = (function() {
   var el = {
     confirmDelete: null,
     deleteAccountMsg: null,
-    deleteAccountButton: null
+    deleteAccountDiv: null,
+    editAccountDiv: null,
+    showEditAccountMsg: null,
   };
 
   function init() {
@@ -15,6 +17,9 @@ var AccountInfo = (function() {
 
   function editAccount() {
     Requests.cancelExcept(null);
+    el.deleteAccountDiv.parentElement.removeChild(el.deleteAccountDiv);
+    el.editAccountDiv.parentElement.removeChild(el.editAccountDiv);
+    formMsg.showElement(el.showEditAccountMsg, Init.loader);
 
     var data = new FormData();
     data.append("action", "AccountInfo");
@@ -33,7 +38,8 @@ var AccountInfo = (function() {
         Logout.showExpired();
         return;
       }
-
+      formMsg.clear(el.showEditAccountMsg);
+      
       var error = null;
       if (Requests.get(ID).status === 400) {
         if (JSON.parse(Requests.get(ID).responseText).ERROR === 'INVALID_ACTION') {
@@ -53,7 +59,6 @@ var AccountInfo = (function() {
         error = newElements.createKeyValue('Error', 'Unknown');
       }
       var editAccountParent = document.getElementById('edit-account-parent');
-      editAccountParent.innerHTML = '';
       editAccountParent.appendChild(error);
     }
   }
@@ -122,19 +127,22 @@ var AccountInfo = (function() {
   }
 
   function createEditAccountSection() {
-    var editAccountDiv = newElements.createBlueButton('Edit Account', 'edit-account-button');
-    editAccountDiv.children[0].addEventListener('click', editAccount);
+    el.editAccountDiv = newElements.createBlueButton('Edit Account', 'edit-account-button');
+    el.editAccountDiv.children[0].addEventListener('click', editAccount);
 
-    var deleteAccountDiv = newElements.createBlueButton('Delete Account', 'delete-account-button');
-    el.deleteAccountButton = deleteAccountDiv.children[0];
-    el.deleteAccountButton.addEventListener('click', showConfirmDelete);
+    el.deleteAccountDiv = newElements.createBlueButton('Delete Account', 'delete-account-button');
+    el.deleteAccountDiv.children[0].addEventListener('click', showConfirmDelete);
+
+    el.showEditAccountMsg = document.createElement('div');
+    el.showEditAccountMsg.id = 'show-edit-account-msg';
 
     var div = document.createElement('div');
     div.id = 'edit-account-parent';
     div.className = 'parent-in-myaccount';
 
-    div.appendChild(editAccountDiv);
-    div.appendChild(deleteAccountDiv);
+    div.appendChild(el.showEditAccountMsg);
+    div.appendChild(el.editAccountDiv);
+    div.appendChild(el.deleteAccountDiv);
 
     var section = document.createElement('div');
     section.id = 'edit-account-section';
