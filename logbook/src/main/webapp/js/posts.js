@@ -343,7 +343,15 @@ var Posts = (function() {
       }
 
       function failCallback() {
-        data['locationDiv'].children[0].innerHTML = 'Not available';
+        if (LocationSearch.isValidLatLon(data['lat'], data['lon'])) {
+          data['locationDiv'].children[0].innerHTML = '(' + Init.fourDecimal(data['lat']) + ', ' + Init.fourDecimal(data['lon']) + ') deg';
+          if (state.clickedFullPost) {
+            showMap(data);
+          }
+        }
+        else {
+          data['locationDiv'].children[0].innerHTML = 'Not available';
+        }
       }
     }());
 
@@ -413,9 +421,7 @@ var Posts = (function() {
       data['postDiv'].insertBefore(optionsBar, data['locationDiv']);
     }
 
-    if (data['locationQuery']) {
-      showMap(data);
-    }
+    showMap(data);
 
     el.postsParent.innerHTML = '';
     el.postsParent.appendChild(data['postDiv']);
@@ -423,15 +429,20 @@ var Posts = (function() {
   }
 
   function showMap(data) {
-    if (!data['locationQuery']) {
-      return;
-    }
     var zoom = null;
-    if (data['locationQuery'].address) {
-      zoom = 16;
+    if (data['locationQuery']) {
+      if (data['locationQuery'].address) {
+        zoom = 16;
+      }
+      else {
+        zoom = 12;
+      }
+    }
+    else if (LocationSearch.isValidLatLon(data['lat'], data['lon'])) {
+      zoom = 12;
     }
     else {
-      zoom = 12;
+      return;
     }
 
     if (!el.mapParent) {

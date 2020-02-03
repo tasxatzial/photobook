@@ -305,12 +305,19 @@ var LocationSearch = (function() {
   /* create the string for a ajax reverse nomination search request.
   Assumes that arguments are strings or numbers */
   function createLatLonInput(latitude, longitude) {
-    if (String(latitude).trim() === '' || String(longitude).trim() === '' || isNaN(latitude) || isNaN(longitude)) {
+    if (!isValidLatLon(latitude, longitude)) {
       return null;
     }
     return '?lat=' + latitude +
         '&lon=' + longitude +
         '&format=json&zoom=16';
+  }
+
+  function isValidLatLon(latitude, longitude) {
+    return !(String(latitude).trim() === '' || String(longitude).trim() === '' ||
+        isNaN(latitude) || isNaN(longitude) ||
+        latitude < -90 || latitude > 90 ||
+        longitude < -180 || longitude > 180);
   }
 
   /* Parse a reverse nominatim search response and return an
@@ -362,6 +369,7 @@ var LocationSearch = (function() {
     isSearchDataReady: isSearchDataReady,
     createInput: createInput,
     createLatLonInput: createLatLonInput,
-    parseReverseSearch: parseReverseSearch
+    parseReverseSearch: parseReverseSearch,
+    isValidLatLon: isValidLatLon
   };
 }());

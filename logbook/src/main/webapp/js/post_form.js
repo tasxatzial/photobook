@@ -271,7 +271,7 @@ var PostForm = (function() {
       formButton.enable(el.locationDetectButton);
       data.loc.lat = String(position.coords.latitude);
       data.loc.lon = String(position.coords.longitude);
-      formMsg.showOK(el.locationDetectMsg, '(' + fourDecimal(data.loc.lat) + ', ' + fourDecimal(data.loc.lon) + ')');
+      formMsg.showOK(el.locationDetectMsg, '(' + Init.fourDecimal(data.loc.lat) + ', ' + Init.fourDecimal(data.loc.lon) + ')');
     }
     function failCallback() {
       formButton.enable(el.locationDetectButton);
@@ -292,7 +292,7 @@ var PostForm = (function() {
       if (response) {
         data.loc.lat = response.lat;
         data.loc.lon = response.lon;
-        formMsg.showOK(el.locationDetectMsg, '(' + fourDecimal(data.loc.lat) + ', ' + fourDecimal(data.loc.lon) + ')');
+        formMsg.showOK(el.locationDetectMsg, '(' + Init.fourDecimal(data.loc.lat) + ', ' + Init.fourDecimal(data.loc.lon) + ')');
       }
       else {
         formButton.enable(el.locationDetectButton);
@@ -334,9 +334,6 @@ var PostForm = (function() {
     formButton.disable(el.selectDiskPhotoButton);
   }
 
-  function fourDecimal(string) {
-    return 0.001 * Math.round(parseFloat(string) * 1000)
-  }
   return {
     init: init
   };

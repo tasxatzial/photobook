@@ -78,6 +78,10 @@ var Init = (function() {
     }
   }
 
+  function fourDecimal(string) {
+    return 0.001 * Math.round(parseFloat(string) * 1000)
+  }
+
   return {
     dataNames: dataNames,
     postNames: postNames,
@@ -87,6 +91,7 @@ var Init = (function() {
     setUser: setUser,
     loader: loader,
     scrollTo: scrollTo,
-    clearFullWindowMsg: clearFullWindowMsg
+    clearFullWindowMsg: clearFullWindowMsg,
+    fourDecimal: fourDecimal
   };
 }());
