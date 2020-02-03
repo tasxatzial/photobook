@@ -53,6 +53,11 @@ var Posts = (function() {
 
   function getPosts(username) {
     Requests.cancelExcept(null);
+
+    var oldError = document.getElementById('get-posts-error-msg');
+    if (oldError) {
+      el.postsParent.removeChild(oldError);
+    }
     formMsg.showElement(el.loaderMsg, Init.loader);
 
     var formData = new FormData();
@@ -79,11 +84,11 @@ var Posts = (function() {
     }
 
     function failCallback() {
-      formMsg.clear(el.loaderMsg);
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
         return;
       }
+      formMsg.clear(el.loaderMsg);
       var error = null;
       if (Requests.get(ID).status === 0) {
         error = newElements.createKeyValue('Error', 'Unable to send request');
@@ -91,6 +96,7 @@ var Posts = (function() {
       else {
         error = newElements.createKeyValue('Error', 'Unknown');
       }
+      error.id = 'get-posts-error-msg';
       el.postsParent.appendChild(error);
     }
   }
