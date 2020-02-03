@@ -7,7 +7,9 @@ var Posts = (function() {
     confirmDelete: null,
     deleteButton: null,
     deleteMsg: null,
-    loaderMsg: null
+    loaderMsg: null,
+    postFormLoadMsg: null,
+    postButton: null
   };
 
   var data = {
@@ -44,13 +46,6 @@ var Posts = (function() {
       var accountSubsection = document.getElementById('account-subsection');
       accountSubsection.innerHTML = '';
       accountSubsection.appendChild(postsSection);
-    }
-
-    if (username === Init.getUser() || username === null) {
-      el.loaderMsg = el.postsParent.children[2];
-    }
-    else {
-      el.loaderMsg = el.postsParent.children[1];
     }
 
     getPosts(username);
@@ -152,21 +147,26 @@ var Posts = (function() {
     headerH2.innerHTML = 'Latest posts';
     header.appendChild(headerH2);
 
-    var loaderMsg = document.createElement('div');
-    loaderMsg.id = 'sign-process-msg';
+    el.loaderMsg = document.createElement('div');
+    el.loaderMsg.className = 'sign-process-msg';
 
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';
 
     if (username === Init.getUser() || username === null) {
-      var postButton = newElements.createBlueButton('+ New Post', 'new-post-button');
-      postButton.addEventListener('click', function() {
+      el.postFormLoadMsg = document.createElement('div');
+      el.postFormLoadMsg.className = 'sign-process-msg';
+      el.postFormLoadMsg.id = 'post-form-load-msg';
+
+      el.postButton = newElements.createBlueButton('+ New Post', 'new-post-button');
+      el.postButton.addEventListener('click', function() {
         getPostForm(username);
       });
-      postsParent.appendChild(postButton);
+      postsParent.appendChild(el.postButton);
+      postsParent.appendChild(el.postFormLoadMsg)
     }
     postsParent.appendChild(header);
-    postsParent.appendChild(loaderMsg);
+    postsParent.appendChild(el.loaderMsg);
 
     var postsSection = document.createElement('div');
     postsSection.id = 'posts-section';
@@ -437,6 +437,7 @@ var Posts = (function() {
 
   function getPostForm(username) {
     Requests.cancelExcept(null);
+    formMsg.showElement(el.postFormLoadMsg, Init.loader);
 
     var formData = new FormData();
     formData.append("action", "GetPostForm");
@@ -460,7 +461,16 @@ var Posts = (function() {
     }
 
     function failCallback() {
-      console.log(Requests.get(ID).responseText);
+      if (Requests.get(ID).status === 401) {
+        Logout.showExpired();
+      }
+      else if (Requests.get(ID).status === 0) {
+        formMsg.showError(el.postFormLoadMsg,'Unable to send request');
+      }
+      else {
+        formMsg.showError(el.postFormLoadMsg,'Error');
+      }
+      el.postButton.scrollIntoView();
     }
   }
 

@@ -36,7 +36,7 @@ public class Main extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession oldSession = null;
         PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
 
@@ -76,7 +76,17 @@ public class Main extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("GetProfile");
                 break;
             case "GetPostForm":
-                dispatcher = request.getRequestDispatcher("WEB-INF/post_form.jsp");
+                oldSession = request.getSession(false);
+                if (oldSession != null && oldSession.getAttribute("username") != null) {
+                    dispatcher = request.getRequestDispatcher("WEB-INF/post_form.jsp");
+                }
+                else {
+                    response.setContentType("application/json;charset=UTF-8");
+                    json.put("ERROR", "NO_SESSION");
+                    out.print(json.toJSONString());
+                    response.setStatus(401);
+                    return;
+                }
                 break;
             case "GetPosts":
                 dispatcher = request.getRequestDispatcher("GetPosts");
@@ -91,7 +101,7 @@ public class Main extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("DeleteAccount");
                 break;
             case "Logout":
-                HttpSession oldSession = request.getSession(false);
+                oldSession = request.getSession(false);
                 if (oldSession != null) {
                     oldSession.invalidate();
                 }

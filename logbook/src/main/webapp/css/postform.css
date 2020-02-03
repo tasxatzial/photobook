@@ -59,3 +59,7 @@
 #post-form-place-parent {
   margin-bottom: 0.7rem;
 }
+
+#post-form-load-msg {
+  height: 1rem;
+}
