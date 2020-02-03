@@ -3,6 +3,7 @@
 var Logout = (function() {
   function init() {
     Requests.cancelExcept(null);
+    Init.clearFullWindowMsg();
 
     var data = new FormData();
     data.append("action", "Logout");
@@ -10,8 +11,6 @@ var Logout = (function() {
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
-      Init.clearFullWindowMsg();
-
       var navbarContent = document.getElementById('navbar-content');
       var accountButton = document.getElementById('profile-button');
       var allUsersButton = document.getElementById('show-users-button');
