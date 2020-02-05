@@ -9,7 +9,7 @@ function ajaxRequest(method, url, data, successFunction, failFunction) {
       if (this.status >= 200 && this.status < 300) {
         successFunction();
       }
-      else {
+      else if (this.statusName !== 'aborted') {
         failFunction();
       }
     }
@@ -43,6 +43,7 @@ var Requests = (function() {
   function cancelExcept(ID) {
     for (let key in xhr) {
       if (key !== ID) {
+        xhr[key]['statusName'] = 'aborted';
         xhr[key].abort();
         delete xhr[key];
       }
