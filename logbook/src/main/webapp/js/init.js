@@ -79,7 +79,28 @@ var Init = (function() {
   }
 
   function fourDecimal(string) {
-    return 0.001 * Math.round(parseFloat(string) * 1000)
+    var num = 0.0001 * Math.round(parseFloat(string) * 10000);
+    if (num > 99.9999) {
+      if (num < 100) {
+        num = 100;
+      }
+      return (num.toString()).substring(0, 8);
+    }
+    else if (num > -0.0001) {
+      if (num < 0) {
+        num = 0;
+      }
+      return (num.toString()).substring(0, 7);
+    }
+    else if (num > -100.0001) {
+      if (num < -100) {
+        num = -100;
+      }
+      return (num.toString()).substring(0, 8);
+    }
+    else {
+      return (num.toString()).substring(0, 9);
+    }
   }
 
   return {
