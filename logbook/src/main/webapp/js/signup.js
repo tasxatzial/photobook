@@ -258,6 +258,7 @@ var Signup = (function() {
     SignUpFace.init();
     data.oldEmail = el.email.value;
     el.signupButton.disabled = false;
+    el.email.disabled = false;
   }
 
   return {

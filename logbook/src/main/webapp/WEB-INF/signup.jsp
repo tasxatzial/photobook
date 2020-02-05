@@ -37,7 +37,7 @@
         <div class="flex-label">
           <label for="signup-email" class="signup-necessary sign-label">E-mail</label>
         </div>
-        <input type="email" class="sign-tofill" value="<%= (String) request.getAttribute("email")%>" name="signup-email" id="signup-email"
+        <input type="email" class="sign-tofill" value="<%= (String) request.getAttribute("email")%>" name="signup-email" id="signup-email" disabled
                pattern="^[\w!#$%&'*+/=?^`{|}~-]+(?:\.[\w!#$%&'*+/=?^`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$" required>
       </div>
       <div class="sign-child">
