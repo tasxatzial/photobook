@@ -41,7 +41,7 @@ var Requests = (function() {
   }
 
   function cancelExcept(ID) {
-    for (let key in xhr) {
+    for (var key in xhr) {
       if (key !== ID) {
         xhr[key]['statusName'] = 'aborted';
         xhr[key].abort();

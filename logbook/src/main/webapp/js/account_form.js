@@ -100,7 +100,7 @@ var AccountInfo = (function() {
       else {
         formMsg.showError(el.deleteAccountMsg, 'Error');
       }
-      var button = newElements.createFullWindowButton();
+      var button = newElements.createFullWindowButton('OK');
       button.addEventListener('click', Init.clearFullWindowMsg);
       el.confirmDelete.children[0].appendChild(button);
     }

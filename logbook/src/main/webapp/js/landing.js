@@ -9,6 +9,10 @@ var Landing = (function() {
 
   function showSignin() {
     Init.clearFullWindowMsg();
+    newElements.showFullWindowMsg(1, 'Please wait...', function () {
+      Requests.cancelExcept(null);
+      Init.clearFullWindowMsg();
+    });
     Requests.cancelExcept(null);
 
     var data = new FormData();
@@ -20,6 +24,7 @@ var Landing = (function() {
     }));
 
     function successCallback() {
+      Init.clearFullWindowMsg();
       Init.nonav.innerHTML = Requests.get(ID).responseText;
 
       var signinButton = document.getElementById('signin-nav-button');
@@ -37,6 +42,10 @@ var Landing = (function() {
 
   function showSignup() {
     Init.clearFullWindowMsg();
+    newElements.showFullWindowMsg(1, 'Please wait...', function () {
+      Requests.cancelExcept(null);
+      Init.clearFullWindowMsg();
+    });
     Requests.cancelExcept(null);
 
     var data = new FormData();
@@ -47,6 +56,7 @@ var Landing = (function() {
     }));
 
     function successCallback() {
+      Init.clearFullWindowMsg();
       Init.nonav.innerHTML = Requests.get(ID).responseText;
       document.getElementById('signup-parent').classList.add('parent-in-main');
 
@@ -64,6 +74,7 @@ var Landing = (function() {
   }
 
   function failCallback(ID) {
+    Init.clearFullWindowMsg();
     if (Requests.get(ID).status === 0) {
       newElements.showFullWindowMsg(-1, 'Unable to send request', Init.clearFullWindowMsg);
     }

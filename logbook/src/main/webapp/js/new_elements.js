@@ -180,9 +180,9 @@ var newElements = (function NewElements() {
     return expired;
   }
 
-  function createFullWindowButton() {
+  function createFullWindowButton(text) {
     var button = document.createElement('button');
-    button.innerHTML = 'OK';
+    button.innerHTML = text;
     button.id = 'full-window-button';
     formButton.enable(button);
 
@@ -190,7 +190,13 @@ var newElements = (function NewElements() {
   }
 
   function showFullWindowMsg(type, text, callback) {
-    var button = newElements.createFullWindowButton();
+    var button;
+    if (type === 1) {
+      button = newElements.createFullWindowButton('Cancel');
+    }
+    else {
+      button = newElements.createFullWindowButton('OK');
+    }
     if (callback) {
       button.addEventListener('click', callback);
     }
