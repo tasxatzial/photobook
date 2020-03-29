@@ -9,7 +9,7 @@ var Landing = (function() {
 
   function showSignin() {
     Init.clearFullWindowMsg();
-    newElements.showFullWindowMsg(1, 'Please wait...', function () {
+    newElements.showFullWindowMsg('Cancel', 'Please wait...', function () {
       Requests.cancelExcept(null);
       Init.clearFullWindowMsg();
     });
@@ -42,7 +42,7 @@ var Landing = (function() {
 
   function showSignup() {
     Init.clearFullWindowMsg();
-    newElements.showFullWindowMsg(1, 'Please wait...', function () {
+    newElements.showFullWindowMsg('Cancel', 'Please wait...', function () {
       Requests.cancelExcept(null);
       Init.clearFullWindowMsg();
     });
@@ -76,10 +76,10 @@ var Landing = (function() {
   function failCallback(ID) {
     Init.clearFullWindowMsg();
     if (Requests.get(ID).status === 0) {
-      newElements.showFullWindowMsg(-1, 'Unable to send request', Init.clearFullWindowMsg);
+      newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
     }
     else {
-      newElements.showFullWindowMsg(-1, 'Error', Init.clearFullWindowMsg);
+      newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
     }
   }
 

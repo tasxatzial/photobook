@@ -4,7 +4,7 @@ var Logout = (function() {
   function init() {
     Requests.cancelExcept(null);
     Init.clearFullWindowMsg();
-    newElements.showFullWindowMsg(1, 'Please wait...', function () {
+    newElements.showFullWindowMsg('Cancel', 'Please wait...', function () {
       Requests.cancelExcept(null);
       Init.clearFullWindowMsg();
     });
@@ -30,16 +30,16 @@ var Logout = (function() {
     function failCallback() {
       Init.clearFullWindowMsg();
       if (Requests.get(ID).status === 0) {
-        newElements.showFullWindowMsg(-1, 'Unable to send request', Init.clearFullWindowMsg);
+        newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
       else {
-        newElements.showFullWindowMsg(-1, 'Error', Init.clearFullWindowMsg);
+        newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
       }
     }
   }
 
   function showExpired() {
-    newElements.showFullWindowMsg(0, '', init);
+    newElements.showFullWindowMsg('OK', 'Your session has expired', init);
   }
 
   return {

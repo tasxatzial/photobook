@@ -189,25 +189,14 @@ var newElements = (function NewElements() {
     return button;
   }
 
-  function showFullWindowMsg(type, text, callback) {
-    var button;
-    if (type === 1) {
-      button = newElements.createFullWindowButton('Cancel');
-    }
-    else {
-      button = newElements.createFullWindowButton('OK');
-    }
+  function showFullWindowMsg(buttonText, text, callback) {
+    var button = newElements.createFullWindowButton(buttonText);
+
     if (callback) {
       button.addEventListener('click', callback);
     }
 
-    var msg = null;
-    if (type === 0) {
-      msg = newElements.createFullWindow('Your session has expired');
-    }
-    else {
-      msg = newElements.createFullWindow(text);
-    }
+    var msg = newElements.createFullWindow(text);
     msg.children[0].appendChild(button);
 
     var body = document.getElementsByTagName('body')[0];
