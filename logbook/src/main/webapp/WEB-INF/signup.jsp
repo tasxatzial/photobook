@@ -16,7 +16,7 @@
       <div class="sign-child" id="signup-photo-section">
         <p>
           <label class="sign-label"><input type="checkbox" disabled>
-            Associate my username with a photo that may be used to identify me during the sign in process
+            Associate my username to a face that may be used to identify me during the sign in process
           </label>
         </p>
       </div>
