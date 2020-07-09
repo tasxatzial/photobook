@@ -2,19 +2,25 @@
 
 ## Description
 
-A platform where people can share information about travel locations.
+A simple platform where people can share information about travel locations.
 
 ## Language
 
-HTML, CSS, Javascript (ES5).
+Frontend: Plain HTML, CSS, Javascript (ES5)
+
+Backend: Java
+
+Database: SQL
 
 ## Features
 
-### Sign up
+Here's a complete list of features:
 
-* Notifications if all required inputs match the accepted format.
+### Sign up screen
 
-* Passwords mismatch notification when two different passwords have been entered.
+* Notifications if a required input does not match the accepted format.
+
+* Password mismatch notification.
 
 * Username & email notifications if they are already taken by someone else.
 
@@ -24,21 +30,21 @@ HTML, CSS, Javascript (ES5).
 
 * Automatic fill in of the country, city, address fields (HTML5 geolocation + Nominatim online service).
 
-* Option to associate a username to a face that can be used for recognition during the sign-in process (Face++ online service): The user can select a face photo from the disk drive and upload it to the service. If Face++ recognizes a face, the photo is then stored online and may be used in the sign in form.
+* Option to associate a username to a face using a photo (Face++ online service). A photo that shows the same face can be used during signin so that the username is filled in automatically.
 
-### Sign in
+### Sign in screen
 
-* Automatic fill in of the username (Face++ online service): The user has the option to select a face photo from the disk drive. If the face has been associated to his/her username during the sign-up process, Face++ should be able using that photo to identify the username.
+* Automatic fill in of the username using a face photo (Face++ online service).
 
 * The Face++ service is also used to detect if the face in the photo shows any emotion. In that case it returns an appropriate message.
 
 ### Logged in features
 
-* Create posts, this is possible both from the user page and the main page. A post has a location (verified either with HTML geolocation or the Nominatim online service) and a description as the minimum required fields. Optionally it can have a photo that has been selected from the disk or a URL to an online photo, and a URL to an online resource.
+* Create posts, this is possible both from the user posts page and the main page.
 
 * Delete own posts.
 
-* Edit account details. This includes all information entered during sign up except the username.
+* Edit account details.
 
 * Delete account. This also deletes all owned posts.
 
@@ -46,13 +52,13 @@ HTML, CSS, Javascript (ES5).
 
 * See the profile of any user. This is possible both from the all users list and from every post.
 
-* See a short list of the 10 latest posts, the posts can either belong to a single user or to the global list of posts. A short post shows the location of the post, a small version the photo, a short description, and the creator of the post.
+* See a short list of the 10 latest posts of a user or the 10 latest posts from all users.
 
-* See an expanded version of a short post. In addition to the short post it includes a full description, a larger version of the photo, a URL to an online resource, and shows the location of the post on a map (Openlayers online service).
+* See an expanded version of a short post. An expanded post includes all the details that are not displayed in the short list of posts.
 
-* A top navigation bar that can be used to see own account details, all users, all posts, and log out.
+* There is a top-navigation bar that can be used to see own account details, see all users, see all posts, and log out.
 
-* Sessions do not expire if the browser is closed. They do expire though after 10 mins of inactivity.
+* Sessions expire after 10 mins of inactivity.
 
 ## Implementation
 
@@ -62,13 +68,13 @@ HTML, CSS, Javascript (ES5).
 
 * Single Page Application.
 
-* Responsive.
+* The site is responsive.
 
 ### Backend
 
 * Java servlets.
 
-* Servlets can also be used as a REST type API.
+* The servlets can also be used as a REST type API.
 
 * MVC model.
 
@@ -76,6 +82,18 @@ HTML, CSS, Javascript (ES5).
 
 * SQL database.
 
-## Run
+## Compile & Run
 
--- To be updated --
+This is a maven project. It can be compiled with:
+
+    mvn package
+
+Currently the easiest way to run the website is by seting up a tomcat and a SQL database locally. Details may be added in the future.
+
+## Screenshots
+
+Check the [screenshots](/screenshots) folder.
+
+## Contributions
+
+Parts of this project were contributed by [Panagiotis Padadakos](http://users.ics.forth.gr/~papadako/).
