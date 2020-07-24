@@ -24,7 +24,7 @@ var ValidChecker = (function() {
 
         /* collect all elements --------------------------------------- */
     data.checkedInputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
-        occupation, city, country, interests, about);
+        occupation, country, city, interests, about);
 
     /* valid regex check functions --------------------------------- */
     regexValid(username);
@@ -84,8 +84,10 @@ var ValidChecker = (function() {
       element.addEventListener('input', function () {
         signupMsg.innerHTML = '';
         element.checkedValid = 0;
-        if (element.parentNode.children[0].children[1]) {
-          element.parentNode.children[0].removeChild(element.parentNode.children[0].children[1]);
+        for (var child = element.parentNode.children[0].firstChild; child !== null; child = child.nextSibling) {
+          if (child.className === 'invalid-value') {
+            element.parentNode.children[0].removeChild(child);
+          }
         }
       });
       element.addEventListener('focusout', function () {
@@ -142,13 +144,16 @@ var ValidChecker = (function() {
 
   /* displays an invalid message next to the element label */
   function showInvalidMsg(element, value) {
-    if (!element.parentNode.children[0].children[1]) {
-      var msg = document.createElement('div');
-      msg.innerHTML = value;
-      msg.className = 'invalid-value';
-
-      element.parentNode.children[0].appendChild(msg);
+    for(var child = element.parentNode.children[0].firstChild; child !== null; child = child.nextSibling) {
+      if (child.className === 'invalid-value') {
+        return;
+      }
     }
+    var msg = document.createElement('div');
+    msg.innerHTML = value;
+    msg.className = 'invalid-value';
+
+    element.parentNode.children[0].appendChild(msg);
   }
 
   function checkInvalidElements() {
