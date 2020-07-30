@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Functions related to the location search using the nominatim API and the browser geolocation feature.
+ * @type {{init: init}}
+ */
 var SignUpLocation = (function () {
   var state = {
     response: null,
@@ -27,6 +31,9 @@ var SignUpLocation = (function () {
     reverseUrl: 'https://nominatim.openstreetmap.org/reverse'
   };
 
+  /**
+   * Initializations after the signup form has loaded.
+   */
   function init() {
     state.response = null;
     state.mapVisible = false;
@@ -65,13 +72,14 @@ var SignUpLocation = (function () {
       formButton.enable(el.nominatimSearchButton);
     }
   }
-  
-  /* called by toggleMap() every time the visibility of the map is toggled.
-  Assumes that a map object already exists */
+
+  /**
+   * Called by toggleMap() every time the visibility of the map is toggled.
+   Assumes that a map object already exists
+   */
   function toggleOldMap() {
 
-    /* initialization when a location is about to be displayed
-    for the first time */
+    /* initialization when a location is about to be displayed for the first time */
     if (state.newLocation) {
       state.newLocation = false;
 
@@ -106,8 +114,10 @@ var SignUpLocation = (function () {
     }
   }
 
-  /* called every time the visibility of the map is toggled.
-  Creates a map object in case none exists and then calls toggleOldMap() */
+  /**
+   * Called every time the visibility of the map is toggled.
+   * Creates a map object in case none exists and then calls toggleOldMap()
+   */
   function toggleMap() {
     if (!state.map) {
       var mapDiv = document.createElement('div');
@@ -119,9 +129,9 @@ var SignUpLocation = (function () {
     toggleOldMap();
   }
 
-  /* initialize map section. This can happen when:
-  1) User inputs a country/city/address
-  2) User is using geolocation search */
+  /**
+   * Initializes/resets the map section.
+   */
   function initMap() {
     if (state.mapVisible) {
       state.mapVisible = false;
@@ -133,7 +143,9 @@ var SignUpLocation = (function () {
     state.newLocation = true;
   }
 
-  /* check if city/country values permit a location search */
+  /**
+   * Checks if city/country values permit a location search.
+   */
   function locationCheck() {
     formMsg.clear(el.nominatimSearchMsg);
     formMsg.clear(el.geolocSearchMsg);
@@ -147,10 +159,10 @@ var SignUpLocation = (function () {
     }
   }
 
-  /* nominatim search, called when user clicks the search location button */
+  /**
+   * Nominatim search, called when user clicks the search location button.
+   */
   function locationSearch() {
-
-    /* ajax request success callback */
     function successCallback() {
       state.response = JSON.parse(Requests.get(ID).responseText)[0];
       if (state.response) {
@@ -166,7 +178,6 @@ var SignUpLocation = (function () {
       formButton.enable(el.nominatimSearchButton);
     }
 
-    /* ajax request fail callback */
     function failCallback() {
       formMsg.showError(el.nominatimSearchMsg, 'Error');
       formInput.enable(el.country);
@@ -178,7 +189,7 @@ var SignUpLocation = (function () {
 
     Requests.cancelExcept(null);
 
-    /* initialize */
+    /* initialize & do a nominatim search */
     initMap();
     var input = LocationSearch.createInput(el.address, el.city, el.country);
     formInput.disable(el.country);
@@ -191,15 +202,17 @@ var SignUpLocation = (function () {
     var ID = Requests.add(ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback));
   }
 
-  /* geolocation detect + reverse nominatim search. called when user clicks
-  the detect my location button */
+  /**
+   * Geolocation detect + reverse nominatim search. Called when user clicks
+   * the detect my location button.
+   */
   function geolocSearch() {
 
-    /* reverse nominatim search success callback */
+    /* Geolocation detect was successful, now do a reverse nominatim search */
     function successCallback() {
       state.response = JSON.parse(Requests.get(ID).responseText);
 
-      /* calculate country/city/address from the ajax response */
+      /* calculate country/city/address from the response */
       var location = LocationSearch.parseReverseSearch(state.response);
 
       formInput.enable(el.country);
@@ -231,7 +244,7 @@ var SignUpLocation = (function () {
       }
     }
 
-    /* geolocation search + reverse nominatim fail callback */
+    /* common fail callback for geolocation detect & reverse nominatim search */
     function failCallback() {
       formMsg.showError(el.geolocSearchMsg, 'Error');
       formInput.enable(el.country);
@@ -243,7 +256,7 @@ var SignUpLocation = (function () {
       }
     }
 
-    /* geolocation search success callback */
+    /* geolocation detect success callback */
     function successNavCallback(position) {
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
@@ -254,7 +267,7 @@ var SignUpLocation = (function () {
     Requests.cancelExcept(null);
     var ID = null;
 
-    /* initialize */
+    /* initialize & do a geolocation detect */
     initMap();
     formInput.disable(el.country);
     formInput.disable(el.city);
@@ -266,6 +279,10 @@ var SignUpLocation = (function () {
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
   }
 
+  /**
+   * Creates the show map button.
+   * @returns {HTMLButtonElement}
+   */
   function createMapButton() {
     var button = document.createElement('button');
     button.type = 'button';
@@ -281,17 +298,38 @@ var SignUpLocation = (function () {
   };
 }());
 
+/**
+ * Helper functions for the location search functionality.
+ * @type {{
+ * createInput: (function(*=, *, *): string),
+ * isValidLatLon: (function(*=, *=): boolean),
+ * createLatLonInput: createLatLonInput,
+ * parseReverseSearch: parseReverseSearch,
+ * isSearchDataReady: (function(*, *): *|boolean)
+ * }}
+ */
 var LocationSearch = (function() {
-  /* Return true if city/country permit a location search. Assumes that
-  arguments are valid elements with a value attribute. City must also have
-  a pattern attribute */
+
+  /**
+   * Returns true if city/country permit a location search. Assumes that
+   * arguments are valid elements with a value attribute. City must also have a pattern attribute.
+   * @param city
+   * @param country
+   * @returns {*|boolean}
+   */
   function isSearchDataReady(city, country) {
     var cityRegex = new RegExp(city.pattern);
     return country.value && cityRegex.test(city.value);
   }
 
-  /* return a string for an ajax request based on the location.
-  Assumes that arguments are valid elements with a value attribute */
+  /**
+   * Returns a string for the ajax request URL of the nominatim search.
+   * Assumes that arguments are valid elements with a value attribute.
+   * @param address
+   * @param city
+   * @param country
+   * @returns {string}
+   */
   function createInput(address, city, country) {
     var cityAddress = city.value;
     if (address && address.value.trim()) {
@@ -302,8 +340,13 @@ var LocationSearch = (function() {
         '&format=json&limit=1';
   }
 
-  /* create the string for a ajax reverse nomination search request.
-  Assumes that arguments are strings or numbers */
+  /**
+   * Returns a string for the ajax request URL of the reverse nominatim search.
+   * Assumes that the arguments are strings or numbers.
+   * @param latitude
+   * @param longitude
+   * @returns {string|null}
+   */
   function createLatLonInput(latitude, longitude) {
     if (!isValidLatLon(latitude, longitude)) {
       return null;
@@ -313,6 +356,12 @@ var LocationSearch = (function() {
         '&format=json&zoom=16';
   }
 
+  /**
+   * Checks whether the specified latitude,longitude have valid values.
+   * @param latitude
+   * @param longitude
+   * @returns {boolean}
+   */
   function isValidLatLon(latitude, longitude) {
     return !(String(latitude).trim() === '' || String(longitude).trim() === '' ||
         isNaN(latitude) || isNaN(longitude) ||
@@ -320,7 +369,7 @@ var LocationSearch = (function() {
         longitude < -180 || longitude > 180);
   }
 
-  /* Parse a reverse nominatim search response and return an
+  /* Parses a reverse nominatim search response and returns an
   object with country,city,address keys. If null is returned,
   none of the country,city,address could be identified from the response */
   function parseReverseSearch(response) {

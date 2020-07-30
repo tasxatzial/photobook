@@ -15,7 +15,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
 
 /**
- *
+ * This servlet determines which page to show when the site is loaded:
+ * 1) The landing page (signup/signin) if the user is not logged in.
+ * 2) The latest posts page, if there is already a valid session.
  */
 @WebServlet(name = "Init", urlPatterns = {"/Init"})
 @MultipartConfig

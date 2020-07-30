@@ -17,7 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
 
 /**
- *
+ * Check if a username or email (only one of them at a time) exist on the DB.
  */
 @WebServlet(name = "CheckOnDB", urlPatterns = {"/CheckOnDB"})
 @MultipartConfig

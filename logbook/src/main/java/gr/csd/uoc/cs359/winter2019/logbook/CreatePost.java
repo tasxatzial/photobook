@@ -19,7 +19,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
-
+/**
+ * Creates a post. The owner of the post is always the logged in user.
+ */
 @WebServlet(name = "CreatePost", urlPatterns = "/CreatePost")
 @MultipartConfig
 public class CreatePost extends HttpServlet {
@@ -40,17 +42,19 @@ public class CreatePost extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONObject jsonFinal = new JSONObject();
 
+        /* we need a valid session */
         HttpSession oldSession = request.getSession(false);
-        String username = null;
         if (oldSession == null || oldSession.getAttribute("username") == null) {
             jsonFinal.put("ERROR", "NO_SESSION");
             out.print(jsonFinal.toJSONString());
             response.setStatus(401);
             return;
         }
-        username = (String) oldSession.getAttribute("username");
 
+        /* check that we have all post fields */
         jsonFinal = checkFields(request);
+
+        /* check that there is a valid post description, latitude, longitude */
         if (jsonFinal.get("description") == null && request.getParameter("description").trim().equals("")) {
             jsonFinal.put("description", "Invalid value");
         }
@@ -67,7 +71,10 @@ public class CreatePost extends HttpServlet {
             response.setStatus(400);
             return;
         }
+
+        /* create a Post object using the request parameters */
         Post post = new Post();
+        String username = (String) oldSession.getAttribute("username");
         String r_description = request.getParameter("description");
         String r_resourceURL = request.getParameter("resourceURL");
         String r_imageURL = request.getParameter("imageURL");
@@ -82,6 +89,7 @@ public class CreatePost extends HttpServlet {
         post.setLatitude(r_latitude);
         post.setLongitude(r_longitude);
 
+        /* add the post to the DB and get it's ID */
         int id = PostDB.addPost(post);
         if (id == -1) {
             JSONObject json = new JSONObject();
@@ -90,6 +98,8 @@ public class CreatePost extends HttpServlet {
             response.setStatus(500);
             return;
         }
+
+        /* get the Post that has the ID that we have */
         post = PostDB.getPost(id);
         if (post == null) {
             JSONObject json = new JSONObject();
@@ -98,6 +108,8 @@ public class CreatePost extends HttpServlet {
             response.setStatus(500);
             return;
         }
+
+        /* verify that the post with the ID that we have matches the request parameters */
         String d_description = post.getDescription();
         String d_resourceURL = post.getResourceURL();
         String d_imageURL = post.getImageURL();
@@ -121,6 +133,11 @@ public class CreatePost extends HttpServlet {
         }
     }
 
+    /**
+     * Checks that the request has all the required parameters.
+     * @param request
+     * @return
+     */
     protected JSONObject checkFields(HttpServletRequest request) {
         JSONObject json = new JSONObject();
         String[] fields = new String[] {
@@ -136,6 +153,13 @@ public class CreatePost extends HttpServlet {
         return json;
     }
 
+    /**
+     * Checks whether the specified latlon string consists of a valid value. If param = 'latitude'
+     * it is assumed that latlon is a latitude value, else it is assumed that latlon is a longitude value.
+     * @param latlon
+     * @param param
+     * @return
+     */
     protected boolean validLatLon(String latlon, String param) {
         if (latlon == null) {
             return false;

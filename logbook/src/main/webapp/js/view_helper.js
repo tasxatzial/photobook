@@ -1,6 +1,9 @@
 'use strict';
 
-/* style for buttons that can be enabled or disabled */
+/**
+ * Style for buttons that can be enabled or disabled.
+ * @type {{enable: enable, disable: disable}}
+ */
 var formButton = (function() {
   function enable(button) {
     button.disabled = false;
@@ -17,20 +20,46 @@ var formButton = (function() {
   };
 }());
 
-/* show various messages depending on the result of a search */
+/**
+ * Show various messages and style them accordingly depending on the results.
+ * @type {{showOK: showOK, showError: showError, clear: clear, showElement: showElement}}
+ */
 var formMsg = (function() {
+
+  /**
+   * Shows the msg in the msgDiv element using red color.
+   * @param msgDiv
+   * @param msg
+   */
   function showError(msgDiv, msg) {
     msgDiv.innerHTML = msg;
     msgDiv.style.color = 'red';
   }
+
+  /**
+   * Shows the msg in the msgDiv element using green color.
+   * @param msgDiv
+   * @param msg
+   */
   function showOK(msgDiv, msg) {
     msgDiv.innerHTML = msg;
     msgDiv.style.color = 'green';
   }
+
+  /**
+   * Clears the content of the msgDiv element.
+   * @param msgDiv
+   */
   function clear(msgDiv) {
     msgDiv.innerHTML = '';
     msgDiv.style.color = 'black';
   }
+
+  /**
+   * Clears the content of the msgDiv element and appends the specified element to it.
+   * @param msgDiv
+   * @param element
+   */
   function showElement(msgDiv, element) {
     msgDiv.innerHTML = '';
     msgDiv.style.color = 'black';
@@ -45,7 +74,10 @@ var formMsg = (function() {
   };
 }());
 
-/* style for enabled/disabled input form fields */
+/**
+ * Style for enabled/disabled form input fields.
+ * @type {{enable: enable, disable: disable}}
+ */
 var formInput = (function() {
   function enable(input) {
     input.disabled = false;
@@ -62,7 +94,10 @@ var formInput = (function() {
   };
 }());
 
-/* style for enabled/disabled form submit button */
+/**
+ * Style for enabled/disabled form submit button.
+ * @type {{enable: enable, disable: disable}}
+ */
 var formSubmit = (function() {
   function enable(input) {
     input.disabled = false;
@@ -71,22 +106,6 @@ var formSubmit = (function() {
   function disable(input) {
     input.disabled = true;
     input.style.background ='gray';
-  }
-
-  return {
-    enable: enable,
-    disable: disable
-  };
-}());
-
-var redButton = (function() {
-  function enable(input) {
-    input.disabled = false;
-    input.style.background = '#ff4e56';
-  }
-  function disable(input) {
-    input.disabled = true;
-    input.style.background = 'gray';
   }
 
   return {

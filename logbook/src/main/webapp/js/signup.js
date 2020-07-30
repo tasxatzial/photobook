@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * Functions related to the signup process and the edit account info process.
+ * These do not include the loading of the signup form (loaded in landing.js/account_form.js)
+ * @type {{init: init}}
+ */
 var Signup = (function() {
   var data = {
     oldEmail: null
@@ -19,6 +24,10 @@ var Signup = (function() {
     nominatimSearchButton: null
   };
 
+  /**
+   * The first function that is called when the signup button is clicked.
+   * @param action
+   */
   function clickSignup(action) {
     formMsg.clear(el.signupMsg);
     var invalidElement = ValidChecker.checkInvalidElements();
@@ -30,6 +39,10 @@ var Signup = (function() {
     }
   }
 
+  /**
+   * Returns a formData object that contains all the info that will be submitted.
+   * @returns {FormData}
+   */
   function gatherData() {
     var data = new FormData();
     var inputs = ValidChecker.getCheckedInputs();
@@ -47,6 +60,10 @@ var Signup = (function() {
     return data;
   }
 
+  /**
+   * Enables all form inputs.
+   * @param action
+   */
   function enableInputs(action) {
     var inputs = ValidChecker.getCheckedInputs();
     for (var i = 0; i < inputs.length; i++) {
@@ -63,6 +80,9 @@ var Signup = (function() {
     formButton.enable(el.nominatimSearchButton);
   }
 
+  /**
+   * Disables all form inputs.
+   */
   function disableInputs() {
     var inputs = ValidChecker.getCheckedInputs();
     for (var i = 0; i < inputs.length; i++) {
@@ -77,6 +97,11 @@ var Signup = (function() {
     formButton.disable(el.nominatimSearchButton);
   }
 
+  /**
+   * Performs signup using the specified action. If action='Signup' it will perform signup.
+   * If action='UpdateAccount', it will update the user account info.
+   * @param action
+   */
   function doSignup(action) {
     Requests.cancelExcept(null);
     disableInputs();
@@ -151,20 +176,34 @@ var Signup = (function() {
     }
   }
 
+  /**
+   * Checks whether the username and email are taken by other user.
+   * @param action
+   */
   function checkUsernameEmailDB(action) {
     Init.scrollTo(el.signupButton);
+
+    /* if we just want to update account info (that means the username field is already disabled)
+    and the email has not changed, there is no need to send a request */
     if (action === 'UpdateAccount' && el.email.value === data.oldEmail) {
       doSignup(action);
       return;
     }
     Requests.cancelExcept(null);
+
+    /* disable both username and email fields during this process */
     formInput.disable(el.username);
     formInput.disable(el.email);
+
+    /* also disable signup button */
     formSubmit.disable(el.signupButton);
+
     formMsg.showElement(el.signupMsg, Init.loader);
     
     var formData = new FormData();
     formData.append('action', 'CheckUsernameEmailDB');
+
+    /* only check for duplicate email if we are requesting to update the account info */
     if (action !== 'UpdateAccount') {
       formData.append('username', el.username.value);
     }
@@ -216,6 +255,10 @@ var Signup = (function() {
     }
   }
 
+  /**
+   * Initializations after the signup form has loaded.
+   * @param action
+   */
   function init(action) {
     el.username = document.getElementById('signup-username');
     el.email = document.getElementById('signup-email');
@@ -234,6 +277,8 @@ var Signup = (function() {
         clickSignup('Signup');
       });
     }
+
+    /* disable editing the username if we are editing the account info instead of performing signup */
     else if (action === 'AccountInfo') {
       formInput.disable(document.getElementById('signup-username'));
 

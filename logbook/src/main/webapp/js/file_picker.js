@@ -1,19 +1,27 @@
 'use strict';
 
-/* Prompts the user with a file select dialog. Reads the selected file
-and if it is a jpg/png image, it displays it on the DOM.
+/**
+ * Prompts the user with a file select dialog. Reads the selected file
+   and if it is a jpg/png image, it displays it on the DOM.
 
-Accepts an input type element and an empty container that will be used
-for displaying the image. To trigger the file selection
-dialog, the click() method must be called with an argument
-that is the function that will be called when the image
-has finished loading on the DOM */
+   Accepts an input type element and an empty container that will be used for displaying the image.
+   To trigger the file selection dialog, the click() method must be called with an argument
+   that is the function that will be called when the image has finished loading.
+ * @param photoContainer
+ * @param fileInput
+ * @returns {{getPhotob64: (function(): null), clearPhoto: clearPhoto, click: click}}
+ * @constructor
+ */
 function PhotoPicker(photoContainer, fileInput) {
   var state = {
     photob64: null,
     callback: null
   };
 
+  /**
+   * Called after the image has finished loading.
+   * @param callback
+   */
   function click(callback) {
     if (typeof callback === 'function') {
       state.callback = callback;
@@ -21,7 +29,11 @@ function PhotoPicker(photoContainer, fileInput) {
     fileInput.click();
   }
 
-  /* only png/jpg files are valid */
+  /**
+   * Checks whether the specified photo is valid (png/jpg files are valid). The photo should be in base64 format.
+   * @param photo
+   * @returns {boolean}
+   */
   function isValidImage(photo) {
     var type = photo.split(',')[0];
     var png = /data:image\/png/;
@@ -30,18 +42,21 @@ function PhotoPicker(photoContainer, fileInput) {
     return png.test(type) || jpeg.test(type) || jpg.test(type);
   }
 
-  /* read and draw the specified file inside the photoContainer */
+  /**
+   * Reads the specified image file and puts it inside the photoContainer element.
+   * @param file
+   */
   function displayImage(file) {
     
-    /* read the selected file as base64 */
+    /* read the selected image and store it in base64 format */
     var reader = new FileReader();
     reader.readAsDataURL(file);
 
-    /* fires when reading is done */
+    /* called when reading of the image is finished */
     reader.onload = function(event) {
       state.photob64 = event.target.result;
 
-      /* only png/jpg files will be displayed */
+      /* we want to accept only png/jpg files */
       if (!isValidImage(state.photob64.split(',')[0])) {
         photoContainer.innerHTML = 'Invalid format';
         state.photob64 = null;
@@ -51,7 +66,7 @@ function PhotoPicker(photoContainer, fileInput) {
         return;
       }
 
-      /* create the image element and add it to DOM */
+      /* create the image element and add it to the DOM */
       var img = document.createElement('img');
       photoContainer.innerHTML = '';
       photoContainer.appendChild(img);
@@ -68,10 +83,17 @@ function PhotoPicker(photoContainer, fileInput) {
     };
   }
 
+  /**
+   * Returns the base64 representation of the selected image.
+   * @returns {null}
+   */
   function getPhotob64() {
     return state.photob64;
   }
 
+  /**
+   * Removes the photo from the DOM.
+   */
   function clearPhoto() {
     state.photob64 = null;
     photoContainer.innerHTML = '';
@@ -92,7 +114,7 @@ function PhotoPicker(photoContainer, fileInput) {
       this.value = null; 
     };
 
-    /* fires when a file is selected */
+    /* called when a file is selected */
     fileInput.onchange = function(event) {
       var file = event.target.files[0];
       if (file) { //when OK is pressed

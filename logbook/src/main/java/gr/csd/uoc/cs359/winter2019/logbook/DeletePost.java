@@ -21,7 +21,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
-
+/**
+ * Deletes a post posted by the logged in user.
+ */
 @WebServlet(name = "DeletePost", urlPatterns = "/DeletePost")
 @MultipartConfig
 public class DeletePost extends HttpServlet {
@@ -38,6 +40,7 @@ public class DeletePost extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
 
+        /* only a logged in user can delete a post and that post must belong to the same user */
         String i_username = (String) request.getAttribute("username");
         if (i_username != null) {
             PostDB.deleteAllPostsBy(UserDB.getUser(i_username));
@@ -54,6 +57,7 @@ public class DeletePost extends HttpServlet {
             PrintWriter out = response.getWriter();
             JSONObject jsonFinal = new JSONObject();
 
+            /* we need a valid session */
             HttpSession oldSession = request.getSession(false);
             if (oldSession == null || oldSession.getAttribute("username") == null) {
                 jsonFinal.put("ERROR", "NO_SESSION");
@@ -61,6 +65,8 @@ public class DeletePost extends HttpServlet {
                 response.setStatus(401);
                 return;
             }
+
+            /* we need a username in the request */
             String r_username = request.getParameter("username");
             if (r_username == null) {
                 jsonFinal.put("ERROR", "MISSING_USERNAME");
@@ -68,6 +74,8 @@ public class DeletePost extends HttpServlet {
                 response.setStatus(400);
                 return;
             }
+
+            /* we need the username in the request to match the username of the logged in user */
             String s_username = (String) oldSession.getAttribute("username");
             if (!r_username.equals(s_username)) {
                 jsonFinal.put("ERROR", "UNAUTHORIZED");
@@ -75,6 +83,8 @@ public class DeletePost extends HttpServlet {
                 out.print(jsonFinal.toJSONString());
                 return;
             }
+
+            /* we need an post ID so that we know which post to delete */
             String postID = request.getParameter("postID");
             if (postID == null) {
                 jsonFinal.put("ERROR", "MISSING_POSTID");
@@ -82,6 +92,8 @@ public class DeletePost extends HttpServlet {
                 out.print(jsonFinal.toJSONString());
                 return;
             }
+
+            /* finally, we need to check that the post ID exists */
             int pID;
             try {
                 pID = Integer.parseInt(postID);
@@ -101,6 +113,7 @@ public class DeletePost extends HttpServlet {
                 return;
             }
 
+            /* delete the post and verify that it has been erased from the DB */
             PostDB.deletePost(pID);
             post = PostDB.getPost(pID);
 

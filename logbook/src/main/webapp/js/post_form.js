@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Functions related to creating new posts. Only functions related to the new post form are considered here.
+ * @type {{init: init}}
+ */
 var PostForm = (function() {
   var state = {
     lastDetectionMethod: null
@@ -41,6 +45,10 @@ var PostForm = (function() {
     header: null
   };
 
+  /**
+   * Initializations after the form has been displayed.
+   * @param username
+   */
   function init(username) {
     data.loc.lat = null;
     data.loc.lon = null;
@@ -81,6 +89,9 @@ var PostForm = (function() {
     addListeners();
   }
 
+  /**
+   * Adds all required listeners to the form.
+   */
   function addListeners() {
     el.placeRadio.addEventListener('click', function() {
       Requests.cancelExcept(null);
@@ -144,6 +155,9 @@ var PostForm = (function() {
     }
   }
 
+  /**
+   * Changes the initial view when geolocation search is not supported.
+   */
   function selectPlaceInit() {
     data.loc.lat = null;
     data.loc.lon = null;
@@ -155,6 +169,11 @@ var PostForm = (function() {
     state.lastDetectionMethod = 'place';
   }
 
+  /**
+   * Changes the view when we choose between disk image selection and URL image selection.
+   * @returns {{toggle: toggle}}
+   * @constructor
+   */
   function PhotoToggler() {
     var state = {
       onlineImage: false
@@ -190,6 +209,9 @@ var PostForm = (function() {
     };
   }
 
+  /**
+   * Creates a new post.
+   */
   function createPost() {
     Requests.cancelExcept(null);
     Init.scrollTo(el.postButton);
@@ -251,6 +273,9 @@ var PostForm = (function() {
     }
   }
 
+  /**
+   * Selects either geolocation search or location search using the nominatim service. It then performs a search.
+   */
   function locationSearchInit() {
     data.loc.lat = null;
     data.loc.lon = null;
@@ -264,6 +289,9 @@ var PostForm = (function() {
     }
   }
 
+  /**
+   * Performs geolocation search.
+   */
   function geolocationSearch() {
     formMsg.showElement(el.locationDetectMsg, Init.loader);
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
@@ -279,6 +307,9 @@ var PostForm = (function() {
     }
   }
 
+  /**
+   * Performs location search using the nominatim service.
+   */
   function locationSearch() {
     Requests.cancelExcept(null);
     formMsg.showElement(el.locationDetectMsg, Init.loader);
@@ -306,6 +337,9 @@ var PostForm = (function() {
     }
   }
 
+  /**
+   * Enables all inputs. Called after an unsuccessful creation of new post.
+   */
   function enableInputs() {
     formSubmit.enable(el.postButton);
     formInput.enable(el.description);
@@ -320,6 +354,9 @@ var PostForm = (function() {
     formButton.enable(el.selectDiskPhotoButton);
   }
 
+  /**
+   * Disables all inputs. Called after the new post button has been clicked.
+   */
   function disableInputs() {
     formSubmit.disable(el.postButton);
     formInput.disable(el.description);

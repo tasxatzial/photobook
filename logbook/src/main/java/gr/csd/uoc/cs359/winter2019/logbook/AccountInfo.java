@@ -18,7 +18,8 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.RequestDispatcher;
 
 /**
- *
+ * Returns the signup form filled in with the account info of the logged in user (if an edit account info was requested)
+ * or an empty signup form (if the user wants to signup).
  */
 @WebServlet(name = "AccountInfo", urlPatterns = "/AccountInfo")
 @MultipartConfig
@@ -38,11 +39,16 @@ public class AccountInfo extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
 
+        /* if we are requesting to edit the account info then fill in the signup form before returning the the form */
         if (request.getParameter("action") != null && request.getParameter("action").equals("AccountInfo")) {
             HttpSession oldSession = request.getSession(false);
+
+            /* we need a valid session */
             if (oldSession != null && oldSession.getAttribute("username") != null) {
                 String username = (String) oldSession.getAttribute("username");
                 User user = UserDB.getUser(username);
+
+                /* get the account info only for the logged in user */
                 if (user == null) {
                     response.setContentType("application/json;charset=UTF-8");
                     json.put("ERROR", "INVALID_USER");
@@ -79,6 +85,8 @@ public class AccountInfo extends HttpServlet {
                 response.setStatus(401);
             }
         }
+
+        /* If we are requesting a signup, just return an empty signup form */
         else if (request.getParameter("action") != null && request.getParameter("action").equals("GetSignup")) {
             response.setContentType("text/html;charset=UTF-8");
             request.setAttribute("username", "");
@@ -109,6 +117,10 @@ public class AccountInfo extends HttpServlet {
         }
     }
 
+    /**
+     * Sets the proper gender in the signup form.
+     * @param request
+     */
     void setGender(HttpServletRequest request) {
         request.setAttribute("male-checked", "");
         request.setAttribute("female-checked", "");

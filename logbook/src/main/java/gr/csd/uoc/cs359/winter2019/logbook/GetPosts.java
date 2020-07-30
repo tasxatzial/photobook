@@ -21,7 +21,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
-
+/**
+ * Get the 10 latest posts.
+ */
 @WebServlet(name = "GetPosts", urlPatterns = "/GetPosts")
 @MultipartConfig
 public class GetPosts extends HttpServlet {
@@ -42,6 +44,7 @@ public class GetPosts extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONObject jsonFinal = new JSONObject();
 
+        /* we need a valid session */
         HttpSession oldSession = request.getSession(false);
         if (oldSession == null || oldSession.getAttribute("username") == null) {
             jsonFinal.put("ERROR", "NO_SESSION");
@@ -50,8 +53,9 @@ public class GetPosts extends HttpServlet {
             return;
         }
 
+        /* If a username was provided in the request, get the 10 latest posts of that user.
+        else get the 10 latest posts */
         String username = request.getParameter("username");
-
         List<Post> posts;
         if (username != null) {
             posts = PostDB.getTop10RecentPostsOfUser(username);
@@ -63,6 +67,7 @@ public class GetPosts extends HttpServlet {
         Post post;
         JSONObject json;
 
+        /* collect all info for each post */
         for (int i = 0; i < posts.size(); i++) {
             post = posts.get(i);
             json = new JSONObject();
@@ -95,6 +100,11 @@ public class GetPosts extends HttpServlet {
         out.println(jsonFinal.toJSONString());
     }
 
+    /**
+     * Checks that the specified image is a valid base 64 format (jpeg or png)
+     * @param image
+     * @return
+     */
     protected Boolean isValidImageBase64(String image) {
         String trimmedImage = image.trim();
         if (!trimmedImage.equals("")) {
@@ -106,6 +116,11 @@ public class GetPosts extends HttpServlet {
         return false;
     }
 
+    /**
+     * Checks that the specified URL is valid: starts with http, https, www
+     * @param URL
+     * @return
+     */
     protected Boolean isValidURL(String URL) {
         String trimmedURL = URL.trim();
         String http = "(?i)^http://.*";
@@ -114,6 +129,11 @@ public class GetPosts extends HttpServlet {
         return trimmedURL.matches(http) || trimmedURL.matches(https) || trimmedURL.matches(www);
     }
 
+    /**
+     * Adds the http prefix to the specified URL.
+     * @param URL
+     * @return
+     */
     protected String addHttp(String URL) {
         String trimmedURL = URL.trim();
         String http = "(?i)^http://.*";

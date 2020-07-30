@@ -1,6 +1,17 @@
 'use strict';
 
-/*  face recognition that is based on faceplusplus service */
+/**
+ * Face recognition API that is based on the face++ service
+ * @type {{
+ * shortMsg: shortMsg,
+ * search: (function(*=, *, *=): {hasCompleted: (function(): boolean), getToken: (function(): null), getUserID: (function(): null), getConfidence: (function(): null), getErrorMsg: (function(): null)}),
+ * analyze: (function(*=, *=, *, *=): {getEmotion: (function(): null), hasCompleted: (function(): boolean), getErrorMsg: (function(): null)}),
+ * emotionReply: emotionReply,
+ * detect: (function(*=, *, *=): {hasCompleted: (function(): boolean), getToken: (function(): null), getErrorMsg: (function(): null)}),
+ * setID: (function(*=, *=, *, *=): {hasCompleted: (function(): boolean), getErrorMsg: (function(): null)}),
+ * addFace: (function(*=, *, *=): {hasCompleted: (function(): boolean), getErrorMsg: (function(): null)})
+ * }}
+ */
 var FaceAPI = (function() {
 
   // Object that holds anything related with the facetPlusPlus REST API Service
@@ -37,7 +48,12 @@ var FaceAPI = (function() {
     analyze: 'https://api-us.faceplusplus.com/facepp/v3/face/analyze'
   };
 
-  /* common callback for all services */
+  /**
+   * Common callback for all face++ services.
+   * @param state
+   * @param failFunc
+   * @returns {function(...[*]=)}
+   */
   function failCallback(state, failFunc) {
     return function() {
       if (Requests.get(state.ID).responseText) {
@@ -53,6 +69,12 @@ var FaceAPI = (function() {
     };
   }
 
+  /**
+   * Detects a face in the specified photo and returns a token that can be accessed with the getToken method.
+   * @param photoB64
+   * @param successFunc
+   * @param failFunc
+   */
   function detect(photoB64, successFunc, failFunc) {
     var state = {
       ID: null,
@@ -90,6 +112,13 @@ var FaceAPI = (function() {
     };
   }
 
+  /**
+   * Associates an Id (username) to the specified token.
+   * @param userId
+   * @param faceToken
+   * @param successFunc
+   * @param failFunc
+   */
   function setID(userId, faceToken, successFunc, failFunc) {
     var state = {
       ID: null,
@@ -119,6 +148,12 @@ var FaceAPI = (function() {
     };
   }
 
+  /**
+   * Stores the specified token online.
+   * @param faceToken
+   * @param successFunc
+   * @param failFunc
+   */
   function addFace(faceToken, successFunc, failFunc) {
     var state = {
       ID: null,
@@ -148,6 +183,14 @@ var FaceAPI = (function() {
     };
   }
 
+  /**
+   * Analyzes whether the face associated to the specified token shows the specified attributes. Currently
+   * only the 'emotion' attribute is supported. The getEmotion method is used to access the returned emotion.
+   * @param returnAttributes
+   * @param faceTokens
+   * @param successFunc
+   * @param failFunc
+   */
   function analyze(returnAttributes, faceTokens, successFunc, failFunc) {
     var state = {
       ID: null,
@@ -200,6 +243,14 @@ var FaceAPI = (function() {
     };
   }
 
+  /**
+   * Checks whether a face has been associated to the face shown in the specified photo.
+   * The getUserID, getToken, getConfidence methods are used to access the returned userId (username), token,
+   * and confidence level (face in the photo matching the already associated face).
+   * @param photoB64
+   * @param successFunc
+   * @param failFunc
+   */
   function search(photoB64, successFunc, failFunc){
     var state = {
       ID: null,
@@ -255,7 +306,10 @@ var FaceAPI = (function() {
     };
   }
 
-  /* converts the server response error message to a simpler one */
+  /**
+   * Converts the server error message msg to a human friendly string.
+   * @param msg
+   */
   function shortMsg(msg) {
     switch(msg) {
       case 'IMAGE_ERROR_UNSUPPORTED_FORMAT':
@@ -271,7 +325,10 @@ var FaceAPI = (function() {
     }
   }
 
-  /* returns a message for the emotion that has been detected */
+  /**
+   * Returns an appropriate message for the specified emotion.
+   * @param emotion
+   */
   function emotionReply(emotion) {
     if (!emotion) {
       return '';

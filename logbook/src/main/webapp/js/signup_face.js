@@ -1,6 +1,9 @@
 'use strict';
 
-/*  face recognition controller */
+/**
+ * Functions related to the face recognition on the signup page.
+ * @type {{init: init}}
+ */
 var SignUpFace = (function () {
 
   var state = {
@@ -36,11 +39,13 @@ var SignUpFace = (function () {
     selectButton: null
   };
 
-  /* called from task setID or addFace when they succeed.
-  Will return immediately if:
-  1) the other task has failed -> photo uploading result: fail
-  2) the other task has not finished -> photo uploading result:
-  will be determined by the other task */
+  /**
+   * Called from faceAPI.js success callback functions of setID/addFace.
+   * Will return immediately if:
+   * 1) the other task (addFace/setID) has failed thus the result of photo uploading is already determined.
+   * 2) the other task (addFace/setID) is not finished thus the result of photo uploading will be
+   * determined by that task.
+   */
   function taskSuccess() {
     if (!state.ended || state.fail) {
       state.ended = true;
@@ -53,11 +58,12 @@ var SignUpFace = (function () {
     formInput.enable(el.username);
   }
 
-  /* called from task setID or addFace when they fail, the errMsg is
-  the error message provided by the corresponding function.
-  Will return immediately if:
-  1) the task that called it is not the first task that failed ->
-  photo uploading result: fail */
+  /**
+   * Called from faceAPI.js fail callback functions of setID/addFace.
+   * Will return immediately if the task that called it (setID/addFace) is not the first task that failed, that means
+   * the first task that failed already determined the result of the photo uploading.
+   * @param errMsg The error message provided by setID/addFace fail callback functions.
+   */
   function taskFail(errMsg) {
     if (!state.fail) {
       state.fail = true;
@@ -70,8 +76,10 @@ var SignUpFace = (function () {
     }
   }
 
-  /* called when ajax request for detect succeeds. calls setID & addFace,
-  each will make an extra ajax request */
+  /**
+   * Called when a face is detected in the uploaded photo. It then calls setID & addFace from faceAPI.js,
+   each will make a new face++ request.
+   */
   function detectSuccess() {
     var faceToken = tasks.detect.getToken();
     if (!faceToken) {
@@ -88,7 +96,9 @@ var SignUpFace = (function () {
     }
   }
 
-  /* called when ajax request for detect fails -> photo uploading result: fail */
+  /**
+   * Called when no face is detected in the uploaded photo.
+   */
   function detectFail() {
     formInput.enable(el.username);
     formButton.enable(el.selectButton);
@@ -97,8 +107,10 @@ var SignUpFace = (function () {
     formMsg.showError(el.uploadMsgParent, FaceAPI.shortMsg(tasks.detect.getErrorMsg()));
   }
 
-  /* the first request to the face++ service, called every time
-  the upload button is clicked */
+  /**
+   * The first request to the face++ service (detect face). It is called every time
+   the upload button is clicked.
+   */
   function detect() {
     var photo = state.photoPicker.getPhotob64();
     var loader = newElements.createLoader('images/loader.gif');
@@ -111,12 +123,14 @@ var SignUpFace = (function () {
     tasks.detect = FaceAPI.detect(photo, detectSuccess, detectFail);
   }
 
-  /* called every time the select photo button is clicked */
+  /**
+   * Triggers the file selection tool. Called every time the select photo button is clicked.
+   */
   function pickNewImage() {
 
-    /* pass a callback that will be called in case:
-    1) The selected photo is not an accepted format
-    2) The selected photo is loaded on the DOM */
+    /* pass a callback that will be called when:
+    1) The selected photo is not an accepted format.
+    2) The selected photo is loaded successfully. */
     state.photoPicker.click(function(){
       formMsg.clear(el.uploadMsgParent);
       var photo = state.photoPicker.getPhotob64();
@@ -126,7 +140,9 @@ var SignUpFace = (function () {
     });
   }
 
-  /* called every time user clicks the checkbox/label */
+  /**
+   * Toggles the visibility of the photo section each time the user clicks the checkbox.
+   */
   function toggleControl() {
 
     /* initialize the photo section once */
@@ -156,9 +172,11 @@ var SignUpFace = (function () {
     }
   }
 
-  /* initializes the photo section. This happens when:
-  1) user types a username
-  2) user clicks the checkbox/label to hide the photo section */
+  /**
+   * Initializes (hides) the photo section. This happens when:
+   * 1) The username field is changed.
+   * 2) The user clicks the checkbox and the photo section is already visible.
+   */
   function initphotoSection() {
     formMsg.clear(el.uploadMsgParent);
     formButton.disable(el.uploadButton);
@@ -166,8 +184,12 @@ var SignUpFace = (function () {
     state.photoPicker.clearPhoto();
   }
 
-  /* check if username value permits to access the photo section.
-  called every time user types in username box */
+  /**
+   * Checks if the username pattern permits to associate it with a face. If yes, the checkbox is enabled.
+   * If no, the photo section is removed from DOM and the checkbox is disabled.
+   * This function is called every time the username input field is changed.
+   * @param usernameRegex
+   */
   function usernameCheck(usernameRegex) {
     if (state.photoSectionVisible) {
       initphotoSection();
@@ -178,6 +200,10 @@ var SignUpFace = (function () {
     el.checkBox.disabled = !usernameRegex.test(el.username.value);
   }
 
+  /**
+   * Creates all the elements that appear in the photo section after the checkbox has been clicked (checked = true).
+   * @returns {HTMLDivElement}
+   */
   function createSignUpPhotoSection() {
     var selectButton = document.createElement('button');
     selectButton.id = 'signup-pick-photo-button';
@@ -224,6 +250,9 @@ var SignUpFace = (function () {
     return divContent;
   }
 
+  /**
+   * Initializations after the signup form has loaded.
+   */
   function init() {
     state.photoSectionVisible = false;
     el.username = document.getElementById('signup-username');
@@ -241,7 +270,8 @@ var SignUpFace = (function () {
     });
     el.checkBox.addEventListener('click', toggleControl);
 
-    if (el.checkBox.checked) { //firefox remembers its state when page is reloaded
+    /* uncheck the checkbox on the page. This is due to browsers remembering its state when the page is reloaded */
+    if (el.checkBox.checked) {
       el.checkBox.checked = false;
     }
     if (usernameRegex.test(el.username.value)) {

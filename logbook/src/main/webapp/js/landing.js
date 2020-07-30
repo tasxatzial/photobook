@@ -1,12 +1,22 @@
 'use strict';
 
+/**
+ * Initializations when the landing page is requested and the user is not logged in.
+ * @type {{init: init}}
+ */
 var Landing = (function() {
 
+  /**
+   * Initializes the view when the landing page is requested.
+   */
   function init() {
     Init.nonav.innerHTML = '';
     Init.nonav.appendChild(createLanding());
   }
 
+  /**
+   * Loads the signin form.
+   */
   function showSignin() {
     Init.clearFullWindowMsg();
     newElements.showFullWindowMsg('Cancel', 'Please wait...', function () {
@@ -40,6 +50,9 @@ var Landing = (function() {
     }
   }
 
+  /**
+   * Loads the signup form.
+   */
   function showSignup() {
     Init.clearFullWindowMsg();
     newElements.showFullWindowMsg('Cancel', 'Please wait...', function () {
@@ -73,6 +86,10 @@ var Landing = (function() {
     }
   }
 
+  /**
+   * Called when the signup/signin form fails to load.
+   * @param ID
+   */
   function failCallback(ID) {
     Init.clearFullWindowMsg();
     if (Requests.get(ID).status === 0) {
@@ -83,6 +100,10 @@ var Landing = (function() {
     }
   }
 
+  /**
+   * Creates the landing page element.
+   * @returns {HTMLDivElement}
+   */
   function createLanding() {
     var signupButton = document.createElement('input');
     signupButton.type = 'button';

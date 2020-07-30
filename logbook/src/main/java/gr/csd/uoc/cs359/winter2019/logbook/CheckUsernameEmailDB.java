@@ -18,7 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
 
 /**
- *
+ * Checks if a username and/or email exist on the DB.
  */
 @WebServlet(name = "CheckUsernameEmailDB", urlPatterns = {"/CheckUsernameEmailDB"})
 @MultipartConfig
@@ -39,6 +39,7 @@ public class CheckUsernameEmailDB extends HttpServlet {
         JSONObject json = new JSONObject();
         RequestDispatcher dispatcher;
 
+        /* check the email */
         if (request.getParameter("email") != null) {
             request.setAttribute("parameter", "email");
             request.setAttribute("parameterValue", request.getParameter("email"));
@@ -51,6 +52,8 @@ public class CheckUsernameEmailDB extends HttpServlet {
                 json.put("email", "unused");
             }
         }
+
+        /* check the username */
         if (request.getParameter("username") != null) {
             request.setAttribute("parameter", "username");
             request.setAttribute("parameterValue", request.getParameter("username"));

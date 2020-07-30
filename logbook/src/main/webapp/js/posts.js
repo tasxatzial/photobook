@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Functions related to already created posts.
+ * @type {{init: init}}
+ */
 var Posts = (function() {
   var el = {
     postsParent: null,
@@ -28,6 +32,10 @@ var Posts = (function() {
     reverseUrl: 'https://nominatim.openstreetmap.org/reverse'
   };
 
+  /**
+   * Initializes the posts section (global or user).
+   * @param username
+   */
   function init(username) {
     data.username = username;
     el.confirmDelete = null;
@@ -51,6 +59,10 @@ var Posts = (function() {
     getPosts(username);
   }
 
+  /**
+   * Requests the 10 latest posts from the server.
+   * @param username
+   */
   function getPosts(username) {
     Requests.cancelExcept(null);
 
@@ -101,6 +113,12 @@ var Posts = (function() {
     }
   }
 
+  /**
+   * Deletes a post. Only owners of posts can delete their posts.
+   * @param fullPost (This is no longer necessary)
+   * @param username The owner of the post.
+   * @param postID The ID of the post.
+   */
   function deletePost(fullPost, username, postID) {
     Requests.cancelExcept(null);
 
@@ -160,6 +178,11 @@ var Posts = (function() {
     }
   }
 
+  /**
+   * Creates the posts section and populates it with the 10 latest posts.
+   * @param username
+   * @returns {HTMLDivElement}
+   */
   function createPostsSection(username) {
     var header = document.createElement('header');
     var headerH2 = document.createElement('h2');
@@ -194,10 +217,16 @@ var Posts = (function() {
     return postsSection;
   }
 
+  /**
+   * Creates a short version of a post. A short post does not show all information related to the post.
+   * @param postJSON
+   * @returns {HTMLDivElement}
+   */
   function createShortPost(postJSON) {
     var postDiv = null;
     var queryLatLon = null;
 
+    /* create the post description, this is a trimmed version (max 350 chars) of the full description */
     var description = document.createElement('p');
     description.className = 'post-description';
     if (postJSON['description'].length > 350) {
@@ -207,6 +236,7 @@ var Posts = (function() {
       description.innerHTML = postJSON['description'].trim().replace('\n', '<br><br>');
     }
 
+    /* create the photo of the post */
     var image = document.createElement('img');
     image.className = 'short-post-photo';
     if (postJSON['imageURL']) {
@@ -221,14 +251,17 @@ var Posts = (function() {
       imageParent.appendChild(image);
     }
 
+    /* create the read more button */
     var readMore = document.createElement('p');
     readMore.className = 'read-more';
     readMore.innerHTML = 'Read the full post';
 
+    /* create the > image of the read more button */
     var img = document.createElement('img');
     img.className = 'post-show-more-arrow';
     img.src = 'images/showmore.svg';
 
+    /* create the button that tells us who created this post */
     var button = document.createElement('button');
     button.className = 'transparent-button';
     button.innerHTML = postJSON['username'];
@@ -237,31 +270,34 @@ var Posts = (function() {
       ShowProfile.init(postJSON['username'], true);
     };
 
+    /* create the element that tells us when the post was created */
     var at = document.createElement('span');
     at.innerHTML = ' at ';
     at.style.fontWeight = 'bold';
-
     var timestamp = document.createElement('span');
     timestamp.innerHTML = postJSON['createdAt'].substring(0, postJSON['createdAt'].lastIndexOf(":"));
 
+    /* create the element that tells us who created the post and when */
     var username = document.createElement('div');
     username.className = 'posted-by';
     username.appendChild(button);
     username.appendChild(at);
     username.appendChild(timestamp);
 
-    /* var rating = document.createElement('div');
-    rating.innerHTML = "Rating: ";
-    rating.className = 'post-rating';*/
-
+    /* create the footer element, this currently shows only who created the post and when */
     var footer = document.createElement('div');
     footer.className = 'post-footer';
     footer.appendChild(username);
-    /* footer.appendChild(rating); */
 
+    /* create the element that shows the location of the place referenced in the post */
     var location = newElements.createKeyValue('Location', 'Querying...');
     location.id = 'post-location';
 
+    /* create the element that has the main content of the post, this includes:
+    the location of the post
+    the image of the post
+    the description of the post
+    the footer of the post */
     postDiv = document.createElement('div');
     postDiv.appendChild(location);
     if (image.src) {
@@ -270,6 +306,7 @@ var Posts = (function() {
     postDiv.appendChild(description);
     postDiv.appendChild(footer);
 
+    /* create the element that has the read more button (includes the button and the image of the button) */
     var readMoreButton = document.createElement('button');
     readMoreButton.className = 'read-more-button';
     readMoreButton.appendChild(readMore);
@@ -294,6 +331,7 @@ var Posts = (function() {
       locationDiv: location
     };
 
+    /* request the name of the location from the nominatim service */
     queryLatLon = new QueryLatLon(data);
 
     postDiv.appendChild(readMoreButton);
@@ -301,6 +339,13 @@ var Posts = (function() {
     return postDiv;
   }
 
+  /**
+   * Requests the name of the location of the place referenced in the post and changes the corresponding
+   * element of the post to display that name.
+   * @param data
+   * @returns {{getLocation: (function(): null), getQueryID: (function(): null)}}
+   * @constructor
+   */
   function QueryLatLon(data) {
     var queryID = null;
     var locationQuery = null;
@@ -369,6 +414,11 @@ var Posts = (function() {
     };
   }
 
+  /**
+   * Turns a short post into a full post. This means all the information related to the post is now visible.
+   * We also get to see the location of the place referenced in the post on a map.
+   * @param data
+   */
   function turnToFullPost(data) {
     state.clickedFullPost = true;
     Requests.cancelExcept(data['queryID']);
@@ -379,28 +429,6 @@ var Posts = (function() {
     data['descriptionDiv'].innerHTML = data['description'].trim().replace('\n', '<br><br>');
     data['postDiv'].removeChild(data['readMoreButtonDiv']);
 
-    /*var rating = postedBy.children[1];
-      if (data['username'] !== Init.getUser()) {
-      rating.innerHTML = 'Rate';
-      var select = document.createElement('select');
-      select.id = 'rating-select';
-
-      var defaultSelect = document.createElement('option');
-      defaultSelect.selected = true;
-      defaultSelect.value = '0';
-      defaultSelect.innerHTML = '-';
-
-      select.appendChild(defaultSelect);
-      for (var i = 1; i <= 5; i++) {
-        var option = document.createElement('option');
-        option.value = String(i);
-        option.innerHTML = String(i);
-        select.appendChild(option);
-      }
-
-      rating.appendChild(select);
-    } */
-
     if (data['resourceURL']) {
       var url = document.createElement('a');
       url.href = data['resourceURL'];
@@ -410,6 +438,7 @@ var Posts = (function() {
       data['descriptionDiv'].appendChild(onlineURL);
     }
 
+    /* show a edit post button when we are the owners of the post */
     if (data['username'] === Init.getUser()) {
       var optionsBar = document.createElement('div');
       optionsBar.id = 'post-options-bar';
@@ -428,6 +457,10 @@ var Posts = (function() {
     window.scrollTo(0, 0);
   }
 
+  /**
+   * Show a map with a mark of the location of the place referenced in the post.
+   * @param data
+   */
   function showMap(data) {
     var zoom = null;
     if (data['locationQuery']) {
@@ -465,6 +498,10 @@ var Posts = (function() {
     obj.map.drawMap();
   }
 
+  /**
+   * Requests the new post form from the server. Called when the new post button is clicked.
+   * @param username
+   */
   function getPostForm(username) {
     Requests.cancelExcept(null);
     Init.scrollTo(el.postButton);
@@ -505,6 +542,10 @@ var Posts = (function() {
     }
   }
 
+  /**
+   * Creates the section that will host the new post form.
+   * @returns {HTMLDivElement}
+   */
   function createPostFormSection() {
     var postFormParent = document.createElement('div');
     postFormParent.id = 'post-form-parent';
@@ -516,6 +557,12 @@ var Posts = (function() {
     return postFormSection;
   }
 
+  /**
+   * Creates an option button that shows a edit post menu once it has been clicked. This button is only visible
+   * to the owner of the post. Currently, the edits of the post only include deleting the post.
+   * @param data
+   * @returns {HTMLButtonElement}
+   */
   function createPostOptionsShowButton(data) {
     var button = newElements.createGearButton('show-post-options-button');
     button.addEventListener('click', function() {
@@ -528,6 +575,11 @@ var Posts = (function() {
     return button;
   }
 
+  /**
+   * Creates button that closes the edit post menu once it has been opened.
+   * @param data
+   * @returns {HTMLButtonElement}
+   */
   function createPostOptionsCloseButton(data) {
     var button = newElements.createCloseButton('remove-post-options-button');
     button.addEventListener('click', function() {
@@ -540,6 +592,11 @@ var Posts = (function() {
     return button;
   }
 
+  /**
+   * Creates the edit post menu.
+   * @param data
+   * @returns {HTMLDivElement}
+   */
   function createPostOptionsMenu(data) {
     el.deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
     el.deleteButton.children[0].addEventListener('click', function() {
@@ -558,13 +615,21 @@ var Posts = (function() {
     return div;
   }
 
+  /**
+   * Creates yes/no post delete confirmation buttons.
+   * @param data
+   */
   function confirmDelete(data) {
     if (!el.confirmDelete) {
       el.confirmDelete = newElements.createYesNoButtons('post-delete-confirm');
+
+      //listener for the yes button
       el.confirmDelete.children[1].addEventListener('click', function() {
         el.confirmDelete = null;
         deletePost(data['postDiv'], data['username'], data['postID']);
       });
+
+      //listener for the no button
       el.confirmDelete.children[2].addEventListener('click', function() {
         formMsg.clear(el.deleteMsg);
         el.confirmDelete = null;

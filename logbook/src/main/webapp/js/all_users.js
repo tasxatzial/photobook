@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Functions related to the all users section.
+ * @type {{init: init}}
+ */
 var AllUsers = (function() {
   var state = {
     response: null,
@@ -11,6 +15,9 @@ var AllUsers = (function() {
     navBar: null
   };
 
+  /**
+   * Initializes the view when the all users button is clicked.
+   */
   function init() {
     Requests.cancelExcept(null);
 
@@ -55,6 +62,9 @@ var AllUsers = (function() {
     }
   }
 
+  /**
+   * Adds listeners to the navigation bar of the user list (left button, right button, page selector).
+   */
   function addNavBarListeners() {
     var leftButton = el.navBar.children[0];
     var selectButton = el.navBar.children[1].children[0];
@@ -87,6 +97,10 @@ var AllUsers = (function() {
     });
   }
 
+  /**
+   * Shows the list of users in the specified pageNo.
+   * @param pageNo
+   */
   function showPage(pageNo) {
     if (pageNo <= state.pages && pageNo >= 1) {
       if (el.userListParent.children[3]) {
@@ -97,6 +111,11 @@ var AllUsers = (function() {
     }
   }
 
+  /**
+   * Creates the navigation bar of the user list (left button, right button, page selector).
+   * @param pages The total number of pages in the user list
+   * @returns {HTMLDivElement}
+   */
   function createNavBar(pages) {
     if (!pages) {
       pages = 1;
@@ -121,6 +140,10 @@ var AllUsers = (function() {
     return buttonSection;
   }
 
+  /**
+   * Creates the initial elements in the all users section.
+   * @returns {HTMLDivElement}
+   */
   function createAllUsersSection() {
     var headerH2 = document.createElement('h2');
     headerH2.innerHTML = 'Users';
@@ -143,6 +166,11 @@ var AllUsers = (function() {
     return userlistSection;
   }
 
+  /**
+   * Creates the list of users for the specified page.
+   * @param page
+   * @returns {HTMLDivElement}
+   */
   function createUserPage(page) {
     var hrBottom = document.createElement('hr');
     hrBottom.className = 'userlist-hr-bottom';

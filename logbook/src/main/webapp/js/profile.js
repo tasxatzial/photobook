@@ -1,10 +1,20 @@
 'use strict';
 
+/**
+ * Functions related to the page shown when the a user account page is requested, usually
+ * by clicking on a username that appears in a post or the all users page.
+ * @type {{init: init}}
+ */
 var ShowProfile = (function() {
   var el = {
     accountSubsection: null
   };
 
+  /**
+   * Initializations when the user account page is requested.
+   * @param username
+   * @param firstTime
+   */
   function init(username, firstTime) {
     Requests.cancelExcept(null);
 
@@ -61,6 +71,12 @@ var ShowProfile = (function() {
     }
   }
 
+  /**
+   * Changes the appearance of all navigation tabs when a tab is made active.
+   * @param buttonActive
+   * @param button2
+   * @param button3
+   */
   function showBorders(buttonActive, button2, button3) {
     buttonActive.className = 'account-nav-button active-tab';
     button2.className = 'account-nav-button inactive-tab';
@@ -69,6 +85,11 @@ var ShowProfile = (function() {
     }
   }
 
+  /**
+   * Creates the initial elements in the user account section.
+   * @param username
+   * @returns {HTMLDivElement}
+   */
   function createAccountSection(username) {
     var header = document.createElement('header');
     var headerH2 = document.createElement('h2');
@@ -95,6 +116,10 @@ var ShowProfile = (function() {
     return accountSection;
   }
 
+  /**
+   * Creates the user profile section, this is the content of the left-most tab on the user account page.
+   * @returns {HTMLDivElement}
+   */
   function createProfileSection() {
     var loaderMsg = document.createElement('div');
     loaderMsg.id = 'sign-process-msg';
@@ -111,6 +136,11 @@ var ShowProfile = (function() {
     return profileSection;
   }
 
+  /**
+   * Creates a navigation tab that has the specified name.
+   * @param name
+   * @returns {HTMLButtonElement}
+   */
   function createNavTab(name) {
     var button = document.createElement('button');
     button.type = 'button';
@@ -119,6 +149,12 @@ var ShowProfile = (function() {
     return button;
   }
 
+  /**
+   * Creates the navigation tabs on the user account page. We should have 3 tabs if we have opened
+   * our account page, 2 tabs in all other cases.
+   * @param username
+   * @returns {HTMLButtonElement}
+   */
   function createNavTabs(username) {
     var navTabs = document.createElement('div');
     navTabs.id = 'account-nav';

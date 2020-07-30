@@ -19,7 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
 
 /**
- *
+ * Do a signin.
  */
 @WebServlet(name = "Signin", urlPatterns = {"/Signin"})
 @MultipartConfig
@@ -39,17 +39,21 @@ public class Signin extends HttpServlet {
 
         RequestDispatcher dispatcher = null;
 
+        /* Redirect to the Init servlet if there is already a session */
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null && oldSession.getAttribute("username") != null) {
             dispatcher = request.getRequestDispatcher("Init");
             dispatcher.forward(request, response);
         }
 
+        /* check username */
         JSONObject jsonSignin = new JSONObject();
         request.setAttribute("parameter", "username");
         request.setAttribute("parameterValue", request.getParameter("username"));
         dispatcher = request.getRequestDispatcher("CheckOnDB");
         dispatcher.include(request, response);
+
+        /* if username does not exist on DB, there is no need to check the password */
         if (request.getParameter("username") != null && request.getAttribute("username").equals("0")) {
             jsonSignin.put("username", "1");
             String password = request.getParameter("password");
@@ -64,11 +68,15 @@ public class Signin extends HttpServlet {
         else {
             jsonSignin.put("username", "0");
         }
+
+        /* return if either username or password are not valid */
         if (jsonSignin.get("username").equals("0") || jsonSignin.get("password").equals("0")) {
             response.setContentType("application/json;charset=UTF-8");
             PrintWriter out = response.getWriter();
             out.print(jsonSignin.toJSONString());
         }
+
+        /* If both username and password are ok, we start a new session and redirect to the Init servlet */
         else {
             HttpSession newSession = request.getSession(true);
             newSession.setAttribute("username", request.getParameter("username"));

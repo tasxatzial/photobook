@@ -17,13 +17,11 @@ import javax.servlet.RequestDispatcher;
 
 
 /**
- *
+ * The Main servlet. All client requests are handled by this servlet.
  */
 @WebServlet(name = "Main", urlPatterns = "/Main")
 @MultipartConfig
 public class Main extends HttpServlet {
-
-    /* static HashMap<String, List<String>> sessionMap = new HashMap(); */
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,6 +38,7 @@ public class Main extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
 
+        /* we need a valid action parameter */
         if (request.getParameter("action") == null) {
             response.setContentType("application/json;charset=UTF-8");
             json.put("MISSING_FIELDS", "action");
@@ -47,6 +46,7 @@ public class Main extends HttpServlet {
             response.setStatus(400);
             return;
         };
+
         RequestDispatcher dispatcher = null;
         switch(request.getParameter("action")) {
             case "Init":
@@ -55,14 +55,14 @@ public class Main extends HttpServlet {
             case "GetSignin":
                 dispatcher = request.getRequestDispatcher("WEB-INF/signin");
                 break;
-            case "GetSignup":
+            case "GetSignup": //get the Signup form, the same form is used for updating account info
             case "AccountInfo":
                 dispatcher = request.getRequestDispatcher("AccountInfo");
                 break;
             case "CheckUsernameEmailDB":
                 dispatcher = request.getRequestDispatcher("CheckUsernameEmailDB");
                 break;
-            case "Signup":
+            case "Signup": //do a Signup or update the account info
             case "UpdateAccount":
                 dispatcher = request.getRequestDispatcher("Signup");
                 break;

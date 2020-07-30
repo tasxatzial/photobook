@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A Map of country code (2 letters) -> full country name.
+ */
 public final class Countries {
     private static final Map<String, String> COUNTRIES = createMap();
 

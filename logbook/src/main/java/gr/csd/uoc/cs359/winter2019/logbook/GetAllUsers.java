@@ -20,7 +20,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Get all usernames.
  */
 @WebServlet(name = "GetAllUsers", urlPatterns = "/GetAllUsers")
 @MultipartConfig
@@ -42,6 +42,7 @@ public class GetAllUsers extends HttpServlet {
         JSONObject json = new JSONObject();
         PrintWriter out = response.getWriter();
 
+        /* we need a valid session */
         HttpSession oldSession = request.getSession(false);
         if (oldSession == null || oldSession.getAttribute("username") == null) {
             json.put("ERROR", "NO_SESSION");

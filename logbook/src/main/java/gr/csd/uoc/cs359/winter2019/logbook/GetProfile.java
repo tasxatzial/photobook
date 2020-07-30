@@ -21,6 +21,9 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
 
+/**
+ * Get the profile details of a user.
+ */
 @WebServlet(name = "GetProfile", urlPatterns = "/GetProfile")
 @MultipartConfig
 public class GetProfile extends HttpServlet {
@@ -39,6 +42,7 @@ public class GetProfile extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
 
+        /* we need a valid session */
         HttpSession oldSession = request.getSession(false);
         if (oldSession == null || oldSession.getAttribute("username") == null) {
             json.put("ERROR", "NO_SESSION");
@@ -54,6 +58,8 @@ public class GetProfile extends HttpServlet {
             response.setStatus(400);
             return;
         }
+
+        /* check that the username exists */
         user = UserDB.getUser(request.getParameter("username"));
         if (user == null) {
             json.put("ERROR", "INVALID_USER");
@@ -62,6 +68,7 @@ public class GetProfile extends HttpServlet {
             return;
         }
 
+        /* collect all required info */
         json.put("username", user.getUserName());
         json.put("email", user.getEmail());
         json.put("firstName", user.getFirstName());

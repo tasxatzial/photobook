@@ -1,7 +1,31 @@
 'use strict';
 
+/**
+ * The methods of this object are used to create some of the HTML elements.
+ * @type {{
+ * createLoader: (function(*): HTMLImageElement),
+ * createGearButton: (function(*=): HTMLButtonElement),
+ * createFullWindowButton: (function(*): HTMLButtonElement),
+ * showFullWindowMsg: showFullWindowMsg,
+ * createFullWindow: (function(*): HTMLDivElement),
+ * createSignBarButton: (function(*, *, *=): HTMLButtonElement),
+ * createCloseButton: (function(*=): HTMLButtonElement),
+ * createSignupSummary: (function(*, *): HTMLDivElement),
+ * createYesNoButtons: (function(*): HTMLDivElement),
+ * createBlueButton: (function(*, *): HTMLDivElement),
+ * createKeyValue: (function(*, *=, *=): HTMLParagraphElement),
+ * createArrowButton: (function(*): HTMLButtonElement),
+ * createSelectPage: (function(*, *): HTMLDivElement)
+ * }}
+ */
 var newElements = (function NewElements() {
 
+  /**
+   * Returns a distinct large blue button.
+   * @param value The text of the button element
+   * @param id The id of the returned element
+   * @returns {HTMLDivElement}
+   */
   function createBlueButton(value, id) {
     var div = document.createElement('div');
     div.className = 'sign-button';
@@ -16,6 +40,11 @@ var newElements = (function NewElements() {
     return div;
   }
 
+  /**
+   * Creates a spinning loader.
+   * @param pathToFile
+   * @returns {HTMLImageElement}
+   */
   function createLoader(pathToFile) {
     var loader = document.createElement('img');
     loader.src = pathToFile;
@@ -24,6 +53,13 @@ var newElements = (function NewElements() {
     return loader;
   }
 
+  /**
+   * Creates a button for the top navigation bar.
+   * @param value The text of the button element
+   * @param id The id of the button element
+   * @param pathToFile The path to the image shown next to the button text
+   * @returns {HTMLButtonElement}
+   */
   function createSignBarButton(value, id, pathToFile) {
     var button = document.createElement('button');
     button.className = 'navbar-button';
@@ -46,6 +82,14 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  /**
+   * Creates an element from the specified key/value. The element looks like:
+   * Key (bold font): value (normal font)
+   * @param key
+   * @param value
+   * @param append
+   * @returns {HTMLParagraphElement}
+   */
   function createKeyValue(key, value, append) {
     var span = document.createElement('span');
     if (append) {
@@ -65,6 +109,12 @@ var newElements = (function NewElements() {
     return msg;
   }
 
+  /**
+   * Creates the element that shows a summary of the info that the user entered during signup.
+   * @param response A server response, that is an object that contains the info
+   * @param dataNames An array that maps the response keys to human readable text
+   * @returns {HTMLDivElement}
+   */
   function createSignupSummary(response, dataNames) {
     var div = document.createElement('div');
     for (var i = 0; i < dataNames.length; i++) {
@@ -76,6 +126,12 @@ var newElements = (function NewElements() {
     return div;
   }
 
+  /**
+   * Creates a dropdown element that selects a page.
+   * @param pages The total number of pages
+   * @param id The id of the returned element
+   * @returns {HTMLDivElement}
+   */
   function createSelectPage(pages, id) {
     var select = document.createElement('select');
     select.className = "sign-tofill";
@@ -96,6 +152,11 @@ var newElements = (function NewElements() {
     return div;
   }
 
+  /**
+   * Creates a button that shows an arrow image.
+   * @param imageUrl The src attribute of the arrow image
+   * @returns {HTMLButtonElement}
+   */
   function createArrowButton(imageUrl) {
     var img = document.createElement('img');
     img.src = imageUrl;
@@ -109,6 +170,11 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  /**
+   * Creates an element that shows a yes/no button.
+   * @param id The id of the returned element
+   * @returns {HTMLDivElement}
+   */
   function createYesNoButtons(id) {
     var yesButton = document.createElement('button');
     yesButton.innerHTML = 'Yes';
@@ -148,6 +214,11 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  /**
+   * Creates a button that shows a gear icon.
+   * @param id
+   * @returns {HTMLButtonElement}
+   */
   function createGearButton(id) {
     var button = createOptionButton(id);
     button.children[0].src = "images/settings.svg";
@@ -156,6 +227,11 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  /**
+   * Creates a button that shows a X (close) icon.
+   * @param id
+   * @returns {HTMLButtonElement}
+   */
   function createCloseButton(id) {
     var button = createOptionButton(id);
     button.children[0].src = "images/close.svg";
@@ -164,6 +240,11 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  /**
+   * Creates an element that has dimensions equal to the viewport dimensions.
+   * @param text The text of the element
+   * @returns {HTMLDivElement}
+   */
   function createFullWindow(text) {
     var expired = document.createElement('div');
     expired.id = 'full-screen';
@@ -180,6 +261,11 @@ var newElements = (function NewElements() {
     return expired;
   }
 
+  /**
+   * Creates a button that is contained in the element returned by createFullWindow().
+   * @param text The text of the button element
+   * @returns {HTMLButtonElement}
+   */
   function createFullWindowButton(text) {
     var button = document.createElement('button');
     button.innerHTML = text;
@@ -189,6 +275,13 @@ var newElements = (function NewElements() {
     return button;
   }
 
+  /**
+   * Appends the element returned by createFullWindow() to the body element. This
+   * essentially blocks the user interaction with every other element.
+   * @param buttonText The text of the button element
+   * @param text The text of the element returned by createFullWindow()
+   * @param callback The function that will be called when the button is clicked
+   */
   function showFullWindowMsg(buttonText, text, callback) {
     var button = newElements.createFullWindowButton(buttonText);
 

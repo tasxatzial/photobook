@@ -1,10 +1,15 @@
 'use strict';
 
-/* a object for manipulating the map */
+/**
+ * The methods of the object returned by this function are all related to the Openlayers map.
+ * @param divId
+ * @returns {{getDiv: (function(): *), setZoom: setZoom, resetState: resetState, addLocation: addLocation, drawMap: drawMap}}
+ * @constructor
+ */
 function OLMap(divId) {
   var state = {
 
-    /* the map element */
+    /* the map element, this is the child of the element with id = divId */
     obj: null,
 
     /* the markers for the locations */
@@ -32,10 +37,17 @@ function OLMap(divId) {
     state.projection4326 = new OpenLayers.Projection('EPSG:4326');
   }());
 
+  /**
+   * Returns the div element that contains the map element. This is the element with id = 'divId'.
+   * @returns {*}
+   */
   function getDiv() {
     return state.obj.div;
   }
 
+  /**
+   * Resets the state of this object to its initial state.
+   */
   function resetState() {
     state.customInitZoom = null;
     state.initZoom = 0;
@@ -46,7 +58,10 @@ function OLMap(divId) {
     }
   }
 
-  /* returns the zoom level and center of the map */
+  /**
+   * Returns the zoom level and center of the map.
+   * @returns {{center: {lon: number, lat: number}, zoom: number}}
+   */
   function findZoomCenter() {
     var zoom = 1;
     var center = {lon: 0, lat: 0};
@@ -69,7 +84,10 @@ function OLMap(divId) {
     };
   }
 
-  /* puts a marker on the map for the specified location */
+  /**
+   * Puts a marker on the map for the specified location.
+   * @param location
+   */
   function drawLocation(location) {
     var locY = location.lat;
     var locX = location.lon;
@@ -83,7 +101,9 @@ function OLMap(divId) {
     state.markers.addMarker(new OpenLayers.Marker(lonLat));
   }
 
-  /* draws the map and all the locations */
+  /**
+   * Draws the map and all the marked locations.
+   */
   function drawMap() {
 
     /* calculate zoom level and center only when the map is shown for the first time */
@@ -103,12 +123,19 @@ function OLMap(divId) {
     }
   }
 
-  /* adds one more location to the map */
+  /**
+   * Adds one more location to the map.
+   * @param location
+   */
   function addLocation(location) {
     location.draw = 0;
     state.locations.push(location);
   }
 
+  /**
+   * Sets the zoom level of the map.
+   * @param lvl
+   */
   function setZoom(lvl) {
     state.customInitZoom = lvl;
   }

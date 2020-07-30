@@ -1,10 +1,19 @@
 'use strict';
 
+/**
+ * Functions that check if the provided account information is valid based on specific patterns and requirements.
+ * This happens either during the signup process or when we are editing the user account info.
+ *
+ * @type {{init: init, showInvalidMsg: showInvalidMsg, getCheckedInputs: (function(): []|*[]), checkInvalidElements: checkInvalidElements}}
+ */
 var ValidChecker = (function() {
   var data = {
     checkedInputs: []
   };
 
+  /**
+   * Initializations after the signup form has loaded.
+   */
   function init() {
     var username = document.getElementById('signup-username');
     var email = document.getElementById('signup-email');
@@ -22,11 +31,19 @@ var ValidChecker = (function() {
 
     data.checkedInputs = [];
 
-        /* collect all elements --------------------------------------- */
+    /* collect all elements that require checking --------------------------------------- */
     data.checkedInputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
         occupation, country, city, interests, about);
 
-    /* valid regex check functions --------------------------------- */
+    /* checks for valid regex pattern */
+    function regexValid(element) {
+      element.valid = function () {
+        var regex = new RegExp(element.pattern);
+        return regex.test(element.value) && element.value;
+      };
+    }
+
+    /* define the check function for each one of the checked inputs ---------------------------- */
     regexValid(username);
     regexValid(email);
     regexValid(passwd1);
@@ -55,13 +72,6 @@ var ValidChecker = (function() {
       return about.value.length <= 500;
     };
 
-    function regexValid(element) {
-      element.valid = function () {
-        var regex = new RegExp(element.pattern);
-        return regex.test(element.value) && element.value;
-      };
-    }
-
     /* add listeners ----------------------------------------------- */
     addValidPatternListeners(username);
     addValidPatternListeners(email);
@@ -76,7 +86,7 @@ var ValidChecker = (function() {
     addValidPatternListeners(interests);
     addValidPatternListeners(about);
 
-    /* regex validation listeners for all elements besides username, email, passwordConfirm */
+    /* listeners for all elements except passw2 */
     function addValidPatternListeners(element) {
       element.checkedValid = 0;
       element.invalidMsg = 'Invalid';
@@ -100,7 +110,7 @@ var ValidChecker = (function() {
       });
     }
 
-    /* same value listeners for password and passwordConfirm */
+    /* listeners for passwd1 and passwd2 */
     function addPasswdConfirmListeners() {
       passwd1.addEventListener('input', clearMismatchMsg);
       passwd1.addEventListener('focusout', checkMismatch);
@@ -129,7 +139,10 @@ var ValidChecker = (function() {
     }
   }
 
-  /* checks if an element has a valid value and modifies its isValid attribute */
+  /**
+   * Checks if an input field has a valid value and modifies its isValid attribute.
+   * @param element
+   */
   function checkValid(element) {
     if (!element.checkedValid) {
       element.checkedValid = 1;
@@ -142,20 +155,29 @@ var ValidChecker = (function() {
     }
   }
 
-  /* displays an invalid message next to the element label */
-  function showInvalidMsg(element, value) {
+  /**
+   * Shows the specified text (an invalid input message) next to the label of the specified element.
+   * @param element
+   * @param text
+   */
+  function showInvalidMsg(element, text) {
     for(var child = element.parentNode.children[0].firstChild; child !== null; child = child.nextSibling) {
       if (child.className === 'invalid-value') {
         return;
       }
     }
     var msg = document.createElement('div');
-    msg.innerHTML = value;
+    msg.innerHTML = text;
     msg.className = 'invalid-value';
 
     element.parentNode.children[0].appendChild(msg);
   }
 
+  /**
+   * Checks whether there are any invalid input fields. Returns the element that we need to scroll to so that
+   * the user sees an invalid message notification.
+   * @returns {HTMLElement}
+   */
   function checkInvalidElements() {
     for (var j = 0; j < data.checkedInputs.length; j++) {
       checkValid(data.checkedInputs[j]);
@@ -166,6 +188,10 @@ var ValidChecker = (function() {
     }
   }
 
+  /**
+   * Returns the array of the input fields that require checking.
+   * @returns {[]|*[]}
+   */
   function getCheckedInputs() {
     return data.checkedInputs;
   }
@@ -176,5 +202,4 @@ var ValidChecker = (function() {
     showInvalidMsg: showInvalidMsg,
     getCheckedInputs: getCheckedInputs
   };
-
 }());

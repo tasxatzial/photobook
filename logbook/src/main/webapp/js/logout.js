@@ -1,6 +1,14 @@
 'use strict';
 
+/**
+ * Functions related to the logout process.
+ * @type {{init: init, showExpired: showExpired}}
+ */
 var Logout = (function() {
+
+  /**
+   * Initializes the view when the user logs out.
+   */
   function init() {
     Requests.cancelExcept(null);
     Init.clearFullWindowMsg();
@@ -38,6 +46,9 @@ var Logout = (function() {
     }
   }
 
+  /**
+   * Shows a expired session message.
+   */
   function showExpired() {
     newElements.showFullWindowMsg('OK', 'Your session has expired', init);
   }

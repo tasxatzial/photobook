@@ -1,6 +1,13 @@
 'use strict';
 
-/* create and return a ajax request */
+/**
+ * Creates and returns an ajax request.
+ * @param method GET or POST
+ * @param url
+ * @param data
+ * @param successFunction
+ * @param failFunction
+ */
 function ajaxRequest(method, url, data, successFunction, failFunction) {
   var xhr = new XMLHttpRequest();
   xhr.open(method, url, true);
@@ -23,23 +30,33 @@ function ajaxRequest(method, url, data, successFunction, failFunction) {
   return xhr;
 }
 
+/**
+ * Simple function for managing multiple ajax requests.
+ * @type {{add: (function(*): *), get: (function(*): *), cancelExcept: cancelExcept}}
+ */
 var Requests = (function() {
+
+  /* stores the requests */
   var xhr = {};
 
+  /* generate an Id */
   function getID() {
     return (Math.random() + 1).toString(36).substring(2, 5);
   }
 
+  /* adds a request and returns its Id */
   function add(request) {
     var ID = getID();
     xhr[ID] = request;
     return ID;
   }
 
+  /* gets the request that has the specified Id */
   function get(ID) {
     return xhr[ID];
   }
 
+  /* cancels all requests except the one with the specified Id */
   function cancelExcept(ID) {
     for (var key in xhr) {
       if (key !== ID) {

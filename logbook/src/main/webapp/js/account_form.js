@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Functions related to the account tab section.
+ * @type {{init: init}}
+ */
 var AccountInfo = (function() {
   var el = {
     confirmDelete: null,
@@ -9,12 +13,18 @@ var AccountInfo = (function() {
     showEditAccountMsg: null,
   };
 
+  /**
+   * Initializes the view when the user account tab is clicked.
+   */
   function init() {
     var accountSubsection = document.getElementById('account-subsection');
     accountSubsection.innerHTML = '';
     accountSubsection.appendChild(createEditAccountSection());
   }
 
+  /**
+   * Loads the signup form already filled in with user account details.
+   */
   function editAccount() {
     Requests.cancelExcept(null);
     el.deleteAccountDiv.parentElement.removeChild(el.deleteAccountDiv);
@@ -69,6 +79,9 @@ var AccountInfo = (function() {
     }
   }
 
+  /**
+   * Deletes user account and calls the logout function.
+   */
   function deleteAccount() {
     Requests.cancelExcept(null);
     formMsg.showElement(el.deleteAccountMsg, Init.loader);
@@ -106,6 +119,9 @@ var AccountInfo = (function() {
     }
   }
 
+  /**
+   * Shows yes/no confirmation buttons when the delete account button is clicked.
+   */
   function showConfirmDelete() {
     var yesNoButtons = newElements.createYesNoButtons('account-delete-confirm');
     yesNoButtons.children[1].addEventListener('click', function () {
@@ -125,6 +141,10 @@ var AccountInfo = (function() {
     Init.scrollTo(el.deleteAccountDiv);
   }
 
+  /**
+   * Creates the initial elements in the account section.
+   * @returns {HTMLDivElement}
+   */
   function createEditAccountSection() {
     el.editAccountDiv = newElements.createBlueButton('Edit Account', 'edit-account-button');
     el.editAccountDiv.children[0].addEventListener('click', editAccount);

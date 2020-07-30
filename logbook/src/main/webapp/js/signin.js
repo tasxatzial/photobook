@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Functions related to the signin process. These do not include the loading of the signin form (loaded in landing.js)
+ * @type {{init: init}}
+ */
 var Signin = (function() {
   var el = {
     username: null,
@@ -9,6 +13,9 @@ var Signin = (function() {
     signinPhotoButton:null
   };
 
+  /**
+   * Disables all form inputs.
+   */
   function disableInputs() {
     formSubmit.disable(el.signinButton);
     formInput.disable(el.username);
@@ -16,6 +23,9 @@ var Signin = (function() {
     formButton.disable(el.signinPhotoButton);
   }
 
+  /**
+   * Enables all form inputs.
+   */
   function enableInputs() {
     formSubmit.enable(el.signinButton);
     formInput.enable(el.username);
@@ -23,6 +33,9 @@ var Signin = (function() {
     formButton.enable(el.signinPhotoButton);
   }
 
+  /**
+   * Performs sign in.
+   */
   function doSignin() {
     Requests.cancelExcept(null);
     Init.scrollTo(el.signinButton);
@@ -70,6 +83,9 @@ var Signin = (function() {
     }
   }
 
+  /**
+   * Initializations after the signin form has loaded.
+   */
   function init() {
     el.signinButton = document.querySelector('#signin-button input');
     el.username = document.getElementById('signin-username');

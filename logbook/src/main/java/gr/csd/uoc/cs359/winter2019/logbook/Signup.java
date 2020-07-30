@@ -16,7 +16,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
-import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +26,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Do a signup & update account info.
  */
 @WebServlet(name = "Signup", urlPatterns = {"/Signup"})
 @MultipartConfig
@@ -49,6 +48,7 @@ public class Signup extends HttpServlet {
         JSONObject jsonSignup = new JSONObject();
         PrintWriter out = response.getWriter();
 
+        /* only Signup and UpdateAccount actions are accepted */
         if (request.getParameter("action") == null ||
                 (!request.getParameter("action").equals("Signup") &&
                         !request.getParameter("action").equals("UpdateAccount"))) {
@@ -58,6 +58,7 @@ public class Signup extends HttpServlet {
             return;
         }
 
+        /* For updating the account info, we need a valid session */
         String username = null;
         if (request.getParameter("action").equals("UpdateAccount")) {
             HttpSession oldSession = request.getSession(false);
@@ -75,6 +76,7 @@ public class Signup extends HttpServlet {
         String passwd1 = request.getParameter("password");
         Enumeration paramNames = request.getParameterNames();
 
+        /* Check if the parameters of the request are valid */
         while (paramNames.hasMoreElements()) {
             String paramName = (String) paramNames.nextElement();
             String[] paramValues = request.getParameterValues(paramName);
@@ -123,6 +125,7 @@ public class Signup extends HttpServlet {
 
         RequestDispatcher dispatcher;
 
+        /* If the username is valid, check if it already exists on DB */
         if (jsonSignup.get("username") == null && request.getParameter("action").equals("Signup")) {
             request.setAttribute("parameter", "username");
             request.setAttribute("parameterValue", request.getParameter("username"));
@@ -133,7 +136,10 @@ public class Signup extends HttpServlet {
             }
         }
 
+        /* If the email is valid, check if it already exists on DB */
         if (jsonSignup.get("email") == null) {
+
+            /* if we are performing signup, just check if the email exists on DB */
             if (request.getParameter("action").equals("Signup")) {
                 request.setAttribute("parameter", "email");
                 request.setAttribute("parameterValue", request.getParameter("email"));
@@ -143,6 +149,9 @@ public class Signup extends HttpServlet {
                     jsonSignup.put("email", "Already taken");
                 }
             }
+
+            /* if we are updating the account info, first make sure that the username parameter
+            corresponds to an actual user */
             else {
                 User user = UserDB.getUser(username);
                 if (user != null) {
@@ -166,7 +175,7 @@ public class Signup extends HttpServlet {
             }
         }
 
-
+        /* Return an error if any of the request parameters are invalid */
         if (!jsonSignup.isEmpty()) {
             jsonSignup.put("ERROR", "INVALID_PARAMETERS");
             out.print(jsonSignup.toJSONString());
@@ -177,6 +186,11 @@ public class Signup extends HttpServlet {
         }
     }
 
+    /**
+     * Checks that the request has all the required parameters.
+     * @param request
+     * @return
+     */
     protected JSONObject checkFields(HttpServletRequest request) {
         JSONObject json = new JSONObject();
         String[] fields = new String[]{
@@ -193,8 +207,17 @@ public class Signup extends HttpServlet {
         return json;
     }
 
+    /**
+     * Performs signup.
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     protected void doSignup(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ClassNotFoundException {
+
+        /* create a User object using the request parameters */
         String r_username = request.getParameter("username");
         String r_password = request.getParameter("password");
         String r_email = request.getParameter("email");
@@ -224,6 +247,7 @@ public class Signup extends HttpServlet {
         user.setInterests(r_interests);
         user.setInfo(r_about);
 
+        /* either update user's account info, or do a signup */
         if (request.getParameter("action").equals("UpdateAccount")) {
             UserDB.updateUser(user);
         }
@@ -231,6 +255,7 @@ public class Signup extends HttpServlet {
             UserDB.addUser(user);
         }
 
+        /* verify that the user info has been written on DB */
         user = UserDB.getUser(request.getParameter("username"));
         JSONObject jsonSignup = new JSONObject();
         PrintWriter out = response.getWriter();
@@ -292,6 +317,11 @@ public class Signup extends HttpServlet {
         }
     }
 
+    /**
+     * Checks whether the specified date conforms to the format yyyy-MM-dd.
+     * @param date
+     * @return
+     */
     protected boolean isValidDate(String date) {
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setLenient(false);
@@ -303,6 +333,11 @@ public class Signup extends HttpServlet {
         return true;
     }
 
+    /**
+     * Returns the regex pattern for the specified field request parameter.
+     * @param field
+     * @return
+     */
     protected String getRegexPattern(String field) {
         switch(field) {
             case "username":

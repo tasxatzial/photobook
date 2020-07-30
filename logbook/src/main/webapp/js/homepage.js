@@ -1,6 +1,14 @@
 'use strict';
 
+/**
+ * Functions related to the post-signin process.
+ * @type {{init: init}}
+ */
 var Homepage = (function() {
+
+  /**
+   * Initializes the view when the homepage (initial screen when a user is logged in) is requested.
+   */
   function init() {
     Init.nonav.innerHTML = '';
 
@@ -32,6 +40,13 @@ var Homepage = (function() {
     Posts.init(null);
   }
 
+  /**
+   * Underlines one of the 'my account', 'all users', 'posts' links in the top navigation menu.
+   * @param element1
+   * @param element2
+   * @param element3
+   * @returns {function(...[*]=)}
+   */
   function underline(element1, element2, element3) {
     return function() {
       element1.style.borderBottom = '3px solid #324a69';

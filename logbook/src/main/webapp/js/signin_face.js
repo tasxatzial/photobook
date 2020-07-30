@@ -1,8 +1,10 @@
 'use strict';
 
-/*  face recognition control */
+/**
+ * Functions related to the face recognition on the signin page.
+ * @type {{init: init}}
+ */
 var SignInFace = (function () {
-
   var tasks = {
     search: null,
     analyze: null
@@ -29,8 +31,10 @@ var SignInFace = (function () {
     photoButton: null,
     submit: null
   };
-  
-  /* called after ajax request for analyze succeeds */
+
+  /**
+   * Called after the request for analyze emotion has detected an emotion with confidence > 80.
+   */
   function analyzeSuccess() {
     var emotion = tasks.analyze.getEmotion();
     if (emotion) {
@@ -41,20 +45,25 @@ var SignInFace = (function () {
     }
   }
 
-  /* called after ajax request for analyze fails, error message
-  can be ignored */
+  /**
+   * Called after the request for analyze emotion has not detected any emotion with confidence > 80
+   * (error message can be ignored).
+   */
   function analyzePhotoFail() {
     formMsg.clear(el.uploadMsgParent);
   }
 
-  /* the second call to face++ service.
-  called after ajax request for search succeeds */
+  /**
+   * Analyzes the emotion of a face token, called only if the search face has succeeded.
+   */
   function analyze() {
     var token = tasks.search.getToken();
     tasks.analyze = FaceAPI.analyze('emotion', token, analyzeSuccess, analyzePhotoFail);
   }
 
-  /* called after ajax request for search succeeds */
+  /**
+   * Called after the request for search face returned a face token.
+   */
   function searchPhotoSuccess() {
     formInput.enable(el.username);
     formButton.enable(el.photoButton);
@@ -70,7 +79,9 @@ var SignInFace = (function () {
     }
   }
 
-  /* called after ajax request for search fails */
+  /**
+   * Called after the request for search face did not find a face.
+   */
   function searchPhotoFail() {
     formInput.enable(el.username);
     formButton.enable(el.photoButton);
@@ -78,7 +89,10 @@ var SignInFace = (function () {
     formMsg.showError(el.uploadMsgParent, FaceAPI.shortMsg(tasks.search.getErrorMsg()));
   }
 
-  /* called after the selected image has been displayed on the DOM */
+  /**
+   * Called after the selected image has finished loading. Then a request to the face++ search face
+   * service is triggered.
+   */
   function postSelectPhoto() {
     var photo = el.photoPicker.getPhotob64();
     state.photoSectionVisible = true;
@@ -97,7 +111,9 @@ var SignInFace = (function () {
     }
   }
 
-  /* called each time user clicks the select photo button */
+  /**
+   * Called each time the user clicks the select image button.
+   */
   function selectPhoto() {
 
     /* initialize once */
@@ -109,13 +125,14 @@ var SignInFace = (function () {
       el.photoPicker = new PhotoPicker(photoParent, fileInput);
     }
 
-    /* pass postSelectPhoto() to photoPicker click function so that it
-    is called after the DOM has finished loading the selected image */
+    /* trigger the click and pass postSelectPhoto() to photoPicker click function so that it
+    is called after the image has finished loading */
     el.photoPicker.click(postSelectPhoto);
   }
 
-  /* removes the hidden photo section if user types and a previous photo
-  has been used */
+  /**
+   * Removes everything in the image section (triggered by the user typing a username).
+   */
   function resetPhotoSection() {
     if (state.photoSectionVisible) {
       state.photoSectionVisible = false;
@@ -125,6 +142,10 @@ var SignInFace = (function () {
     }
   }
 
+  /**
+   * Creates all the elements that appear on the page after the user has selected an image.
+   * @returns {HTMLDivElement}
+   */
   function createSignInPhotoSection() {
     var photoContainer = document.createElement('div');
     photoContainer.id = 'signin-photo-parent';
@@ -141,6 +162,9 @@ var SignInFace = (function () {
     return section;
   }
 
+  /**
+   * Signin form initializations.
+   */
   function init() {
     el.username = document.getElementById('signin-username');
     el.password = document.getElementById('signin-password');

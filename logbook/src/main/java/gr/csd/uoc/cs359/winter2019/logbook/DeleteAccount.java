@@ -20,7 +20,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 
-
+/**
+ * Deletes an account. This also includes deleting all the posts by that account.
+ * This action deletes the account and posts of the logged in user.
+ */
 @WebServlet(name = "DeleteAccount", urlPatterns = "/DeleteAccount")
 @MultipartConfig
 public class DeleteAccount extends HttpServlet {
@@ -41,6 +44,7 @@ public class DeleteAccount extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONObject jsonFinal = new JSONObject();
 
+        /* we need a valid session */
         HttpSession oldSession = request.getSession(false);
         if (oldSession == null || oldSession.getAttribute("username") == null) {
             jsonFinal.put("ERROR", "NO_SESSION");
@@ -49,12 +53,15 @@ public class DeleteAccount extends HttpServlet {
             return;
         }
 
+        /* delete the posts of the user */
         String username = (String) oldSession.getAttribute("username");
         request.setAttribute("username",username);
         RequestDispatcher dispatcher = request.getRequestDispatcher("DeletePost");
         dispatcher.include(request, response);
 
         if (request.getAttribute("DELETE_POSTS").equals("1")) {
+
+            /* it is an error if the account does not exist */
             User user = UserDB.getUser(username);
             if (user == null) {
                 jsonFinal.put("ERROR", "DELETE_ACCOUNT");
@@ -62,6 +69,8 @@ public class DeleteAccount extends HttpServlet {
                 response.setStatus(500);
                 return;
             }
+
+            /* it is an error if the account cannot be deleted */
             UserDB.deleteUser(username);
             user = UserDB.getUser(username);
             if (user != null) {
@@ -74,6 +83,8 @@ public class DeleteAccount extends HttpServlet {
                 out.print(jsonFinal.toJSONString());
             }
         }
+
+        /* it is an error if all post could not be deleted. Do not delete the account in that case */
         else {
             jsonFinal.put("ERROR", "DELETE_POSTS");
             out.print(jsonFinal.toJSONString());
