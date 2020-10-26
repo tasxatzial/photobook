@@ -383,7 +383,7 @@ var Posts = (function() {
 
       function failCallback() {
         if (LocationSearch.isValidLatLon(data['lat'], data['lon'])) {
-          data['locationDiv'].children[0].innerHTML = '(' + Init.fourDecimal(data['lat']) + ', ' + Init.fourDecimal(data['lon']) + ') deg';
+          data['locationDiv'].children[0].innerHTML = '(' + parseFloat(data['lat']).toFixed(4) + ', ' + parseFloat(data['lon']).toFixed(4) + ') deg';
           if (state.clickedFullPost) {
             showMap(data);
           }

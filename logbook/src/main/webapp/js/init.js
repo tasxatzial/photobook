@@ -116,36 +116,6 @@ var Init = (function() {
     }
   }
 
-  /**
-   * Parses the specified string as a float and keeps only 4 decimal digits.
-   * @param string
-   * @returns {string}
-   */
-  function fourDecimal(string) {
-    var num = 0.0001 * Math.round(parseFloat(string) * 10000);
-    if (num > 99.9999) {
-      if (num < 100) {
-        num = 100;
-      }
-      return (num.toString()).substring(0, 8);
-    }
-    else if (num > -0.0001) {
-      if (num < 0) {
-        num = 0;
-      }
-      return (num.toString()).substring(0, 7);
-    }
-    else if (num > -100.0001) {
-      if (num < -100) {
-        num = -100;
-      }
-      return (num.toString()).substring(0, 8);
-    }
-    else {
-      return (num.toString()).substring(0, 9);
-    }
-  }
-
   return {
     dataNames: dataNames,
     postNames: postNames,
@@ -156,6 +126,5 @@ var Init = (function() {
     loader: loader,
     scrollTo: scrollTo,
     clearFullWindowMsg: clearFullWindowMsg,
-    fourDecimal: fourDecimal
   };
 }());
