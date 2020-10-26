@@ -32,6 +32,7 @@ var Logout = (function() {
       navbarContent.removeChild(allUsersButton);
       navbarContent.removeChild(logoutButton);
       navbarContent.removeChild(postsButton);
+      Init.nonav.classList.remove('no-nav-logged-in');
       Landing.init();
     }
 

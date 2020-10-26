@@ -7,16 +7,37 @@
   text-align: center;
 }
 
-#landing-signup-msg {
+#landing-signin-msg {
   font-size: 1.4rem;
 }
 
-#landing-signin-msg {
+#landing-signup-msg {
   font-size: 1.2rem;
+  margin-right: 0.5em;
+}
+
+#landing-signup-container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+#landing-signup-button {
+  font-size: 1.2rem;
+  background: transparent;
+  color: #438eda;
+  font-weight: bold;
+  letter-spacing: .03em;
+  border: 0;
+  cursor: pointer;
+}
+
+#landing-signup-button:focus, #landing-signup-button:hover {
+  text-decoration: underline;
 }
 
 #landing-signin-button input {
-  font-size: 1.1rem;
-  padding: .4rem 0;
-  width: 50%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  letter-spacing: .08em;
 }

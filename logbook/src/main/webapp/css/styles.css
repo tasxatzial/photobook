@@ -1,5 +1,12 @@
 html {
-  font-size: 100%;
+  background-image:
+          radial-gradient(circle farthest-corner at top left, rgba(205, 223, 220,1) 0%, rgba(225, 243, 197,0) 60%),
+          radial-gradient(circle farthest-side at top right, rgba(221, 216, 217,1) 0%, rgba(211, 216, 177,0) 20%),
+          radial-gradient(circle farthest-corner at bottom right, rgba(200, 184, 189,1) 0%, rgba(244, 214, 219, 0) 53%),
+          radial-gradient(circle farthest-corner at top right, rgba(175, 221, 240,1) 0%, rgba(195, 221, 240,0) 50%),
+          radial-gradient(ellipse at bottom center, rgba(205, 223, 220,1) 0%, rgba(225, 243, 197,0) 66%),
+          radial-gradient(ellipse at top center, rgba(254, 233, 230,0.6) 0%, rgba(254, 223, 190, 0) 60%);
+  background-color: #c5b99e;
 }
 
 * {
@@ -8,12 +15,15 @@ html {
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #e8f3e9;
   margin: auto;
 }
 
 #no-nav {
   margin-top: 2.8rem;
+}
+
+.no-nav-logged-in {
+  background: #A2AEC0;
 }
 
 /* blue button container */
@@ -31,15 +41,32 @@ body {
   font-size: 1.1rem;
   letter-spacing: .05rem;
   color: white;
-  padding: .4rem 0;
-  background: linear-gradient(to bottom, #43628b, #324a69);
+  padding: .5em 1.4em;
+  background: #529a79;
   border: 1px solid #1b5e2e;
-  border-radius: 3px;
-  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+  border-radius: 2px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
   text-align: center;
-  width: 100%;
+  cursor: pointer;
   margin: 16px auto 16px;
+  transform: scale(1.0);
+  transition: transform 200ms;
+}
+
+#landing-section, #signin-section, .signup-section {
+  min-height: calc(100vh - 2.8rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input[type="button"]:focus, button:focus, .sign-button input:focus {
+  outline: 0;
+}
+
+.sign-button input:focus, .sign-button input:hover {
+  transform: scale(1.05);
 }
 
 /* button press effect */
@@ -50,14 +77,6 @@ body {
 input[type="button"]:active, button:active {
   position: relative;
   top: 1px;
-}
-
-input[type="button"]:focus, button:focus {
-  outline: 0;
-}
-
-#signin-section, #landing-section {
-  padding-top: 4rem;
 }
 
 #account-delete-confirm-text, #post-delete-confirm-text, #delete-post-msg {
@@ -72,7 +91,7 @@ input[type="button"]:focus, button:focus {
   background-color: white;
   min-height: calc(100vh - 2.8rem);
   border: 1px solid silver;
-  border-radius: 4px;
+  border-radius: 2px;
   box-shadow: 0 0 8px 0 rgba(0,0,0,0.25);
 }
 
@@ -127,12 +146,20 @@ input[type="button"]:focus, button:focus {
   padding: 0;
 }
 
+@media only screen and (max-width: 67rem) {
+  .parent-in-main {
+    border: 0;
+    border-radius: unset;
+    box-shadow: none;
+  }
+}
+
 @media only screen and (max-width: 45rem) {
   #landing-section, #signin-section {
     padding-top: 0;
   }
 
   .parent-in-main {
-    padding: 16px 24px 24px;
+    padding: 16px;
   }
 }

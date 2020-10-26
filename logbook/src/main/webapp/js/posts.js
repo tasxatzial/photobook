@@ -83,14 +83,15 @@ var Posts = (function() {
       var response = JSON.parse(Requests.get(ID).responseText);
       formMsg.clear(el.loaderMsg);
       var shortPost = null;
-      var numPosts = 0;
+      if (Object.keys(response).length > 0) {
+        el.postsParent.appendChild(document.createElement('hr'));
+      }
       Object.keys(response).forEach(function(key,index) {
         shortPost = createShortPost(response[key]);
-        el.postsParent.appendChild(document.createElement('hr'));
         el.postsParent.appendChild(shortPost);
-        numPosts++;
+        el.postsParent.appendChild(document.createElement('hr'));
       });
-      if (numPosts === 0) {
+      if (Object.keys(response).length === 0) {
         el.loaderMsg.innerHTML = 'No posts.';
       }
     }
@@ -254,26 +255,19 @@ var Posts = (function() {
     /* create the read more button */
     var readMore = document.createElement('p');
     readMore.className = 'read-more';
-    readMore.innerHTML = 'Read the full post';
-
-    /* create the > image of the read more button */
-    var img = document.createElement('img');
-    img.className = 'post-show-more-arrow';
-    img.src = 'images/showmore.svg';
+    readMore.innerHTML = 'Continue reading...';
 
     /* create the button that tells us who created this post */
     var button = document.createElement('button');
-    button.className = 'transparent-button';
+    button.className = 'transparent-button post-creator-button';
     button.innerHTML = postJSON['username'];
-    button.style.textDecoration = 'underline';
     button.onclick = function() {
       ShowProfile.init(postJSON['username'], true);
     };
 
     /* create the element that tells us when the post was created */
     var at = document.createElement('span');
-    at.innerHTML = ' at ';
-    at.style.fontWeight = 'bold';
+    at.innerHTML = ' @ ';
     var timestamp = document.createElement('span');
     timestamp.innerHTML = postJSON['createdAt'].substring(0, postJSON['createdAt'].lastIndexOf(":"));
 
@@ -304,13 +298,12 @@ var Posts = (function() {
       postDiv.appendChild(imageParent);
     }
     postDiv.appendChild(description);
-    postDiv.appendChild(footer);
+
 
     /* create the element that has the read more button (includes the button and the image of the button) */
     var readMoreButton = document.createElement('button');
     readMoreButton.className = 'read-more-button';
     readMoreButton.appendChild(readMore);
-    readMoreButton.appendChild(img);
     readMoreButton.addEventListener('click', function () {
       data['locationQuery'] = queryLatLon.getLocation();
       data['queryID'] =  queryLatLon.getQueryID();
@@ -335,6 +328,7 @@ var Posts = (function() {
     queryLatLon = new QueryLatLon(data);
 
     postDiv.appendChild(readMoreButton);
+    postDiv.appendChild(footer);
 
     return postDiv;
   }
@@ -433,9 +427,9 @@ var Posts = (function() {
       var url = document.createElement('a');
       url.href = data['resourceURL'];
       url.target = 'blank';
-      url.innerHTML = data['resourceURL'];
+      url.innerHTML = data['resourceURL'].substr(data['resourceURL'].lastIndexOf('//') + 2);
       var onlineURL = newElements.createKeyValue('See also', url, 1);
-      data['descriptionDiv'].appendChild(onlineURL);
+      data['postDiv'].insertBefore(onlineURL, data['footerDiv']);
     }
 
     /* show a edit post button when we are the owners of the post */

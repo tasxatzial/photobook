@@ -2,6 +2,7 @@
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  align-items: flex-end;
 }
 
 .account-nav-button {
@@ -18,16 +19,22 @@
   border: 1px solid gray;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  transition: background-color 200ms;
 }
 
 .active-tab {
-  border-bottom: 0;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
-.inactive-tab {
-  border-bottom: 1px dashed gray;
+.inactive-tab:focus, .inactive-tab:hover, .active-tab:focus, .active-tab:hover {
+  background-color: whitesmoke;
 }
 
 #delete-account-button input {
-  background: #ff4e56;
+  background: #ee5f66;
+}
+
+#edit-account-button input {
+  background: #529a79;
 }

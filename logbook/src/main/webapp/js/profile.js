@@ -169,15 +169,18 @@ var ShowProfile = (function() {
     showProfileButton.addEventListener('click', function () {
       ShowProfile.init(username, false);
       showBorders(showProfileButton, showPostsButton, editAccountButton);
+      this.blur();
     });
     showPostsButton.addEventListener('click', function () {
       Posts.init(username);
       showBorders(showPostsButton, showProfileButton, editAccountButton);
+      this.blur();
     });
     if (editAccountButton) {
       editAccountButton.addEventListener('click', function () {
         AccountInfo.init();
         showBorders(editAccountButton, showProfileButton, showPostsButton);
+        this.blur();
       });
     }
 

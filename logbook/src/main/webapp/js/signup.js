@@ -123,6 +123,7 @@ var Signup = (function() {
         accountInfoTitle.innerHTML = 'You provided the following information: ';
         el.signupContent.innerHTML = '';
         el.signupParent.classList.remove('signup-parent-initial');
+        el.signupSection.classList = 'post-signup-section';
         el.signupContent.appendChild(accountInfoTitle);
         el.signupContent.appendChild(accountInfo);
       }
@@ -157,6 +158,7 @@ var Signup = (function() {
           var response = JSON.parse(responseText);
           if (response.ERROR === 'INVALID_PARAMETERS') {
             el.signupParent.classList.remove('signup-parent-initial');
+            el.signupSection.classList = 'post-signup-section';
             var info = newElements.createSignupSummary(response, Init.dataNames);
             el.header.innerHTML = '400 - Bad Request';
             el.signupContent.innerHTML = '';
@@ -262,6 +264,7 @@ var Signup = (function() {
   function init(action) {
     el.username = document.getElementById('signup-username');
     el.email = document.getElementById('signup-email');
+    el.signupSection = document.getElementById('signup-section');
     el.signupParent = document.getElementById('signup-parent');
     el.header = el.signupParent.children[0].children[0];
     el.signupContent = el.signupParent.children[1];
@@ -276,6 +279,7 @@ var Signup = (function() {
       el.signupButton.addEventListener('click', function() {
         clickSignup('Signup');
       });
+      el.signupButton.classList.add('signup-button');
     }
 
     /* disable editing the username if we are editing the account info instead of performing signup */

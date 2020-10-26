@@ -81,11 +81,11 @@ var formMsg = (function() {
 var formInput = (function() {
   function enable(input) {
     input.disabled = false;
-    input.style.backgroundColor = '#f5fdff';
+    input.style.backgroundColor = '#fafcff';
   }
   function disable(input) {
     input.disabled = true;
-    input.style.backgroundColor = 'rgb(245, 243, 243)';
+    input.style.backgroundColor = '#e3e2e2';
   }
 
   return {
@@ -101,11 +101,11 @@ var formInput = (function() {
 var formSubmit = (function() {
   function enable(input) {
     input.disabled = false;
-    input.style.background ='linear-gradient(to bottom, #43628b, #324a69)';
+    input.style.background ='#529a79';
   }
   function disable(input) {
     input.disabled = true;
-    input.style.background ='gray';
+    input.style.background ='#e3e2e2';
   }
 
   return {

@@ -13,14 +13,18 @@
 
 /* input boxes except radio buttons */
 .sign-tofill {
-  background-color: #f5fdff;
+  background-color: #fafcff;
   border: 1px solid silver;
-  border-radius: 3px;
+  border-radius: 2px;
   height: 2rem;
   font-family: inherit;
   font-size: 1rem;
   width: 100%;
   min-width: 0;
+}
+
+.sign-tofill:focus {
+  border: 1px solid black;
 }
 
 /* increase distance between form labels and their input boxes.

@@ -1,18 +1,19 @@
 #navbar h1 {
   font-size: 1.6rem;
-  color: white;
-  margin: 0 32px 0 0;
+  margin-right: 32px;
 }
 
 #navbar-content h1 a {
-  color: #324a69;
+  font-family: 'Kalam', cursive;
+  font-weight: 700;
+  color: white;
   text-decoration: none;
 }
 
 #navbar {
   width: 100%;
   height: 2.8rem;
-  background-color: #abc4de;
+  background-color: #585e71;
   position: fixed;
   top: 0;
 }
@@ -26,21 +27,24 @@
   justify-content: flex-start;
   flex-flow: row nowrap;
   max-width: 65rem;
-  padding-right: 32px;
-  padding-left: 32px;
   height: 100%;
 }
 
 .navbar-button {
   margin: 0;
-  color: black;
-  background-color: #abc4de;
-  font-size: 1.1rem;
+  color: #dee5ee;
+  background-color: #585e71;
   border: 0;
   padding: 1px 8px;
   font-family: inherit;
   height: 100%;
   width: 9rem;
+  cursor: pointer;
+  transition: border-bottom 200ms;
+}
+
+.navbar-active-button {
+  background: #373b4b;
 }
 
 .test-div {
@@ -54,23 +58,44 @@
 .navbar-button-text {
   margin-left: .3rem;
   white-space: nowrap;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
 }
 
-.navbar-button:hover {
-  background-color: #cbdaeb;
+.navbar-button:focus, .navbar-button:hover {
+  border-bottom: 4px solid #A2AEC0;
 }
 
 #logout-button {
   margin-left: auto;
+  width: unset;
+  padding-left: 0;
+  padding-right: 0;
 }
 
-@media only screen and (max-width: 45rem) {
-  #navbar-content {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
+#signin-nav-button, #signup-nav-button {
+  width: unset;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media only screen and (max-width: 67rem) {
   #navbar h1 {
-    margin: 0 24px 0 0;
+    padding-left: 32px;
+  }
+  #signin-nav-button, #signup-nav-button, #logout-button {
+    padding-right: 32px;
+  }
+}
+@media only screen and (max-width: 45rem) {
+  #navbar h1 {
+    margin-right: 24px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  #logout-button, #signin-nav-button, #signup-nav-button {
+    padding-left: 16px;
+    padding-right: 16px;
   }
   #profile-button .navbar-button-text,
   #show-users-button .navbar-button-text,

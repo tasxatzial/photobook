@@ -4,6 +4,10 @@
   max-width: 21rem;
 }
 
+.post-signup-section {
+  display: block;
+}
+
 /* location search (button + msg) container */
 .signup-location-search, .signup-geolocation-search {
   display: flex;

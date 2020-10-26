@@ -106,18 +106,14 @@ var Landing = (function() {
    */
   function createLanding() {
     var signupButton = document.createElement('input');
+    signupButton.id = 'landing-signup-button';
     signupButton.type = 'button';
     signupButton.value = 'Sign up';
     signupButton.addEventListener('click', showSignup);
 
-    var signupButtonContainer = document.createElement('div');
-    signupButtonContainer.id = 'landing-signup-button';
-    signupButtonContainer.className = 'sign-button';
-    signupButtonContainer.appendChild(signupButton);
-
-    var signupTitle = document.createElement('p');
-    signupTitle.id = 'landing-signup-msg';
-    signupTitle.innerHTML = 'Connect with people and share your travels.';
+    var signinTitle = document.createElement('p');
+    signinTitle.id = 'landing-signin-msg';
+    signinTitle.innerHTML = 'Connect with people and share your travels.';
 
     var signinButton = document.createElement('input');
     signinButton.type = 'button';
@@ -129,20 +125,25 @@ var Landing = (function() {
     signinButtonContainer.className = 'sign-button';
     signinButtonContainer.appendChild(signinButton);
 
-    var signinTitle = document.createElement('p');
-    signinTitle.id = 'landing-signin-msg';
-    signinTitle.innerHTML = 'Already have an account?';
+    var signupContainer = document.createElement('div');
+    signupContainer.id = 'landing-signup-container';
+
+    var signupTitle = document.createElement('p');
+    signupTitle.id = 'landing-signup-msg';
+    signupTitle.innerHTML = 'Don\'t have an account?';
+    signupContainer.appendChild(signupTitle);
+    signupContainer.appendChild(signupButton);
 
     var hr = document.createElement('hr');
 
     var page = document.createElement('div');
     page.className = 'parent-in-main';
     page.id = 'landing-page';
-    page.appendChild(signupTitle);
-    page.appendChild(signupButtonContainer);
-    page.appendChild(hr);
     page.appendChild(signinTitle);
     page.appendChild(signinButtonContainer);
+
+    page.appendChild(hr);
+    page.appendChild(signupContainer);
 
     var section = document.createElement('div');
     section.id = 'landing-section';

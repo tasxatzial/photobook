@@ -189,7 +189,7 @@ var newElements = (function NewElements() {
     formButton.enable(noButton);
 
     var text = document.createElement('div');
-    text.innerHTML = 'Please confirm';
+    text.innerHTML = 'Proceed?';
     text.id = id + '-text';
 
     var div = document.createElement('div');

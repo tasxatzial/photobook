@@ -11,25 +11,34 @@ var Homepage = (function() {
    */
   function init() {
     Init.nonav.innerHTML = '';
+    Init.nonav.classList.add('no-nav-logged-in');
 
     var accountButton = newElements.createSignBarButton('My account', 'profile-button', 'images/myaccount.svg');
     accountButton.addEventListener('click', function() {
+      this.blur();
       ShowProfile.init(Init.getUser(), true);
     });
     Init.navbarContent.appendChild(accountButton);
 
     var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button', 'images/users.svg');
-    allUsersButton.addEventListener('click', AllUsers.init);
+    allUsersButton.addEventListener('click', function() {
+      this.blur();
+      AllUsers.init();
+    });
     Init.navbarContent.appendChild(allUsersButton);
 
     var postsButton = newElements.createSignBarButton('Posts', 'show-posts', 'images/posts.svg');
     postsButton.addEventListener('click', function() {
+      this.blur();
       Posts.init(null);
     });
     Init.navbarContent.appendChild(postsButton);
 
     var logoutButton = newElements.createSignBarButton('Log out', 'logout-button', 'images/logout.svg');
-    logoutButton.addEventListener('click', Logout.init);
+    logoutButton.addEventListener('click', function() {
+      this.blur();
+      Logout.init();
+    });
     Init.navbarContent.appendChild(logoutButton);
 
     allUsersButton.addEventListener('click', underline(allUsersButton, accountButton, postsButton));
@@ -49,9 +58,9 @@ var Homepage = (function() {
    */
   function underline(element1, element2, element3) {
     return function() {
-      element1.style.borderBottom = '3px solid #324a69';
-      element2.style.borderBottom = '0';
-      element3.style.borderBottom = '0';
+      element1.classList.add('navbar-active-button');
+      element2.classList.remove('navbar-active-button');
+      element3.classList.remove('navbar-active-button');
     };
   }
 
