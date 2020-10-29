@@ -50,6 +50,10 @@ var PostForm = (function() {
    * @param username
    */
   function init(username) {
+    var accountSection = document.getElementById('account-section');
+    if (!accountSection) {
+      Homepage.removeActive();
+    }
     data.loc.lat = null;
     data.loc.lon = null;
     state.lastDetectionMethod = null;

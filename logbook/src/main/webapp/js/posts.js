@@ -415,6 +415,7 @@ var Posts = (function() {
    */
   function turnToFullPost(data) {
     state.clickedFullPost = true;
+    Homepage.removeActive();
     Requests.cancelExcept(data['queryID']);
 
     if (data['postDiv'].children[1].className === 'short-post-photo-parent') {

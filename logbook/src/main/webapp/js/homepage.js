@@ -2,9 +2,11 @@
 
 /**
  * Functions related to the post-signin process.
- * @type {{init: init}}
+ *
+ * @type {{init: init, removeActive: removeActive, setActive: setActive}}
  */
 var Homepage = (function() {
+  var activeButton = null;
 
   /**
    * Initializes the view when the homepage (initial screen when a user is logged in) is requested.
@@ -16,6 +18,8 @@ var Homepage = (function() {
     var accountButton = newElements.createSignBarButton('My account', 'profile-button', 'images/myaccount.svg');
     accountButton.addEventListener('click', function() {
       this.blur();
+      removeActive();
+      setActive(this);
       ShowProfile.init(Init.getUser(), true);
     });
     Init.navbarContent.appendChild(accountButton);
@@ -23,6 +27,8 @@ var Homepage = (function() {
     var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button', 'images/users.svg');
     allUsersButton.addEventListener('click', function() {
       this.blur();
+      removeActive();
+      setActive(this);
       AllUsers.init();
     });
     Init.navbarContent.appendChild(allUsersButton);
@@ -30,6 +36,8 @@ var Homepage = (function() {
     var postsButton = newElements.createSignBarButton('Posts', 'show-posts', 'images/posts.svg');
     postsButton.addEventListener('click', function() {
       this.blur();
+      removeActive();
+      setActive(this);
       Posts.init(null);
     });
     Init.navbarContent.appendChild(postsButton);
@@ -37,34 +45,30 @@ var Homepage = (function() {
     var logoutButton = newElements.createSignBarButton('Log out', 'logout-button', 'images/logout.svg');
     logoutButton.addEventListener('click', function() {
       this.blur();
+      setActive(this);
       Logout.init(true);
     });
     Init.navbarContent.appendChild(logoutButton);
 
-    allUsersButton.addEventListener('click', underline(allUsersButton, accountButton, postsButton));
-    accountButton.addEventListener('click', underline(accountButton, allUsersButton, postsButton));
-    postsButton.addEventListener('click', underline(postsButton, allUsersButton, accountButton));
-
-    underline(postsButton, allUsersButton, accountButton)();
+    setActive(postsButton);
     Posts.init(null);
   }
 
-  /**
-   * Underlines one of the 'my account', 'all users', 'posts' links in the top navigation menu.
-   * @param element1
-   * @param element2
-   * @param element3
-   * @returns {function(...[*]=)}
-   */
-  function underline(element1, element2, element3) {
-    return function() {
-      element1.classList.add('navbar-active-button');
-      element2.classList.remove('navbar-active-button');
-      element3.classList.remove('navbar-active-button');
-    };
+  function setActive(button) {
+    activeButton = button;
+    button.classList.add('navbar-active-button');
+  }
+
+  function removeActive() {
+    if (activeButton) {
+      activeButton.classList.remove('navbar-active-button');
+      activeButton = null;
+    }
   }
 
   return {
-    init: init
+    init: init,
+    setActive: setActive,
+    removeActive: removeActive
   };
 }());

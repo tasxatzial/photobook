@@ -40,7 +40,12 @@ var ShowProfile = (function() {
     var data = new FormData();
     data.append("action", "GetProfile");
     if (username !== null) {
+      Homepage.removeActive();
       data.append("username", username);
+    }
+    if (username === Init.getUser()) {
+      var accountButton = document.getElementById('profile-button');
+      Homepage.setActive(accountButton);
     }
     var ID = Requests.add(ajaxRequest("POST", "Main", data, successCallback, failCallback));
 
