@@ -20,12 +20,12 @@ var Landing = (function() {
   function showSignin() {
     Requests.cancelExcept(null);
     var signinButton = document.getElementById('signin-nav-button');
-
+    var landingLoader = null;
     var data = new FormData();
     data.append('action', 'GetSignin');
     var ID = null;
     ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
-      failCallback(ID, signinButton);
+      failCallback(ID, signinButton, landingLoader);
     }));
 
     if (signinButton) {
@@ -35,6 +35,9 @@ var Landing = (function() {
       var loader = document.createElement('div');
       loader.className = 'navbar-loader';
       signinButton.appendChild(loader);
+    } else {
+      landingLoader = document.getElementById('landing-loader');
+      landingLoader.classList.add('landing-loader');
     }
 
     function successCallback() {
@@ -57,11 +60,12 @@ var Landing = (function() {
   function showSignup() {
     Requests.cancelExcept(null);
     var signupButton = document.getElementById('signup-nav-button');
+    var landingLoader = null;
     var data = new FormData();
     data.append('action', 'GetSignup');
     var ID = null;
     ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
-      failCallback(ID, signupButton);
+      failCallback(ID, signupButton, landingLoader);
     }));
 
     if (signupButton) {
@@ -71,6 +75,9 @@ var Landing = (function() {
       var loader = document.createElement('div');
       loader.className = 'navbar-loader';
       signupButton.appendChild(loader);
+    } else {
+      landingLoader = document.getElementById('landing-loader');
+      landingLoader.classList.add('landing-loader');
     }
 
     function successCallback() {
@@ -94,12 +101,16 @@ var Landing = (function() {
    * Called when the signup/signin form fails to load.
    * @param ID
    * @param button
+   * @param landingLoader
    */
-  function failCallback(ID, button) {
+  function failCallback(ID, button, landingLoader) {
     if (button) {
       var loader = document.querySelector('.navbar-loader');
       button.classList.add('navbar-notloading-button');
       button.removeChild(loader);
+    }
+    if (landingLoader) {
+      landingLoader.classList.remove('landing-loader');
     }
     if (Requests.get(ID).status === 0) {
       newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
@@ -143,7 +154,11 @@ var Landing = (function() {
     signupContainer.appendChild(signupTitle);
     signupContainer.appendChild(signupButton);
 
-    var hr = document.createElement('hr');
+    var hr = document.createElement('div');
+    hr.id = 'landing-divider';
+    var hrLoader = document.createElement('div');
+    hrLoader.id = 'landing-loader';
+    hr.appendChild(hrLoader);
 
     var page = document.createElement('div');
     page.className = 'parent-in-main';
