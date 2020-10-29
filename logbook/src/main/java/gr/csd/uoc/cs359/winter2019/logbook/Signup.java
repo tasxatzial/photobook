@@ -288,7 +288,6 @@ public class Signup extends HttpServlet {
                 r_about.equals(about)) {
                 if (request.getParameter("action").equals("Signup")) {
                     jsonSignup.put("username", username);
-                    jsonSignup.put("password", password);
                     jsonSignup.put("email", email);
                     jsonSignup.put("firstName", firstName);
                     jsonSignup.put("lastName", lastName);
