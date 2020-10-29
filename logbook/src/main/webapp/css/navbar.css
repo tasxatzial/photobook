@@ -31,6 +31,7 @@
 }
 
 .navbar-button {
+  position: relative;
   margin: 0;
   color: #dee5ee;
   background-color: #585e71;
@@ -40,7 +41,37 @@
   height: 100%;
   width: 9rem;
   cursor: pointer;
-  transition: border-bottom 200ms;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+@keyframes slide {
+  from { margin-left: 0%}
+  to { margin-left: 125%; }
+}
+
+.navbar-loader {
+  animation-name: slide;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  width: 50%;
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  left: -50%;
+  background: #A2AEC0;
+}
+
+.navbar-underline {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: #A2AEC0;
 }
 
 .navbar-active-button {
@@ -60,10 +91,6 @@
   white-space: nowrap;
   font-size: 1rem;
   letter-spacing: 0.03em;
-}
-
-.navbar-button:focus, .navbar-button:hover {
-  border-bottom: 4px solid #A2AEC0;
 }
 
 #logout-button {

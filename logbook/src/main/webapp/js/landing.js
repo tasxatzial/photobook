@@ -18,26 +18,27 @@ var Landing = (function() {
    * Loads the signin form.
    */
   function showSignin() {
-    Init.clearFullWindowMsg();
-    newElements.showFullWindowMsg('Cancel', 'Please wait...', function () {
-      Requests.cancelExcept(null);
-      Init.clearFullWindowMsg();
-    });
     Requests.cancelExcept(null);
+    var signinButton = document.getElementById('signin-nav-button');
 
     var data = new FormData();
     data.append('action', 'GetSignin');
-
     var ID = null;
     ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
-      failCallback(ID);
+      failCallback(ID, signinButton);
     }));
 
-    function successCallback() {
-      Init.clearFullWindowMsg();
-      Init.nonav.innerHTML = Requests.get(ID).responseText;
+    if (signinButton) {
+      signinButton.classList.remove('navbar-notloading-button');
+      var underline = document.querySelector('.navbar-underline');
+      underline.style.display = 'none';
+      var loader = document.createElement('div');
+      loader.className = 'navbar-loader';
+      signinButton.appendChild(loader);
+    }
 
-      var signinButton = document.getElementById('signin-nav-button');
+    function successCallback() {
+      Init.nonav.innerHTML = Requests.get(ID).responseText;
       if (signinButton) {
         Init.navbarContent.removeChild(signinButton);
       }
@@ -54,26 +55,29 @@ var Landing = (function() {
    * Loads the signup form.
    */
   function showSignup() {
-    Init.clearFullWindowMsg();
-    newElements.showFullWindowMsg('Cancel', 'Please wait...', function () {
-      Requests.cancelExcept(null);
-      Init.clearFullWindowMsg();
-    });
     Requests.cancelExcept(null);
-
+    var signupButton = document.getElementById('signup-nav-button');
     var data = new FormData();
     data.append('action', 'GetSignup');
     var ID = null;
     ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
-      failCallback(ID);
+      failCallback(ID, signupButton);
     }));
 
+    if (signupButton) {
+      signupButton.classList.remove('navbar-notloading-button');
+      var underline = document.querySelector('.navbar-underline');
+      underline.style.display = 'none';
+      var loader = document.createElement('div');
+      loader.className = 'navbar-loader';
+      signupButton.appendChild(loader);
+    }
+
     function successCallback() {
-      Init.clearFullWindowMsg();
       Init.nonav.innerHTML = Requests.get(ID).responseText;
       document.getElementById('signup-parent').classList.add('parent-in-main');
 
-      var signupButton = document.getElementById('signup-nav-button');
+      //var signupButton = document.getElementById('signup-nav-button');
       if (signupButton) {
         Init.navbarContent.removeChild(signupButton);
       }
@@ -89,9 +93,14 @@ var Landing = (function() {
   /**
    * Called when the signup/signin form fails to load.
    * @param ID
+   * @param button
    */
-  function failCallback(ID) {
-    Init.clearFullWindowMsg();
+  function failCallback(ID, button) {
+    if (button) {
+      var loader = document.querySelector('.navbar-loader');
+      button.classList.add('navbar-notloading-button');
+      button.removeChild(loader);
+    }
     if (Requests.get(ID).status === 0) {
       newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
     }

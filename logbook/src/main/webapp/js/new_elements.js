@@ -62,7 +62,7 @@ var newElements = (function NewElements() {
    */
   function createSignBarButton(value, id, pathToFile) {
     var button = document.createElement('button');
-    button.className = 'navbar-button';
+    button.className = 'navbar-notloading-button navbar-button';
     button.id = id;
 
     var cont = document.createElement('div');
@@ -79,6 +79,28 @@ var newElements = (function NewElements() {
     div.innerHTML = value;
     cont.appendChild(div);
     button.appendChild(cont);
+
+    var underline = document.createElement('div');
+    underline.className = 'navbar-underline';
+    button.appendChild(underline);
+
+    button.addEventListener('focus', function() {
+      if (button.classList.contains('navbar-notloading-button')) {
+        underline.style.display = 'block';
+      }
+    });
+    button.addEventListener('blur', function() {
+      underline.style.display = 'none';
+    });
+    button.addEventListener('mouseenter', function() {
+      if (button.classList.contains('navbar-notloading-button')) {
+        underline.style.display = 'block';
+      }
+    });
+    button.addEventListener('mouseleave', function() {
+      underline.style.display = 'none';
+    });
+
     return button;
   }
 

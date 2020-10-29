@@ -9,24 +9,29 @@ var Logout = (function() {
   /**
    * Initializes the view when the user logs out.
    */
-  function init() {
-    Requests.cancelExcept(null);
+  function init(clickedLogout) {
     Init.clearFullWindowMsg();
-    newElements.showFullWindowMsg('Cancel', 'Please wait...', function () {
-      Requests.cancelExcept(null);
-      Init.clearFullWindowMsg();
-    });
+    Requests.cancelExcept(null);
 
     var data = new FormData();
     data.append("action", "Logout");
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
+    var logoutButton = document.getElementById('logout-button');
+    if (clickedLogout) {
+      logoutButton.classList.remove('navbar-notloading-button');
+      var underline = document.querySelector('.navbar-underline');
+      underline.style.display = 'none';
+      var loader = document.createElement('div');
+      loader.className = 'navbar-loader';
+      logoutButton.appendChild(loader);
+    }
+
     function successCallback() {
-      Init.clearFullWindowMsg();
       var navbarContent = document.getElementById('navbar-content');
       var accountButton = document.getElementById('profile-button');
       var allUsersButton = document.getElementById('show-users-button');
-      var logoutButton = document.getElementById('logout-button');
+
       var postsButton = document.getElementById('show-posts');
       navbarContent.removeChild(accountButton);
       navbarContent.removeChild(allUsersButton);
@@ -37,7 +42,10 @@ var Logout = (function() {
     }
 
     function failCallback() {
-      Init.clearFullWindowMsg();
+      var loader = document.querySelector('.navbar-loader');
+      logoutButton.classList.add('navbar-notloading-button');
+      logoutButton.removeChild(loader);
+
       if (Requests.get(ID).status === 0) {
         newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
@@ -51,7 +59,9 @@ var Logout = (function() {
    * Shows a expired session message.
    */
   function showExpired() {
-    newElements.showFullWindowMsg('OK', 'Your session has expired', init);
+    newElements.showFullWindowMsg('OK', 'Your session has expired', function() {
+      init(false);
+    });
   }
 
   return {
