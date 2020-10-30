@@ -102,3 +102,24 @@ textarea[name="signup-about"] {
     flex-flow: row nowrap;
     justify-content: space-between;
 }
+
+.step-label {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.signup-hidden {
+  display: none;
+}
+
+.step-label h3 {
+  margin-top: .5em;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.hr-line {
+  border-bottom: 2px solid silver;
+  flex: 1 1 auto;
+}

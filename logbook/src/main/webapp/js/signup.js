@@ -30,7 +30,7 @@ var Signup = (function() {
    */
   function clickSignup(action) {
     formMsg.clear(el.signupMsg);
-    var invalidElement = ValidChecker.checkInvalidElements();
+    var invalidElement = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputs);
     if (invalidElement) {
       Init.scrollTo(invalidElement.parentNode);
     }
@@ -270,10 +270,24 @@ var Signup = (function() {
     el.signupContent = el.signupParent.children[1];
     el.address = document.getElementById('signup-address');
     el.gender = document.querySelectorAll('input[type="radio"]');
-    el.signupMsg = document.getElementById('sign-process-msg');
+    el.signupMsg = document.getElementById('signup-process-msg');
+    el.step1Msg = document.querySelector('.signup-process-msg1');
+    el.geolocMsg = document.querySelector('.sign-process-msg2');
+    el.nominatimMsg = document.querySelector('.sign-process-msg3');
     el.signupButton = document.querySelector('#signup-button input');
     el.geolocSearchButton = document.getElementsByClassName('signup-geolocation-search-button')[0];
     el.nominatimSearchButton = document.getElementsByClassName('signup-location-search-button')[0];
+    el.step1Content = document.getElementById('signup-step1');
+    el.step2Content = document.getElementById('signup-step2');
+    el.step3Content = document.getElementById('signup-step3');
+    el.step4Content = document.getElementById('signup-step4');
+    el.step1ButtonContainer = document.getElementById('signup-step1-button-container');
+    el.step2ButtonContainer = document.getElementById('signup-step2-button-container');
+    el.step3ButtonContainer = document.getElementById('signup-step3-button-container');
+    el.step1Label = document.getElementById('step1-label');
+    el.step2Label = document.getElementById('step2-label');
+    el.step3Label = document.getElementById('step3-label');
+    el.step4Label = document.getElementById('step4-label');
 
     if (action === 'GetSignup') {
       el.signupButton.addEventListener('click', function() {
@@ -300,13 +314,24 @@ var Signup = (function() {
       el.signupButton.addEventListener('click', function() {
         clickSignup('UpdateAccount');
       });
+
+      el.signupButton.disabled = false;
+      el.step1ButtonContainer.classList.add('signup-hidden');
+      el.step2ButtonContainer.classList.add('signup-hidden');
+      el.step3ButtonContainer.classList.add('signup-hidden');
+      el.step1Label.classList.add('signup-hidden');
+      el.step2Label.classList.add('signup-hidden');
+      el.step3Label.classList.add('signup-hidden');
+      el.step4Label.classList.add('signup-hidden');
+      el.step2Content.classList.remove('signup-hidden');
+      el.step3Content.classList.remove('signup-hidden');
+      el.step4Content.classList.remove('signup-hidden');
     }
 
     ValidChecker.init();
     SignUpLocation.init();
     SignUpFace.init();
     data.oldEmail = el.email.value;
-    el.signupButton.disabled = false;
     el.email.disabled = false;
   }
 

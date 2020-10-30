@@ -8,6 +8,10 @@
  */
 var ValidChecker = (function() {
   var data = {
+    checkedInputsStep1: [],
+    checkedInputsStep2: [],
+    checkedInputsStep3: [],
+    checkedInputsStep4: [],
     checkedInputs: []
   };
 
@@ -27,13 +31,31 @@ var ValidChecker = (function() {
     var country = document.getElementById('signup-country');
     var interests = document.querySelector('textarea[name="signup-interests"]');
     var about = document.querySelector('textarea[name="signup-about"]');
-    var signupMsg = document.getElementById('sign-process-msg');
+    var signupMsg = document.getElementById('signup-process-msg');
 
+    data.checkedInputsStep1 = [];
+    data.checkedInputsStep2 = [];
+    data.checkedInputsStep3 = [];
+    data.checkedInputsStep4 = [];
     data.checkedInputs = [];
 
     /* collect all elements that require checking --------------------------------------- */
-    data.checkedInputs.push(username, passwd1, passwd2, email, firstName, lastName, birthDate,
-        occupation, country, city, interests, about);
+    data.checkedInputsStep1.push(username, passwd1, passwd2, email);
+    data.checkedInputsStep2.push(firstName, lastName, birthDate, occupation);
+    data.checkedInputsStep3.push(country, city);
+    data.checkedInputsStep4.push(interests, about);
+    for (var i = 0; i < data.checkedInputsStep1.length; i++) {
+      data.checkedInputs.push(data.checkedInputsStep1[i]);
+    }
+    for (i = 0; i < data.checkedInputsStep2.length; i++) {
+      data.checkedInputs.push(data.checkedInputsStep2[i]);
+    }
+    for (i = 0; i < data.checkedInputsStep3.length; i++) {
+      data.checkedInputs.push(data.checkedInputsStep3[i]);
+    }
+    for (i = 0; i < data.checkedInputsStep4.length; i++) {
+      data.checkedInputs.push(data.checkedInputsStep4[i]);
+    }
 
     /* checks for valid regex pattern */
     function regexValid(element) {
@@ -178,28 +200,61 @@ var ValidChecker = (function() {
    * the user sees an invalid message notification.
    * @returns {HTMLElement}
    */
-  function checkInvalidElements() {
-    for (var j = 0; j < data.checkedInputs.length; j++) {
-      checkValid(data.checkedInputs[j]);
-      if (!data.checkedInputs[j].isValid) {
-        showInvalidMsg(data.checkedInputs[j], data.checkedInputs[j].invalidMsg);
-        return data.checkedInputs[j].scrollElem;
+  function checkInvalidElements(array) {
+    for (var j = 0; j < array.length; j++) {
+      checkValid(array[j]);
+      if (!array[j].isValid) {
+        showInvalidMsg(array[j], array[j].invalidMsg);
+        return array[j].scrollElem;
       }
     }
+  }
+
+  function checkInvalidElementsStep1() {
+    return checkInvalidElements(data.checkedInputsStep1);
+  }
+  function checkInvalidElementsStep2() {
+    return checkInvalidElements(data.checkedInputsStep2);
+  }
+  function checkInvalidElementsStep3() {
+    return checkInvalidElements(data.checkedInputsStep3);
+  }
+  function checkInvalidElementsStep4() {
+    return checkInvalidElements(data.checkedInputsStep4);
   }
 
   /**
    * Returns the array of the input fields that require checking.
    * @returns {[]|*[]}
    */
+  function getCheckedInputsStep1() {
+    return data.checkedInputsStep1;
+  }
+  function getCheckedInputsStep2() {
+    return data.checkedInputsStep2;
+  }
+  function getCheckedInputsStep3() {
+    return data.checkedInputsStep3;
+  }
+  function getCheckedInputsStep4() {
+    return data.checkedInputsStep4;
+  }
   function getCheckedInputs() {
     return data.checkedInputs;
   }
 
   return {
     init: init,
-    checkInvalidElements: checkInvalidElements,
+    checkInvalidElementsStep1: checkInvalidElementsStep1,
+    checkInvalidElementsStep2: checkInvalidElementsStep2,
+    checkInvalidElementsStep3: checkInvalidElementsStep3,
+    checkInvalidElementsStep4: checkInvalidElementsStep4,
+    checkInvalidElements: checkInvalidElementsStep4,
     showInvalidMsg: showInvalidMsg,
+    getCheckedInputsStep1: getCheckedInputsStep1,
+    getCheckedInputsStep2: getCheckedInputsStep2,
+    getCheckedInputsStep3: getCheckedInputsStep3,
+    getCheckedInputsStep4: getCheckedInputsStep4,
     getCheckedInputs: getCheckedInputs
   };
 }());
