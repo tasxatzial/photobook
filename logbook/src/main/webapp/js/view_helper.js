@@ -105,7 +105,7 @@ var formSubmit = (function() {
   }
   function disable(input) {
     input.disabled = true;
-    input.style.background ='#e3e2e2';
+    input.style.background = 'gray';
   }
 
   return {

@@ -103,7 +103,7 @@
           <div class="hr-line"></div>
         </div>
         <div class="sign-child">
-          <p class="sign-label">- You may detect your location or manually fill in the fields below</p>
+          <p class="sign-label">You may detect your location or manually fill in the fields below</p>
           <div class="signup-geolocation-search">
             <button type="button" class="signup-geolocation-search-button sign-internal-button" disabled>Detect my location</button>
             <div class="sign-process-msg2 sign-process-msg" id="signup-geolocation-search-state"></div>
@@ -158,7 +158,7 @@
           <textarea name="signup-about" class="sign-tofill" rows="5" cols="50"><%= (String) request.getAttribute("about")%></textarea>
         </div>
         <div id="signup-button" class="sign-button">
-          <input type="button" value="<%= (String) request.getAttribute("button") %>" disabled>
+          <input type="button" value="<%= (String) request.getAttribute("button") %>">
           <div id="signup-process-msg"></div>
         </div>
       </div>

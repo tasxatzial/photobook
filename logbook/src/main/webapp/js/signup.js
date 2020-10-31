@@ -27,10 +27,16 @@ var Signup = (function() {
   /**
    * The first function that is called when the signup button is clicked.
    * @param action
+   * @param checkedInputs
    */
   function clickSignup(action) {
     formMsg.clear(el.signupMsg);
-    var invalidElement = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputs);
+    if (action === 'Signup') {
+      var invalidElement = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep1());
+    }
+    else {
+      invalidElement = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputs());
+    }
     if (invalidElement) {
       Init.scrollTo(invalidElement.parentNode);
     }
@@ -55,7 +61,7 @@ var Signup = (function() {
         data.append(el.gender[j].name.split('-')[1], el.gender[j].value);
       }
     }
-
+    console.log(el.address.value);
     data.append(el.address.name.split('-')[1], el.address.value);
     return data;
   }
@@ -198,7 +204,12 @@ var Signup = (function() {
     formInput.disable(el.email);
 
     /* also disable signup button */
-    formSubmit.disable(el.signupButton);
+    if (action === 'UpdateAccount') {
+      formSubmit.disable(el.signupButton);
+    }
+    else {
+      formSubmit.disable(el.step1ButtonContainer.children[0]);
+    }
 
     formMsg.showElement(el.signupMsg, Init.loader);
     
@@ -218,7 +229,14 @@ var Signup = (function() {
       formMsg.clear(el.signupMsg);
       if ((action === 'UpdateAccount' || response.username === 'unused') &&
           response.email === 'unused') {
-        doSignup(action);
+        if (response === 'UpdateAccount') {
+          doSignup(action);
+        }
+        else {
+          el.step1Content.classList.add('signup-hidden');
+          el.step2Content.classList.remove('signup-hidden');
+          el.step2ButtonContainer.children[0].disabled = false;
+        }
       }
       else {
         if (action === 'Signup' && response.username !== 'unused') {
@@ -234,15 +252,23 @@ var Signup = (function() {
           Init.scrollTo(el.email.parentNode);
         }
       }
-      formSubmit.enable(el.signupButton);
-      if (action === 'Signup') {
+      if (action === 'UpdateAccount') {
+        formSubmit.enable(el.signupButton);
+      }
+      else {
+        formSubmit.enable(el.step1ButtonContainer.children[0]);
         formInput.enable(el.username);
       }
       formInput.enable(el.email);
     }
 
     function failCallback() {
-      formSubmit.enable(el.signupButton);
+      if (action === 'UpdateAccount') {
+        formSubmit.enable(el.signupButton);
+      }
+      else {
+        formSubmit.enable(el.step1ButtonContainer.children[0]);
+      }
       if (action === 'Signup') {
         formInput.enable(el.username);
       }
@@ -253,7 +279,12 @@ var Signup = (function() {
       else {
         formMsg.showError(el.signupMsg, 'Error');
       }
-      Init.scrollTo(el.signupButton);
+      if (action === 'UpdateAccount') {
+        Init.scrollTo(el.signupButton);
+      }
+      else {
+        Init.scrollTo(el.step1ButtonContainer);
+      }
     }
   }
 
@@ -290,13 +321,38 @@ var Signup = (function() {
     el.step4Label = document.getElementById('step4-label');
 
     if (action === 'GetSignup') {
-      el.signupButton.addEventListener('click', function() {
+      el.step1ButtonContainer.children[0].addEventListener('click', function() {
         clickSignup('Signup');
       });
-      el.signupButton.classList.add('signup-button');
+      el.step2ButtonContainer.children[0].addEventListener('click', function() {
+        var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep2());
+        if (invalidEvent) {
+          Init.scrollTo(invalidEvent.parentNode);
+        }
+        else {
+          el.step2Content.classList.add('signup-hidden');
+          el.step3Content.classList.remove('signup-hidden');
+          el.step3ButtonContainer.children[0].disabled = false;
+        }
+      });
+      el.step3ButtonContainer.children[0].addEventListener('click', function() {
+        var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep3());
+        if (invalidEvent) {
+          Init.scrollTo(invalidEvent.parentNode);
+        }
+        else {
+          el.step3Content.classList.add('signup-hidden');
+          el.step4Content.classList.remove('signup-hidden');
+          el.signupButton.disabled = false;
+        }
+      });
+      el.signupButton.addEventListener('click', function() {
+        doSignup('Signup');
+      });
+      el.step1ButtonContainer.children[0].disabled = false;
     }
 
-    /* disable editing the username if we are editing the account info instead of performing signup */
+    /* disable the username if we are editing the account info instead of performing signup */
     else if (action === 'AccountInfo') {
       formInput.disable(document.getElementById('signup-username'));
 

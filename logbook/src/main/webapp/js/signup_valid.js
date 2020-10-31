@@ -210,19 +210,6 @@ var ValidChecker = (function() {
     }
   }
 
-  function checkInvalidElementsStep1() {
-    return checkInvalidElements(data.checkedInputsStep1);
-  }
-  function checkInvalidElementsStep2() {
-    return checkInvalidElements(data.checkedInputsStep2);
-  }
-  function checkInvalidElementsStep3() {
-    return checkInvalidElements(data.checkedInputsStep3);
-  }
-  function checkInvalidElementsStep4() {
-    return checkInvalidElements(data.checkedInputsStep4);
-  }
-
   /**
    * Returns the array of the input fields that require checking.
    * @returns {[]|*[]}
@@ -245,11 +232,7 @@ var ValidChecker = (function() {
 
   return {
     init: init,
-    checkInvalidElementsStep1: checkInvalidElementsStep1,
-    checkInvalidElementsStep2: checkInvalidElementsStep2,
-    checkInvalidElementsStep3: checkInvalidElementsStep3,
-    checkInvalidElementsStep4: checkInvalidElementsStep4,
-    checkInvalidElements: checkInvalidElementsStep4,
+    checkInvalidElements: checkInvalidElements,
     showInvalidMsg: showInvalidMsg,
     getCheckedInputsStep1: getCheckedInputsStep1,
     getCheckedInputsStep2: getCheckedInputsStep2,

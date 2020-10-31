@@ -1,7 +1,7 @@
 .signup-parent-initial {
   box-sizing: content-box;
   min-height: auto;
-  max-width: 21rem;
+  flex: 0 1 21rem;
 }
 
 .post-signup-section {
