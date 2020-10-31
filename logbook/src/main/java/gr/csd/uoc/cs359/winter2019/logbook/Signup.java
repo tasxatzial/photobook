@@ -226,7 +226,7 @@ public class Signup extends HttpServlet {
         String r_birthDate = request.getParameter("birthDate");
         String r_country = request.getParameter("country");
         String r_city = request.getParameter("city");
-        String r_address = request.getParameter("city");
+        String r_address = request.getParameter("address");
         String r_job = request.getParameter("job");
         String r_gender = request.getParameter("gender");
         String r_interests = request.getParameter("interests");
