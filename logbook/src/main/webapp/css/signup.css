@@ -81,12 +81,14 @@
 textarea[name="signup-interests"] {
   height: 4.1rem;
   max-height: 6rem;
+  display: block;
 }
 
 /* shows 500 chars without any resizing */
 textarea[name="signup-about"] {
   height: 14rem;
   max-height: 17rem;
+  display: block;
 }
 
 /* increase distance between the requirements information and the related

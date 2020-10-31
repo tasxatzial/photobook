@@ -308,6 +308,8 @@ var Signup = (function() {
     el.address = document.getElementById('signup-address');
     el.gender = document.querySelectorAll('input[type="radio"]');
     el.interests = document.querySelector('#signup-interests-parent textarea');
+    el.aboutRemaining = document.getElementById('about-remaining-chars');
+    el.interestsRemaining = document.getElementById('interests-remaining-chars');
     el.about = document.querySelector('#signup-about-parent textarea');
     el.signupMsg = document.getElementById('signup-process-msg');
     el.step1Msg = document.querySelector('.signup-process-msg1');
@@ -395,6 +397,15 @@ var Signup = (function() {
       el.step2asterisk.classList.add('signup-hidden');
       el.step3asterisk.classList.add('signup-hidden');
     }
+
+    el.interestsRemaining.innerHTML = (el.interests.maxLength - el.interests.value.length) + " characters remaining";
+    el.aboutRemaining.innerHTML = (el.about.maxLength - el.about.value.length) + " characters remaining";
+    el.interests.addEventListener('input', function() {
+      el.interestsRemaining.innerHTML = (el.interests.maxLength - el.interests.value.length) + " characters remaining";
+    });
+    el.about.addEventListener('input', function() {
+      el.aboutRemaining.innerHTML = (el.about.maxLength - el.about.value.length) + " characters remaining";
+    });
 
     ValidChecker.init();
     SignUpLocation.init();
