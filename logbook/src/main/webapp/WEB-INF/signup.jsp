@@ -12,6 +12,7 @@
           <h3>Step 1</h3>
           <div class="hr-line"></div>
         </div>
+        <p id="step1-required-asterisk" class="step-required-asterisk">(<span>*</span>) Required</p>
         <div class="sign-child">
           <div class="flex-label">
             <label for="signup-username" class="signup-necessary sign-label">Username</label>
@@ -57,6 +58,7 @@
           <h3>Step 2</h3>
           <div class="hr-line"></div>
         </div>
+        <p id="step2-required-asterisk" class="step-required-asterisk">(<span>*</span>) Required</p>
         <div class="sign-child">
           <div class="flex-label">
             <label for="signup-firstName" class="signup-necessary sign-label">First name</label>
@@ -102,6 +104,7 @@
           <h3>Step 3</h3>
           <div class="hr-line"></div>
         </div>
+        <p id="step3-required-asterisk" class="step-required-asterisk">(<span>*</span>) Required</p>
         <div class="sign-child">
           <p class="sign-label">You may detect your location or manually fill in the fields below</p>
           <div class="signup-geolocation-search">

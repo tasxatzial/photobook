@@ -319,6 +319,8 @@ var Signup = (function() {
     el.step2Label = document.getElementById('step2-label');
     el.step3Label = document.getElementById('step3-label');
     el.step4Label = document.getElementById('step4-label');
+    el.step2asterisk = document.getElementById('step2-required-asterisk');
+    el.step3asterisk = document.getElementById('step3-required-asterisk');
 
     if (action === 'GetSignup') {
       el.step1ButtonContainer.children[0].addEventListener('click', function() {
@@ -382,6 +384,8 @@ var Signup = (function() {
       el.step2Content.classList.remove('signup-hidden');
       el.step3Content.classList.remove('signup-hidden');
       el.step4Content.classList.remove('signup-hidden');
+      el.step2asterisk.classList.add('signup-hidden');
+      el.step3asterisk.classList.add('signup-hidden');
     }
 
     ValidChecker.init();

@@ -114,12 +114,21 @@ textarea[name="signup-about"] {
 }
 
 .step-label h3 {
-  margin-top: .5em;
-  margin-left: 1em;
-  margin-right: 1em;
+  margin: .5em 1em;
 }
 
 .hr-line {
   border-bottom: 2px solid silver;
   flex: 1 1 auto;
+}
+
+.step-required-asterisk {
+  margin-top: 0;
+  margin-bottom: 1.2em;
+  width: fit-content;
+  margin-left: auto;
+}
+
+.step-required-asterisk span {
+  color: red;
 }
