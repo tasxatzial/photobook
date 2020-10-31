@@ -11,7 +11,6 @@ var ValidChecker = (function() {
     checkedInputsStep1: [],
     checkedInputsStep2: [],
     checkedInputsStep3: [],
-    checkedInputsStep4: [],
     checkedInputs: []
   };
 
@@ -36,14 +35,12 @@ var ValidChecker = (function() {
     data.checkedInputsStep1 = [];
     data.checkedInputsStep2 = [];
     data.checkedInputsStep3 = [];
-    data.checkedInputsStep4 = [];
     data.checkedInputs = [];
 
     /* collect all elements that require checking --------------------------------------- */
     data.checkedInputsStep1.push(username, passwd1, passwd2, email);
     data.checkedInputsStep2.push(firstName, lastName, birthDate, occupation);
     data.checkedInputsStep3.push(country, city);
-    data.checkedInputsStep4.push(interests, about);
     for (var i = 0; i < data.checkedInputsStep1.length; i++) {
       data.checkedInputs.push(data.checkedInputsStep1[i]);
     }
@@ -52,9 +49,6 @@ var ValidChecker = (function() {
     }
     for (i = 0; i < data.checkedInputsStep3.length; i++) {
       data.checkedInputs.push(data.checkedInputsStep3[i]);
-    }
-    for (i = 0; i < data.checkedInputsStep4.length; i++) {
-      data.checkedInputs.push(data.checkedInputsStep4[i]);
     }
 
     /* checks for valid regex pattern */
@@ -86,14 +80,6 @@ var ValidChecker = (function() {
       return country.value !== '';
     };
 
-    interests.valid = function () {
-      return interests.value.length <= 100;
-    };
-
-    about.valid = function () {
-      return about.value.length <= 500;
-    };
-
     /* add listeners ----------------------------------------------- */
     addValidPatternListeners(username);
     addValidPatternListeners(email);
@@ -105,8 +91,6 @@ var ValidChecker = (function() {
     addValidPatternListeners(city);
     addValidPatternListeners(birthDate);
     addValidPatternListeners(country);
-    addValidPatternListeners(interests);
-    addValidPatternListeners(about);
 
     /* listeners for all elements except passw2 */
     function addValidPatternListeners(element) {
@@ -223,9 +207,6 @@ var ValidChecker = (function() {
   function getCheckedInputsStep3() {
     return data.checkedInputsStep3;
   }
-  function getCheckedInputsStep4() {
-    return data.checkedInputsStep4;
-  }
   function getCheckedInputs() {
     return data.checkedInputs;
   }
@@ -237,7 +218,6 @@ var ValidChecker = (function() {
     getCheckedInputsStep1: getCheckedInputsStep1,
     getCheckedInputsStep2: getCheckedInputsStep2,
     getCheckedInputsStep3: getCheckedInputsStep3,
-    getCheckedInputsStep4: getCheckedInputsStep4,
     getCheckedInputs: getCheckedInputs
   };
 }());

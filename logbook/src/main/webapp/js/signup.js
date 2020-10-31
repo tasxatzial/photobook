@@ -18,6 +18,8 @@ var Signup = (function() {
     signupContent: null,
     address: null,
     gender: null,
+    interests: null,
+    about: null,
     signupButton: null,
     signupMsg: null,
     geolocSearchButton: null,
@@ -27,7 +29,6 @@ var Signup = (function() {
   /**
    * The first function that is called when the signup button is clicked.
    * @param action
-   * @param checkedInputs
    */
   function clickSignup(action) {
     formMsg.clear(el.signupMsg);
@@ -61,7 +62,8 @@ var Signup = (function() {
         data.append(el.gender[j].name.split('-')[1], el.gender[j].value);
       }
     }
-    console.log(el.address.value);
+    data.append(el.interests.name.split('-')[1], el.interests.value);
+    data.append(el.about.name.split('-')[1], el.about.value);
     data.append(el.address.name.split('-')[1], el.address.value);
     return data;
   }
@@ -81,6 +83,8 @@ var Signup = (function() {
     formInput.enable(el.gender[1]);
     formInput.enable(el.gender[2]);
     formInput.enable(el.address);
+    formInput.enable(el.interests);
+    formInput.enable(el.about);
     formSubmit.enable(el.signupButton);
     formButton.enable(el.geolocSearchButton);
     formButton.enable(el.nominatimSearchButton);
@@ -98,6 +102,8 @@ var Signup = (function() {
     formInput.disable(el.gender[1]);
     formInput.disable(el.gender[2]);
     formInput.disable(el.address);
+    formInput.disable(el.interests);
+    formInput.disable(el.about);
     formSubmit.disable(el.signupButton);
     formButton.disable(el.geolocSearchButton);
     formButton.disable(el.nominatimSearchButton);
@@ -301,6 +307,8 @@ var Signup = (function() {
     el.signupContent = el.signupParent.children[1];
     el.address = document.getElementById('signup-address');
     el.gender = document.querySelectorAll('input[type="radio"]');
+    el.interests = document.querySelector('#signup-interests-parent textarea');
+    el.about = document.querySelector('#signup-about-parent textarea');
     el.signupMsg = document.getElementById('signup-process-msg');
     el.step1Msg = document.querySelector('.signup-process-msg1');
     el.geolocMsg = document.querySelector('.sign-process-msg2');

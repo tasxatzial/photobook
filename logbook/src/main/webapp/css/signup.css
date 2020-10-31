@@ -94,7 +94,7 @@ textarea[name="signup-about"] {
 .signup-require-info {
   margin-top: 0.2rem;
   margin-bottom: 0;
-  font-size: .8rem;
+  font-size: .85rem;
 }
 
 .flex-label {
@@ -131,4 +131,8 @@ textarea[name="signup-about"] {
 
 .step-required-asterisk span {
   color: red;
+}
+
+#signup-interests-parent textarea, #signup-about-parent textarea {
+  resize: none;
 }

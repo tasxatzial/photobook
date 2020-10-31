@@ -152,13 +152,15 @@
           <div class="flex-label">
             <p class="sign-label">Interests</p>
           </div>
-          <textarea name="signup-interests" class="sign-tofill" rows="2" cols="50"><%= (String) request.getAttribute("interests")%></textarea>
+          <textarea name="signup-interests" class="sign-tofill" rows="2" cols="50" maxlength="100"><%= (String) request.getAttribute("interests")%></textarea>
+          <!-- <p class="signup-require-info">100 characters remaining</p> -->
         </div>
-        <div class="sign-child">
+        <div class="sign-child" id="signup-about-parent">
           <div class="flex-label">
             <p class="sign-label">General information about you</p>
           </div>
-          <textarea name="signup-about" class="sign-tofill" rows="5" cols="50"><%= (String) request.getAttribute("about")%></textarea>
+          <textarea name="signup-about" class="sign-tofill" rows="5" cols="50" maxlength="500"><%= (String) request.getAttribute("about")%></textarea>
+          <!-- <p class="signup-require-info">500 characters remaining</p> -->
         </div>
         <div id="signup-button" class="sign-button">
           <input type="button" value="<%= (String) request.getAttribute("button") %>">
