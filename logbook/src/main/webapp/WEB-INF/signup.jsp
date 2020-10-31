@@ -110,14 +110,14 @@
           </div>
         </div>
         <div class="sign-child" id="signup-country-parent">
-          <div class="flex-label">
+          <div id="country-label" class="flex-label">
             <p class="sign-label signup-necessary">Country</p>
             <div id="country-hidden" style="display: none"><%= request.getAttribute("country") %></div>
           </div>
           <jsp:include page="countries" />
         </div>
-        <div class="sign-child">
-          <div class="flex-label">
+        <div class="sign-child" id="signup-city-parent">
+          <div id="city-label" class="flex-label">
             <label for="signup-city" class="signup-necessary sign-label">City</label>
           </div>
           <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("city")%>" name="signup-city" id="signup-city" pattern="^[^!#$%&'*+/=?^`{|}\[\]_\\~<>.,]{2,20}$" required>
