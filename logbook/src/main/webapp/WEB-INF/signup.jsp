@@ -48,8 +48,9 @@
                  pattern="^[\w!#$%&'*+/=?^`{|}~-]+(?:\.[\w!#$%&'*+/=?^`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$" required>
         </div>
         <div id="signup-step1-button-container" class="sign-button">
-          <input type="button" value="Next"></div>
-        <div class="sign-process-msg1 sign-process-msg"></div>
+          <input type="button" value="Next">
+          <div id="signup-step1-process-msg"></div>
+        </div>
       </div>
       <div id="signup-step2" class="signup-hidden">
         <div id="step2-label" class="step-label">

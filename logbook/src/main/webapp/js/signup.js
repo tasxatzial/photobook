@@ -214,12 +214,12 @@ var Signup = (function() {
     /* also disable signup button */
     if (action === 'UpdateAccount') {
       formSubmit.disable(el.signupButton);
+      formMsg.showElement(el.signupMsg, Init.loader);
     }
     else {
       formSubmit.disable(el.step1NextButton);
+      formMsg.showElement(el.signupStep1Msg, Init.loader);
     }
-
-    formMsg.showElement(el.signupMsg, Init.loader);
 
     var formData = new FormData();
     formData.append('action', 'CheckUsernameEmailDB');
@@ -234,16 +234,19 @@ var Signup = (function() {
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
-      formMsg.clear(el.signupMsg);
-      if ((action === 'UpdateAccount' || response.username === 'unused') &&
-          response.email === 'unused') {
+      if (action === 'UpdateAccount') {
+        formMsg.clear(el.signupMsg);
+      }
+      else {
+        formMsg.clear(el.signupStep1Msg);
+      }
+      if ((action === 'UpdateAccount' || response.username === 'unused') && response.email === 'unused') {
         if (response === 'UpdateAccount') {
           doSignup(action);
         }
         else {
           el.step1Content.classList.add('signup-hidden');
           el.step2Content.classList.remove('signup-hidden');
-          el.step2NextButton.disabled = false;
         }
       }
       else {
@@ -314,7 +317,7 @@ var Signup = (function() {
     el.interestsRemaining = document.getElementById('interests-remaining-chars');
     el.about = document.querySelector('#signup-about-parent textarea');
     el.signupMsg = document.getElementById('signup-process-msg');
-    el.step1Msg = document.querySelector('.signup-process-msg1');
+    el.signupStep1Msg = document.getElementById('signup-step1-process-msg');
     el.geolocMsg = document.querySelector('.sign-process-msg2');
     el.nominatimMsg = document.querySelector('.sign-process-msg3');
     el.signupButtonContainer = document.querySelector('#signup-button');

@@ -53,7 +53,7 @@
   color: red;
 }
 
-#signup-process-msg, #signin-process-msg {
+#signup-process-msg, #signin-process-msg, #signup-step1-process-msg {
   grid-area: bottom-center;
   justify-self: center;
 }
