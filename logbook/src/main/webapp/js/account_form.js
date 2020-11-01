@@ -40,7 +40,7 @@ var AccountInfo = (function() {
       var signupParent = document.getElementById('signup-parent');
       signupParent.classList.remove('parent-in-main');
       signupParent.classList.add('parent-in-myaccount');
-      Signup.init('AccountInfo');
+      EditAccount.init();
     }
 
     function failCallback() {

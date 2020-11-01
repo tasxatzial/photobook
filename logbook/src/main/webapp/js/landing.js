@@ -93,7 +93,7 @@ var Landing = (function() {
       signinButton.style.marginLeft = 'auto';
       Init.navbarContent.appendChild(signinButton);
 
-      Signup.init('GetSignup');
+      Signup.init();
     }
   }
 

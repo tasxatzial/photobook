@@ -1,17 +1,21 @@
 'use strict';
 
 /**
- * Functions related to the signup process and the edit account info process.
+ * Functions related to the edit account info process.
  * These do not include the loading of the signup form (loaded in landing.js/account_form.js)
  * @type {{init: init}}
  */
-var Signup = (function() {
+var EditAccount = (function() {
+  var data = {
+    oldEmail: null
+  };
+
   var el = {
     signupSection: null,
     signupParent: null,
-    signupContent: null,
     signupButton: null,
     signupMsg: null,
+    signupContent: null,
     header: null,
     username: null,
     email: null,
@@ -20,21 +24,15 @@ var Signup = (function() {
     interests: null,
     about: null,
     geolocSearchButton: null,
-    nominatimSearchButton: null,
-    step1Msg: null,
-    step1Content: null,
-    step1ButtonContainer: null,
-    step1NextButton: null,
-    step2Content: null,
-    step4BackButton: null
+    nominatimSearchButton: null
   };
 
   /**
-   * The first function that is called when the next button in step1 is clicked.
+   * The first function that is called when the update account button is clicked.
    */
   function clickSignup() {
     formMsg.clear(el.signupMsg);
-    var invalidElement = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep1());
+    var invalidElement = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputs());
     if (invalidElement) {
       Init.scrollTo(invalidElement.parentNode);
     }
@@ -66,48 +64,60 @@ var Signup = (function() {
   }
 
   /**
-   * Enables all form inputs in the final step.
+   * Enables all form inputs.
    */
   function enableInputs() {
+    var inputs = ValidChecker.getCheckedInputs();
+    for (var i = 0; i < inputs.length; i++) {
+      if (inputs[i].name !== "signup-username") {
+        formInput.enable(inputs[i]);
+      }
+    }
+    formInput.enable(el.gender[0]);
+    formInput.enable(el.gender[1]);
+    formInput.enable(el.gender[2]);
+    formInput.enable(el.address);
     formInput.enable(el.interests);
     formInput.enable(el.about);
     formSubmit.enable(el.signupButton);
-    formButton.enable(el.step4BackButton);
+    formButton.enable(el.geolocSearchButton);
+    formButton.enable(el.nominatimSearchButton);
   }
 
   /**
    * Disables all form inputs.
    */
   function disableInputs() {
+    var inputs = ValidChecker.getCheckedInputs();
+    for (var i = 0; i < inputs.length; i++) {
+      formInput.disable(inputs[i]);
+    }
+    formInput.disable(el.gender[0]);
+    formInput.disable(el.gender[1]);
+    formInput.disable(el.gender[2]);
+    formInput.disable(el.address);
     formInput.disable(el.interests);
     formInput.disable(el.about);
     formSubmit.disable(el.signupButton);
-    formButton.disable(el.step4BackButton);
+    formButton.disable(el.geolocSearchButton);
+    formButton.disable(el.nominatimSearchButton);
   }
 
   /**
-   * Performs signup
+   * Updates the account (sends the data to the server)
    */
-  function doSignup() {
+  function updateAccount() {
     Requests.cancelExcept(null);
     disableInputs();
     formMsg.showElement(el.signupMsg, Init.loader);
 
     var data = gatherData();
-    data.append('action', 'Signup');
+    data.append('action', 'UpdateAccount');
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
-      var response = JSON.parse(Requests.get(ID).responseText);
-      var accountInfoTitle = document.createElement('p');
-      var accountInfo = newElements.createSignupSummary(response, Init.dataNames);
-      el.header.innerHTML = 'Sign up completed';
-      accountInfoTitle.innerHTML = 'You provided the following information: ';
-      el.signupContent.innerHTML = '';
-      el.signupParent.classList.remove('signup-parent-initial');
-      el.signupSection.classList = 'post-signup-section';
-      el.signupContent.appendChild(accountInfoTitle);
-      el.signupContent.appendChild(accountInfo);
+      formMsg.showOK(el.signupMsg, 'Success');
+      Init.scrollTo(el.signupButton);
       enableInputs();
     }
 
@@ -116,7 +126,6 @@ var Signup = (function() {
         Logout.showExpired();
         return;
       }
-
       if (Requests.get(ID).status === 500) {
         formMsg.showError(el.signupMsg, 'Server error');
         Init.scrollTo(el.signupButton);
@@ -160,52 +169,47 @@ var Signup = (function() {
    */
   function checkUsernameEmailDB() {
     Init.scrollTo(el.signupButton);
+
+    /* if we just want to update account info (that means the username field is already disabled)
+    and the email has not changed, there is no need to send a request */
+    if (el.email.value === data.oldEmail) {
+      updateAccount();
+      return;
+    }
     Requests.cancelExcept(null);
 
     /* disable both username and email fields during this process */
     formInput.disable(el.username);
     formInput.disable(el.email);
 
-    /* also disable step1 next button */
-    formSubmit.disable(el.step1NextButton);
-    formMsg.showElement(el.step1Msg, Init.loader);
+    /* also disable signup button */
+    formSubmit.disable(el.signupButton);
+    formMsg.showElement(el.signupMsg, Init.loader);
 
     var formData = new FormData();
     formData.append('action', 'CheckUsernameEmailDB');
-    formData.append('username', el.username.value);
+
+    /* only check for duplicate email if we are requesting to update the account info */
     formData.append('email', el.email.value);
 
     var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
-      formMsg.clear(el.step1Msg);
-      if (response.username === 'unused' && response.email === 'unused') {
-        el.step1Content.classList.add('signup-hidden');
-        el.step2Content.classList.remove('signup-hidden');
+      formMsg.clear(el.signupMsg);
+      if (response.email === 'unused') {
+        updateAccount();
       }
       else {
-        if (response.username !== 'unused') {
-          ValidChecker.showInvalidMsg(el.username, response.username);
-        }
-        if (response.email !== 'unused') {
-          ValidChecker.showInvalidMsg(el.email, response.email);
-        }
-        if (response.username !== 'unused') {
-          Init.scrollTo(el.username.parentNode);
-        }
-        else if (response.email !== 'unused') {
-          Init.scrollTo(el.email.parentNode);
-        }
+        ValidChecker.showInvalidMsg(el.email, response.email);
+        Init.scrollTo(el.email.parentNode);
       }
-      formSubmit.enable(el.step1NextButton);
-      formInput.enable(el.username);
+      formSubmit.enable(el.signupButton);
       formInput.enable(el.email);
     }
 
     function failCallback() {
-      formSubmit.enable(el.step1NextButton);
-      formInput.enable(el.username);
+      formSubmit.enable(el.signupButton);
       formInput.enable(el.email);
       if (Requests.get(ID).status === 0) {
         formMsg.showError(el.signupMsg, 'Unable to send request');
@@ -213,7 +217,7 @@ var Signup = (function() {
       else {
         formMsg.showError(el.signupMsg, 'Error');
       }
-      Init.scrollTo(el.step1ButtonContainer);
+      Init.scrollTo(el.signupButton);
     }
   }
 
@@ -234,62 +238,56 @@ var Signup = (function() {
     el.interestsRemaining = document.getElementById('interests-remaining-chars');
     el.about = document.querySelector('#signup-about-parent textarea');
     el.signupMsg = document.getElementById('signup-process-msg');
-    el.step1Msg = document.getElementById('signup-step1-process-msg');
     el.signupButtonContainer = document.querySelector('#signup-button');
     el.signupButton = el.signupButtonContainer.children[1];
-    el.step1Content = document.getElementById('signup-step1');
+    el.geolocSearchButton = document.getElementsByClassName('signup-geolocation-search-button')[0];
+    el.nominatimSearchButton = document.getElementsByClassName('signup-location-search-button')[0];
     el.step2Content = document.getElementById('signup-step2');
     el.step3Content = document.getElementById('signup-step3');
     el.step4Content = document.getElementById('signup-step4');
     el.step1ButtonContainer = document.getElementById('signup-step1-button-container');
     el.step2ButtonContainer = document.getElementById('signup-step2-button-container');
     el.step3ButtonContainer = document.getElementById('signup-step3-button-container');
-    el.step1NextButton = el.step1ButtonContainer.children[0];
-    el.step2NextButton = el.step2ButtonContainer.children[1];
-    el.step3NextButton = el.step3ButtonContainer.children[1];
-    el.step2BackButton = el.step2ButtonContainer.children[0];
-    el.step3BackButton = el.step3ButtonContainer.children[0];
     el.step4BackButton = el.signupButtonContainer.children[0];
+    el.step1Label = document.getElementById('step1-label');
+    el.step2Label = document.getElementById('step2-label');
+    el.step3Label = document.getElementById('step3-label');
+    el.step4Label = document.getElementById('step4-label');
+    el.step2asterisk = document.getElementById('step2-required-asterisk');
+    el.step3asterisk = document.getElementById('step3-required-asterisk');
 
-    el.step1NextButton.addEventListener('click', function() {
+    /* disable the username since it cannot change */
+    formInput.disable(document.getElementById('signup-username'));
+
+    var countryHidden = document.getElementById('country-hidden');
+    var country = document.getElementById('signup-country');
+    country.children[0].selected = 'false';
+    for (var j = 0; j < country.children.length; j++) {
+      if (country.children[j].value === countryHidden.innerHTML ||
+          country.children[j].name === countryHidden.innerHTML) {
+        country.children[j].selected = 'true';
+        break;
+      }
+    }
+
+    el.signupButton.addEventListener('click', function() {
       clickSignup();
     });
-    el.step2NextButton.addEventListener('click', function() {
-      var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep2());
-      if (invalidEvent) {
-        Init.scrollTo(invalidEvent.parentNode);
-      }
-      else {
-        el.step2Content.classList.add('signup-hidden');
-        el.step3Content.classList.remove('signup-hidden');
-      }
-    });
-    el.step3NextButton.addEventListener('click', function() {
-      var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep3());
-      if (invalidEvent) {
-        Init.scrollTo(invalidEvent.parentNode);
-      }
-      else {
-        el.step3Content.classList.add('signup-hidden');
-        el.step4Content.classList.remove('signup-hidden');
-      }
-    });
-    el.signupButton.addEventListener('click', function() {
-      doSignup();
-    });
-    el.step2BackButton.addEventListener('click', function() {
-      el.step2Content.classList.add('signup-hidden');
-      el.step1Content.classList.remove('signup-hidden');
-    });
-    el.step3BackButton.addEventListener('click', function() {
-      el.step3Content.classList.add('signup-hidden');
-      el.step2Content.classList.remove('signup-hidden');
-    });
-    el.step4BackButton.addEventListener('click', function() {
-      el.step4Content.classList.add('signup-hidden');
-      el.step3Content.classList.remove('signup-hidden');
-    });
-    el.step1NextButton.disabled = false;
+
+    el.signupButton.disabled = false;
+    el.step4BackButton.classList.add('signup-hidden');
+    el.step1ButtonContainer.classList.add('signup-hidden');
+    el.step2ButtonContainer.classList.add('signup-hidden');
+    el.step3ButtonContainer.classList.add('signup-hidden');
+    el.step1Label.classList.add('signup-hidden');
+    el.step2Label.classList.add('signup-hidden');
+    el.step3Label.classList.add('signup-hidden');
+    el.step4Label.classList.add('signup-hidden');
+    el.step2Content.classList.remove('signup-hidden');
+    el.step3Content.classList.remove('signup-hidden');
+    el.step4Content.classList.remove('signup-hidden');
+    el.step2asterisk.classList.add('signup-hidden');
+    el.step3asterisk.classList.add('signup-hidden');
 
     el.interestsRemaining.innerHTML = (el.interests.maxLength - el.interests.value.length) + " characters remaining";
     el.aboutRemaining.innerHTML = (el.about.maxLength - el.about.value.length) + " characters remaining";
@@ -303,6 +301,7 @@ var Signup = (function() {
     ValidChecker.init();
     SignUpLocation.init();
     SignUpFace.init();
+    data.oldEmail = el.email.value;
     el.email.disabled = false;
   }
 
