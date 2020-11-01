@@ -100,9 +100,9 @@ textarea[name="signup-about"] {
 }
 
 .flex-label {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
 }
 
 .step-label {
@@ -137,4 +137,19 @@ textarea[name="signup-about"] {
 
 #signup-interests-parent textarea, #signup-about-parent textarea {
   resize: none;
+}
+
+.back-button {
+  grid-area: left;
+  justify-self: start;
+  font-size: 1rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #3f85cb;
+}
+
+.back-button:hover, .back-button:focus {
+  outline: 0;
+  text-decoration: underline;
 }

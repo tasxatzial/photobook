@@ -90,7 +90,7 @@ var Signin = (function() {
     el.signinButton = document.querySelector('#signin-button input');
     el.username = document.getElementById('signin-username');
     el.password = document.getElementById('signin-password');
-    el.signinMsg = document.getElementById('sign-process-msg');
+    el.signinMsg = document.getElementById('signin-process-msg');
     el.signinPhotoButton = document.querySelector('.signin-photo-button');
 
     el.username.addEventListener('input', function() {

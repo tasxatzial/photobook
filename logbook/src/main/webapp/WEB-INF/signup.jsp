@@ -48,9 +48,8 @@
                  pattern="^[\w!#$%&'*+/=?^`{|}~-]+(?:\.[\w!#$%&'*+/=?^`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$" required>
         </div>
         <div id="signup-step1-button-container" class="sign-button">
-          <input type="button" value="Next" disabled>
-          <div class="sign-process-msg1 sign-process-msg"></div>
-        </div>
+          <input type="button" value="Next"></div>
+        <div class="sign-process-msg1 sign-process-msg"></div>
       </div>
       <div id="signup-step2" class="signup-hidden">
         <div id="step2-label" class="step-label">
@@ -95,7 +94,8 @@
           <p class="signup-require-info">3 to 15 characters</p>
         </div>
         <div id="signup-step2-button-container" class="sign-button">
-          <input type="button" value="Next" disabled>
+          <button class="back-button">Go back</button>
+          <input type="button" value="Next">
         </div>
       </div>
       <div id="signup-step3" class="signup-hidden">
@@ -139,7 +139,8 @@
           <div id="signup-map-parent"></div>
         </div>
         <div id="signup-step3-button-container" class="sign-button">
-          <input type="button" value="Next" disabled>
+          <button class="back-button">Go back</button>
+          <input type="button" value="Next">
         </div>
       </div>
       <div id="signup-step4" class="signup-hidden">
@@ -163,6 +164,7 @@
           <p id="about-remaining-chars" class="signup-require-info">500 characters remaining</p>
         </div>
         <div id="signup-button" class="sign-button">
+          <button class="back-button">Go back</button>
           <input type="button" value="<%= (String) request.getAttribute("button") %>">
           <div id="signup-process-msg"></div>
         </div>

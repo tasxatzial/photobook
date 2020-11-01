@@ -52,3 +52,8 @@
   font-size: 0.9rem;
   color: red;
 }
+
+#signup-process-msg, #signin-process-msg {
+  grid-area: bottom-center;
+  justify-self: center;
+}

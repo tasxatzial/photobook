@@ -88,6 +88,7 @@ var Signup = (function() {
     formSubmit.enable(el.signupButton);
     formButton.enable(el.geolocSearchButton);
     formButton.enable(el.nominatimSearchButton);
+    formButton.enable(el.step4BackButton);
   }
 
   /**
@@ -107,6 +108,7 @@ var Signup = (function() {
     formSubmit.disable(el.signupButton);
     formButton.disable(el.geolocSearchButton);
     formButton.disable(el.nominatimSearchButton);
+    formButton.disable(el.step4BackButton);
   }
 
   /**
@@ -214,11 +216,11 @@ var Signup = (function() {
       formSubmit.disable(el.signupButton);
     }
     else {
-      formSubmit.disable(el.step1ButtonContainer.children[0]);
+      formSubmit.disable(el.step1NextButton);
     }
 
     formMsg.showElement(el.signupMsg, Init.loader);
-    
+
     var formData = new FormData();
     formData.append('action', 'CheckUsernameEmailDB');
 
@@ -241,7 +243,7 @@ var Signup = (function() {
         else {
           el.step1Content.classList.add('signup-hidden');
           el.step2Content.classList.remove('signup-hidden');
-          el.step2ButtonContainer.children[0].disabled = false;
+          el.step2NextButton.disabled = false;
         }
       }
       else {
@@ -262,7 +264,7 @@ var Signup = (function() {
         formSubmit.enable(el.signupButton);
       }
       else {
-        formSubmit.enable(el.step1ButtonContainer.children[0]);
+        formSubmit.enable(el.step1NextButton);
         formInput.enable(el.username);
       }
       formInput.enable(el.email);
@@ -273,7 +275,7 @@ var Signup = (function() {
         formSubmit.enable(el.signupButton);
       }
       else {
-        formSubmit.enable(el.step1ButtonContainer.children[0]);
+        formSubmit.enable(el.step1NextButton);
       }
       if (action === 'Signup') {
         formInput.enable(el.username);
@@ -315,7 +317,8 @@ var Signup = (function() {
     el.step1Msg = document.querySelector('.signup-process-msg1');
     el.geolocMsg = document.querySelector('.sign-process-msg2');
     el.nominatimMsg = document.querySelector('.sign-process-msg3');
-    el.signupButton = document.querySelector('#signup-button input');
+    el.signupButtonContainer = document.querySelector('#signup-button');
+    el.signupButton = el.signupButtonContainer.children[1];
     el.geolocSearchButton = document.getElementsByClassName('signup-geolocation-search-button')[0];
     el.nominatimSearchButton = document.getElementsByClassName('signup-location-search-button')[0];
     el.step1Content = document.getElementById('signup-step1');
@@ -325,6 +328,12 @@ var Signup = (function() {
     el.step1ButtonContainer = document.getElementById('signup-step1-button-container');
     el.step2ButtonContainer = document.getElementById('signup-step2-button-container');
     el.step3ButtonContainer = document.getElementById('signup-step3-button-container');
+    el.step1NextButton = el.step1ButtonContainer.children[0];
+    el.step2NextButton = el.step2ButtonContainer.children[1];
+    el.step3NextButton = el.step3ButtonContainer.children[1];
+    el.step2BackButton = el.step2ButtonContainer.children[0];
+    el.step3BackButton = el.step3ButtonContainer.children[0];
+    el.step4BackButton = el.signupButtonContainer.children[0];
     el.step1Label = document.getElementById('step1-label');
     el.step2Label = document.getElementById('step2-label');
     el.step3Label = document.getElementById('step3-label');
@@ -333,10 +342,10 @@ var Signup = (function() {
     el.step3asterisk = document.getElementById('step3-required-asterisk');
 
     if (action === 'GetSignup') {
-      el.step1ButtonContainer.children[0].addEventListener('click', function() {
+      el.step1NextButton.addEventListener('click', function() {
         clickSignup('Signup');
       });
-      el.step2ButtonContainer.children[0].addEventListener('click', function() {
+      el.step2NextButton.addEventListener('click', function() {
         var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep2());
         if (invalidEvent) {
           Init.scrollTo(invalidEvent.parentNode);
@@ -344,10 +353,9 @@ var Signup = (function() {
         else {
           el.step2Content.classList.add('signup-hidden');
           el.step3Content.classList.remove('signup-hidden');
-          el.step3ButtonContainer.children[0].disabled = false;
         }
       });
-      el.step3ButtonContainer.children[0].addEventListener('click', function() {
+      el.step3NextButton.addEventListener('click', function() {
         var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep3());
         if (invalidEvent) {
           Init.scrollTo(invalidEvent.parentNode);
@@ -355,13 +363,24 @@ var Signup = (function() {
         else {
           el.step3Content.classList.add('signup-hidden');
           el.step4Content.classList.remove('signup-hidden');
-          el.signupButton.disabled = false;
         }
       });
       el.signupButton.addEventListener('click', function() {
         doSignup('Signup');
       });
-      el.step1ButtonContainer.children[0].disabled = false;
+      el.step2BackButton.addEventListener('click', function() {
+        el.step2Content.classList.add('signup-hidden');
+        el.step1Content.classList.remove('signup-hidden');
+      });
+      el.step3BackButton.addEventListener('click', function() {
+        el.step3Content.classList.add('signup-hidden');
+        el.step2Content.classList.remove('signup-hidden');
+      });
+      el.step4BackButton.addEventListener('click', function() {
+        el.step4Content.classList.add('signup-hidden');
+        el.step3Content.classList.remove('signup-hidden');
+      });
+      el.step1NextButton.disabled = false;
     }
 
     /* disable the username if we are editing the account info instead of performing signup */
@@ -384,6 +403,7 @@ var Signup = (function() {
       });
 
       el.signupButton.disabled = false;
+      el.step4BackButton.classList.add('signup-hidden');
       el.step1ButtonContainer.classList.add('signup-hidden');
       el.step2ButtonContainer.classList.add('signup-hidden');
       el.step3ButtonContainer.classList.add('signup-hidden');

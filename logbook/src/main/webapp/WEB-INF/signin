@@ -18,7 +18,7 @@
       </div>
       <div class="sign-button" id="signin-button">
         <input type="button" value="Sign in" disabled>
-        <div id="sign-process-msg"></div>
+        <div id="signin-process-msg"></div>
       </div>
     </div>
   </div>
