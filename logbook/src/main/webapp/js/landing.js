@@ -125,10 +125,9 @@ var Landing = (function() {
    * @returns {HTMLDivElement}
    */
   function createLanding() {
-    var signupButton = document.createElement('input');
+    var signupButton = document.createElement('button');
     signupButton.id = 'landing-signup-button';
-    signupButton.type = 'button';
-    signupButton.value = 'Sign up';
+    signupButton.innerHTML = 'Sign up';
     signupButton.addEventListener('click', showSignup);
 
     var signinTitle = document.createElement('p');

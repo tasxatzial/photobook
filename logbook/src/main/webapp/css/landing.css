@@ -30,10 +30,16 @@
   letter-spacing: .03em;
   border: 0;
   cursor: pointer;
+  align-self: center;
+  padding: .2em .5em;
 }
 
 #landing-signup-button:focus, #landing-signup-button:hover {
   text-decoration: underline;
+}
+
+#landing-signup-button:active {
+  top: 0;
 }
 
 #landing-signin-button input {

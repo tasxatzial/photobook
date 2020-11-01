@@ -152,4 +152,5 @@ textarea[name="signup-about"] {
 .back-button:hover, .back-button:focus {
   outline: 0;
   text-decoration: underline;
+  top: 0;
 }
