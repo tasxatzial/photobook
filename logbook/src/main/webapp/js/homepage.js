@@ -19,36 +19,28 @@ var Homepage = (function() {
 
     var accountButton = newElements.createSignBarButton('My account', 'profile-button', 'images/myaccount.svg');
     accountButton.addEventListener('click', function() {
-      this.blur();
-      removeActive();
-      setActive(this);
+      initializeButton(this, burgerButton, navbarList);
       ShowProfile.init(Init.getUser(), true);
     });
     navbarList.appendChild(accountButton);
 
     var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button', 'images/users.svg');
     allUsersButton.addEventListener('click', function() {
-      this.blur();
-      removeActive();
-      setActive(this);
+      initializeButton(this, burgerButton, navbarList);
       AllUsers.init();
     });
     navbarList.appendChild(allUsersButton);
 
     var postsButton = newElements.createSignBarButton('Posts', 'show-posts', 'images/posts.svg');
     postsButton.addEventListener('click', function() {
-      this.blur();
-      removeActive();
-      setActive(this);
+      initializeButton(this, burgerButton, navbarList);
       Posts.init(null);
     });
     navbarList.appendChild(postsButton);
 
     var logoutButton = newElements.createSignBarButton('Log out', 'logout-button', 'images/logout.svg');
     logoutButton.addEventListener('click', function() {
-      this.blur();
-      removeActive();
-      setActive(this);
+      initializeButton(this, burgerButton, navbarList);
       Logout.init(true);
     });
     navbarList.appendChild(logoutButton);
@@ -82,6 +74,15 @@ var Homepage = (function() {
     });
     setActive(postsButton);
     Posts.init(null);
+
+    function initializeButton(button) {
+      button.blur();
+      removeActive();
+      setActive(button);
+      burgerButton.innerHTML = '&#9776;';
+      burgerButton.classList.remove('opened-burger-button');
+      navbarList.classList.remove('navigation-open');
+    }
   }
 
   function setActive(button) {

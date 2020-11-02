@@ -15,10 +15,7 @@ var Logout = (function() {
 
     var data = new FormData();
     data.append("action", "Logout");
-    var ID;
-    setTimeout(function() {
-      ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
-    }, 2000);
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     var logoutButton = document.getElementById('logout-button');
     if (clickedLogout) {
@@ -33,7 +30,6 @@ var Logout = (function() {
 
     function successCallback() {
       var navbarList = document.querySelector('.navbar-list');
-      var navbarContent = document.getElementById('navbar-content');
       navbarContent.removeChild(navbarList);
       Init.nonav.classList.remove('no-nav-logged-in');
       var navbarContent = document.getElementById('navbar-content');
