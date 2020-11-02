@@ -16,15 +16,17 @@ var Logout = (function() {
     var data = new FormData();
     data.append("action", "Logout");
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
-
     var logoutButton = document.getElementById('logout-button');
     if (clickedLogout) {
-      logoutButton.classList.remove('navbar-notloading-button');
-      var underline = document.querySelector('.navbar-underline');
-      underline.style.display = 'none';
-      var loader = document.createElement('div');
-      loader.className = 'navbar-loader';
-      logoutButton.appendChild(loader);
+      var loader = document.querySelector('.navbar-loader');
+      if (!loader) {
+        logoutButton.classList.remove('navbar-notloading-button');
+        var underline = document.querySelector('.navbar-underline');
+        underline.style.display = 'none';
+        loader = document.createElement('div');
+        loader.className = 'navbar-loader';
+        logoutButton.appendChild(loader);
+      }
     }
 
     function successCallback() {

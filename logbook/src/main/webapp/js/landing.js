@@ -29,12 +29,15 @@ var Landing = (function() {
     }));
 
     if (signinButton) {
-      signinButton.classList.remove('navbar-notloading-button');
-      var underline = document.querySelector('.navbar-underline');
-      underline.style.display = 'none';
-      var loader = document.createElement('div');
-      loader.className = 'navbar-loader';
-      signinButton.appendChild(loader);
+      var loader = document.querySelector('.navbar-loader');
+      if (!loader) {
+        signinButton.classList.remove('navbar-notloading-button');
+        var underline = document.querySelector('.navbar-underline');
+        underline.style.display = 'none';
+        loader = document.createElement('div');
+        loader.className = 'navbar-loader';
+        signinButton.appendChild(loader);
+      }
     } else {
       landingLoader = document.getElementById('landing-loader');
       landingLoader.classList.add('landing-loader');
@@ -63,18 +66,20 @@ var Landing = (function() {
     var landingLoader = null;
     var data = new FormData();
     data.append('action', 'GetSignup');
-    var ID = null;
-    ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
       failCallback(ID, signupButton, landingLoader);
     }));
 
     if (signupButton) {
-      signupButton.classList.remove('navbar-notloading-button');
-      var underline = document.querySelector('.navbar-underline');
-      underline.style.display = 'none';
-      var loader = document.createElement('div');
-      loader.className = 'navbar-loader';
-      signupButton.appendChild(loader);
+      var loader = document.querySelector('.navbar-loader');
+      if (!loader) {
+        signupButton.classList.remove('navbar-notloading-button');
+        var underline = document.querySelector('.navbar-underline');
+        underline.style.display = 'none';
+        loader = document.createElement('div');
+        loader.className = 'navbar-loader';
+        signupButton.appendChild(loader);
+      }
     } else {
       landingLoader = document.getElementById('landing-loader');
       landingLoader.classList.add('landing-loader');
