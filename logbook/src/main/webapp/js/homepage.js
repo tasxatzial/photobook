@@ -14,6 +14,8 @@ var Homepage = (function() {
   function init() {
     Init.nonav.innerHTML = '';
     Init.nonav.classList.add('no-nav-logged-in');
+    var div = document.createElement('div');
+    div.className = 'navbar-list';
 
     var accountButton = newElements.createSignBarButton('My account', 'profile-button', 'images/myaccount.svg');
     accountButton.addEventListener('click', function() {
@@ -22,7 +24,7 @@ var Homepage = (function() {
       setActive(this);
       ShowProfile.init(Init.getUser(), true);
     });
-    Init.navbarContent.appendChild(accountButton);
+    div.appendChild(accountButton);
 
     var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button', 'images/users.svg');
     allUsersButton.addEventListener('click', function() {
@@ -31,7 +33,7 @@ var Homepage = (function() {
       setActive(this);
       AllUsers.init();
     });
-    Init.navbarContent.appendChild(allUsersButton);
+    div.appendChild(allUsersButton);
 
     var postsButton = newElements.createSignBarButton('Posts', 'show-posts', 'images/posts.svg');
     postsButton.addEventListener('click', function() {
@@ -40,7 +42,7 @@ var Homepage = (function() {
       setActive(this);
       Posts.init(null);
     });
-    Init.navbarContent.appendChild(postsButton);
+    div.appendChild(postsButton);
 
     var logoutButton = newElements.createSignBarButton('Log out', 'logout-button', 'images/logout.svg');
     logoutButton.addEventListener('click', function() {
@@ -48,7 +50,8 @@ var Homepage = (function() {
       setActive(this);
       Logout.init(true);
     });
-    Init.navbarContent.appendChild(logoutButton);
+    div.appendChild(logoutButton);
+    Init.navbarContent.appendChild(div);
 
     setActive(postsButton);
     Posts.init(null);

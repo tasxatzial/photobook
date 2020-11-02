@@ -28,15 +28,9 @@ var Logout = (function() {
     }
 
     function successCallback() {
+      var navbarList = document.querySelector('.navbar-list');
       var navbarContent = document.getElementById('navbar-content');
-      var accountButton = document.getElementById('profile-button');
-      var allUsersButton = document.getElementById('show-users-button');
-
-      var postsButton = document.getElementById('show-posts');
-      navbarContent.removeChild(accountButton);
-      navbarContent.removeChild(allUsersButton);
-      navbarContent.removeChild(logoutButton);
-      navbarContent.removeChild(postsButton);
+      navbarContent.removeChild(navbarList);
       Init.nonav.classList.remove('no-nav-logged-in');
       Landing.init();
     }

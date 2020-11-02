@@ -23,7 +23,7 @@
         <div class="sign-child" id="signup-photo-section">
           <p>
             <label class="sign-label"><input type="checkbox" disabled>
-              Associate my username to a face that may be used to identify me during the sign in process
+              Associate my username to a face that may be used to identify me during the sign in process.
             </label>
           </p>
         </div>
@@ -107,7 +107,7 @@
         </div>
         <p id="step3-required-asterisk" class="step-required-asterisk">(<span>*</span>) Required</p>
         <div class="sign-child">
-          <p class="sign-label">You may detect your location or manually fill in the fields below</p>
+          <p class="sign-label">- You may detect your location or manually fill in the fields below.</p>
           <div class="signup-geolocation-search">
             <button type="button" class="signup-geolocation-search-button sign-internal-button" disabled>Detect my location</button>
             <div class="sign-process-msg2 sign-process-msg" id="signup-geolocation-search-state"></div>
