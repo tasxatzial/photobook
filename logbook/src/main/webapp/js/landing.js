@@ -118,15 +118,8 @@ var Landing = (function() {
     signinTitle.id = 'landing-signin-msg';
     signinTitle.innerHTML = 'Connect with people and share your travels.';
 
-    var signinButton = document.createElement('input');
-    signinButton.type = 'button';
-    signinButton.value = 'Sign in';
-    signinButton.addEventListener('click', showSignin);
-
-    var signinButtonContainer = document.createElement('div');
-    signinButtonContainer.id = 'landing-signin-button';
-    signinButtonContainer.className = 'sign-button';
-    signinButtonContainer.appendChild(signinButton);
+    var signinButtonContainer = newElements.createBlueButton('Sign in', 'landing-signin-button')
+    signinButtonContainer.children[0].addEventListener('click', showSignin);
 
     var signupContainer = document.createElement('div');
     signupContainer.id = 'landing-signup-container';

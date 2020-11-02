@@ -48,7 +48,7 @@
                  pattern="^[\w!#$%&'*+/=?^`{|}~-]+(?:\.[\w!#$%&'*+/=?^`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$" required>
         </div>
         <div id="signup-step1-button-container" class="sign-button">
-          <input type="button" value="Next">
+          <button>Next</button>
           <div id="signup-step1-process-msg"></div>
         </div>
       </div>
@@ -96,7 +96,7 @@
         </div>
         <div id="signup-step2-button-container" class="sign-button">
           <button class="back-button">Go back</button>
-          <input type="button" value="Next">
+          <button>Next</button>
         </div>
       </div>
       <div id="signup-step3" class="signup-hidden">
@@ -141,7 +141,7 @@
         </div>
         <div id="signup-step3-button-container" class="sign-button">
           <button class="back-button">Go back</button>
-          <input type="button" value="Next">
+          <button>Next</button>
         </div>
       </div>
       <div id="signup-step4" class="signup-hidden">
@@ -166,7 +166,7 @@
         </div>
         <div id="signup-button" class="sign-button">
           <button class="back-button">Go back</button>
-          <input type="button" value="<%= (String) request.getAttribute("button") %>">
+          <button><%= (String) request.getAttribute("button") %></button>
           <div id="signup-process-msg"></div>
         </div>
       </div>

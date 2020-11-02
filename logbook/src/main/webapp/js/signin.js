@@ -87,7 +87,7 @@ var Signin = (function() {
    * Initializations after the signin form has loaded.
    */
   function init() {
-    el.signinButton = document.querySelector('#signin-button input');
+    el.signinButton = document.querySelector('#signin-button button');
     el.username = document.getElementById('signin-username');
     el.password = document.getElementById('signin-password');
     el.signinMsg = document.getElementById('signin-process-msg');

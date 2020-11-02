@@ -31,11 +31,10 @@ var newElements = (function NewElements() {
     div.className = 'sign-button';
     div.id = id;
 
-    var input = document.createElement('input');
-    input.type = 'button';
-    input.value = value;
+    var button = document.createElement('button');
+    button.innerHTML = value;
 
-    div.appendChild(input);
+    div.appendChild(button);
 
     return div;
   }

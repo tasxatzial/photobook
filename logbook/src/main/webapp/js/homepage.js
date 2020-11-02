@@ -14,8 +14,8 @@ var Homepage = (function() {
   function init() {
     Init.nonav.innerHTML = '';
     Init.nonav.classList.add('no-nav-logged-in');
-    var div = document.createElement('div');
-    div.className = 'navbar-list';
+    var navbarList = document.createElement('div');
+    navbarList.className = 'navbar-list';
 
     var accountButton = newElements.createSignBarButton('My account', 'profile-button', 'images/myaccount.svg');
     accountButton.addEventListener('click', function() {
@@ -24,7 +24,7 @@ var Homepage = (function() {
       setActive(this);
       ShowProfile.init(Init.getUser(), true);
     });
-    div.appendChild(accountButton);
+    navbarList.appendChild(accountButton);
 
     var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button', 'images/users.svg');
     allUsersButton.addEventListener('click', function() {
@@ -33,7 +33,7 @@ var Homepage = (function() {
       setActive(this);
       AllUsers.init();
     });
-    div.appendChild(allUsersButton);
+    navbarList.appendChild(allUsersButton);
 
     var postsButton = newElements.createSignBarButton('Posts', 'show-posts', 'images/posts.svg');
     postsButton.addEventListener('click', function() {
@@ -42,17 +42,44 @@ var Homepage = (function() {
       setActive(this);
       Posts.init(null);
     });
-    div.appendChild(postsButton);
+    navbarList.appendChild(postsButton);
 
     var logoutButton = newElements.createSignBarButton('Log out', 'logout-button', 'images/logout.svg');
     logoutButton.addEventListener('click', function() {
       this.blur();
+      removeActive();
       setActive(this);
       Logout.init(true);
     });
-    div.appendChild(logoutButton);
-    Init.navbarContent.appendChild(div);
+    navbarList.appendChild(logoutButton);
+    Init.navbarContent.appendChild(navbarList);
 
+    var burgerButton = document.createElement('button');
+    burgerButton.innerHTML = '&#9776;';
+    burgerButton.className = 'initial-burger-button';
+    Init.navbarContent.appendChild(burgerButton);
+
+    burgerButton.addEventListener('click', function() {
+      if (burgerButton.innerHTML === '☰') {
+        burgerButton.innerHTML = '&times;';
+        burgerButton.classList.add('opened-burger-button');
+        navbarList.classList.add('navigation-open');
+      }
+      else {
+        burgerButton.innerHTML = '&#9776;';
+        burgerButton.classList.remove('opened-burger-button');
+        navbarList.classList.remove('navigation-open');
+      }
+    });
+
+    var query = window.matchMedia("(max-width: 45rem)");
+    query.addEventListener('change', function() {
+      if (!query.matches) {
+        burgerButton.classList.remove('opened-burger-button');
+        navbarList.classList.remove('navigation-open');
+        burgerButton.innerHTML = '&#9776;';
+      }
+    });
     setActive(postsButton);
     Posts.init(null);
   }

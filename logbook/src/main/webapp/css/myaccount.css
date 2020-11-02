@@ -31,10 +31,10 @@
   background-color: whitesmoke;
 }
 
-#delete-account-button input {
+#delete-account-button button {
   background: #ee5f66;
 }
 
-#edit-account-button input {
+#edit-account-button button {
   background: #529a79;
 }

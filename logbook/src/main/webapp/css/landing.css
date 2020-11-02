@@ -42,7 +42,7 @@
   top: 0;
 }
 
-#landing-signin-button input {
+#landing-signin-button button {
   font-size: 1.2rem;
   font-weight: bold;
   letter-spacing: .08em;
@@ -56,9 +56,4 @@
   overflow: hidden;
   box-sizing: content-box;
   margin-top: 15px;
-}
-
-@keyframes slide {
-  from { margin-left: 0%}
-  to { margin-left: 125%; }
 }
