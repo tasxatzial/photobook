@@ -62,17 +62,3 @@
   from { margin-left: 0%}
   to { margin-left: 125%; }
 }
-
-.landing-loader {
-  animation-name: slide;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  width: 25%;
-  height: 5px;
-  position: absolute;
-  bottom: 0;
-  left: -25%;
-  background: #A2AEC0;
-}

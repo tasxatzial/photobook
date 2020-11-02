@@ -20,27 +20,20 @@ var Landing = (function() {
   function showSignin() {
     Requests.cancelExcept(null);
     var signinButton = document.getElementById('signin-nav-button');
-    var landingLoader = null;
     var data = new FormData();
     data.append('action', 'GetSignin');
-    var ID = null;
-    ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
-      failCallback(ID, signinButton, landingLoader);
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
+      failCallback(ID, signinButton);
     }));
 
     if (signinButton) {
-      var loader = document.querySelector('.navbar-loader');
-      if (!loader) {
-        signinButton.classList.remove('navbar-notloading-button');
-        var underline = document.querySelector('.navbar-underline');
-        underline.style.display = 'none';
-        loader = document.createElement('div');
-        loader.className = 'navbar-loader';
-        signinButton.appendChild(loader);
-      }
-    } else {
-      landingLoader = document.getElementById('landing-loader');
-      landingLoader.classList.add('landing-loader');
+      signinButton.blur();
+    }
+    var loader = document.querySelector('bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.nonav.appendChild(loader);
     }
 
     function successCallback() {
@@ -63,33 +56,26 @@ var Landing = (function() {
   function showSignup() {
     Requests.cancelExcept(null);
     var signupButton = document.getElementById('signup-nav-button');
-    var landingLoader = null;
     var data = new FormData();
     data.append('action', 'GetSignup');
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, function () {
-      failCallback(ID, signupButton, landingLoader);
+      failCallback(ID, signupButton);
     }));
 
     if (signupButton) {
-      var loader = document.querySelector('.navbar-loader');
-      if (!loader) {
-        signupButton.classList.remove('navbar-notloading-button');
-        var underline = document.querySelector('.navbar-underline');
-        underline.style.display = 'none';
-        loader = document.createElement('div');
-        loader.className = 'navbar-loader';
-        signupButton.appendChild(loader);
-      }
-    } else {
-      landingLoader = document.getElementById('landing-loader');
-      landingLoader.classList.add('landing-loader');
+      signupButton.blur();
+    }
+    var loader = document.querySelector('bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.nonav.appendChild(loader);
     }
 
     function successCallback() {
       Init.nonav.innerHTML = Requests.get(ID).responseText;
       document.getElementById('signup-parent').classList.add('parent-in-main');
 
-      //var signupButton = document.getElementById('signup-nav-button');
       if (signupButton) {
         Init.navbarContent.removeChild(signupButton);
       }
@@ -106,17 +92,10 @@ var Landing = (function() {
    * Called when the signup/signin form fails to load.
    * @param ID
    * @param button
-   * @param landingLoader
    */
-  function failCallback(ID, button, landingLoader) {
-    if (button) {
-      var loader = document.querySelector('.navbar-loader');
-      button.classList.add('navbar-notloading-button');
-      button.removeChild(loader);
-    }
-    if (landingLoader) {
-      landingLoader.classList.remove('landing-loader');
-    }
+  function failCallback(ID, button) {
+    var loader = document.querySelector('.bar-loader');
+    Init.nonav.removeChild(loader);
     if (Requests.get(ID).status === 0) {
       newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
     }

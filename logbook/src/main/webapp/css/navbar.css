@@ -41,39 +41,37 @@
   overflow: hidden;
   box-sizing: border-box;
   flex: 0 1 8rem;
+  border-top: 4px solid #585e71;
+  border-bottom: 4px solid #585e71;
+}
+
+.navbar-button:hover, .navbar-button:focus {
+  border-bottom: 4px solid #A2AEC0;
 }
 
 @keyframes slide {
-  from { margin-left: 0%}
+  from { margin-left: 0}
   to { margin-left: 125%; }
 }
 
-.navbar-loader {
+.bar-loader {
   animation-name: slide;
-  animation-duration: 1s;
+  animation-duration: 2s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-direction: alternate;
-  width: 50%;
+  width: 25%;
   position: absolute;
-  bottom: 0;
+  top: 2.8rem;
   height: 4px;
-  left: -50%;
-  background: #A2AEC0;
-}
-
-.navbar-underline {
-  display: none;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 4px;
-  width: 100%;
-  background: #A2AEC0;
+  left: -25%;
+  background: #529a79;
 }
 
 .navbar-active-button {
   background: #373b4b;
+  border-top: 4px solid #373b4b;
+  border-bottom: 4px solid #373b4b;
 }
 
 .test-div {
@@ -104,6 +102,10 @@
   flex-flow: row nowrap;
 }
 
+.navbar-button:focus, .navbar-button:hover {
+  border-bottom: 4px solid #A2AEC0;
+}
+
 @media only screen and (max-width: 67rem) {
   #navbar h1 {
     margin: 0 32px;
@@ -116,10 +118,19 @@
   #logout-button, #signin-nav-button, #signup-nav-button {
     padding: 1px 16px;
   }
-  #profile-button .navbar-button-text,
-  #show-users-button .navbar-button-text,
-  #show-posts .navbar-button-text,
-  #logout-button .navbar-button-text {
-    display: none;
+  .navbar-list {
+    position: absolute;
+    top: 2.8rem;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .navbar-list .test-div {
+    justify-content: flex-start;
+    padding: 0;
+  }
+  .navbar-button {
+    width: 100%;
+    padding-left: 16px;
   }
 }

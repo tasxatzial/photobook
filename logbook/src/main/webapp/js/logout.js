@@ -18,14 +18,12 @@ var Logout = (function() {
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
     var logoutButton = document.getElementById('logout-button');
     if (clickedLogout) {
+      logoutButton.blur();
       var loader = document.querySelector('.navbar-loader');
       if (!loader) {
-        logoutButton.classList.remove('navbar-notloading-button');
-        var underline = document.querySelector('.navbar-underline');
-        underline.style.display = 'none';
         loader = document.createElement('div');
-        loader.className = 'navbar-loader';
-        logoutButton.appendChild(loader);
+        loader.className = 'bar-loader';
+        Init.nonav.appendChild(loader);
       }
     }
 
@@ -38,10 +36,8 @@ var Logout = (function() {
     }
 
     function failCallback() {
-      var loader = document.querySelector('.navbar-loader');
-      logoutButton.classList.add('navbar-notloading-button');
-      logoutButton.removeChild(loader);
-
+      var loader = document.querySelector('.bar-loader');
+      Init.nonav.removeChild(loader);
       if (Requests.get(ID).status === 0) {
         newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
