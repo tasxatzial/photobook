@@ -29,12 +29,10 @@ var Logout = (function() {
     }
 
     function successCallback() {
-      var navbarList = document.querySelector('.navbar-list');
-      navbarContent.removeChild(navbarList);
       Init.nonav.classList.remove('no-nav-logged-in');
+      var navbarList = document.querySelector('.navbar-list');
       var navbarContent = document.getElementById('navbar-content');
-      var burgerButton = document.querySelector('.initial-burger-button');
-      navbarContent.removeChild(burgerButton);
+      navbarContent.removeChild(navbarList);
       Landing.init();
     }
 
