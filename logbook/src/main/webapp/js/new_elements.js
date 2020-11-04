@@ -33,7 +33,8 @@ var newElements = (function NewElements() {
 
     var button = document.createElement('button');
     button.innerHTML = value;
-
+    button.className = 'center-button';
+    
     div.appendChild(button);
 
     return div;

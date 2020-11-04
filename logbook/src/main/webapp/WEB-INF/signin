@@ -17,7 +17,7 @@
         <input type="password" class="sign-tofill" name="signin-password" id="signin-password" required>
       </div>
       <div class="sign-button" id="signin-button">
-        <button disabled>Sign in</button>
+        <button class="center-button" disabled>Sign in</button>
         <div id="signin-process-msg"></div>
       </div>
     </div>

@@ -139,7 +139,7 @@ textarea[name="signup-about"] {
   resize: none;
 }
 
-.back-button {
+button.back-button {
   grid-area: left;
   justify-self: start;
   font-size: 1rem;
@@ -149,7 +149,7 @@ textarea[name="signup-about"] {
   color: #3f85cb;
 }
 
-.back-button:hover, .back-button:focus {
+button.back-button:hover, button.back-button:focus {
   outline: 0;
   text-decoration: underline;
   top: 0;

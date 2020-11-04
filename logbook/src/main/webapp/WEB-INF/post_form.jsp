@@ -49,7 +49,7 @@
     </div>
   </div>
   <div class="sign-button" id="post-button">
-    <button disabled>Create post</button>
+    <button class="center-button" disabled>Create post</button>
     <div id="signin-process-msg"></div>
   </div>
 </div>
