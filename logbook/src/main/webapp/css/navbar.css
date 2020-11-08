@@ -46,10 +46,6 @@
   border-bottom: 4px solid #585e71;
 }
 
-.navbar-button:hover, .navbar-button:focus {
-  border-bottom: 4px solid #A2AEC0;
-}
-
 .navbar-button:active {
   top: 0;
 }
@@ -160,6 +156,7 @@
     font-size: 1.7rem;
     padding-left: 16px;
     padding-right: 16px;
+    padding-bottom: 5px;
     color: white;
     background: transparent;
     border: 0;
@@ -168,9 +165,23 @@
 
   .opened-burger-button {
     font-size: 2.4rem;
+    padding-bottom: 0;
+  }
+
+  .initial-burger-button:focus, .initial-burger-button:hover {
+    color: #76cea9;
   }
 
   .navigation-open {
     transform: translateX(-100%);
+  }
+
+  .navbar-button:focus, .navbar-button:hover {
+    border-bottom: 4px solid #585e71;
+    text-decoration: underline;
+  }
+  .navbar-button.navbar-active-button:focus, .navbar-button.navbar-active-button:hover {
+    border-bottom: 4px solid #373b4b;
+    text-decoration: underline;
   }
 }

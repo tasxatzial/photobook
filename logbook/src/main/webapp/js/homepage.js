@@ -52,6 +52,7 @@ var Homepage = (function() {
     Init.navbarContent.appendChild(burgerButton);
 
     burgerButton.addEventListener('click', function() {
+      this.blur();
       if (burgerButton.innerHTML === '☰') {
         burgerButton.innerHTML = '&times;';
         burgerButton.classList.add('opened-burger-button');
