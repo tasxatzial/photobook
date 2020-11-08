@@ -31,8 +31,12 @@ var Logout = (function() {
     function successCallback() {
       Init.nonav.classList.remove('no-nav-logged-in');
       var navbarList = document.querySelector('.navbar-list');
+      var burgerButton = document.querySelector('.initial-burger-button');
       var navbarContent = document.getElementById('navbar-content');
       navbarContent.removeChild(navbarList);
+      if (burgerButton) {
+        navbarContent.removeChild(burgerButton);
+      }
       Landing.init();
     }
 
