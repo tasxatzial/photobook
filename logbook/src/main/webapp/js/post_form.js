@@ -59,7 +59,7 @@ var PostForm = (function() {
     state.lastDetectionMethod = null;
     data.username = username;
 
-    el.createPostMsg = document.getElementById('sign-process-msg');
+    el.createPostMsg = document.getElementById('newpost-process-msg');
     el.description = document.getElementById('post-form-description');
     el.onlineResource = document.getElementById('post-form-online-page');
     el.selectOnlinePhoto = document.getElementById('select-online-photo');
