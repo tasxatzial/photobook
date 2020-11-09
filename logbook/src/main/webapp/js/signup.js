@@ -230,10 +230,10 @@ var Signup = (function() {
       formInput.enable(el.username);
       formInput.enable(el.email);
       if (Requests.get(ID).status === 0) {
-        formMsg.showError(el.signupMsg, 'Unable to send request');
+        formMsg.showError(el.step1Msg, 'Unable to send request');
       }
       else {
-        formMsg.showError(el.signupMsg, 'Error');
+        formMsg.showError(el.step1Msg, 'Error');
       }
       Init.scrollTo(el.step1ButtonContainer);
     }
