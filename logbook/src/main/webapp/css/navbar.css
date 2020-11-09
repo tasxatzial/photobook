@@ -63,10 +63,10 @@
   animation-direction: alternate;
   width: 25%;
   position: absolute;
-  top: 2.8rem;
-  height: 4px;
+  top: 0;
+  height: 3px;
   left: -25%;
-  background: #529a79;
+  background: #62b991;
 }
 
 .navbar-active-button {

@@ -13,6 +13,8 @@ var Logout = (function() {
     Init.clearFullWindowMsg();
     Requests.cancelExcept(null);
 
+    var navbarContent = document.getElementById('navbar-content');
+
     var data = new FormData();
     data.append("action", "Logout");
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
@@ -20,11 +22,11 @@ var Logout = (function() {
     var logoutButton = document.getElementById('logout-button');
     if (clickedLogout) {
       logoutButton.blur();
-      var loader = document.querySelector('.navbar-loader');
+      var loader = document.querySelector('.bar-loader');
       if (!loader) {
         loader = document.createElement('div');
         loader.className = 'bar-loader';
-        Init.nonav.appendChild(loader);
+        navbarContent.appendChild(loader);
       }
     }
 
@@ -32,8 +34,8 @@ var Logout = (function() {
       Init.nonav.classList.remove('no-nav-logged-in');
       var navbarList = document.querySelector('.navbar-list');
       var burgerButton = document.querySelector('.initial-burger-button');
-      var navbarContent = document.getElementById('navbar-content');
       navbarContent.removeChild(navbarList);
+      navbarContent.removeChild(loader);
       if (burgerButton) {
         navbarContent.removeChild(burgerButton);
       }
@@ -41,8 +43,7 @@ var Logout = (function() {
     }
 
     function failCallback() {
-      var loader = document.querySelector('.bar-loader');
-      Init.nonav.removeChild(loader);
+      navbarContent.removeChild(loader);
       if (Requests.get(ID).status === 0) {
         newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
