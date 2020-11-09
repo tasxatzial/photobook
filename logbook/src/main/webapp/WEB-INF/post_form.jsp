@@ -1,13 +1,14 @@
 <header>
   <h2>New Post</h2>
 </header>
+<p class="step-required-asterisk">(<span>*</span>) Required</p>
 <div id="post-form">
   <div class="sign-child">
-    <label for="post-form-description" class="sign-label signup-necessary">1. Description.</label>
+    <label for="post-form-description" class="sign-label signup-necessary">1. Description of your location.</label>
     <textarea name="post-form-description" class="sign-tofill" id="post-form-description"></textarea>
   </div>
   <div class="sign-child">
-    <p class="sign-label signup-necessary">2. Please enter a (latitude, longitude). You can use Geolocation or manually provide a Country/Place</p>
+    <p class="sign-label signup-necessary">2. Please enter the (latitude, longitude) of your location. You can detect it using either of the methods below.</p>
     <div class="post-form-options" id="post-form-location-choose">
       <label class="sign-label"><input type="radio" name="detect-method" id="post-form-auto-detect" checked>Geolocation</label><br>
       <label class="sign-label"><input type="radio" name="detect-method" id="post-form-place-detect">Country/Place</label>
@@ -31,11 +32,11 @@
     </div>
   </div>
   <div class="sign-child">
-    <label for="post-form-online-page" class="sign-label">3. You may provide a link to an online page.</label>
+    <label for="post-form-online-page" class="sign-label">3. You may provide a link to an online page related to your location.</label>
     <input type="text" name="post-form-online-page" id="post-form-online-page" class="sign-tofill">
   </div>
   <div class="sign-child">
-    <div class="sign-label">4. You may provide a link to an image. It can be an online image or you can select one from disk.</div>
+    <div class="sign-label">4. You may provide an image related to your location. Choose either of the options below.</div>
     <div class="post-form-options">
       <div id="select-online-photo">
         <label class="sign-label"><input type="checkbox">Online image</label>
