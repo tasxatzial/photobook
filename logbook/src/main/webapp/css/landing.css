@@ -13,12 +13,13 @@
 
 #landing-signup-msg {
   font-size: 1.2rem;
-  margin-right: 0.5em;
+  margin: .5em;
 }
 
 #landing-signup-container {
+  margin-top: 1em;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   justify-content: center;
 }
 
@@ -55,5 +56,5 @@
   position: relative;
   overflow: hidden;
   box-sizing: content-box;
-  margin-top: 15px;
+  margin-top: 20px;
 }
