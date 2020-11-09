@@ -202,7 +202,7 @@ var Posts = (function() {
       el.postFormLoadMsg.id = 'post-form-load-msg';
 
       el.postButton = newElements.createBlueButton('+ New Post', 'new-post-button');
-      el.postButton.addEventListener('click', function() {
+      el.postButton.children[0].addEventListener('click', function() {
         getPostForm(username);
       });
       postsParent.appendChild(el.postButton);

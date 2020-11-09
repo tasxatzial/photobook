@@ -174,7 +174,7 @@ var ShowProfile = (function() {
     showProfileButton.addEventListener('click', function () {
       ShowProfile.init(username, false);
       showBorders(showProfileButton, showPostsButton, editAccountButton);
-      this.blur();
+      showProfileButton.blur();
     });
     showPostsButton.addEventListener('click', function () {
       Posts.init(username);
