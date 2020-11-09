@@ -168,10 +168,6 @@
     padding-bottom: 0;
   }
 
-  .initial-burger-button:focus, .initial-burger-button:hover {
-    color: #76cea9;
-  }
-
   .navigation-open {
     transform: translateX(-100%);
   }
