@@ -72,7 +72,7 @@ public class AccountInfo extends HttpServlet {
                     setGender(request);
                     request.setAttribute("interests", user.getInterests());
                     request.setAttribute("about", user.getInfo());
-                    request.setAttribute("title", "Update account");
+                    request.setAttribute("title", "My account");
                     request.setAttribute("button", "Update");
                     RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/signup.jsp");
                     dispatcher.forward(request, response);
