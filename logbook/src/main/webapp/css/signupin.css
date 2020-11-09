@@ -56,4 +56,10 @@
 #signup-process-msg, #signin-process-msg, #signup-step1-process-msg, #newpost-process-msg {
   grid-area: bottom-center;
   justify-self: center;
+  height: 0;
+  transition: height 300ms;
+}
+
+#signin-process-msg.msg-open, #signup-process-msg.msg-open, #signup-step1-process-msg.msg-open, #newpost-process-msg.msg-open {
+  height: 1rem;
 }

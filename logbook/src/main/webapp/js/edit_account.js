@@ -109,6 +109,8 @@ var EditAccount = (function() {
   function updateAccount() {
     Requests.cancelExcept(null);
     disableInputs();
+    Init.scrollTo(el.signupButton);
+    el.signupMsg.classList.add('msg-open');
     formMsg.showElement(el.signupMsg, Init.loader);
 
     var data = gatherData();
@@ -270,9 +272,7 @@ var EditAccount = (function() {
       }
     }
 
-    el.signupButton.addEventListener('click', function() {
-      clickSignup();
-    });
+    el.signupButton.addEventListener('click', clickSignup);
 
     el.signupButton.disabled = false;
     el.step4BackButton.classList.add('signup-hidden');

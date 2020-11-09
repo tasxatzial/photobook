@@ -219,6 +219,7 @@ var PostForm = (function() {
   function createPost() {
     Requests.cancelExcept(null);
     Init.scrollTo(el.postButton);
+    el.createPostMsg.classList.add('msg-open');
 
     if (data.loc.lat === null || data.loc.lon === null || el.description.value.trim() === '') {
       formMsg.showError(el.createPostMsg, 'Please provide all required fields');
@@ -226,6 +227,7 @@ var PostForm = (function() {
     }
 
     disableInputs();
+
     formMsg.showElement(el.createPostMsg, Init.loader);
 
     var formData = new FormData();

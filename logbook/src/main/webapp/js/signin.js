@@ -40,7 +40,12 @@ var Signin = (function() {
     Requests.cancelExcept(null);
     Init.scrollTo(el.signinButton);
     disableInputs();
-    formMsg.showElement(el.signinMsg, Init.loader);
+    el.signinMsg.classList.add('msg-open');
+
+    setTimeout(function() {
+      formMsg.showElement(el.signinMsg, Init.loader);
+    }, 150);
+
 
     /* prepare data */
     var data = new FormData();
@@ -49,7 +54,11 @@ var Signin = (function() {
     data.append('action', 'Signin');
 
     /* make the call */
-    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, function() {
+      setTimeout(successCallback, 300);
+    }, function() {
+      setTimeout(failCallback, 300);
+    }));
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);

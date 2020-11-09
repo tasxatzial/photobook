@@ -72,7 +72,7 @@ var Signup = (function() {
     formInput.enable(el.interests);
     formInput.enable(el.about);
     formSubmit.enable(el.signupButton);
-    formButton.enable(el.step4BackButton);
+    el.step4BackButton.disabled = false;
   }
 
   /**
@@ -82,7 +82,7 @@ var Signup = (function() {
     formInput.disable(el.interests);
     formInput.disable(el.about);
     formSubmit.disable(el.signupButton);
-    formButton.disable(el.step4BackButton);
+    el.step4BackButton.disabled = true;
   }
 
   /**
@@ -91,11 +91,19 @@ var Signup = (function() {
   function doSignup() {
     Requests.cancelExcept(null);
     disableInputs();
-    formMsg.showElement(el.signupMsg, Init.loader);
+
+    el.signupMsg.classList.add('msg-open');
+    setTimeout(function() {
+      formMsg.showElement(el.signupMsg, Init.loader);
+    }, 150);
 
     var data = gatherData();
     data.append('action', 'Signup');
-    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, function() {
+      setTimeout(successCallback, 300);
+    }, function() {
+      setTimeout(failCallback, 300);
+    }));
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
@@ -116,7 +124,6 @@ var Signup = (function() {
         Logout.showExpired();
         return;
       }
-
       if (Requests.get(ID).status === 500) {
         formMsg.showError(el.signupMsg, 'Server error');
         Init.scrollTo(el.signupButton);
@@ -168,14 +175,23 @@ var Signup = (function() {
 
     /* also disable step1 next button */
     formSubmit.disable(el.step1NextButton);
-    formMsg.showElement(el.step1Msg, Init.loader);
+
+    el.step1Msg.classList.add('msg-open');
+    setTimeout(function() {
+      formMsg.showElement(el.step1Msg, Init.loader);
+    }, 150);
 
     var formData = new FormData();
     formData.append('action', 'CheckUsernameEmailDB');
     formData.append('username', el.username.value);
     formData.append('email', el.email.value);
 
-    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
+    var ID = Requests.add(ajaxRequest('POST', 'Main', formData,
+        function() {
+      setTimeout(successCallback, 300);
+        }, function() {
+      setTimeout(failCallback, 300);
+    }));
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
@@ -183,6 +199,7 @@ var Signup = (function() {
       if (response.username === 'unused' && response.email === 'unused') {
         el.step1Content.classList.add('signup-hidden');
         el.step2Content.classList.remove('signup-hidden');
+        el.step1Msg.classList.remove('msg-open');
       }
       else {
         if (response.username !== 'unused') {
@@ -286,6 +303,8 @@ var Signup = (function() {
       el.step2Content.classList.remove('signup-hidden');
     });
     el.step4BackButton.addEventListener('click', function() {
+      el.signupMsg.classList.remove('msg-open');
+      formMsg.clear(el.signupMsg);
       el.step4Content.classList.add('signup-hidden');
       el.step3Content.classList.remove('signup-hidden');
     });
