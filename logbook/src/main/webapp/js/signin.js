@@ -49,7 +49,7 @@ var Signin = (function() {
 
     /* prepare data */
     var data = new FormData();
-    data.append(el.username.name.split('-')[1], el.username.value);
+    data.append(el.username.name.split('-')[1], el.username.value.toLowerCase());
     data.append(el.password.name.split('-')[1], el.password.value);
     data.append('action', 'Signin');
 

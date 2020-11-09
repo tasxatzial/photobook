@@ -51,7 +51,12 @@ var Signup = (function() {
     var data = new FormData();
     var inputs = ValidChecker.getCheckedInputs();
     for (var i = 0; i < inputs.length; i++) {
-      data.append(inputs[i].name.split('-')[1], inputs[i].value);
+      var name = inputs[i].name.split('-')[1];
+      if (name === 'username' || name === 'email') {
+        data.append(name, inputs[i].value.toLowerCase());
+      } else {
+        data.append(name, inputs[i].value);
+      }
     }
 
     for (var j = 0; j < el.gender.length; j++) {
@@ -183,8 +188,8 @@ var Signup = (function() {
 
     var formData = new FormData();
     formData.append('action', 'CheckUsernameEmailDB');
-    formData.append('username', el.username.value);
-    formData.append('email', el.email.value);
+    formData.append('username', el.username.value.toLowerCase());
+    formData.append('email', el.email.value.toLowerCase());
 
     var ID = Requests.add(ajaxRequest('POST', 'Main', formData,
         function() {
