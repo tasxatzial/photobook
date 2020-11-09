@@ -38,3 +38,7 @@
 #edit-account-button button {
   background: #529a79;
 }
+
+#account-subsection .signup-section {
+  padding: 0;
+}
