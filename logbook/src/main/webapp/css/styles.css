@@ -38,6 +38,7 @@ body {
 
 /* blue button */
 .sign-button .center-button {
+  display: block;
   grid-area: center;
   top: 0;
   box-shadow: none;

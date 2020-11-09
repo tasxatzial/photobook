@@ -55,6 +55,7 @@
 
 #signup-process-msg, #signin-process-msg, #signup-step1-process-msg, #newpost-process-msg {
   grid-area: bottom-center;
+  text-align: center;
   justify-self: center;
   height: 0;
   transition: height 300ms;
