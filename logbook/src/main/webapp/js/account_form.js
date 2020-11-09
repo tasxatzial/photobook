@@ -130,7 +130,10 @@ var AccountInfo = (function() {
       el.confirmDelete.children[0].appendChild(el.deleteAccountMsg);
       deleteAccount();
     });
-    yesNoButtons.children[2].addEventListener('click', Init.clearFullWindowMsg);
+    yesNoButtons.children[2].addEventListener('click', function() {
+      el.deleteAccountDiv.children[0].disabled = false;
+      Init.clearFullWindowMsg();
+    });
 
     el.confirmDelete = newElements.createFullWindow('Your account & posts will be deleted!');
     el.confirmDelete.children[0].appendChild(yesNoButtons);
@@ -150,7 +153,12 @@ var AccountInfo = (function() {
     el.editAccountDiv.children[0].addEventListener('click', editAccount);
 
     el.deleteAccountDiv = newElements.createBlueButton('Delete Account', 'delete-account-button');
-    el.deleteAccountDiv.children[0].addEventListener('click', showConfirmDelete);
+    el.deleteAccountDiv.children[0].addEventListener('click', function() {
+      el.deleteAccountDiv.children[0].disabled = true;
+      setTimeout(function() {
+        showConfirmDelete();
+      }, 200);
+    });
 
     el.showEditAccountMsg = document.createElement('div');
     el.showEditAccountMsg.id = 'show-edit-account-msg';
