@@ -94,12 +94,10 @@ var ValidChecker = (function() {
 
     /* listeners for all elements except passw2 */
     function addValidPatternListeners(element) {
-      element.checkedValid = 0;
       element.invalidMsg = 'Invalid';
       element.scrollElem = element;
       element.addEventListener('input', function () {
         signupMsg.innerHTML = '';
-        element.checkedValid = 0;
         for (var child = element.parentNode.children[0].firstChild; child !== null; child = child.nextSibling) {
           if (child.className === 'invalid-value') {
             element.parentNode.children[0].removeChild(child);
@@ -107,11 +105,9 @@ var ValidChecker = (function() {
         }
       });
       element.addEventListener('focusout', function () {
-        if (!element.checkedValid) {
-          checkValid(element);
-          if (element.value && !element.isValid) {
-            showInvalidMsg(element, element.invalidMsg);
-          }
+        checkValid(element);
+        if (element.value && !element['data-isValid']) {
+          showInvalidMsg(element, element.invalidMsg);
         }
       });
     }
@@ -121,23 +117,19 @@ var ValidChecker = (function() {
       passwd1.addEventListener('input', clearMismatchMsg);
       passwd1.addEventListener('focusout', checkMismatch);
 
-      passwd2.checkedValid = 0;
       passwd2.scrollElem = passwd1;
       passwd2.invalidMsg = 'Mismatch';
       passwd2.addEventListener('input', clearMismatchMsg);
       passwd2.addEventListener('focusout', checkMismatch);
 
       function checkMismatch() {
-        if (!passwd1.checkedValid || !passwd2.checkedValid) {
-          checkValid(passwd2);
-          if (passwd1.value && passwd2.value && passwd1.isValid && !passwd2.isValid) {
-            showInvalidMsg(passwd2, passwd2.invalidMsg);
-          }
+        checkValid(passwd2);
+        if (passwd1.value && passwd2.value && passwd1['data-isValid'] && !passwd2['data-isValid']) {
+          showInvalidMsg(passwd2, passwd2.invalidMsg);
         }
       }
       function clearMismatchMsg() {
         signupMsg.innerHTML = '';
-        passwd2.checkedValid = 0;
         if (passwd2.parentNode.children[0].children[1]) {
           passwd2.parentNode.children[0].removeChild(passwd2.parentNode.children[0].children[1]);
         }
@@ -146,18 +138,15 @@ var ValidChecker = (function() {
   }
 
   /**
-   * Checks if an input field has a valid value and modifies its isValid attribute.
+   * Checks if an input field has a valid value and modifies its data-isValid attribute.
    * @param element
    */
   function checkValid(element) {
-    if (!element.checkedValid) {
-      element.checkedValid = 1;
-      if (element.valid()) {
-        element.isValid = 1;
-      }
-      else {
-        element.isValid = 0;
-      }
+    if (element.valid()) {
+      element['data-isValid'] = 1;
+    }
+    else {
+      element['data-isValid'] = 0;
     }
   }
 
@@ -187,7 +176,7 @@ var ValidChecker = (function() {
   function checkInvalidElements(array) {
     for (var j = 0; j < array.length; j++) {
       checkValid(array[j]);
-      if (!array[j].isValid) {
+      if (!array[j]['data-isValid']) {
         showInvalidMsg(array[j], array[j].invalidMsg);
         return array[j].scrollElem;
       }

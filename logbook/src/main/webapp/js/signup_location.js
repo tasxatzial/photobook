@@ -232,12 +232,10 @@ var SignUpLocation = (function () {
         var countryParent = document.getElementById('signup-country-parent');
         if (countryParent.children[0].children[2]) {
           countryParent.children[0].removeChild(countryParent.children[0].children[2]);
-          countryParent.children[1].checkedValid = 0;
         }
         var cityParent = document.getElementById('signup-city-parent');
         if (cityParent.children[0].children[1]) {
           cityParent.children[0].removeChild(cityParent.children[0].children[1]);
-          cityParent.children[1].checkedValid = 0;
         }
 
         /* else update country/city/address fields */
