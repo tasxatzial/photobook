@@ -32,8 +32,7 @@ body {
   position: relative;
 }
 
-/* blue button */
-.sign-button .center-button {
+.main-button {
   top: 0;
   box-shadow: none;
   font-family: inherit;
@@ -47,11 +46,22 @@ body {
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   text-align: center;
   cursor: pointer;
-  margin: 15px auto;
+  margin-top: 16px;
+  margin-bottom: 16px;
   transition: top 200ms, box-shadow 200ms;
 }
 
-#landing-section, #signin-section, .signup-section {
+.center-button {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.right-button {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+#landing-section, #signin-section, #signup-section {
   min-height: calc(100vh - 2.8rem);
   display: flex;
   justify-content: center;
@@ -64,7 +74,7 @@ input[type="button"]:focus, button:focus {
   outline: 0;
 }
 
-.sign-button .center-button:focus, .sign-button .center-button:hover {
+.main-button:focus, .main-button:hover {
   top: -1px;
   box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.4);
 }

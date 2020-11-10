@@ -5,7 +5,7 @@
     </header>
     <div id="signin-content">
       <div class="sign-child">
-        <label for="signin-username" class="sign-label">Username</label><br>
+        <label for="signin-username" class="sign-label sign-top-label">Username</label><br>
         <div id="signin-photo-button-parent">
           <input type="text" class="sign-tofill" name="signin-username" id="signin-username" required>
           <button type="button" class="signin-photo-button" disabled><img src="images/camera-icon.png" alt="Cam"></button>
@@ -13,11 +13,11 @@
         </div>
       </div>
       <div id="signin-password-parent" class="sign-child">
-        <label for="signin-password" class="sign-label">Password</label><br>
+        <label for="signin-password" class="sign-label sign-top-label">Password</label><br>
         <input type="password" class="sign-tofill" name="signin-password" id="signin-password" required>
       </div>
       <div class="sign-button" id="signin-button">
-        <button class="center-button" disabled>Sign in</button>
+        <button class="main-button center-button" disabled>Sign in</button>
       </div>
       <div id="signin-process-msg"></div>
     </div>

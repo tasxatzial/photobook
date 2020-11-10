@@ -4,6 +4,10 @@
   flex: 0 1 21rem;
 }
 
+#signup-parent.signup-parent-initial.parent-in-main {
+  padding-top: 8px;
+}
+
 .post-signup-section {
   display: block;
 }
@@ -151,4 +155,8 @@ button.back-button {
 button.back-button:hover, button.back-button:focus {
   outline: 0;
   text-decoration: underline;
+}
+
+.next-button {
+  background: #3f85cb;
 }

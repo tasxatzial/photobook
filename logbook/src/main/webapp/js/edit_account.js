@@ -278,7 +278,7 @@ var EditAccount = (function() {
     }
 
     el.signupButton.addEventListener('click', clickSignup);
-
+    el.signupButton.classList.add('center-button');
     el.signupButton.disabled = false;
     el.step4BackButton.classList.add('signup-hidden');
     el.step1ButtonContainer.classList.add('signup-hidden');
@@ -308,6 +308,7 @@ var EditAccount = (function() {
     SignUpFace.init();
     data.oldEmail = el.email.value;
     el.email.disabled = false;
+
   }
 
   return {

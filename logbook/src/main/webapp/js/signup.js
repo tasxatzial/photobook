@@ -221,13 +221,13 @@ var Signup = (function() {
           Init.scrollTo(el.email.parentNode);
         }
       }
-      formSubmit.enable(el.step1NextButton);
+      formSubmit.enableNext(el.step1NextButton);
       formInput.enable(el.username);
       formInput.enable(el.email);
     }
 
     function failCallback() {
-      formSubmit.enable(el.step1NextButton);
+      formSubmit.enableNext(el.step1NextButton);
       formInput.enable(el.username);
       formInput.enable(el.email);
       if (Requests.get(ID).status === 0) {
@@ -273,6 +273,8 @@ var Signup = (function() {
     el.step2BackButton = el.step2ButtonContainer.children[0];
     el.step3BackButton = el.step3ButtonContainer.children[0];
     el.step4BackButton = el.signupButtonContainer.children[0];
+
+    el.signupButton.classList.add('right-button');
 
     el.step1NextButton.addEventListener('click', function() {
       gotoStep2();

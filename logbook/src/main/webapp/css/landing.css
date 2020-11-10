@@ -1,6 +1,7 @@
 #landing-page {
   max-width: 28rem;
   min-height: auto;
+  padding-top: 8px;
 }
 
 #landing-signin-msg, #landing-signup-msg {

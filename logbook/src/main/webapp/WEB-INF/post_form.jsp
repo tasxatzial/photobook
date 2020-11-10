@@ -4,11 +4,11 @@
 <p class="step-required-asterisk">(<span>*</span>) Required</p>
 <div id="post-form">
   <div class="sign-child">
-    <label for="post-form-description" class="sign-label signup-necessary">1. Description of your location.</label>
+    <label for="post-form-description" class="sign-label sign-top-label signup-necessary">1. Description of your location.</label>
     <textarea name="post-form-description" class="sign-tofill" id="post-form-description"></textarea>
   </div>
   <div class="sign-child">
-    <p class="sign-label signup-necessary">2. Please enter the (latitude, longitude) of your location. You can detect it using either of the methods below.</p>
+    <p class="sign-label signup-necessary sign-top-label">2. Please enter the (latitude, longitude) of your location. You can detect it using either of the methods below.</p>
     <div class="post-form-options" id="post-form-location-choose">
       <label class="sign-label"><input type="radio" name="detect-method" id="post-form-auto-detect" checked>Geolocation</label><br>
       <label class="sign-label"><input type="radio" name="detect-method" id="post-form-place-detect">Country/Place</label>
@@ -32,11 +32,11 @@
     </div>
   </div>
   <div class="sign-child">
-    <label for="post-form-online-page" class="sign-label">3. You may provide a link to an online page related to your location.</label>
+    <label for="post-form-online-page" class="sign-label sign-top-label">3. You may provide a link to an online page related to your location.</label>
     <input type="text" name="post-form-online-page" id="post-form-online-page" class="sign-tofill">
   </div>
   <div class="sign-child">
-    <div class="sign-label">4. You may provide an image related to your location. Choose either of the options below.</div>
+    <div class="sign-label sign-top-label">4. You may provide an image related to your location. Choose either of the options below.</div>
     <div class="post-form-options">
       <div id="select-online-photo">
         <label class="sign-label"><input type="checkbox">Online image</label>
@@ -50,7 +50,7 @@
     </div>
   </div>
   <div class="sign-button" id="post-button">
-    <button class="center-button" disabled>Create post</button>
+    <button class="main-button center-button" disabled>Create post</button>
   </div>
   <div id="newpost-process-msg"></div>
 </div>

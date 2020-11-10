@@ -103,6 +103,10 @@ var formSubmit = (function() {
     input.disabled = false;
     input.style.background ='#529a79';
   }
+  function enableNext(input) {
+    input.disabled = false;
+    input.style.background ='#3f85cb';
+  }
   function disable(input) {
     input.disabled = true;
     input.style.background = 'gray';
@@ -110,6 +114,7 @@ var formSubmit = (function() {
 
   return {
     enable: enable,
+    enableNext: enableNext,
     disable: disable
   };
 }());

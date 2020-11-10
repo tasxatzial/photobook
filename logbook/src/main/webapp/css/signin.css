@@ -2,6 +2,7 @@
 #signin-parent {
   max-width: 20rem;
   min-height: auto;
+  padding-top: 8px;
 }
 
 /* container of the select photo button */
