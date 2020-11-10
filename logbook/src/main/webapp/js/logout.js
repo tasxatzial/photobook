@@ -35,7 +35,9 @@ var Logout = (function() {
       var navbarList = document.querySelector('.navbar-list');
       var burgerButton = document.querySelector('.initial-burger-button');
       navbarContent.removeChild(navbarList);
-      navbarContent.removeChild(loader);
+      if (loader) {
+        navbarContent.removeChild(loader);
+      }
       if (burgerButton) {
         navbarContent.removeChild(burgerButton);
       }
@@ -43,7 +45,9 @@ var Logout = (function() {
     }
 
     function failCallback() {
-      navbarContent.removeChild(loader);
+      if (loader) {
+        navbarContent.removeChild(loader);
+      }
       if (Requests.get(ID).status === 0) {
         newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
