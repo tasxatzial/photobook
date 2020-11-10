@@ -131,8 +131,8 @@ textarea[name="signup-about"] {
 .step-required-asterisk {
   margin-top: 0;
   margin-bottom: 1.2em;
-  width: fit-content;
-  margin-left: auto;
+  width: 100%;
+  text-align: right;
 }
 
 .step-required-asterisk span {
