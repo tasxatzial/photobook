@@ -29,7 +29,6 @@ body {
 /* blue button container */
 .sign-button {
   display: flex;
-  position: relative;
 }
 
 .main-button {

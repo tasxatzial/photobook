@@ -144,7 +144,6 @@ textarea[name="signup-about"] {
 }
 
 button.back-button {
-  position: absolute;
   font-size: 1rem;
   background: transparent;
   border: none;
