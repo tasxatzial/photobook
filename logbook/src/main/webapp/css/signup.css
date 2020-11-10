@@ -140,8 +140,7 @@ textarea[name="signup-about"] {
 }
 
 button.back-button {
-  grid-area: left;
-  justify-self: start;
+  position: absolute;
   font-size: 1rem;
   background: transparent;
   border: none;
@@ -152,5 +151,4 @@ button.back-button {
 button.back-button:hover, button.back-button:focus {
   outline: 0;
   text-decoration: underline;
-  top: 0;
 }

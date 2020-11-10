@@ -32,7 +32,7 @@ var Signup = (function() {
   /**
    * The first function that is called when the next button in step1 is clicked.
    */
-  function clickSignup() {
+  function gotoStep2() {
     formMsg.clear(el.signupMsg);
     var invalidElement = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep1());
     if (invalidElement) {
@@ -205,6 +205,7 @@ var Signup = (function() {
         el.step1Content.classList.add('signup-hidden');
         el.step2Content.classList.remove('signup-hidden');
         el.step1Msg.classList.remove('msg-open');
+        el.step2BackButton.style.top = computeTop(el.step2BackButton);
       }
       else {
         if (response.username !== 'unused') {
@@ -274,7 +275,7 @@ var Signup = (function() {
     el.step4BackButton = el.signupButtonContainer.children[0];
 
     el.step1NextButton.addEventListener('click', function() {
-      clickSignup();
+      gotoStep2();
     });
     el.step2NextButton.addEventListener('click', function() {
       var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep2());
@@ -284,6 +285,7 @@ var Signup = (function() {
       else {
         el.step2Content.classList.add('signup-hidden');
         el.step3Content.classList.remove('signup-hidden');
+        el.step3BackButton.style.top = computeTop(el.step3BackButton);
       }
     });
     el.step3NextButton.addEventListener('click', function() {
@@ -294,6 +296,7 @@ var Signup = (function() {
       else {
         el.step3Content.classList.add('signup-hidden');
         el.step4Content.classList.remove('signup-hidden');
+        el.step4BackButton.style.top = computeTop(el.step4BackButton);
       }
     });
     el.signupButton.addEventListener('click', function() {
@@ -328,6 +331,15 @@ var Signup = (function() {
     SignUpLocation.init();
     SignUpFace.init();
     el.email.disabled = false;
+  }
+
+  /* used to compute the top of the go back buttons */
+  function computeTop(element) {
+    var elementHeight = window.getComputedStyle(element).height;
+    var elementHeightNum = elementHeight.substring(0, elementHeight.length - 2);
+    var parentHeight = window.getComputedStyle(element.parentElement).height;
+    var parentHeightNum = parentHeight.substring(0, parentHeight.length - 2);
+    return 0.5 *(parentHeightNum - elementHeightNum) + 'px';
   }
 
   return {

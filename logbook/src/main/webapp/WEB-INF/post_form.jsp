@@ -51,6 +51,6 @@
   </div>
   <div class="sign-button" id="post-button">
     <button class="center-button" disabled>Create post</button>
-    <div id="newpost-process-msg"></div>
   </div>
+  <div id="newpost-process-msg"></div>
 </div>

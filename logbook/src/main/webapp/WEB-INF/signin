@@ -18,8 +18,8 @@
       </div>
       <div class="sign-button" id="signin-button">
         <button class="center-button" disabled>Sign in</button>
-        <div id="signin-process-msg"></div>
       </div>
+      <div id="signin-process-msg"></div>
     </div>
   </div>
 </div>
