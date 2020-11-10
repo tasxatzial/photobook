@@ -245,11 +245,6 @@ var SignUpLocation = (function () {
 
         formMsg.showOK(el.geolocSearchMsg, 'Found');
         initMap();
-
-        /* show map only if the returned country/city values permit search */
-        if (LocationSearch.isSearchDataReady(el.city, el.country)) {
-          toggleMap();
-        }
       }
     }
 
