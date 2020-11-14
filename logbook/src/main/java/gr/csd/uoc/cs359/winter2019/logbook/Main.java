@@ -35,12 +35,12 @@ public class Main extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession oldSession = null;
-        PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
 
         /* we need a valid action parameter */
         if (request.getParameter("action") == null) {
             response.setContentType("application/json;charset=UTF-8");
+            PrintWriter out = response.getWriter();
             json.put("MISSING_FIELDS", "action");
             out.print(json.toJSONString());
             response.setStatus(400);
@@ -82,6 +82,7 @@ public class Main extends HttpServlet {
                 }
                 else {
                     response.setContentType("application/json;charset=UTF-8");
+                    PrintWriter out = response.getWriter();
                     json.put("ERROR", "NO_SESSION");
                     out.print(json.toJSONString());
                     response.setStatus(401);
@@ -109,6 +110,7 @@ public class Main extends HttpServlet {
                 break;
             default:
                 response.setContentType("application/json;charset=UTF-8");
+                PrintWriter out = response.getWriter();
                 json.put("INVALID_PARAMETERS", "action");
                 out.print(json.toJSONString());
                 response.setStatus(400);

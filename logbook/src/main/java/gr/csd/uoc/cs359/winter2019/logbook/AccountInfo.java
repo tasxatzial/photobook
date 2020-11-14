@@ -36,7 +36,6 @@ public class AccountInfo extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
-        PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
 
         /* if we are requesting to edit the account info then fill in the signup form before returning the the form */
@@ -51,6 +50,7 @@ public class AccountInfo extends HttpServlet {
                 /* get the account info only for the logged in user */
                 if (user == null) {
                     response.setContentType("application/json;charset=UTF-8");
+                    PrintWriter out = response.getWriter();
                     json.put("ERROR", "INVALID_USER");
                     out.print(json.toJSONString());
                     response.setStatus(400);
@@ -80,6 +80,7 @@ public class AccountInfo extends HttpServlet {
             }
             else {
                 response.setContentType("application/json;charset=UTF-8");
+                PrintWriter out = response.getWriter();
                 json.put("ERROR", "NO_SESSION");
                 out.print(json.toJSONString());
                 response.setStatus(401);
@@ -111,6 +112,7 @@ public class AccountInfo extends HttpServlet {
         }
         else {
             response.setContentType("application/json;charset=UTF-8");
+            PrintWriter out = response.getWriter();
             json.put("ERROR", "INVALID_ACTION");
             out.print(json.toJSONString());
             response.setStatus(400);
