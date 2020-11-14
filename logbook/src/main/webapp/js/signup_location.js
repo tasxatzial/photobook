@@ -167,6 +167,7 @@ var SignUpLocation = (function () {
       state.response = JSON.parse(Requests.get(ID).responseText)[0];
       if (state.response) {
         toggleMap();
+        toggleMap();
       }
       else {
         formMsg.showError(el.nominatimSearchMsg, 'Not found');
@@ -175,7 +176,7 @@ var SignUpLocation = (function () {
       formInput.enable(el.city);
       formInput.enable(el.address);
       formButton.enable(el.geolocSearchButton);
-      formButton.enable(el.nominatimSearchButton);
+      //formButton.enable(el.nominatimSearchButton);
     }
 
     function failCallback() {
@@ -219,9 +220,9 @@ var SignUpLocation = (function () {
       formInput.enable(el.city);
       formInput.enable(el.address);
       formButton.enable(el.geolocSearchButton);
-      if (LocationSearch.isSearchDataReady(el.city, el.country)) {
+      /* if (LocationSearch.isSearchDataReady(el.city, el.country)) {
         formButton.enable(el.nominatimSearchButton);
-      }
+      } */
 
       /* show error if 1) all country/city/address are empty
                       2) reverse nominatim search returns an unknown location */
@@ -245,6 +246,12 @@ var SignUpLocation = (function () {
 
         formMsg.showOK(el.geolocSearchMsg, 'Found');
         initMap();
+
+        /* show map only if the returned country/city values permit search */
+        if (LocationSearch.isSearchDataReady(el.city, el.country)) {
+          toggleMap();
+          toggleMap();
+        }
       }
     }
 
