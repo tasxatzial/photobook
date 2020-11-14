@@ -277,9 +277,11 @@ var Signup = (function() {
     el.signupButton.classList.add('right-button');
 
     el.step1NextButton.addEventListener('click', function() {
+      this.blur();
       gotoStep2();
     });
     el.step2NextButton.addEventListener('click', function() {
+      this.blur();
       var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep2());
       if (invalidEvent) {
         Init.scrollTo(invalidEvent.parentNode);
@@ -291,6 +293,7 @@ var Signup = (function() {
       }
     });
     el.step3NextButton.addEventListener('click', function() {
+      this.blur();
       var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep3());
       if (invalidEvent) {
         Init.scrollTo(invalidEvent.parentNode);
@@ -302,6 +305,7 @@ var Signup = (function() {
       }
     });
     el.signupButton.addEventListener('click', function() {
+      this.blur();
       doSignup();
     });
     el.step2BackButton.addEventListener('click', function() {
