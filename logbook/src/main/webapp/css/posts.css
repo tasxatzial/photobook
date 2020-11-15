@@ -68,7 +68,7 @@
   flex-flow: column;
 }
 
-#delete-post-button input {
+#delete-post-button .main-button {
   background: #ee5f66;
 }
 
