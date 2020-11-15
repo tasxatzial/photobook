@@ -90,6 +90,7 @@ input[type="button"]:active, button:active {
 
 #account-delete-confirm-text, #post-delete-confirm-text, #delete-post-msg {
   margin-bottom: 16px;
+  text-align: center;
 }
 
 .parent-in-main {

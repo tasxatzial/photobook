@@ -64,6 +64,10 @@
   margin-right: auto;
 }
 
+#delete-post-button {
+  flex-flow: column;
+}
+
 #delete-post-button input {
   background: #ee5f66;
 }
