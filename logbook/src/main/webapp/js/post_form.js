@@ -102,7 +102,10 @@ var PostForm = (function() {
       selectPlaceInit();
     });
 
-    el.postButton.addEventListener('click', createPost);
+    el.postButton.addEventListener('click', function() {
+      this.blur();
+      createPost();
+    });
     formSubmit.enable(el.postButton);
 
     el.description.addEventListener('input', function() {

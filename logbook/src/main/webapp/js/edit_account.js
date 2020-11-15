@@ -277,7 +277,10 @@ var EditAccount = (function() {
       }
     }
 
-    el.signupButton.addEventListener('click', clickSignup);
+    el.signupButton.addEventListener('click', function() {
+      this.blur();
+      clickSignup();
+    });
     el.signupButton.classList.add('center-button');
     el.signupButton.disabled = false;
     el.step4BackButton.classList.add('signup-hidden');

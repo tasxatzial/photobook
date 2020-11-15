@@ -595,6 +595,7 @@ var Posts = (function() {
   function createPostOptionsMenu(data) {
     el.deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
     el.deleteButton.children[0].addEventListener('click', function() {
+      this.blur();
       confirmDelete(data);
     });
 
