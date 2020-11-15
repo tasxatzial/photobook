@@ -1,6 +1,7 @@
 #post-form-description {
   height: 14rem;
   max-height: 17rem;
+  resize: none;
 }
 
 #post-form-photo-parent {
