@@ -156,6 +156,11 @@ input[type="button"]:active, button:active {
   padding: 0;
 }
 
+div[id^="OpenLayers_Control_Attribution"] {
+  bottom: 1em;
+  right: 1em;
+}
+
 @media only screen and (max-width: 45rem) {
   .parent-in-main {
     border: 0;
