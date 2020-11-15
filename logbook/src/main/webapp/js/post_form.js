@@ -305,7 +305,7 @@ var PostForm = (function() {
       formButton.enable(el.locationDetectButton);
       data.loc.lat = String(position.coords.latitude);
       data.loc.lon = String(position.coords.longitude);
-      formMsg.showOK(el.locationDetectMsg, '(' + Init.fourDecimal(data.loc.lat) + ', ' + Init.fourDecimal(data.loc.lon) + ')');
+      formMsg.showOK(el.locationDetectMsg, '(' + parseFloat(data.loc.lat).toFixed(4) + ', ' + parseFloat(data.loc.lon).toFixed(4) + ')');
     }
     function failCallback() {
       formButton.enable(el.locationDetectButton);
@@ -329,7 +329,7 @@ var PostForm = (function() {
       if (response) {
         data.loc.lat = response.lat;
         data.loc.lon = response.lon;
-        formMsg.showOK(el.locationDetectMsg, '(' + Init.fourDecimal(data.loc.lat) + ', ' + Init.fourDecimal(data.loc.lon) + ')');
+        formMsg.showOK(el.locationDetectMsg, '(' + parseFloat(data.loc.lat).toFixed(4) + ', ' + parseFloat(data.loc.lon).toFixed(4) + ')');
       }
       else {
         formButton.enable(el.locationDetectButton);
