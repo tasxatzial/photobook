@@ -17,8 +17,8 @@
   margin-left: 2px;
   margin-right: 2px;
   border: 1px solid gray;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   transition: background-color 200ms;
 }
 
