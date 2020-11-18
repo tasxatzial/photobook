@@ -128,7 +128,9 @@
           <p class="signup-require-info">2 to 20 characters</p>
         </div>
         <div class="sign-child">
-          <label for="signup-address" class="sign-label sign-top-label">Address</label><br>
+          <div id="address-label" class="flex-label">
+            <label for="signup-address" class="sign-label sign-top-label">Address</label><br>
+          </div>
           <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("address")%>" name="signup-address" id="signup-address">
         </div>
         <div class="sign-child">
@@ -159,7 +161,7 @@
         </div>
         <div class="sign-child" id="signup-about-parent">
           <div class="flex-label">
-            <p class="sign-label sign-top-label">General information about you</p>
+            <p class="sign-label sign-top-label">General info</p>
           </div>
           <textarea name="signup-about" class="sign-tofill" rows="5" cols="50" maxlength="500"><%= (String) request.getAttribute("about")%></textarea>
           <p id="about-remaining-chars" class="signup-require-info">500 characters remaining</p>

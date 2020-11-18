@@ -98,7 +98,7 @@ var newElements = (function NewElements() {
       span.appendChild(value);
     }
     else {
-      span.innerHTML = value;
+      span.textContent = value;
     }
     span.className = 'normal-font-weight';
 

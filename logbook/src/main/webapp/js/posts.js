@@ -437,7 +437,7 @@ var Posts = (function() {
       var url = document.createElement('a');
       url.href = data['resourceURL'];
       url.target = 'blank';
-      url.innerHTML = data['resourceURL'].substr(data['resourceURL'].lastIndexOf('//') + 2);
+      url.textContent = data['resourceURL'].substr(data['resourceURL'].lastIndexOf('//') + 2);
       var onlineURL = newElements.createKeyValue('See also', url, 1);
       data['postDiv'].insertBefore(onlineURL, data['footerDiv']);
     }

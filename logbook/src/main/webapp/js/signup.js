@@ -64,9 +64,6 @@ var Signup = (function() {
         data.append(el.gender[j].name.split('-')[1], el.gender[j].value);
       }
     }
-    data.append(el.interests.name.split('-')[1], el.interests.value);
-    data.append(el.about.name.split('-')[1], el.about.value);
-    data.append(el.address.name.split('-')[1], el.address.value);
     return data;
   }
 
@@ -193,10 +190,10 @@ var Signup = (function() {
 
     var ID = Requests.add(ajaxRequest('POST', 'Main', formData,
         function() {
-      setTimeout(successCallback, 300);
+          setTimeout(successCallback, 300);
         }, function() {
-      setTimeout(failCallback, 300);
-    }));
+          setTimeout(failCallback, 300);
+        }));
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
@@ -306,7 +303,13 @@ var Signup = (function() {
     });
     el.signupButton.addEventListener('click', function() {
       this.blur();
-      doSignup();
+      var invalidEvent = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep4());
+      if (invalidEvent) {
+        Init.scrollTo(invalidEvent.parentNode);
+      }
+      else {
+        doSignup();
+      }
     });
     el.step2BackButton.addEventListener('click', function() {
       el.step2Content.classList.add('signup-hidden');

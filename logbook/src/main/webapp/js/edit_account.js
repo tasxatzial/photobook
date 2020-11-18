@@ -62,9 +62,6 @@ var EditAccount = (function() {
         data.append(el.gender[j].name.split('-')[1], el.gender[j].value);
       }
     }
-    data.append(el.interests.name.split('-')[1], el.interests.value);
-    data.append(el.about.name.split('-')[1], el.about.value);
-    data.append(el.address.name.split('-')[1], el.address.value);
     return data;
   }
 
@@ -81,9 +78,6 @@ var EditAccount = (function() {
     formInput.enable(el.gender[0]);
     formInput.enable(el.gender[1]);
     formInput.enable(el.gender[2]);
-    formInput.enable(el.address);
-    formInput.enable(el.interests);
-    formInput.enable(el.about);
     formSubmit.enable(el.signupButton);
     formButton.enable(el.geolocSearchButton);
     formButton.enable(el.nominatimSearchButton);
@@ -100,9 +94,6 @@ var EditAccount = (function() {
     formInput.disable(el.gender[0]);
     formInput.disable(el.gender[1]);
     formInput.disable(el.gender[2]);
-    formInput.disable(el.address);
-    formInput.disable(el.interests);
-    formInput.disable(el.about);
     formSubmit.disable(el.signupButton);
     formButton.disable(el.geolocSearchButton);
     formButton.disable(el.nominatimSearchButton);
@@ -311,7 +302,6 @@ var EditAccount = (function() {
     SignUpFace.init();
     data.oldEmail = el.email.value;
     el.email.disabled = false;
-
   }
 
   return {
