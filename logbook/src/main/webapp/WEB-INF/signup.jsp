@@ -22,7 +22,7 @@
         </div>
         <div class="sign-child" id="signup-photo-section">
           <p>
-            <label class="sign-label"><input type="checkbox" disabled>
+            <label class="sign-label sign-text-label"><input type="checkbox" disabled>
               Associate my username to a face that may be used to identify me during the sign in process.
             </label>
           </p>
@@ -107,7 +107,7 @@
         </div>
         <p id="step3-required-asterisk" class="step-required-asterisk">(<span>*</span>) Required</p>
         <div class="sign-child">
-          <p class="sign-label">- You may detect your location or manually fill in the fields below.</p>
+          <p class="sign-label sign-text-label">- You may detect your location or manually fill in the fields below.</p>
           <div class="signup-geolocation-search">
             <button type="button" class="signup-geolocation-search-button sign-internal-button" disabled>Detect my location</button>
             <div class="sign-process-msg2 sign-process-msg" id="signup-geolocation-search-state"></div>
@@ -132,7 +132,7 @@
           <input type="text" class="sign-tofill" value="<%= (String) request.getAttribute("address")%>" name="signup-address" id="signup-address">
         </div>
         <div class="sign-child">
-          <p class="sign-label">- If the Country/City fields are filled in, you may find your location on a map</p>
+          <p class="sign-label sign-text-label">- If the Country/City fields are filled in, you may find your location on a map.</p>
           <div class="signup-location-search">
             <button type="button" class="signup-location-search-button sign-internal-button" disabled>Search my location</button>
             <div class="sign-process-msg3 sign-process-msg" id="signup-location-search-state"></div>

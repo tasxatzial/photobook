@@ -171,8 +171,8 @@ var SignInFace = (function () {
     el.passwordParent = document.getElementById('signin-password-parent');
     el.form = document.getElementById('signin-content');
     el.photoButton = document.getElementsByClassName('signin-photo-button')[0];
-    el.submit = document.querySelector('#signin-button input');
-    el.signinMsg = document.getElementById('sign-process-msg');
+    el.submit = document.querySelector('#signin-button button');
+    el.signinMsg = document.getElementById('signin-process-msg');
     el.photoSection = null;
     el.uploadMsgParent = null;
 

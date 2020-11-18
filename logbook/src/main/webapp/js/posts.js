@@ -228,13 +228,11 @@ var Posts = (function() {
     var queryLatLon = null;
 
     /* create the post description, this is a trimmed version (max 350 chars) of the full description */
-    var description = document.createElement('p');
-    description.className = 'post-description';
-    if (postJSON['description'].length > 350) {
-      description.innerHTML = postJSON['description'].trim().replace('\n', '<br><br>').substring(0, 350) + ' ...';
-    }
-    else {
-      description.innerHTML = postJSON['description'].trim().replace('\n', '<br><br>');
+    var description = document.createElement('div');
+    var descriptionArray = createDescription(postJSON['description'], 350);
+    for (var i = 0; i < descriptionArray.length; i++) {
+      description.className = 'post-description';
+      description.appendChild(descriptionArray[i]);
     }
 
     /* create the photo of the post */
@@ -252,10 +250,13 @@ var Posts = (function() {
       imageParent.appendChild(image);
     }
 
-    /* create the read more button */
-    var readMore = document.createElement('p');
-    readMore.className = 'read-more';
-    readMore.innerHTML = 'Continue reading...';
+    /* use different class in description depending on whether there is an image in the post */
+    if (image.src) {
+      description.classList.add('post-description-image');
+    }
+    else {
+      description.classList.add('post-description-no-image');
+    }
 
     /* create the button that tells us who created this post */
     var button = document.createElement('button');
@@ -268,15 +269,18 @@ var Posts = (function() {
     /* create the element that tells us when the post was created */
     var at = document.createElement('span');
     at.innerHTML = ' @ ';
-    var timestamp = document.createElement('span');
-    timestamp.innerHTML = postJSON['createdAt'].substring(0, postJSON['createdAt'].lastIndexOf(":"));
+    var timestampEl = document.createElement('span');
+    var timestamp = postJSON['createdAt'].substring(0, postJSON['createdAt'].lastIndexOf(":")).split(' ');
+    var timestampDate = timestamp[0];
+    var timestampTime = '[' + timestamp[1] + ']';
+    timestampEl.innerHTML = timestampDate + ' ' + timestampTime;
 
     /* create the element that tells us who created the post and when */
     var username = document.createElement('div');
     username.className = 'posted-by';
     username.appendChild(button);
     username.appendChild(at);
-    username.appendChild(timestamp);
+    username.appendChild(timestampEl);
 
     /* create the footer element, this currently shows only who created the post and when */
     var footer = document.createElement('div');
@@ -303,7 +307,7 @@ var Posts = (function() {
     /* create the element that has the read more button (includes the button and the image of the button) */
     var readMoreButton = document.createElement('button');
     readMoreButton.className = 'read-more-button';
-    readMoreButton.appendChild(readMore);
+    readMoreButton.innerHTML = 'Continue reading';
     readMoreButton.addEventListener('click', function () {
       data['locationQuery'] = queryLatLon.getLocation();
       data['queryID'] =  queryLatLon.getQueryID();
@@ -421,7 +425,12 @@ var Posts = (function() {
     if (data['postDiv'].children[1].className === 'short-post-photo-parent') {
       data['postDiv'].children[1].children[0].className = 'full-post-photo';
     }
-    data['descriptionDiv'].innerHTML = data['description'].trim().replace('\n', '<br><br>');
+    data['descriptionDiv'].innerHTML = '';
+    var descriptionArray = createDescription(data['description']);
+    for (var i = 0; i < descriptionArray.length; i++) {
+      data['descriptionDiv'].appendChild(descriptionArray[i]);
+    }
+
     data['postDiv'].removeChild(data['readMoreButtonDiv']);
 
     if (data['resourceURL']) {
@@ -491,6 +500,45 @@ var Posts = (function() {
     obj.map.setZoom(zoom);
     obj.map.addLocation({lat: data['lat'], lon: data['lon']});
     obj.map.drawMap();
+  }
+
+  /**
+   * Creates an array of p elements for the description based on the given description text.
+   * @param descriptionText
+   * @param maxVisibleLength Drop all description characters after index maxVisibleLength
+   * @returns
+   */
+  function createDescription(descriptionText, maxVisibleLength) {
+    var description = descriptionText.trim().replace(/ +/g, ' ').replace(/\n+/g, '\n');
+    if (description === '') {
+      return 'Missing description';
+    }
+    if (maxVisibleLength && maxVisibleLength >= 20 && maxVisibleLength < descriptionText.length) {
+      var cropped = true;
+      description = descriptionText.substring(0, maxVisibleLength);
+      var lastSpace = description.lastIndexOf(' ');
+      if (lastSpace === -1) {
+        var lastNewLine = description.lastIndexOf('\n');
+        if (lastNewLine !== -1) {
+          description = description.substring(0, lastNewLine);
+        }
+      }
+      else {
+        description = description.substring(0, lastSpace);
+      }
+    }
+
+    var descriptionArray = [];
+    var lines = description.split('\n');
+    for (var line = 0; line < lines.length; line++) {
+      var paragraph = document.createElement('p');
+      paragraph.textContent = lines[line];
+      descriptionArray.push(paragraph);
+    }
+    if (cropped) {
+      descriptionArray[descriptionArray.length - 1].textContent += ' ...';
+    }
+    return descriptionArray;
   }
 
   /**

@@ -237,7 +237,8 @@ var PostForm = (function() {
     formData.append("action", "CreatePost");
     formData.append("latitude", data.loc.lat);
     formData.append("longitude", data.loc.lon);
-    formData.append("description", el.description.value);
+    var description = el.description.value.trim().replace(/ +/g, ' ').replace(/\n+/g, '\n');
+    formData.append("description", description);
     formData.append("resourceURL", el.onlineResource.value);
     formData.append("imageURL", el.onlineImage.value);
     if (el.filePicker.getPhotob64()) {

@@ -7,10 +7,9 @@
 #post-form-photo-parent {
   display: flex;
   flex-flow: column nowrap;
+  justify-content: center;
   align-items: center;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  margin-top: 1em;
 }
 
 #post-form-photo-parent :nth-child(2) {
@@ -27,18 +26,23 @@
 
 .post-form-options {
   margin-top: .3rem;
-  margin-bottom: .3rem;
+  margin-bottom: .4rem;
 }
 
 #select-online-photo {
   width: 100%;
 }
 
-#select-disk-photo {
-  margin-top: .2rem;
+#select-online-photo label {
+  display: inline-flex;
+  align-items: baseline;
 }
 
-#post-form-parent input[type="radio"] {
+#select-disk-photo {
+  margin-top: .4rem;
+}
+
+#post-form-parent input[type="radio"], #select-online-photo input[type="checkbox"] {
   margin-left: 0;
 }
 

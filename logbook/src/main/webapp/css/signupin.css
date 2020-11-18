@@ -9,6 +9,7 @@
   font-family: inherit;
   font-size: 1rem;
   margin-bottom: .3rem;
+  padding: 2px 6px;
 }
 
 /* input boxes except radio buttons */
@@ -54,7 +55,6 @@
 }
 
 .invalid-value {
-  font-size: 0.9rem;
   color: red;
 }
 

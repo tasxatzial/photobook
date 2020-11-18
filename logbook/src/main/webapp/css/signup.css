@@ -8,7 +8,7 @@
   padding-top: 8px;
 }
 
-.post-signup-section {
+#signup-section.post-signup-section {
   display: block;
 }
 
@@ -45,6 +45,10 @@
   text-indent: -22px;
 }
 
+#signup-photo-section input {
+  margin-top: 0;
+}
+
 /* the hidden photo section that appears after clicking the checkbox */
 #signup-photo-section-hidden {
   display: flex;
@@ -79,6 +83,7 @@
   padding: 0;
   margin-top: 0;
   margin-bottom: 0;
+  font-size: .95rem;
 }
 
 /* shows 100 chars without any resizing */
