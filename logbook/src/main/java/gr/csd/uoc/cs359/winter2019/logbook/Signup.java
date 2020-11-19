@@ -245,18 +245,18 @@ public class Signup extends HttpServlet {
 
         User user = new User();
         user.setUserName(r_username);
-        user.setPassword(r_password);
+        user.setPassword(r_password.replace("'", "''"));
         user.setEmail(r_email);
         user.setFirstName(r_firstName);
         user.setLastName(r_lastName);
         user.setBirthDate(r_birthDate);
         user.setCountry(r_country);
         user.setTown(r_city);
-        user.setAddress(r_address);
+        user.setAddress(r_address.replace("'", "''"));
         user.setOccupation(r_job);
         user.setGender(r_gender);
-        user.setInterests(r_interests);
-        user.setInfo(r_about);
+        user.setInterests(r_interests.replace("'", "''"));
+        user.setInfo(r_about.replace("'", "''"));
 
         /* either update user's account info, or do a signup */
         if (request.getParameter("action").equals("UpdateAccount")) {

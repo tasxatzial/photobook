@@ -56,7 +56,7 @@ public class Signin extends HttpServlet {
         /* if username does not exist on DB, there is no need to check the password */
         if (request.getParameter("username") != null && request.getAttribute("username").equals("0")) {
             jsonSignin.put("username", "1");
-            String password = request.getParameter("password");
+            String password = request.getParameter("password").replace("'", "''");
             String username = request.getParameter("username");
             if (!UserDB.checkValidPassword(username, password)) {
                 jsonSignin.put("password", "0");

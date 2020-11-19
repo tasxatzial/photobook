@@ -82,7 +82,7 @@ public class CreatePost extends HttpServlet {
         String r_latitude = request.getParameter("latitude");
         String r_longitude = request.getParameter("longitude");
         post.setUserName(username);
-        post.setDescription(r_description);
+        post.setDescription(r_description.replace("'", "''"));
         post.setResourceURL(r_resourceURL);
         post.setImageURL(r_imageURL);
         post.setImageBase64(r_imageBase64);
