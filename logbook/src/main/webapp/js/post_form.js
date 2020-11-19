@@ -290,7 +290,7 @@ var PostForm = (function() {
     data.loc.lat = null;
     data.loc.lon = null;
     formMsg.clear(el.createPostMsg);
-    formButton.disable(el.locationDetectButton);
+    disableLocationInputs();
     if (navigator.geolocation && el.geolocationRadio.checked) {
       geolocationSearch();
     }
@@ -306,13 +306,13 @@ var PostForm = (function() {
     formMsg.showElement(el.locationDetectMsg, Init.loader);
     navigator.geolocation.getCurrentPosition(successNavCallback, failCallback);
     function successNavCallback(position) {
-      formButton.enable(el.locationDetectButton);
+      enableLocationInputs();
       data.loc.lat = String(position.coords.latitude);
       data.loc.lon = String(position.coords.longitude);
       formMsg.showOK(el.locationDetectMsg, '(' + parseFloat(data.loc.lat).toFixed(4) + ', ' + parseFloat(data.loc.lon).toFixed(4) + ')');
     }
     function failCallback() {
-      formButton.enable(el.locationDetectButton);
+      enableLocationInputs();
       formMsg.showError(el.locationDetectMsg, "Error");
     }
   }
@@ -328,7 +328,7 @@ var PostForm = (function() {
     var ID = Requests.add(ajaxRequest('GET', nominatimAPI.url + input, null, successCallback, failCallback));
 
     function successCallback() {
-      formButton.enable(el.locationDetectButton);
+      enableLocationInputs();
       var response = JSON.parse(Requests.get(ID).responseText)[0];
       if (response) {
         data.loc.lat = response.lat;
@@ -336,15 +336,37 @@ var PostForm = (function() {
         formMsg.showOK(el.locationDetectMsg, '(' + parseFloat(data.loc.lat).toFixed(4) + ', ' + parseFloat(data.loc.lon).toFixed(4) + ')');
       }
       else {
-        formButton.enable(el.locationDetectButton);
+        enableLocationInputs();
         formMsg.showError(el.locationDetectMsg, 'Not found');
       }
     }
 
     function failCallback() {
-      formButton.enable(el.locationDetectButton);
+      enableLocationInputs();
       formMsg.showError(el.locationDetectMsg, 'Error');
     }
+  }
+
+  /**
+   * Enables all inputs related to location detect.
+   */
+  function enableLocationInputs() {
+    formButton.enable(el.locationDetectButton);
+    el.geolocationRadio.disabled = false;
+    el.placeRadio.disabled = false;
+    el.country.disabled = false;
+    el.place.disabled = false;
+  }
+
+  /**
+   * Disables all inputs related to location detect.
+   */
+  function disableLocationInputs() {
+    formButton.disable(el.locationDetectButton);
+    el.geolocationRadio.disabled = true;
+    el.placeRadio.disabled = true;
+    el.country.disabled = true;
+    el.place.disabled = true;
   }
 
   /**
