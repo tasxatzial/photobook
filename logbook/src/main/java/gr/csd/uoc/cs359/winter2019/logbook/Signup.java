@@ -112,10 +112,21 @@ public class Signup extends HttpServlet {
                     if (paramValues[0].length() > 100) {
                         jsonSignup.put(paramName, "Exceeds maximum size (100)");
                     }
+                    else if (paramValues[0].matches(getRegexPattern(paramName))) {
+                        jsonSignup.put(paramName, "Invalid pattern");
+                    }
                     break;
                 case "about":
                     if (paramValues[0].length() > 500) {
                         jsonSignup.put(paramName, "Exceeds maximum size (500)");
+                    }
+                    else if (paramValues[0].matches(getRegexPattern(paramName))) {
+                        jsonSignup.put(paramName, "Invalid pattern");
+                    }
+                    break;
+                case "address":
+                    if (paramValues[0].matches(getRegexPattern(paramName))) {
+                        jsonSignup.put(paramName, "Invalid pattern");
                     }
                     break;
                 default:
@@ -351,6 +362,10 @@ public class Signup extends HttpServlet {
                 return "^[^0-9!#$%&'*+/=?^`{|}\\[\\]_\\\\~<>.,-]{3,15}$";
             case "city":
                 return "^[^!#$%&'*+/=?^`{|}\\[\\]_\\\\~<>.,]{2,20}$";
+            case "address":
+            case "interests":
+            case "about":
+                return ".*<.*=?.*>.*";
             default:
                 return null;
         }
