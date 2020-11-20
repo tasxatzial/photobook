@@ -18,61 +18,65 @@ var ShowProfile = (function() {
   function init(username, firstTime) {
     Requests.cancelExcept(null);
 
-    if (firstTime === true) {
-      Init.nonav.innerHTML = '';
-      Init.nonav.appendChild(createAccountSection(username));
-      el.accountSubsection = document.getElementById('account-subsection');
+    var loader = document.querySelector('.bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.navbarContent.appendChild(loader);
     }
-    else {
-      el.accountSubsection.innerHTML = '';
-    }
-
-    var profileSection = createProfileSection();
-    var profileParent = profileSection.children[0];
-    var loaderMsg = profileParent.children[0];
-    formMsg.showElement(loaderMsg, Init.loader);
-
-    el.accountSubsection.appendChild(profileSection);
-
-    var navTabs = document.getElementById('account-nav');
-    showBorders(navTabs.children[0], navTabs.children[1], navTabs.children[2]);
 
     var data = new FormData();
     data.append("action", "GetProfile");
     if (username !== null) {
-      Homepage.removeActive();
       data.append("username", username);
-    }
-    if (username === Init.getUser()) {
-      var accountButton = document.getElementById('profile-button');
-      Homepage.setActive(accountButton);
     }
     var ID = Requests.add(ajaxRequest("POST", "Main", data, successCallback, failCallback));
 
     function successCallback() {
+      Init.navbarContent.removeChild(loader);
+      Homepage.removeActive();
+
+      if (firstTime === true) {
+        Init.nonav.innerHTML = '';
+        Init.nonav.appendChild(createAccountSection(username));
+        el.accountSubsection = document.getElementById('account-subsection');
+      }
+      else {
+        el.accountSubsection.innerHTML = '';
+      }
+
+      var profileSection = createProfileSection();
+      var profileParent = profileSection.children[0];
+      el.accountSubsection.appendChild(profileSection);
+
+      var navTabs = document.getElementById('account-nav');
+      showBorders(navTabs.children[0], navTabs.children[1], navTabs.children[2]);
+
+      if (username === Init.getUser()) {
+        var accountButton = document.getElementById('profile-button');
+        Homepage.setActive(accountButton);
+      }
+
       var response = JSON.parse(Requests.get(ID).responseText);
-      formMsg.clear(loaderMsg);
       var profile = newElements.createSignupSummary(response,  Init.dataNames);
       profileParent.appendChild(profile);
     }
 
     function failCallback() {
+      Init.navbarContent.removeChild(loader);
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
         return;
       }
-      formMsg.clear(loaderMsg);
-      var error = null;
       if (Requests.get(ID).status === 400) {
-        error = newElements.createKeyValue('Error', 'Invalid user');
+        newElements.showFullWindowMsg('OK', 'Invalid user', Init.clearFullWindowMsg);
       }
       else if (Requests.get(ID).status === 0) {
-        error = newElements.createKeyValue('Error', 'Unable to send request');
+        newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
       else {
-        error = newElements.createKeyValue('Error', 'Unknown');
+        newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
       }
-      profileParent.appendChild(error);
     }
   }
 
@@ -126,13 +130,9 @@ var ShowProfile = (function() {
    * @returns {HTMLDivElement}
    */
   function createProfileSection() {
-    var loaderMsg = document.createElement('div');
-    loaderMsg.id = 'sign-process-msg';
-
     var profileParent = document.createElement('div');
     profileParent.id = 'profile-parent';
     profileParent.className = 'parent-in-myaccount';
-    profileParent.appendChild(loaderMsg);
 
     var profileSection = document.createElement('div');
     profileSection.id = 'profile-section';
