@@ -26,7 +26,7 @@ var AllUsers = (function() {
     Init.nonav.appendChild(userlistSection);
 
     el.userListParent = userlistSection.children[0];
-    var loaderMsg = el.userListParent.children[1];
+    var loaderMsg = el.userListParent.children[2];
     formMsg.showElement(loaderMsg, Init.loader);
 
     var data = new FormData();
@@ -121,8 +121,8 @@ var AllUsers = (function() {
    */
   function showPage(pageNo) {
     if (pageNo <= state.pages && pageNo >= 1) {
-      if (el.userListParent.children[3]) {
-        el.userListParent.removeChild(el.userListParent.children[2]);
+      if (el.userListParent.children[4]) {
+        el.userListParent.removeChild(el.userListParent.children[3]);
       }
       var userPage = createUserPage(state.response[pageNo]);
       el.userListParent.insertBefore(userPage, el.navBar);
@@ -171,10 +171,20 @@ var AllUsers = (function() {
 
     var loaderMsg = document.createElement('div');
 
+    var legend = document.createElement('div');
+    legend.id = 'legend';
+    var circle = newElements.createGreenCircle('images/green_circle.svg');
+    var legendText = document.createElement('span');
+    legendText.id = 'legend-text';
+    legendText.innerText = 'Online';
+    legend.appendChild(circle);
+    legend.appendChild(legendText);
+
     var div = document.createElement('div');
     div.id = 'userlist-parent';
     div.className = 'parent-in-main';
     div.appendChild(header);
+    div.appendChild(legend);
     div.appendChild(loaderMsg);
 
     var userlistSection = document.createElement('div');
@@ -199,6 +209,7 @@ var AllUsers = (function() {
 
     Object.keys(page).forEach(function(key, index) {
       var msg = newElements.createKeyValue(key, page[key]);
+      msg.classList.add('allusers-name');
 
       var img = document.createElement('img');
       img.className = 'user-show-more-arrow';

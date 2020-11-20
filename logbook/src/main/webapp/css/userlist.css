@@ -65,3 +65,21 @@
     margin-bottom: 0;
     margin-top: 0;
 }
+
+.online-user {
+    height: 1rem;
+}
+
+#legend {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#legend-text {
+    margin-left: .4em;
+}
+
+.allusers-name {
+    margin-right: .4em;
+}

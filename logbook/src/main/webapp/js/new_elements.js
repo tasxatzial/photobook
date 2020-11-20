@@ -53,6 +53,14 @@ var newElements = (function NewElements() {
     return loader;
   }
 
+  function createGreenCircle(pathToFile) {
+    var circle = document.createElement('img');
+    circle.src = pathToFile;
+    circle.className = 'online-user';
+
+    return circle;
+  }
+
   /**
    * Creates a button for the top navigation bar.
    * @param value The text of the button element
@@ -311,6 +319,7 @@ var newElements = (function NewElements() {
     createCloseButton: createCloseButton,
     createFullWindow: createFullWindow,
     createFullWindowButton: createFullWindowButton,
-    showFullWindowMsg: showFullWindowMsg
+    showFullWindowMsg: showFullWindowMsg,
+    createGreenCircle: createGreenCircle
   };
 }());
