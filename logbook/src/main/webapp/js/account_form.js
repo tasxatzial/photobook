@@ -10,7 +10,6 @@ var AccountInfo = (function() {
     deleteAccountMsg: null,
     deleteAccountDiv: null,
     editAccountDiv: null,
-    showEditAccountMsg: null,
   };
 
   /**
@@ -27,15 +26,20 @@ var AccountInfo = (function() {
    */
   function editAccount() {
     Requests.cancelExcept(null);
-    el.deleteAccountDiv.parentElement.removeChild(el.deleteAccountDiv);
-    el.editAccountDiv.parentElement.removeChild(el.editAccountDiv);
-    formMsg.showElement(el.showEditAccountMsg, Init.loader);
+
+    var loader = document.querySelector('.bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.navbarContent.appendChild(loader);
+    }
 
     var data = new FormData();
     data.append("action", "AccountInfo");
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
+      Init.navbarContent.removeChild(loader);
       document.getElementById('account-subsection').innerHTML = Requests.get(ID).responseText;
       var signupParent = document.getElementById('signup-parent');
       signupParent.classList.remove('parent-in-main');
@@ -44,38 +48,37 @@ var AccountInfo = (function() {
     }
 
     function failCallback() {
+      Init.navbarContent.removeChild(loader);
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
         return;
       }
-      formMsg.clear(el.showEditAccountMsg);
 
       var error = null;
       if (Requests.get(ID).status === 400) {
         var responseText = Requests.get(ID).responseText;
         if (!responseText) {
-          error = newElements.createKeyValue('Error', 'Unknown');
+          error = 'Error';
         }
         else {
           if (JSON.parse(responseText).ERROR === 'INVALID_ACTION') {
-            error = newElements.createKeyValue('Error', 'Invalid action');
+            error = 'Invalid action';
           }
           else {
-            error = newElements.createKeyValue('Error', 'Invalid user');
+            error = 'Invalid user';
           }
         }
       }
       else if (Requests.get(ID).status === 500) {
-        error = newElements.createKeyValue('Error', 'Server error');
+        error = 'Server error';
       }
       else if (Requests.get(ID).status === 0) {
-        error = newElements.createKeyValue('Error', 'Unable to send request');
+        error = 'Unable to send request';
       }
       else {
-        error = newElements.createKeyValue('Error', 'Unknown');
+        error = 'Unknown';
       }
-      var editAccountParent = document.getElementById('edit-account-parent');
-      editAccountParent.appendChild(error);
+      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
   }
 
@@ -84,17 +87,18 @@ var AccountInfo = (function() {
    */
   function deleteAccount() {
     Requests.cancelExcept(null);
-    formMsg.showElement(el.deleteAccountMsg, Init.loader);
 
     var formData = new FormData();
     formData.append("action", "DeleteAccount");
     var ID = Requests.add(ajaxRequest("POST", "Main", formData, successCallback, failCallback));
 
     function successCallback() {
+      Init.navbarContent.removeChild(loader);
       Logout.init();
     }
 
     function failCallback() {
+      Init.navbarContent.removeChild(loader);
       if (Requests.get(ID).status === 401) {
         formMsg.showError(el.deleteAccountMsg, 'Error: Session has expired');
       }
@@ -160,15 +164,10 @@ var AccountInfo = (function() {
       }, 200);
     });
 
-    el.showEditAccountMsg = document.createElement('div');
-    el.showEditAccountMsg.id = 'show-edit-account-msg';
-    el.showEditAccountMsg.className = 'sign-process-msg';
-
     var div = document.createElement('div');
     div.id = 'edit-account-parent';
     div.className = 'parent-in-myaccount';
 
-    div.appendChild(el.showEditAccountMsg);
     div.appendChild(el.editAccountDiv);
     div.appendChild(el.deleteAccountDiv);
 
