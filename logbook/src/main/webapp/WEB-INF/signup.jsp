@@ -50,7 +50,6 @@
         <div id="signup-step1-button-container" class="sign-button">
           <button class="main-button right-button next-button">Next</button>
         </div>
-        <div id="signup-step1-process-msg"></div>
       </div>
       <div id="signup-step2" class="signup-hidden">
         <div id="step2-label" class="step-label">
@@ -170,7 +169,6 @@
           <button class="back-button">Go back</button>
           <button class="main-button"><%= (String) request.getAttribute("button") %></button>
         </div>
-        <div id="signup-process-msg"></div>
       </div>
     </div>
   </div>

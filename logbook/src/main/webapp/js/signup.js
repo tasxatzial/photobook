@@ -11,29 +11,29 @@ var Signup = (function() {
     signupParent: null,
     signupContent: null,
     signupButton: null,
-    signupMsg: null,
     header: null,
     username: null,
     email: null,
+    password: null,
+    passwordConfirm: null,
     address: null,
     gender: null,
     interests: null,
     about: null,
     geolocSearchButton: null,
     nominatimSearchButton: null,
-    step1Msg: null,
     step1Content: null,
     step1ButtonContainer: null,
     step1NextButton: null,
     step2Content: null,
-    step4BackButton: null
+    step4BackButton: null,
+    faceAssosiate: null
   };
 
   /**
    * The first function that is called when the next button in step1 is clicked.
    */
   function gotoStep2() {
-    formMsg.clear(el.signupMsg);
     var invalidElement = ValidChecker.checkInvalidElements(ValidChecker.getCheckedInputsStep1());
     if (invalidElement) {
       Init.scrollTo(invalidElement.parentNode);
@@ -68,9 +68,9 @@ var Signup = (function() {
   }
 
   /**
-   * Enables all form inputs in the final step.
+   * Enables all form inputs in step4.
    */
-  function enableInputs() {
+  function enableInputsStep4() {
     formInput.enable(el.interests);
     formInput.enable(el.about);
     formSubmit.enable(el.signupButton);
@@ -78,9 +78,9 @@ var Signup = (function() {
   }
 
   /**
-   * Disables all form inputs.
+   * Disables all form inputs in step4.
    */
-  function disableInputs() {
+  function disableInputsStep4() {
     formInput.disable(el.interests);
     formInput.disable(el.about);
     formSubmit.disable(el.signupButton);
@@ -88,26 +88,49 @@ var Signup = (function() {
   }
 
   /**
+   * Enables all form inputs in step1.
+   */
+  function enableInputsStep1() {
+    formInput.enable(el.username);
+    formInput.enable(el.email);
+    formInput.enable(el.password);
+    formInput.enable(el.passwordConfirm);
+    formSubmit.enable(el.step1NextButton);
+    el.faceAssosiate.disabled = false;
+  }
+
+  /**
+   * Disables all form inputs in step4.
+   */
+  function disableInputsStep1() {
+    formInput.disable(el.username);
+    formInput.disable(el.email);
+    formInput.disable(el.password);
+    formInput.disable(el.passwordConfirm);
+    formSubmit.disable(el.step1NextButton);
+    el.faceAssosiate.disabled = true;
+  }
+
+  /**
    * Performs signup
    */
   function doSignup() {
     Requests.cancelExcept(null);
-    disableInputs();
+    disableInputsStep4();
 
-    el.signupMsg.classList.add('msg-open');
-    setTimeout(function() {
-      formMsg.showElement(el.signupMsg, Init.loader);
-    }, 150);
+    var loader = document.querySelector('.bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.navbarContent.appendChild(loader);
+    }
 
     var data = gatherData();
     data.append('action', 'Signup');
-    var ID = Requests.add(ajaxRequest('POST', 'Main', data, function() {
-      setTimeout(successCallback, 300);
-    }, function() {
-      setTimeout(failCallback, 300);
-    }));
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
+      Init.navbarContent.removeChild(loader);
       var response = JSON.parse(Requests.get(ID).responseText);
       var accountInfoTitle = document.createElement('p');
       var accountInfo = newElements.createSignupSummary(response, Init.dataNames);
@@ -118,27 +141,25 @@ var Signup = (function() {
       el.signupSection.classList = 'post-signup-section';
       el.signupContent.appendChild(accountInfoTitle);
       el.signupContent.appendChild(accountInfo);
-      enableInputs();
+      enableInputsStep4();
     }
 
     function failCallback() {
+      Init.navbarContent.removeChild(loader);
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
         return;
       }
       if (Requests.get(ID).status === 500) {
-        formMsg.showError(el.signupMsg, 'Server error');
-        Init.scrollTo(el.signupButton);
+        newElements.showFullWindowMsg('OK', 'Server error', Init.clearFullWindowMsg);
       }
       else if (Requests.get(ID).status === 0) {
-        formMsg.showError(el.signupMsg, 'Unable to send request');
-        Init.scrollTo(el.signupButton);
+        newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
       else if (Requests.get(ID).status === 400) {
         var responseText = Requests.get(ID).responseText;
         if (!responseText) {
-          formMsg.showError(el.signupMsg, 'Error');
-          Init.scrollTo(el.signupButton);
+          newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
         }
         else {
           var response = JSON.parse(responseText);
@@ -151,16 +172,14 @@ var Signup = (function() {
             el.signupContent.appendChild(info);
           }
           else {
-            formMsg.showError(el.signupMsg, 'Invalid action');
-            Init.scrollTo(el.signupButton);
+            newElements.showFullWindowMsg('OK', 'Invalid action', Init.clearFullWindowMsg);
           }
         }
       }
       else {
-        formMsg.showError(el.signupMsg, 'Error');
-        Init.scrollTo(el.signupButton);
+        newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
       }
-      enableInputs();
+      enableInputsStep4();
     }
   }
 
@@ -168,40 +187,30 @@ var Signup = (function() {
    * Checks whether the username and email are taken by other user.
    */
   function checkUsernameEmailDB() {
-    Init.scrollTo(el.signupButton);
     Requests.cancelExcept(null);
 
-    /* disable both username and email fields during this process */
-    formInput.disable(el.username);
-    formInput.disable(el.email);
+    var loader = document.querySelector('.bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.navbarContent.appendChild(loader);
+    }
 
-    /* also disable step1 next button */
-    formSubmit.disable(el.step1NextButton);
-
-    el.step1Msg.classList.add('msg-open');
-    setTimeout(function() {
-      formMsg.showElement(el.step1Msg, Init.loader);
-    }, 150);
+    disableInputsStep1();
 
     var formData = new FormData();
     formData.append('action', 'CheckUsernameEmailDB');
     formData.append('username', el.username.value.toLowerCase());
     formData.append('email', el.email.value.toLowerCase());
 
-    var ID = Requests.add(ajaxRequest('POST', 'Main', formData,
-        function() {
-          setTimeout(successCallback, 300);
-        }, function() {
-          setTimeout(failCallback, 300);
-        }));
+    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
 
     function successCallback() {
+      Init.navbarContent.removeChild(loader);
       var response = JSON.parse(Requests.get(ID).responseText);
-      formMsg.clear(el.step1Msg);
       if (response.username === 'unused' && response.email === 'unused') {
         el.step1Content.classList.add('signup-hidden');
         el.step2Content.classList.remove('signup-hidden');
-        el.step1Msg.classList.remove('msg-open');
         el.step2BackButton.style.top = computeTop(el.step2BackButton);
       }
       else {
@@ -218,22 +227,18 @@ var Signup = (function() {
           Init.scrollTo(el.email.parentNode);
         }
       }
-      formSubmit.enableNext(el.step1NextButton);
-      formInput.enable(el.username);
-      formInput.enable(el.email);
+      enableInputsStep1();
     }
 
     function failCallback() {
-      formSubmit.enableNext(el.step1NextButton);
-      formInput.enable(el.username);
-      formInput.enable(el.email);
+      Init.navbarContent.removeChild(loader);
+      enableInputsStep1();
       if (Requests.get(ID).status === 0) {
-        formMsg.showError(el.step1Msg, 'Unable to send request');
+        newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
       else {
-        formMsg.showError(el.step1Msg, 'Error');
+        newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
       }
-      Init.scrollTo(el.step1ButtonContainer);
     }
   }
 
@@ -243,6 +248,8 @@ var Signup = (function() {
   function init() {
     el.username = document.getElementById('signup-username');
     el.email = document.getElementById('signup-email');
+    el.password = document.getElementById('signup-password');
+    el.passwordConfirm = document.getElementById('signup-passwordConfirm');
     el.signupSection = document.getElementById('signup-section');
     el.signupParent = document.getElementById('signup-parent');
     el.header = el.signupParent.children[0].children[0];
@@ -253,8 +260,6 @@ var Signup = (function() {
     el.aboutRemaining = document.getElementById('about-remaining-chars');
     el.interestsRemaining = document.getElementById('interests-remaining-chars');
     el.about = document.querySelector('#signup-about-parent textarea');
-    el.signupMsg = document.getElementById('signup-process-msg');
-    el.step1Msg = document.getElementById('signup-step1-process-msg');
     el.signupButtonContainer = document.querySelector('#signup-button');
     el.signupButton = el.signupButtonContainer.children[1];
     el.step1Content = document.getElementById('signup-step1');
@@ -270,7 +275,7 @@ var Signup = (function() {
     el.step2BackButton = el.step2ButtonContainer.children[0];
     el.step3BackButton = el.step3ButtonContainer.children[0];
     el.step4BackButton = el.signupButtonContainer.children[0];
-
+    el.faceAssosiate = document.querySelector("input[type=checkbox]");
     el.signupButton.classList.add('right-button');
 
     el.step1NextButton.addEventListener('click', function() {
@@ -320,8 +325,6 @@ var Signup = (function() {
       el.step2Content.classList.remove('signup-hidden');
     });
     el.step4BackButton.addEventListener('click', function() {
-      el.signupMsg.classList.remove('msg-open');
-      formMsg.clear(el.signupMsg);
       el.step4Content.classList.add('signup-hidden');
       el.step3Content.classList.remove('signup-hidden');
     });

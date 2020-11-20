@@ -32,7 +32,6 @@ var ValidChecker = (function() {
     var interests = document.querySelector('textarea[name="signup-interests"]');
     var about = document.querySelector('textarea[name="signup-about"]');
     var address = document.getElementById('signup-address');
-    var signupMsg = document.getElementById('signup-process-msg');
 
     data.checkedInputsStep1 = [];
     data.checkedInputsStep2 = [];
@@ -119,7 +118,6 @@ var ValidChecker = (function() {
       element.invalidMsg = 'Invalid';
       element.scrollElem = element;
       element.addEventListener('input', function () {
-        signupMsg.innerHTML = '';
         for (var child = element.parentNode.children[0].firstChild; child !== null; child = child.nextSibling) {
           if (child.className === 'invalid-value') {
             element.parentNode.children[0].removeChild(child);
@@ -151,7 +149,6 @@ var ValidChecker = (function() {
         }
       }
       function clearMismatchMsg() {
-        signupMsg.innerHTML = '';
         if (passwd2.parentNode.children[0].children[1]) {
           passwd2.parentNode.children[0].removeChild(passwd2.parentNode.children[0].children[1]);
         }
