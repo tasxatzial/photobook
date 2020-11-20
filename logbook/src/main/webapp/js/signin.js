@@ -38,14 +38,16 @@ var Signin = (function() {
    */
   function doSignin() {
     Requests.cancelExcept(null);
-    Init.scrollTo(el.signinButton);
+
+    formMsg.clear(el.signinMsg);
+    var loader = document.querySelector('.bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.navbarContent.appendChild(loader);
+    }
+
     disableInputs();
-    el.signinMsg.classList.add('msg-open');
-
-    setTimeout(function() {
-      formMsg.showElement(el.signinMsg, Init.loader);
-    }, 150);
-
 
     /* prepare data */
     var data = new FormData();
@@ -54,13 +56,10 @@ var Signin = (function() {
     data.append('action', 'Signin');
 
     /* make the call */
-    var ID = Requests.add(ajaxRequest('POST', 'Main', data, function() {
-      setTimeout(successCallback, 300);
-    }, function() {
-      setTimeout(failCallback, 300);
-    }));
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
+      Init.navbarContent.removeChild(loader);
       var response = JSON.parse(Requests.get(ID).responseText);
       if (response.HOMEPAGE) {
         var signupButton = document.getElementById('signup-nav-button');
@@ -69,26 +68,29 @@ var Signin = (function() {
         Homepage.init();
       }
       else {
-        if (response['username'] === '0') {
-          formMsg.showError(el.signinMsg, 'Invalid username');
-        }
-        else {
-          formMsg.showError(el.signinMsg, 'Invalid password');
-        }
+        el.signinMsg.classList.add('msg-open');
+        setTimeout(function() {
+          if (response['username'] === '0') {
+            formMsg.showError(el.signinMsg, 'Invalid username');
+          }
+          else {
+            formMsg.showError(el.signinMsg, 'Invalid password');
+          }
+        }, 150);
         Init.scrollTo(el.signinButton);
         enableInputs();
       }
     }
 
     function failCallback() {
+      Init.navbarContent.removeChild(loader);
       enableInputs();
       if (Requests.get(ID).status === 0) {
-        formMsg.showError(el.signinMsg, 'Unable to send request');
+        newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
       else {
-        formMsg.showError(el.signinMsg, 'Error');
+        newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
       }
-      Init.scrollTo(el.signinButton);
     }
   }
 
@@ -104,14 +106,13 @@ var Signin = (function() {
 
     el.username.addEventListener('input', function() {
       formMsg.clear(el.signinMsg);
+      el.signinMsg.classList.remove('msg-open');
     });
     el.password.addEventListener('input', function() {
       formMsg.clear(el.signinMsg);
+      el.signinMsg.classList.remove('msg-open');
     });
-    el.signinButton.addEventListener('click', function() {
-      formMsg.clear(el.signinMsg);
-      doSignin();
-    });
+    el.signinButton.addEventListener('click', doSignin);
     el.signinButton.disabled = false;
 
     SignInFace.init();

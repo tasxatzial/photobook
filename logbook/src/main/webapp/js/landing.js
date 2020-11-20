@@ -6,17 +6,12 @@
  */
 var Landing = (function() {
 
-  var el = {
-    navbarContent: null
-  };
-
   /**
    * Initializes the view when the landing page is requested.
    */
   function init() {
     Init.nonav.innerHTML = '';
     Init.nonav.appendChild(createLanding());
-    el.navbarContent = document.getElementById('navbar-content');
   }
 
   /**
@@ -38,11 +33,11 @@ var Landing = (function() {
     if (!loader) {
       loader = document.createElement('div');
       loader.className = 'bar-loader';
-      el.navbarContent.appendChild(loader);
+      Init.navbarContent.appendChild(loader);
     }
 
     function successCallback() {
-      el.navbarContent.removeChild(loader);
+      Init.navbarContent.removeChild(loader);
       Init.nonav.innerHTML = Requests.get(ID).responseText;
       if (signinButton) {
         Init.navbarContent.removeChild(signinButton);
@@ -75,11 +70,11 @@ var Landing = (function() {
     if (!loader) {
       loader = document.createElement('div');
       loader.className = 'bar-loader';
-      el.navbarContent.appendChild(loader);
+      Init.navbarContent.appendChild(loader);
     }
 
     function successCallback() {
-      el.navbarContent.removeChild(loader);
+      Init.navbarContent.removeChild(loader);
       Init.nonav.innerHTML = Requests.get(ID).responseText;
       document.getElementById('signup-parent').classList.add('parent-in-main');
 
@@ -102,7 +97,7 @@ var Landing = (function() {
    */
   function failCallback(ID, button) {
     var loader = document.querySelector('.bar-loader');
-    el.navbarContent.removeChild(loader);
+    Init.navbarContent.removeChild(loader);
     if (Requests.get(ID).status === 0) {
       newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
     }
