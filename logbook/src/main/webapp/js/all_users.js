@@ -25,47 +25,54 @@ var AllUsers = (function() {
   function init() {
     Requests.cancelExcept(null);
 
-    var userlistSection = createAllUsersSection();
-    Init.nonav.innerHTML = '';
-    Init.nonav.appendChild(userlistSection);
-
-    el.userListParent = userlistSection.children[0];
-    var loaderMsg = el.userListParent.children[3];
-    formMsg.showElement(loaderMsg, Init.loader);
+    var loader = document.querySelector('.bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.navbarContent.appendChild(loader);
+    }
 
     var data = new FormData();
     data.append("action", "GetAllUsers");
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     function successCallback() {
-      var response = JSON.parse(Requests.get(ID).responseText);
-      formMsg.clear(loaderMsg);
+      Init.navbarContent.removeChild(loader);
+
+      var userlistSection = createAllUsersSection();
+      el.userListParent = userlistSection.children[0];
+
+      Init.nonav.innerHTML = '';
+      Init.nonav.appendChild(userlistSection);
 
       state.lastUpdateTime = Date.now();
       setLastUpdateContainer();
 
+      var response = JSON.parse(Requests.get(ID).responseText);
       state.response = response;
+
       state.pages = Object.keys(response).length;
       el.navBar = createNavBar(state.pages);
       addNavBarListeners();
+
       el.userListParent.appendChild(el.navBar);
       showPage(1);
     }
 
     function failCallback() {
+      Init.navbarContent.removeChild(loader);
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
         return;
       }
-      formMsg.clear(loaderMsg);
       var error = null;
       if (Requests.get(ID).status === 0) {
-        error = newElements.createKeyValue('Error', 'Unable to send request');
+        error = 'Unable to send request';
       }
       else {
-        error = newElements.createKeyValue('Error', 'Unknown');
+        error = 'Error';
       }
-      el.userListParent.appendChild(error);
+      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
   }
 
