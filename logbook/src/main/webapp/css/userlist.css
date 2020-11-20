@@ -55,6 +55,7 @@
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
+    height: 2.9em;
 }
 
 .userlist-hr-bottom {
@@ -87,4 +88,10 @@
 
 .userlist-refresh-button {
     margin-left: 1em;
+}
+
+@media only screen and (max-width: 45rem) {
+    .username-line {
+        height: 2.65em;
+    }
 }

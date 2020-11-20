@@ -165,11 +165,11 @@ button.back-button:hover, button.back-button:focus {
   background: #3f85cb;
 }
 
-.signup-summary p {
+.signup-summary p + p {
   margin-bottom: 0.75em;
   margin-top: 0;
 }
 
 .signup-summary p:first-child {
-  margin-top: revert;
+  margin-bottom: 0.75em;
 }

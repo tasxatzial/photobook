@@ -489,7 +489,7 @@ var Posts = (function() {
       el.mapParent.id = 'post-map-parent';
       el.mapParent.appendChild(mapDiv);
       data['postDiv'].insertBefore(el.mapParent, data['footerDiv']);
-      mapDiv.style.height = '20rem';
+      mapDiv.style.height = '18rem';
       obj.map = new OLMap(mapDiv.id);
     }
     else {

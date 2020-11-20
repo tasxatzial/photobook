@@ -123,7 +123,7 @@ var SignUpLocation = (function () {
       var mapDiv = document.createElement('div');
       mapDiv.id = 'map';
       el.mapParent.appendChild(mapDiv);
-      mapDiv.style.height = '20rem';
+      mapDiv.style.height = '18rem';
       state.map = new OLMap(mapDiv.id);
     }
     toggleOldMap();

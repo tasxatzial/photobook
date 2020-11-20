@@ -29,8 +29,8 @@
   padding: 0;
   font-weight: bold;
   color: #3f85cb;
-  margin-top: 0;
-  margin-bottom: .5em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .read-more-button:focus, .read-more-button:hover, .post-creator-button:focus, .post-creator-button:hover {
@@ -55,8 +55,8 @@
 }
 
 #post-map-parent {
-  max-width: 35rem;
-  margin: 1.5em auto 1em;
+  max-width: 30rem;
+  margin: 1em auto;
 }
 
 #delete-post-button {
@@ -98,10 +98,6 @@
 }
 
 .post-description p {
-  margin-bottom: 0.5em;
-  margin-top: 0;
-}
-
-.post-description p:last-child {
-  margin-bottom: revert;
+  margin-bottom: 0;
+  margin-top: 0.5em;
 }
