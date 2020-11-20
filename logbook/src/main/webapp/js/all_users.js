@@ -7,12 +7,16 @@
 var AllUsers = (function() {
   var state = {
     response: null,
-    pages: 0
+    pages: 0,
+    lastUpdateTime: null
   };
 
   var el = {
     userListParent: null,
-    navBar: null
+    navBar: null,
+    lastUpdatedText: null,
+    refreshButton: null,
+    lastUpdateContainer: null
   };
 
   /**
@@ -26,7 +30,7 @@ var AllUsers = (function() {
     Init.nonav.appendChild(userlistSection);
 
     el.userListParent = userlistSection.children[0];
-    var loaderMsg = el.userListParent.children[2];
+    var loaderMsg = el.userListParent.children[3];
     formMsg.showElement(loaderMsg, Init.loader);
 
     var data = new FormData();
@@ -36,6 +40,9 @@ var AllUsers = (function() {
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
       formMsg.clear(loaderMsg);
+
+      state.lastUpdateTime = Date.now();
+      setLastUpdateContainer();
 
       state.response = response;
       state.pages = Object.keys(response).length;
@@ -87,6 +94,7 @@ var AllUsers = (function() {
       rightButton.disabled = false;
       rightButton.classList.add('userlist-enabled-arrow-button');
       showPage(selectButton.value);
+      setLastUpdateContainer();
     });
     rightButton.addEventListener('click', function () {
       selectButton.value = Number(selectButton.value) + 1;
@@ -97,9 +105,11 @@ var AllUsers = (function() {
       leftButton.disabled = false;
       leftButton.classList.add('userlist-enabled-arrow-button');
       showPage(selectButton.value);
+      setLastUpdateContainer();
     });
     selectButton.addEventListener('change', function () {
       showPage(selectButton.value);
+      setLastUpdateContainer();
       leftButton.disabled = selectButton.value === '1';
       rightButton.disabled = Number(selectButton.value) === state.pages;
       if (leftButton.disabled) {
@@ -116,13 +126,36 @@ var AllUsers = (function() {
   }
 
   /**
+   * Sets the content of the element that shows when the online status was last updated.
+   */
+  function setLastUpdateContainer() {
+    var t = Math.floor((Date.now() - state.lastUpdateTime) / 60000);
+    if (t > 0) {
+      if (!el.refreshButton) {
+        el.refreshButton = document.createElement('button');
+        el.refreshButton.innerHTML = 'Refresh';
+        el.refreshButton.className = 'userlist-refresh-button';
+        el.refreshButton.addEventListener('click', function() {
+          AllUsers.init();
+        });
+        el.lastUpdateContainer.appendChild(el.refreshButton);
+      }
+      el.lastUpdatedText.innerHTML = 'Online (updated > ' + t + ' min ago)';
+    }
+    else {
+      el.refreshButton = null;
+      el.lastUpdatedText.innerHTML = 'Online';
+    }
+  }
+
+  /**
    * Shows the list of users in the specified pageNo.
    * @param pageNo
    */
   function showPage(pageNo) {
     if (pageNo <= state.pages && pageNo >= 1) {
-      if (el.userListParent.children[4]) {
-        el.userListParent.removeChild(el.userListParent.children[3]);
+      if (el.userListParent.children[5]) {
+        el.userListParent.removeChild(el.userListParent.children[4]);
       }
       var userPage = createUserPage(state.response[pageNo]);
       el.userListParent.insertBefore(userPage, el.navBar);
@@ -171,20 +204,24 @@ var AllUsers = (function() {
 
     var loaderMsg = document.createElement('div');
 
-    var legend = document.createElement('div');
-    legend.id = 'legend';
+    el.lastUpdateContainer = document.createElement('div');
+    el.lastUpdateContainer.id = 'legend';
     var circle = newElements.createGreenCircle('images/green_circle.svg');
-    var legendText = document.createElement('span');
-    legendText.id = 'legend-text';
-    legendText.innerText = 'Online';
-    legend.appendChild(circle);
-    legend.appendChild(legendText);
+    el.lastUpdatedText = document.createElement('span');
+    el.lastUpdatedText.id = 'legend-text';
+    el.lastUpdatedText.innerText = 'Online';
+    el.lastUpdateContainer.appendChild(circle);
+    el.lastUpdateContainer.appendChild(el.lastUpdatedText);
+
+    var activeUsers = document.createElement('p');
+    activeUsers.innerText = 'Online users are those who have been active < 1 min ago.';
 
     var div = document.createElement('div');
     div.id = 'userlist-parent';
     div.className = 'parent-in-main';
     div.appendChild(header);
-    div.appendChild(legend);
+    div.appendChild(activeUsers);
+    div.appendChild(el.lastUpdateContainer);
     div.appendChild(loaderMsg);
 
     var userlistSection = document.createElement('div');
