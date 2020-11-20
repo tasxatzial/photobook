@@ -307,6 +307,42 @@ var newElements = (function NewElements() {
     document.getElementsByTagName('body')[0].appendChild(msg);
   }
 
+  /**
+   * Shows a full window with yes/no confirmation buttons when the delete button is clicked.
+   */
+  function showConfirmDelete(text, id, callback) {
+    var yesNoButtons = newElements.createYesNoButtons(id);
+
+    /* yes button */
+    yesNoButtons.children[1].addEventListener('click', function () {
+      confirmDeleteWindow.removeChild(yesNoButtons);
+
+      var text = document.createElement('p');
+      text.innerHTML = 'Deleting...';
+
+      var deleteMsg = document.createElement('div');
+      formMsg.showElement(deleteMsg, Init.loader);
+
+      confirmDeleteWindow.appendChild(text);
+      confirmDeleteWindow.appendChild(deleteMsg);
+
+      callback();
+    });
+
+    /* no button */
+    yesNoButtons.children[2].addEventListener('click', function() {
+      Init.clearFullWindowMsg();
+    });
+
+    var confirmDelete = createFullWindow(text);
+    var confirmDeleteWindow = confirmDelete.children[0];
+    confirmDeleteWindow.appendChild(yesNoButtons);
+
+    var body = document.getElementsByTagName('body')[0];
+    body.id = 'full-body';
+    document.getElementsByTagName('body')[0].appendChild(confirmDelete);
+  }
+
   return {
     createLoader: createLoader,
     createSignBarButton: createSignBarButton,
@@ -321,6 +357,7 @@ var newElements = (function NewElements() {
     createFullWindow: createFullWindow,
     createFullWindowButton: createFullWindowButton,
     showFullWindowMsg: showFullWindowMsg,
-    createGreenCircle: createGreenCircle
+    createGreenCircle: createGreenCircle,
+    showConfirmDelete: showConfirmDelete
   };
 }());
