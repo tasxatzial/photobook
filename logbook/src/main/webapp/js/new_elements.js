@@ -126,6 +126,7 @@ var newElements = (function NewElements() {
    */
   function createSignupSummary(response, dataNames) {
     var div = document.createElement('div');
+    div.className = 'signup-summary';
     for (var i = 0; i < dataNames.length; i++) {
       if (response[dataNames[i][0]] !== undefined) {
         var msg = createKeyValue(dataNames[i][1], response[dataNames[i][0]]);

@@ -164,3 +164,12 @@ button.back-button:hover, button.back-button:focus {
 .next-button {
   background: #3f85cb;
 }
+
+.signup-summary p {
+  margin-bottom: 0.75em;
+  margin-top: 0;
+}
+
+.signup-summary p:first-child {
+  margin-top: revert;
+}
