@@ -343,8 +343,21 @@ var newElements = (function NewElements() {
     document.getElementsByTagName('body')[0].appendChild(confirmDelete);
   }
 
+  /**
+   * Creates a sliding loader.
+   * @returns {HTMLDivElement}
+   */
+  function createSlidingLoader() {
+    var loader = document.createElement('div');
+    loader.className = 'bar-loader';
+    loader.style.animationDuration = (window.innerWidth * 1.5)/1000 + 's';
+
+    return loader;
+  }
+
   return {
     createLoader: createLoader,
+    createSlidingLoader: createSlidingLoader,
     createSignBarButton: createSignBarButton,
     createSignupSummary: createSignupSummary,
     createYesNoButtons: createYesNoButtons,

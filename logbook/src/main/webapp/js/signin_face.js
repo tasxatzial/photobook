@@ -100,8 +100,7 @@ var SignInFace = (function () {
     formMsg.clear(el.uploadMsgParent);
     formMsg.clear(el.signinMsg);
     if (photo) {
-      var loader = newElements.createLoader('images/loader.gif');
-      formMsg.showElement(el.uploadMsgParent, loader);
+      formMsg.showElement(el.uploadMsgParent, Init.loader);
       formInput.disable(el.username);
       formButton.disable(el.photoButton);
       formSubmit.disable(el.submit);

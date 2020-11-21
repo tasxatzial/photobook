@@ -113,8 +113,7 @@ var SignUpFace = (function () {
    */
   function detect() {
     var photo = state.photoPicker.getPhotob64();
-    var loader = newElements.createLoader('images/loader.gif');
-    formMsg.showElement(el.uploadMsgParent, loader);
+    formMsg.showElement(el.uploadMsgParent, Init.loader);
     formInput.disable(el.username);
     formButton.disable(el.selectButton);
     formButton.disable(el.uploadButton);

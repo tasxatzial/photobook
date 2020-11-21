@@ -28,8 +28,7 @@ var AccountInfo = (function() {
 
     var loader = document.querySelector('.bar-loader');
     if (!loader) {
-      loader = document.createElement('div');
-      loader.className = 'bar-loader';
+      loader = newElements.createSlidingLoader();
       Init.navbarContent.appendChild(loader);
     }
 

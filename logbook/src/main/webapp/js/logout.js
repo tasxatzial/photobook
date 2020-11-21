@@ -24,9 +24,8 @@ var Logout = (function() {
       Homepage.initializeButton(logoutButton);
       var loader = document.querySelector('.bar-loader');
       if (!loader) {
-        loader = document.createElement('div');
-        loader.className = 'bar-loader';
-        navbarContent.appendChild(loader);
+        loader = newElements.createSlidingLoader();
+        Init.navbarContent.appendChild(loader);
       }
     }
 
