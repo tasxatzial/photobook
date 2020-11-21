@@ -99,7 +99,7 @@ public class UserDB {
 
             StringBuilder insQuery = new StringBuilder();
 
-            insQuery.append("SELECT user_name FROM users;");
+            insQuery.append("SELECT user_name FROM users ORDER BY registered_since;");
 
             stmt.execute(insQuery.toString());
 
