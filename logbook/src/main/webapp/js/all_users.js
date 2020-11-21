@@ -39,6 +39,9 @@ var AllUsers = (function() {
     function successCallback() {
       Init.navbarContent.removeChild(loader);
 
+      var allUsersButton = document.getElementById('show-users-button');
+      Homepage.initializeButton(allUsersButton);
+
       var userlistSection = createAllUsersSection();
       el.userListParent = userlistSection.children[0];
 

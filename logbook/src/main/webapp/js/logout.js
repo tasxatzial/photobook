@@ -21,7 +21,7 @@ var Logout = (function() {
 
     var logoutButton = document.getElementById('logout-button');
     if (clickedLogout) {
-      logoutButton.blur();
+      Homepage.initializeButton(logoutButton);
       var loader = document.querySelector('.bar-loader');
       if (!loader) {
         loader = document.createElement('div');
@@ -47,6 +47,7 @@ var Logout = (function() {
     function failCallback() {
       if (loader) {
         navbarContent.removeChild(loader);
+        Homepage.initializeButton(null);
       }
       if (Requests.get(ID).status === 0) {
         newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);

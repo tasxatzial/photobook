@@ -81,6 +81,11 @@ var Posts = (function() {
 
     function successCallback() {
       var response = JSON.parse(Requests.get(ID).responseText);
+      if (username === null) {
+        var postsButton = document.getElementById('show-posts');
+        Homepage.initializeButton(postsButton);
+      }
+
       formMsg.clear(el.loaderMsg);
       var shortPost = null;
       if (Object.keys(response).length > 0) {
