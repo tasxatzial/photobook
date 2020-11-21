@@ -86,8 +86,8 @@ public class UserDB {
      * @return
      * @throws ClassNotFoundException
      */
-    public static List<String> getAllUsersNames() throws ClassNotFoundException {
-        List<String> userNames = new ArrayList<>();
+    public static List<List<String>> getAllUsersNames() throws ClassNotFoundException {
+        List<List<String>> userNames = new ArrayList<>();
 
         Statement stmt = null;
         Connection con = null;
@@ -99,14 +99,17 @@ public class UserDB {
 
             StringBuilder insQuery = new StringBuilder();
 
-            insQuery.append("SELECT user_name FROM users ORDER BY registered_since;");
+            insQuery.append("SELECT user_name, registered_since FROM users ORDER BY registered_since;");
 
             stmt.execute(insQuery.toString());
 
             ResultSet res = stmt.getResultSet();
 
             while (res.next() == true) {
-                userNames.add(res.getString("user_name"));
+                List<String> user = new ArrayList<>();
+                user.add(res.getString("user_name"));
+                user.add(res.getString("registered_since"));
+                userNames.add(user);
             }
 
         } catch (SQLException ex) {

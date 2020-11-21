@@ -81,9 +81,9 @@
 
 #legend {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 1em;
+    margin-bottom: .5em;
 }
 
 #legend-text {

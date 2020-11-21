@@ -16,7 +16,7 @@ var AllUsers = (function() {
     navBar: null,
     lastUpdatedText: null,
     refreshButton: null,
-    lastUpdateContainer: null
+    topLegendContainer: null
   };
 
   /**
@@ -161,7 +161,7 @@ var AllUsers = (function() {
         el.refreshButton.addEventListener('click', function() {
           AllUsers.init();
         });
-        el.lastUpdateContainer.appendChild(el.refreshButton);
+        el.topLegendContainer.appendChild(el.refreshButton);
       }
       el.lastUpdatedText.innerHTML = 'Online (updated > ' + t + ' min ago)';
     }
@@ -177,8 +177,8 @@ var AllUsers = (function() {
    */
   function showPage(pageNo) {
     if (pageNo <= state.pages && pageNo >= 1) {
-      if (el.userListParent.children[5]) {
-        el.userListParent.removeChild(el.userListParent.children[4]);
+      if (el.userListParent.children[4]) {
+        el.userListParent.removeChild(el.userListParent.children[3]);
       }
       var userPage = createUserPage(state.response[pageNo]);
       el.userListParent.insertBefore(userPage, el.navBar);
@@ -225,16 +225,23 @@ var AllUsers = (function() {
     var header = document.createElement('header');
     header.appendChild(headerH2);
 
-    var loaderMsg = document.createElement('div');
-
-    el.lastUpdateContainer = document.createElement('div');
-    el.lastUpdateContainer.id = 'legend';
     var circle = newElements.createGreenCircle('images/green_circle.svg');
+
     el.lastUpdatedText = document.createElement('span');
     el.lastUpdatedText.id = 'legend-text';
     el.lastUpdatedText.innerText = 'Online';
-    el.lastUpdateContainer.appendChild(circle);
-    el.lastUpdateContainer.appendChild(el.lastUpdatedText);
+
+    var lastUpdatedContainer = document.createElement('div');
+    lastUpdatedContainer.appendChild(circle);
+    lastUpdatedContainer.appendChild(el.lastUpdatedText);
+
+    var registedSince = document.createElement('div');
+    registedSince.innerHTML = 'Registered since';
+
+    el.topLegendContainer = document.createElement('div');
+    el.topLegendContainer.id = 'legend';
+    el.topLegendContainer.appendChild(lastUpdatedContainer);
+    el.topLegendContainer.appendChild(registedSince);
 
     var activeUsers = document.createElement('p');
     activeUsers.innerText = 'Online users are those who have been active < 1 min ago.';
@@ -244,8 +251,7 @@ var AllUsers = (function() {
     div.className = 'parent-in-main';
     div.appendChild(header);
     div.appendChild(activeUsers);
-    div.appendChild(el.lastUpdateContainer);
-    div.appendChild(loaderMsg);
+    div.appendChild(el.topLegendContainer);
 
     var userlistSection = document.createElement('div');
     userlistSection.id = 'userlist-section';
@@ -266,25 +272,25 @@ var AllUsers = (function() {
     var div = document.createElement('div');
     div.id = 'userlist';
     div.appendChild(hrBottom);
-
     Object.keys(page).forEach(function(key, index) {
-      var msg = newElements.createKeyValue(key, page[key]);
-      msg.classList.add('allusers-name');
+      var username = page[key]['n'];
+      var registered = page[key]['r'].substring(0, 10);
+      var userText = newElements.createKeyValue(key, username);
+      userText.classList.add('allusers-name');
 
-      var img = document.createElement('img');
-      img.className = 'user-show-more-arrow';
-      img.src = 'images/showmore.svg';
+      var registeredDate = document.createElement('div');
+      registeredDate.innerHTML = registered;
 
       var user = document.createElement('div');
       user.className = "username-line";
-      user.appendChild(msg);
-      user.appendChild(img);
+      user.appendChild(userText);
+      user.appendChild(registeredDate);
 
       var button = document.createElement('button');
       button.className = 'username-button';
       button.appendChild(user);
       button.onclick = function() {
-        ShowProfile.init(page[key], true);
+        ShowProfile.init(username, true);
       };
 
       var hr = document.createElement('hr');

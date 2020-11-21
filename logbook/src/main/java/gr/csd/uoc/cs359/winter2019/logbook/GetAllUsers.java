@@ -52,10 +52,13 @@ public class GetAllUsers extends HttpServlet {
         }
 
         JSONObject jsonPage = new JSONObject();
-        List<String> usernames = UserDB.getAllUsersNames();
+        List<List<String>> usernames = UserDB.getAllUsersNames();
         int j = 1;
         for (int i = 0; i < usernames.size(); i++) {
-            jsonPage.put(Integer.toString(i + 1), usernames.get(i));
+            JSONObject jsonUser = new JSONObject();
+            jsonUser.put("n", usernames.get(i).get(0));
+            jsonUser.put("r", usernames.get(i).get(1));
+            jsonPage.put(Integer.toString(i + 1), jsonUser);
             if (i % 10 == 9 || i == usernames.size() - 1) {
                 json.put(Integer.toString(j), jsonPage);
                 j++;
