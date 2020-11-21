@@ -244,19 +244,13 @@ var Posts = (function() {
     else if (postJSON['imageBase64']) {
       image.src = postJSON['imageBase64'];
     }
-    if (image.src) {
-      var imageParent = document.createElement('div');
-      imageParent.className = 'short-post-photo-parent';
-      imageParent.appendChild(image);
+    var imageParent = document.createElement('div');
+    imageParent.className = 'short-post-photo-parent';
+    if (!image.src) {
+      image.src = 'images/no-image.jpg';
+      imageParent.classList.add('post-no-image');
     }
-
-    /* use different class in description depending on whether there is an image in the post */
-    if (image.src) {
-      description.classList.add('post-description-image');
-    }
-    else {
-      description.classList.add('post-description-no-image');
-    }
+    imageParent.appendChild(image);
 
     /* create the button that tells us who created this post */
     var button = document.createElement('button');
@@ -307,7 +301,7 @@ var Posts = (function() {
     /* create the element that has the read more button (includes the button and the image of the button) */
     var readMoreButton = document.createElement('button');
     readMoreButton.className = 'read-more-button';
-    readMoreButton.innerHTML = 'Continue reading';
+    readMoreButton.innerHTML = 'Read more';
     readMoreButton.addEventListener('click', function () {
       data['locationQuery'] = queryLatLon.getLocation();
       data['queryID'] =  queryLatLon.getQueryID();
@@ -422,7 +416,7 @@ var Posts = (function() {
     Homepage.initializeButton(null);
     Requests.cancelExcept(data['queryID']);
 
-    if (data['postDiv'].children[1].className === 'short-post-photo-parent') {
+    if (!data['postDiv'].children[1].classList.contains('post-no-image')) {
       data['postDiv'].children[1].children[0].className = 'full-post-photo';
     }
     data['descriptionDiv'].innerHTML = '';

@@ -89,11 +89,7 @@
   width: 100%;
 }
 
-.post-description-no-image {
-  margin-top: 0;
-}
-
-.post-description-image {
+.post-description {
   margin-top: 1.4em;
 }
 
