@@ -221,8 +221,6 @@ var PostForm = (function() {
    */
   function createPost() {
     Requests.cancelExcept(null);
-    Init.scrollTo(el.postButton);
-    el.createPostMsg.classList.add('msg-open');
 
     if (data.loc.lat === null || data.loc.lon === null || el.description.value.trim() === '') {
       formMsg.showError(el.createPostMsg, 'Please provide all required fields');
@@ -231,7 +229,12 @@ var PostForm = (function() {
 
     disableInputs();
 
-    formMsg.showElement(el.createPostMsg, Init.loader);
+    var loader = document.querySelector('.bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.navbarContent.appendChild(loader);
+    }
 
     var formData = new FormData();
     formData.append("action", "CreatePost");
@@ -251,34 +254,32 @@ var PostForm = (function() {
     var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
 
     function successCallback() {
+      Init.navbarContent.removeChild(loader);
       Posts.init(data.username);
     }
 
     function failCallback() {
+      Init.navbarContent.removeChild(loader);
       enableInputs();
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
         return;
       }
-      var info = null;
       if (Requests.get(ID).status === 500) {
-        formMsg.showError(el.createPostMsg, 'Server error');
-        Init.scrollTo(el.postButton);
+        newElements.showFullWindowMsg('OK', 'Server error', Init.clearFullWindowMsg);
       }
       else if (Requests.get(ID).status === 0) {
-        formMsg.showError(el.createPostMsg, 'Unable to send request');
-        Init.scrollTo(el.postButton);
+        newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
       else if (Requests.get(ID).status === 400) {
         var response = JSON.parse(Requests.get(ID).responseText);
-        info = newElements.createSignupSummary(response, Init.postNames);
+        var info = newElements.createSignupSummary(response, Init.postNames);
         el.postFormContent.innerHTML = '';
         el.postFormContent.appendChild(info);
         el.header.innerHTML = '400 - Bad Request';
       }
       else {
-        formMsg.showError(el.createPostMsg, 'Error');
-        Init.scrollTo(el.postButton);
+        newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
       }
     }
   }
