@@ -11,7 +11,6 @@ var Posts = (function() {
     confirmDelete: null,
     deleteButton: null,
     deleteMsg: null,
-    loaderMsg: null,
     postButton: null
   };
 
@@ -65,11 +64,12 @@ var Posts = (function() {
   function getPosts(username) {
     Requests.cancelExcept(null);
 
-    var oldError = document.getElementById('get-posts-error-msg');
-    if (oldError) {
-      el.postsParent.removeChild(oldError);
+    var loader = document.querySelector('.bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.navbarContent.appendChild(loader);
     }
-    formMsg.showElement(el.loaderMsg, Init.loader);
 
     var formData = new FormData();
     formData.append("action", "GetPosts");
@@ -79,13 +79,13 @@ var Posts = (function() {
     var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
 
     function successCallback() {
+      Init.navbarContent.removeChild(loader);
       var response = JSON.parse(Requests.get(ID).responseText);
       if (username === null) {
         var postsButton = document.getElementById('show-posts');
         Homepage.initializeButton(postsButton);
       }
 
-      formMsg.clear(el.loaderMsg);
       var shortPost = null;
       if (Object.keys(response).length > 0) {
         el.postsParent.appendChild(document.createElement('hr'));
@@ -96,25 +96,26 @@ var Posts = (function() {
         el.postsParent.appendChild(document.createElement('hr'));
       });
       if (Object.keys(response).length === 0) {
-        el.loaderMsg.innerHTML = 'No posts.';
+        var postsMsg = document.createElement('p');
+        postsMsg.innerHTML = 'No posts.';
+        el.postsParent.appendChild(postsMsg);
       }
     }
 
     function failCallback() {
+      Init.navbarContent.removeChild(loader);
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
         return;
       }
-      formMsg.clear(el.loaderMsg);
       var error = null;
       if (Requests.get(ID).status === 0) {
-        error = newElements.createKeyValue('Error', 'Unable to send request');
+        error = 'Unable to send request';
       }
       else {
-        error = newElements.createKeyValue('Error', 'Unknown');
+        error = 'Error';
       }
-      error.id = 'get-posts-error-msg';
-      el.postsParent.appendChild(error);
+      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
   }
 
