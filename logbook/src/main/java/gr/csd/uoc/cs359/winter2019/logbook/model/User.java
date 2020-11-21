@@ -273,6 +273,10 @@ public class User implements Serializable {
      * @param gender
      */
     public void setGender(String gender) {
+        if (gender == null) {
+            this.gender = Gender.UNKNOWN;
+            return;
+        }
         switch (gender.toLowerCase().trim()) {
             case "female":
                 this.gender = Gender.FEMALE;
