@@ -89,20 +89,26 @@ var AllUsers = (function() {
 
     leftButton.disabled = true;
     leftButton.classList.remove('userlist-enabled-arrow-button');
+    leftButton.children[0].src = 'images/left_disabled.svg';
     if (state.pages <= 1) {
       rightButton.disabled = true;
       rightButton.classList.remove('userlist-enabled-arrow-button');
+      rightButton.children[0].src = 'images/right_disabled.svg';
     } else {
       rightButton.classList.add('userlist-enabled-arrow-button');
     }
     leftButton.addEventListener('click', function () {
       selectButton.value = Number(selectButton.value) - 1;
-      if (selectButton.value === '1') {
+      if (Number(selectButton.value) === 1) {
         leftButton.disabled = true;
         leftButton.classList.remove('userlist-enabled-arrow-button');
+        leftButton.children[0].src = 'images/left_disabled.svg';
       }
-      rightButton.disabled = false;
-      rightButton.classList.add('userlist-enabled-arrow-button');
+      if (Number(selectButton.value) === state.pages - 1) {
+        rightButton.disabled = false;
+        rightButton.classList.add('userlist-enabled-arrow-button');
+        rightButton.children[0].src = 'images/right.svg';
+      }
       showPage(selectButton.value);
       setLastUpdateContainer();
     });
@@ -111,9 +117,13 @@ var AllUsers = (function() {
       if (Number(selectButton.value) === state.pages) {
         rightButton.disabled = true;
         rightButton.classList.remove('userlist-enabled-arrow-button');
+        rightButton.children[0].src = 'images/right_disabled.svg';
       }
-      leftButton.disabled = false;
-      leftButton.classList.add('userlist-enabled-arrow-button');
+      if (Number(selectButton.value) === 2) {
+        leftButton.disabled = false;
+        leftButton.classList.add('userlist-enabled-arrow-button');
+        leftButton.children[0].src = 'images/left.svg';
+      }
       showPage(selectButton.value);
       setLastUpdateContainer();
     });
@@ -124,13 +134,17 @@ var AllUsers = (function() {
       rightButton.disabled = Number(selectButton.value) === state.pages;
       if (leftButton.disabled) {
         leftButton.classList.remove('userlist-enabled-arrow-button');
+        leftButton.children[0].src = 'images/left_disabled.svg';
       } else {
         leftButton.classList.add('userlist-enabled-arrow-button');
+        leftButton.children[0].src = 'images/left.svg';
       }
       if (rightButton.disabled) {
         rightButton.classList.remove('userlist-enabled-arrow-button');
+        rightButton.children[0].src = 'images/right_disabled.svg';
       } else {
         rightButton.classList.add('userlist-enabled-arrow-button');
+        rightButton.children[0].src = 'images/right.svg';
       }
     });
   }
