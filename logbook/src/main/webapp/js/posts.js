@@ -128,8 +128,6 @@ var Posts = (function() {
   function deletePost(fullPost, username, postID) {
     Requests.cancelExcept(null);
 
-    formMsg.showElement(el.deleteMsg, Init.loader);
-
     var formData = new FormData();
     formData.append("action", "DeletePost");
     formData.append("postID", postID);
@@ -138,49 +136,55 @@ var Posts = (function() {
     var ID = Requests.add(ajaxRequest('POST', "Main", formData, successCallback, failCallback));
 
     function successCallback() {
+      var confirmDelete = document.getElementById('full-screen');
+      document.getElementsByTagName('body')[0].removeChild(confirmDelete);
       Posts.init(data.username);
     }
 
     function failCallback() {
+      var confirmDelete = document.getElementById('full-screen');
+      document.getElementsByTagName('body')[0].removeChild(confirmDelete);
       var responseText = null;
+      var error = null;
       if (Requests.get(ID).status === 401) {
         responseText = Requests.get(ID).responseText;
         if (!responseText) {
-          formMsg.showError(el.deleteMsg, 'Error');
+          error = 'Error';
         }
         else {
           if (JSON.parse(responseText).ERROR === 'NO_SESSION') {
             Logout.showExpired();
+            return;
           }
           else {
-            formMsg.showError(el.deleteMsg, 'Unauthorized');
+            error = 'Unauthorized';
           }
         }
       }
       else if (Requests.get(ID).status === 500) {
-        formMsg.showError(el.deleteMsg, 'Server error');
+        error = 'Server error';
       }
       else if (Requests.get(ID).status === 400) {
         responseText = Requests.get(ID).responseText;
         if (!responseText) {
-          formMsg.showError(el.deleteMsg, 'Error');
+          error = 'Error';
         }
         else {
           if (JSON.parse(responseText).ERROR === 'MISSING_USERNAME') {
-            formMsg.showError(el.deleteMsg, 'Invalid user');
+            error = 'Invalid user';
           }
           else {
-            formMsg.showError(el.deleteMsg, 'Invalid post');
+            error = 'Invalid post';
           }
         }
       }
       else if (Requests.get(ID).status === 0) {
-        formMsg.showError(el.deleteMsg, 'Unable to send request');
+        error = 'Unable to send request';
       }
       else {
-        formMsg.showError(el.deleteMsg, 'Error');
+        error = 'Error';
       }
-      Init.scrollTo(el.deleteButton);
+      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
   }
 
@@ -195,9 +199,6 @@ var Posts = (function() {
     headerH2.innerHTML = 'Latest posts';
     header.appendChild(headerH2);
 
-    el.loaderMsg = document.createElement('div');
-    el.loaderMsg.className = 'sign-process-msg';
-
     var postsParent = document.createElement('div');
     postsParent.id = 'posts-parent';
 
@@ -210,7 +211,6 @@ var Posts = (function() {
       postsParent.appendChild(el.postButton);
     }
     postsParent.appendChild(header);
-    postsParent.appendChild(el.loaderMsg);
 
     var postsSection = document.createElement('div');
     postsSection.id = 'posts-section';
@@ -420,7 +420,7 @@ var Posts = (function() {
    */
   function turnToFullPost(data) {
     state.clickedFullPost = true;
-    Homepage.removeActive();
+    Homepage.initializeButton(null);
     Requests.cancelExcept(data['queryID']);
 
     if (data['postDiv'].children[1].className === 'short-post-photo-parent') {
@@ -583,8 +583,9 @@ var Posts = (function() {
       var error = null;
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
+        return;
       }
-      else if (Requests.get(ID).status === 0) {
+      if (Requests.get(ID).status === 0) {
         error = 'Unable to send request';
       }
       else {
@@ -652,44 +653,23 @@ var Posts = (function() {
   function createPostOptionsMenu(data) {
     el.deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
     el.deleteButton.children[0].addEventListener('click', function() {
-      this.blur();
-      confirmDelete(data);
+      var self = this;
+      self.disabled = true;
+      setTimeout(function() {
+        newElements.showConfirmDelete('This post will be deleted!', 'post-delete-confirm', function() {
+          deletePost(data['postDiv'], data['username'], data['postID']);
+        });
+        self.disabled = false;
+      }, 200);
     });
 
     data['postDiv'].appendChild(el.deleteButton);
-    el.deleteMsg = document.createElement('div');
-    el.deleteMsg.id = 'delete-post-msg';
-    el.deleteButton.appendChild(el.deleteMsg);
 
     var div = document.createElement('div');
     div.id = 'post-options-menu';
     div.appendChild(el.deleteButton);
 
     return div;
-  }
-
-  /**
-   * Creates yes/no post delete confirmation buttons.
-   * @param data
-   */
-  function confirmDelete(data) {
-    if (!el.confirmDelete) {
-      el.confirmDelete = newElements.createYesNoButtons('post-delete-confirm');
-
-      //listener for the yes button
-      el.confirmDelete.children[1].addEventListener('click', function() {
-        el.confirmDelete = null;
-        deletePost(data['postDiv'], data['username'], data['postID']);
-      });
-
-      //listener for the no button
-      el.confirmDelete.children[2].addEventListener('click', function() {
-        formMsg.clear(el.deleteMsg);
-        el.confirmDelete = null;
-      });
-      formMsg.showElement(el.deleteMsg, el.confirmDelete);
-    }
-    Init.scrollTo(el.deleteButton);
   }
 
   return {
