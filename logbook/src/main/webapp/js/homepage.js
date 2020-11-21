@@ -34,6 +34,7 @@ var Homepage = (function() {
     var allUsersButton = newElements.createSignBarButton('Users', 'show-users-button', 'images/users.svg');
     allUsersButton.addEventListener('click', function () {
       closeBurgerButton();
+      this.blur();
       AllUsers.init();
     });
     el.navbarList.appendChild(allUsersButton);

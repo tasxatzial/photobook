@@ -224,6 +224,7 @@ var PostForm = (function() {
 
     if (data.loc.lat === null || data.loc.lon === null || el.description.value.trim() === '') {
       formMsg.showError(el.createPostMsg, 'Please provide all required fields');
+      Init.scrollTo(el.postButton);
       return;
     }
 

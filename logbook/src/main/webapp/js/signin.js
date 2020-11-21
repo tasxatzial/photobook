@@ -85,12 +85,14 @@ var Signin = (function() {
     function failCallback() {
       Init.navbarContent.removeChild(loader);
       enableInputs();
+      var error = null;
       if (Requests.get(ID).status === 0) {
-        newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
+        error = 'Unable to send request';
       }
       else {
-        newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
+        error = 'Error';
       }
+      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
   }
 

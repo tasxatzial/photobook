@@ -20,6 +20,10 @@
     transform: scale(1.1);
 }
 
+.userlist-arrow-button:active {
+    top: 0;
+}
+
 .username-button {
     font: inherit;
     background-color: transparent;
@@ -31,6 +35,10 @@
 
 .username-button:focus, .username-button:hover {
     background-color: whitesmoke;
+}
+
+.username-button:active {
+    top :0;
 }
 
 .user-show-more-arrow {
