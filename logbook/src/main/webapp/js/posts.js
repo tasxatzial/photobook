@@ -12,7 +12,6 @@ var Posts = (function() {
     deleteButton: null,
     deleteMsg: null,
     loaderMsg: null,
-    postFormLoadMsg: null,
     postButton: null
   };
 
@@ -202,16 +201,12 @@ var Posts = (function() {
     postsParent.id = 'posts-parent';
 
     if (username === Init.getUser() || username === null) {
-      el.postFormLoadMsg = document.createElement('div');
-      el.postFormLoadMsg.className = 'sign-process-msg';
-      el.postFormLoadMsg.id = 'post-form-load-msg';
-
       el.postButton = newElements.createBlueButton('+ New Post', 'new-post-button');
       el.postButton.children[0].addEventListener('click', function() {
+        this.blur();
         getPostForm(username);
       });
       postsParent.appendChild(el.postButton);
-      postsParent.appendChild(el.postFormLoadMsg)
     }
     postsParent.appendChild(header);
     postsParent.appendChild(el.loaderMsg);
@@ -552,14 +547,20 @@ var Posts = (function() {
    */
   function getPostForm(username) {
     Requests.cancelExcept(null);
-    Init.scrollTo(el.postButton);
-    formMsg.showElement(el.postFormLoadMsg, Init.loader);
+
+    var loader = document.querySelector('.bar-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'bar-loader';
+      Init.navbarContent.appendChild(loader);
+    }
 
     var formData = new FormData();
     formData.append("action", "GetPostForm");
     var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
 
     function successCallback() {
+      Init.navbarContent.removeChild(loader);
       var postFormSection = createPostFormSection();
       postFormSection.children[0].innerHTML = Requests.get(ID).responseText;
       if (username === null) {
@@ -577,16 +578,18 @@ var Posts = (function() {
     }
 
     function failCallback() {
+      Init.navbarContent.removeChild(loader);
+      var error = null;
       if (Requests.get(ID).status === 401) {
         Logout.showExpired();
       }
       else if (Requests.get(ID).status === 0) {
-        formMsg.showError(el.postFormLoadMsg,'Unable to send request');
+        error = 'Unable to send request';
       }
       else {
-        formMsg.showError(el.postFormLoadMsg,'Error');
+        error = 'Error';
       }
-      Init.scrollTo(el.postButton);
+      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
   }
 

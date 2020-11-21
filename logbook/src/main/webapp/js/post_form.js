@@ -52,7 +52,7 @@ var PostForm = (function() {
   function init(username) {
     var accountSection = document.getElementById('account-section');
     if (!accountSection) {
-      Homepage.removeActive();
+      Homepage.initializeButton(null);
     }
     data.loc.lat = null;
     data.loc.lon = null;
