@@ -20,6 +20,7 @@ var Homepage = (function() {
   function init() {
     Init.nonav.innerHTML = '';
     Init.nonav.classList.add('no-nav-logged-in');
+    document.getElementsByTagName('html')[0].classList.add('html-logged-in');
     el.navbarList = document.createElement('div');
     el.navbarList.className = 'navbar-list';
 

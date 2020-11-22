@@ -68,3 +68,7 @@
 #post-form-load-msg {
   height: 1rem;
 }
+
+#post-button button {
+  background: #66c38f;
+}

@@ -1,12 +1,16 @@
 html {
   background-image:
-          radial-gradient(circle farthest-corner at top left, rgba(205, 223, 220,1) 0%, rgba(225, 243, 197,0) 60%),
-          radial-gradient(circle farthest-side at top right, rgba(221, 216, 217,1) 0%, rgba(211, 216, 177,0) 20%),
-          radial-gradient(circle farthest-corner at bottom right, rgba(200, 184, 189,1) 0%, rgba(244, 214, 219, 0) 53%),
-          radial-gradient(circle farthest-corner at top right, rgba(175, 221, 240,1) 0%, rgba(195, 221, 240,0) 50%),
-          radial-gradient(ellipse at bottom center, rgba(205, 223, 220,1) 0%, rgba(225, 243, 197,0) 66%),
-          radial-gradient(ellipse at top center, rgba(254, 233, 230,0.6) 0%, rgba(254, 223, 190, 0) 60%);
-  background-color: #c5b99e;
+      radial-gradient(circle farthest-corner at top left, rgb(207, 205, 223) 0%, rgba(120, 216, 136, 0) 30%),
+      radial-gradient(circle farthest-side at top right, rgb(216, 221, 237) 0%, rgba(211, 216, 177,0) 40%),
+      radial-gradient(circle farthest-corner at bottom right, rgb(200, 196, 184) 0%, rgba(244, 225, 214, 0) 53%),
+      radial-gradient(circle farthest-corner at top right, rgba(175, 221, 240,1) 0%, rgba(224, 240, 195, 0) 50%),
+      radial-gradient(ellipse at bottom left, rgb(205, 223, 205) 0%, rgba(197, 243, 199, 0) 56%),
+      radial-gradient(ellipse at top center, rgba(254, 233, 230,0.6) 0%, rgba(254, 223, 190, 0) 60%);
+  background-color: #bdc3cb;
+}
+
+.html-logged-in {
+  background-image: revert;
 }
 
 * {
@@ -23,7 +27,7 @@ body {
 }
 
 .no-nav-logged-in {
-  background: #A2AEC0;
+  background: #bdc3cb;
 }
 
 /* blue button container */
@@ -39,7 +43,7 @@ body {
   letter-spacing: .05rem;
   color: white;
   padding: .5em 1.4em;
-  background: #529a79;
+  background: #56aa7f;
   border: 1px solid #1b5e2e;
   border-radius: 2px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);

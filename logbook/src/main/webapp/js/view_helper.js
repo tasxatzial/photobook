@@ -101,7 +101,7 @@ var formInput = (function() {
 var formSubmit = (function() {
   function enable(input) {
     input.disabled = false;
-    input.style.background ='#529a79';
+    input.style.background ='#56aa7f';
   }
   function enableNext(input) {
     input.disabled = false;
