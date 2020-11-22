@@ -5,6 +5,14 @@
   align-items: center;
 }
 
+.open-photo {
+  display: block;
+}
+
+.closed-photo {
+  display: none;
+}
+
 .short-post-photo {
   max-width: 100%;
   max-height: 15rem;
@@ -12,11 +20,12 @@
 
 .full-post-photo {
   max-width: 100%;
-  max-height: 25rem;
+  max-height: 30rem;
 }
 
 #post-location {
   font-size: 1.1rem;
+  margin: 0;
 }
 
 .read-more-button {
@@ -30,7 +39,6 @@
   font-weight: bold;
   color: #3f85cb;
   margin-top: 1em;
-  margin-bottom: 1em;
 }
 
 .read-more-button:focus, .read-more-button:hover, .post-creator-button:focus, .post-creator-button:hover {
@@ -72,6 +80,7 @@
   flex-flow: row wrap;
   justify-content: flex-end;
   font-size: 0.9rem;
+  margin-top: 1.4em;
 }
 
 #post-options-bar {
@@ -90,10 +99,27 @@
 }
 
 .post-description {
-  margin-top: 1.4em;
+  margin-top: 1.5em;
 }
 
 .post-description p {
   margin-bottom: 0;
   margin-top: 0.5em;
+}
+
+.location-container .sign-internal-button {
+  margin-left: 1em;
+}
+
+.location-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5em;
+  margin-top: 1em;
+}
+
+.short-post-photo-parent #post-map-parent {
+  margin-top: 0;
+  margin-bottom: 0;
 }

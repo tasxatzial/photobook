@@ -11,7 +11,8 @@ var Posts = (function() {
     confirmDelete: null,
     deleteButton: null,
     deleteMsg: null,
-    postButton: null
+    postButton: null,
+    showMapButton: null
   };
 
   var data = {
@@ -19,7 +20,9 @@ var Posts = (function() {
   };
 
   var state = {
-    clickedFullPost: null
+    clickedFullPost: null,
+    locationValid: null,
+    mapView: false
   };
 
   var obj = {
@@ -38,6 +41,7 @@ var Posts = (function() {
     data.username = username;
     el.confirmDelete = null;
     state.clickedFullPost = null;
+    state.mapView = false;
 
     var postsSection = createPostsSection(username);
     el.postsParent = postsSection.children[0];
@@ -285,18 +289,20 @@ var Posts = (function() {
     var location = newElements.createKeyValue('Location', 'Querying...');
     location.id = 'post-location';
 
+    var locationContainer = document.createElement('div');
+    locationContainer.className = 'location-container';
+    locationContainer.appendChild(location);
+
     /* create the element that has the main content of the post, this includes:
     the location of the post
     the image of the post
     the description of the post
+    the read more button that will show the full post
     the footer of the post */
     postDiv = document.createElement('div');
-    postDiv.appendChild(location);
-    if (image.src) {
-      postDiv.appendChild(imageParent);
-    }
+    postDiv.appendChild(locationContainer);
+    postDiv.appendChild(imageParent);
     postDiv.appendChild(description);
-
 
     /* create the element that has the read more button (includes the button and the image of the button) */
     var readMoreButton = document.createElement('button');
@@ -319,7 +325,8 @@ var Posts = (function() {
       readMoreButtonDiv: readMoreButton,
       footerDiv: footer,
       postDiv: postDiv,
-      locationDiv: location
+      locationDiv: location,
+      imageDiv: imageParent
     };
 
     /* request the name of the location from the nominatim service */
@@ -375,19 +382,22 @@ var Posts = (function() {
         data['locationDiv'].children[0].innerHTML = loc;
         if (state.clickedFullPost) {
           data['locationQuery'] = locationQuery;
-          showMap(data);
+          formButton.enable(el.showMapButton);
         }
+        state.locationValid = true;
       }
 
       function failCallback() {
         if (LocationSearch.isValidLatLon(data['lat'], data['lon'])) {
           data['locationDiv'].children[0].innerHTML = '(' + parseFloat(data['lat']).toFixed(4) + ', ' + parseFloat(data['lon']).toFixed(4) + ') deg';
           if (state.clickedFullPost) {
-            showMap(data);
+            formButton.enable(el.showMapButton);
           }
+          state.locationValid = true;
         }
         else {
           data['locationDiv'].children[0].innerHTML = 'Not available';
+          state.locationValid = false;
         }
       }
     }());
@@ -412,12 +422,11 @@ var Posts = (function() {
    * @param data
    */
   function turnToFullPost(data) {
-    state.clickedFullPost = true;
     Homepage.initializeButton(null);
     Requests.cancelExcept(data['queryID']);
 
-    if (!data['postDiv'].children[1].classList.contains('post-no-image')) {
-      data['postDiv'].children[1].children[0].className = 'full-post-photo';
+    if (!data['imageDiv'].classList.contains('post-no-image')) {
+      data['imageDiv'].children[0].className = 'full-post-photo';
     }
     data['descriptionDiv'].innerHTML = '';
     var descriptionArray = createDescription(data['description']);
@@ -445,14 +454,40 @@ var Posts = (function() {
       var button = createPostOptionsShowButton(data);
       optionsBar.appendChild(button);
 
-      data['postDiv'].insertBefore(optionsBar, data['locationDiv']);
+      data['postDiv'].insertBefore(optionsBar, data['locationDiv'].parentElement);
     }
 
-    showMap(data);
+    el.showMapButton = document.createElement('button');
+    el.showMapButton.className = 'sign-internal-button';
+    el.showMapButton.innerHTML = 'Map view';
+    if (state.locationValid) {
+      formButton.enable(el.showMapButton);
+      el.showMapButton.addEventListener('click', function() {
+          if (state.mapView) {
+            el.showMapButton.innerHTML = 'Map view';
+            data['imageDiv'].classList.remove('open-photo');
+            data['imageDiv'].children[0].classList.remove('closed-photo');
+            data['imageDiv'].removeChild(el.mapParent);
+            state.mapView = false;
+          } else {
+            data['imageDiv'].classList.add('open-photo');
+            data['imageDiv'].children[0].classList.add('closed-photo');
+            el.showMapButton.innerHTML = 'Photo view';
+            showMap(data);
+            state.mapView = true;
+          }
+      });
+    }
+    else {
+      formButton.disable(el.showMapButton);
+    }
+
+    data['locationDiv'].parentElement.appendChild(el.showMapButton);
 
     el.postsParent.innerHTML = '';
     el.postsParent.appendChild(data['postDiv']);
     window.scrollTo(0, 0);
+    state.clickedFullPost = true;
   }
 
   /**
@@ -482,13 +517,13 @@ var Posts = (function() {
       el.mapParent = document.createElement('div');
       el.mapParent.id = 'post-map-parent';
       el.mapParent.appendChild(mapDiv);
-      data['postDiv'].insertBefore(el.mapParent, data['footerDiv']);
-      mapDiv.style.height = '18rem';
+      data['imageDiv'].appendChild(el.mapParent);
+      mapDiv.style.height = '20rem';
       obj.map = new OLMap(mapDiv.id);
     }
     else {
       obj.map.resetState();
-      data['postDiv'].insertBefore(el.mapParent, data['footerDiv']);
+      data['imageDiv'].appendChild(el.mapParent);
     }
 
     obj.map.setZoom(zoom);
