@@ -42,7 +42,8 @@ var ShowProfile = (function() {
       Homepage.initializeButton(accountButton);
     }
     else {
-      Homepage.initializeButton(null);
+      var allUsersButton = document.getElementById('show-users-button');
+      Homepage.initializeButton(allUsersButton);
     }
 
     var data = new FormData();

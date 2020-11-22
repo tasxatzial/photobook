@@ -422,7 +422,6 @@ var Posts = (function() {
    * @param data
    */
   function turnToFullPost(data) {
-    Homepage.initializeButton(null);
     Requests.cancelExcept(data['queryID']);
 
     if (!data['imageDiv'].classList.contains('post-no-image')) {
