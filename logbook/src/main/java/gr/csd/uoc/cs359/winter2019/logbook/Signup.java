@@ -351,7 +351,7 @@ public class Signup extends HttpServlet {
     protected String getRegexPattern(String field) {
         switch(field) {
             case "username":
-                return "^[A-Za-z]{8,50}$";
+                return "^[A-Za-z]{8,25}$";
             case "password":
                 return "^[\\w0-9!#$%&'*+/=?^`{|}\\[\\]_\\\\~<>., -]{8,10}$";
             case "email":
