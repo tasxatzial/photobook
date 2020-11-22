@@ -105,6 +105,7 @@
 .post-description p {
   margin-bottom: 0;
   margin-top: 0.5em;
+  line-height: 1.3em;
 }
 
 .location-container .sign-internal-button {
