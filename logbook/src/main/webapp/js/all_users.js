@@ -280,6 +280,7 @@ var AllUsers = (function() {
 
       var registeredDate = document.createElement('div');
       registeredDate.innerHTML = registered;
+      registeredDate.className = 'registered-since';
 
       var user = document.createElement('div');
       user.className = "username-line";
