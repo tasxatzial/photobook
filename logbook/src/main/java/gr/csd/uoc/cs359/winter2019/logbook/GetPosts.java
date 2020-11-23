@@ -99,6 +99,7 @@ public class GetPosts extends HttpServlet {
             json.put("longitude", post.getLongitude());
             json.put("createdAt", post.getCreatedAt());
             json.put("postID", post.getPostID());
+            json.put("userRating", RatingDB.getRating(post.getPostID(), (String) oldSession.getAttribute("username")));
 
             List<Rating> ratingsList = RatingDB.getRatings(post.getPostID());
             JSONArray ratings = new JSONArray();

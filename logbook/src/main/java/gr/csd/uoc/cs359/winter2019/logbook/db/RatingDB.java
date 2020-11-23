@@ -70,7 +70,7 @@ public class RatingDB {
     /**
      * Get ratings for specific initiative
      *
-     * @param initiativeID
+     * @param postID
      * @return
      * @throws ClassNotFoundException
      */
@@ -316,6 +316,49 @@ public class RatingDB {
             // close connection
             closeDBConnection(stmt, con);
         }
+    }
+
+    /**
+     * Get Rating of the specific postID that was made by the user with the specific username
+     *
+     * @param postID
+     * @param username
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public static int getRating(int postID, String username) throws ClassNotFoundException {
+        int rating = 0;
+        Statement stmt = null;
+        Connection con = null;
+        try {
+
+            con = CS359DB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM ratings ")
+                    .append(" WHERE ")
+                    .append(" post_id = ").append("'").append(postID).append("'")
+                    .append(" AND ")
+                    .append(" user_name = ").append("'").append(username).append("';");
+
+            stmt.execute(insQuery.toString());
+
+            ResultSet res = stmt.getResultSet();
+
+            if (res.next() == true) {
+                rating = res.getInt("rating");
+            }
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(RatingDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            closeDBConnection(stmt, con);
+        }
+
+        return rating;
     }
 
     /**

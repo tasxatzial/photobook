@@ -283,7 +283,7 @@ var Posts = (function() {
         return a + b;
       });
       var rating = (Math.round(10 * (ratingsSum / postJSON['ratings'].length)) / 10).toFixed(1);
-      ratingValue.innerHTML = rating + ' / ' + postJSON['ratings'].length;
+      ratingValue.innerHTML = rating + ' / 5';
     }
     else {
       ratingValue.innerHTML = 'No ratings';
@@ -311,7 +311,8 @@ var Posts = (function() {
     the image of the post
     the description of the post
     the read more button that will show the full post
-    the footer of the post */
+    the footer of the post
+    the rating of the post */
     postDiv = document.createElement('div');
     postDiv.appendChild(locationContainer);
     postDiv.appendChild(imageParent);
@@ -334,6 +335,8 @@ var Posts = (function() {
       lon: postJSON['longitude'],
       username: postJSON['username'],
       postID: postJSON['postID'],
+      ratingDiv: ratingDiv,
+      userRating: postJSON['userRating'],
       descriptionDiv: description,
       readMoreButtonDiv: readMoreButton,
       footerDiv: footer,
@@ -470,6 +473,7 @@ var Posts = (function() {
       data['postDiv'].insertBefore(optionsBar, data['locationDiv'].parentElement);
     }
 
+    /* show the switch to map view button */
     el.showMapButton = document.createElement('button');
     el.showMapButton.className = 'sign-internal-button';
     el.showMapButton.innerHTML = 'Map view';
@@ -494,8 +498,27 @@ var Posts = (function() {
     else {
       formButton.disable(el.showMapButton);
     }
-
     data['locationDiv'].parentElement.appendChild(el.showMapButton);
+
+    /* select the rating of the logged in user for this post */
+    var selectRate = document.createElement('select');
+    selectRate.className = 'select-rate';
+    var option = document.createElement('option');
+    option.value = '';
+    option.selected = true;
+    option.innerHTML = '-';
+    selectRate.appendChild(option);
+
+    for (i = 1; i < 6; i++) {
+      option = document.createElement('option');
+      option.value = i;
+      option.innerHTML = i;
+      selectRate.appendChild(option);
+    }
+    if (data['userRating'] !== 0) {
+      selectRate.children[data['userRating'] - 1].selected = true;
+    }
+    data['ratingDiv'].appendChild(selectRate);
 
     el.postsParent.innerHTML = '';
     el.postsParent.appendChild(data['postDiv']);
