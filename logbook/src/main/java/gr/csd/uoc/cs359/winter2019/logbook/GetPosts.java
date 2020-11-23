@@ -6,13 +6,17 @@
 package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.PostDB;
+import gr.csd.uoc.cs359.winter2019.logbook.db.RatingDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Post;
+import gr.csd.uoc.cs359.winter2019.logbook.model.Rating;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -95,6 +99,14 @@ public class GetPosts extends HttpServlet {
             json.put("longitude", post.getLongitude());
             json.put("createdAt", post.getCreatedAt());
             json.put("postID", post.getPostID());
+
+            List<Rating> ratingsList = RatingDB.getRatings(post.getPostID());
+            JSONArray ratings = new JSONArray();
+            for (Rating rating : ratingsList) {
+                ratings.add(rating.getRate());
+            }
+            json.put("ratings", ratings);
+
             jsonFinal.put(Integer.toString(i), json);
         }
         out.println(jsonFinal.toJSONString());

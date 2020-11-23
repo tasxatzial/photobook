@@ -120,3 +120,16 @@
   margin-top: 0;
   margin-bottom: 0;
 }
+
+.ratings {
+  display: flex;
+  justify-content: flex-end;
+  font-size: .95rem;
+  margin-top: .3em;
+  font-weight: 500;
+}
+
+.ratings span {
+  font-weight: 400;
+  margin-left: .4em;
+}

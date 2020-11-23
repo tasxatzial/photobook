@@ -277,6 +277,22 @@ var Posts = (function() {
     username.appendChild(button);
     username.appendChild(timestampEl);
 
+    var ratingValue = document.createElement('span');
+    if (postJSON['ratings'].length) {
+      var ratingsSum = postJSON['ratings'].reduce(function (a, b) {
+        return a + b;
+      });
+      var rating = (Math.round(10 * (ratingsSum / postJSON['ratings'].length)) / 10).toFixed(1);
+      ratingValue.innerHTML = rating + ' / ' + postJSON['ratings'].length;
+    }
+    else {
+      ratingValue.innerHTML = 'No ratings';
+    }
+    var ratingDiv = document.createElement('div');
+    ratingDiv.className = 'ratings';
+    ratingDiv.innerHTML = 'Rating:';
+    ratingDiv.appendChild(ratingValue);
+
     /* create the footer element, this currently shows only who created the post and when */
     var footer = document.createElement('div');
     footer.className = 'post-footer';
@@ -331,6 +347,7 @@ var Posts = (function() {
 
     postDiv.appendChild(readMoreButton);
     postDiv.appendChild(footer);
+    postDiv.appendChild(ratingDiv);
 
     return postDiv;
   }
