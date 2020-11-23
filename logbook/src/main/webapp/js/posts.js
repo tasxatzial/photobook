@@ -265,19 +265,16 @@ var Posts = (function() {
     };
 
     /* create the element that tells us when the post was created */
-    var at = document.createElement('span');
-    at.innerHTML = ' @ ';
     var timestampEl = document.createElement('span');
     var timestamp = postJSON['createdAt'].substring(0, postJSON['createdAt'].lastIndexOf(":")).split(' ');
     var timestampDate = timestamp[0];
     var timestampTime = '[' + timestamp[1] + ']';
-    timestampEl.innerHTML = timestampDate + ' ' + timestampTime;
+    timestampEl.innerHTML = '@ ' + timestampDate + ' ' + timestampTime;
 
     /* create the element that tells us who created the post and when */
     var username = document.createElement('div');
     username.className = 'posted-by';
     username.appendChild(button);
-    username.appendChild(at);
     username.appendChild(timestampEl);
 
     /* create the footer element, this currently shows only who created the post and when */

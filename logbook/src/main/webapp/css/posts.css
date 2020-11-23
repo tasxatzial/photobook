@@ -49,17 +49,13 @@
   font-weight: bold;
   letter-spacing: 0.05em;
   color: #3f85cb;
-  font-size: .9rem;
+  font-size: inherit;
 }
 
 .posted-by {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-}
-
-.posted-by span {
-  padding-right: 6px;
 }
 
 #post-map-parent {
@@ -79,7 +75,7 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-end;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   margin-top: 1.4em;
 }
 
