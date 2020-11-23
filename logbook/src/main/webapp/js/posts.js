@@ -515,7 +515,10 @@ var Posts = (function() {
       option.innerHTML = i;
       selectRate.appendChild(option);
     }
-    if (data['userRating'] !== 0) {
+    if (data['username'] === Init.getUser()) {
+      selectRate.disabled = true;
+    }
+    else if (data['userRating'] === 0) {
       selectRate.children[data['userRating'] - 1].selected = true;
     }
     data['ratingDiv'].appendChild(selectRate);
