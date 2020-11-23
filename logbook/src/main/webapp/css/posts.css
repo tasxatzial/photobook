@@ -85,6 +85,15 @@
   align-items: center;
 }
 
+#post-options-bar .option-button {
+  transform: scale(1.0);
+  transition: transform 200ms
+}
+
+#post-options-bar .option-button:focus, #post-options-bar .option-button:hover {
+  transform: scale(1.2);
+}
+
 #post-options-menu {
   border: 1px solid silver;
   display: flex;
