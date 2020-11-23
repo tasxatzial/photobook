@@ -277,13 +277,20 @@ var Posts = (function() {
     username.appendChild(button);
     username.appendChild(timestampEl);
 
+    /* create all elements related to the rating of the post */
     var ratingValue = document.createElement('span');
     if (postJSON['ratings'].length) {
       var ratingsSum = postJSON['ratings'].reduce(function (a, b) {
         return a + b;
       });
       var rating = (Math.round(10 * (ratingsSum / postJSON['ratings'].length)) / 10).toFixed(1);
-      ratingValue.innerHTML = rating + ' / 5';
+      var ratingText = rating + ' / 5 [' + postJSON['ratings'].length;
+      if (postJSON['ratings'].length === 1) {
+        ratingValue.innerHTML = ratingText + ' rating]';
+      }
+      else {
+        ratingValue.innerHTML = ratingText + ' ratings]';
+      }
     }
     else {
       ratingValue.innerHTML = 'No ratings';
@@ -301,18 +308,11 @@ var Posts = (function() {
     /* create the element that shows the location of the place referenced in the post */
     var location = newElements.createKeyValue('Location', 'Querying...');
     location.id = 'post-location';
-
     var locationContainer = document.createElement('div');
     locationContainer.className = 'location-container';
     locationContainer.appendChild(location);
 
-    /* create the element that has the main content of the post, this includes:
-    the location of the post
-    the image of the post
-    the description of the post
-    the read more button that will show the full post
-    the footer of the post
-    the rating of the post */
+    /* create the element that has everything in the post */
     postDiv = document.createElement('div');
     postDiv.appendChild(locationContainer);
     postDiv.appendChild(imageParent);
