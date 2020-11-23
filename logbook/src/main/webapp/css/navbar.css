@@ -6,7 +6,7 @@
 #navbar-content h1 a {
   font-family: 'Kalam', cursive;
   font-weight: 700;
-  color: #66c38f;
+  color: white;
   text-decoration: none;
 }
 
@@ -66,7 +66,7 @@
   top: 0;
   height: 3px;
   left: -25%;
-  background: #56aa7f;
+  background: #EEE8A9;
 }
 
 .navbar-active-button {
@@ -104,7 +104,7 @@
 }
 
 .navbar-button:focus, .navbar-button:hover {
-  border-bottom: 4px solid #56aa7f;
+  border-bottom: 4px solid #EEE8A9;
 }
 
 .initial-burger-button {
