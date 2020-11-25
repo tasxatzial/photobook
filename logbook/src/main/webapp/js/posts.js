@@ -14,6 +14,7 @@ var Posts = (function() {
     postButton: null,
     showMapButton: null
   };
+  var posts = {};
 
   var data = {
     username: null
@@ -38,6 +39,7 @@ var Posts = (function() {
    * @param username
    */
   function init(username) {
+    posts = {};
     data.username = username;
     el.confirmDelete = null;
     state.clickedFullPost = null;
@@ -286,6 +288,18 @@ var Posts = (function() {
     ratingDiv.innerHTML = 'Rating: ';
     ratingDiv.appendChild(ratingValue);
 
+    /* compute the avg rating */
+    var ratingsSum = postJSON['ratings'].reduce(function (a, b) {
+      return Number(a) + Number(b);
+    }, 0);
+    var avgRating = 0;
+    if (postJSON['ratings'].length) {
+      avgRating = ratingsSum / postJSON['ratings'].length;
+    }
+    else {
+      avgRating = 0;
+    }
+
     /* create the footer element, this currently shows only who created the post and when */
     var footer = document.createElement('div');
     footer.className = 'post-footer';
@@ -338,7 +352,7 @@ var Posts = (function() {
     postDiv.appendChild(readMoreButton);
     postDiv.appendChild(footer);
     postDiv.appendChild(ratingDiv);
-
+    posts[postJSON['postID']] = {'div': postDiv, 'avgRating': avgRating};
     return postDiv;
   }
 
@@ -348,11 +362,10 @@ var Posts = (function() {
    * @returns {string}
    */
   function createRatingsText(ratings) {
-    var ratingsSum = 0;
     if (ratings.length) {
-      ratingsSum = ratings.reduce(function (a, b) {
+      var ratingsSum = ratings.reduce(function (a, b) {
         return Number(a) + Number(b);
-      });
+      }, 0);
       var rating = (Math.round(10 * (ratingsSum / ratings.length)) / 10).toFixed(1);
       var ratingText = rating + ' / 5 [' + ratings.length;
       if (ratings.length === 1) {
