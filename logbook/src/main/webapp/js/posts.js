@@ -93,17 +93,35 @@ var Posts = (function() {
         Homepage.initializeButton(postsButton);
       }
 
-      var shortPost = null;
+      /* create the sort by rating div */
       if (Object.keys(response).length > 0) {
         var sortDiv = createSortDiv();
         el.postsParent.appendChild(sortDiv);
         el.postsParent.appendChild(document.createElement('hr'));
       }
+
+      /* compute avg rating for each post */
+      Object.keys(response).forEach(function (key, index) {
+        var ratings = response[key]['ratings'];
+        var postID = response[key]['postID'];
+        var ratingsSum = ratings.reduce(function (a, b) {
+          return Number(a) + Number(b);
+        }, 0);
+        var avgRating = 0;
+        if (ratings.length) {
+          avgRating = ratingsSum / ratings.length;
+        }
+        posts[postID] = avgRating;
+      });
+
+      /* create the posts and populate the dom */
       Object.keys(response).forEach(function(key,index) {
-        shortPost = createShortPost(response[key]);
+        var shortPost = createShortPost(response[key]);
         el.postsParent.appendChild(shortPost);
         el.postsParent.appendChild(document.createElement('hr'));
       });
+
+      /* case where there are 0 posts */
       if (Object.keys(response).length === 0) {
         var postsMsg = document.createElement('p');
         postsMsg.innerHTML = 'No posts.';
@@ -326,18 +344,6 @@ var Posts = (function() {
     ratingDiv.innerHTML = 'Rating: ';
     ratingDiv.appendChild(ratingValue);
 
-    /* compute the avg rating */
-    var ratingsSum = postJSON['ratings'].reduce(function (a, b) {
-      return Number(a) + Number(b);
-    }, 0);
-    var avgRating = 0;
-    if (postJSON['ratings'].length) {
-      avgRating = ratingsSum / postJSON['ratings'].length;
-    }
-    else {
-      avgRating = 0;
-    }
-
     /* create the footer element, this currently shows only who created the post and when */
     var footer = document.createElement('div');
     footer.className = 'post-footer';
@@ -374,7 +380,6 @@ var Posts = (function() {
       username: postJSON['username'],
       postID: postJSON['postID'],
       userRating: postJSON['userRating'],
-      ratings: postJSON['ratings'],
       ratingTextDiv: ratingValue,
       descriptionDiv: description,
       readMoreButtonDiv: readMoreButton,
@@ -390,7 +395,6 @@ var Posts = (function() {
     postDiv.appendChild(readMoreButton);
     postDiv.appendChild(footer);
     postDiv.appendChild(ratingDiv);
-    posts[postJSON['postID']] = {'div': postDiv, 'avgRating': avgRating};
     return postDiv;
   }
 
