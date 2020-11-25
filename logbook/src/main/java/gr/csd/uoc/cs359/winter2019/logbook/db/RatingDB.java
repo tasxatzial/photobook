@@ -120,7 +120,7 @@ public class RatingDB {
      * @return
      * @throws ClassNotFoundException
      */
-    public static Rating getRating(int id) throws ClassNotFoundException {
+    public static Rating getRate(int id) throws ClassNotFoundException {
         Rating rating = new Rating();
         Statement stmt = null;
         Connection con = null;
@@ -319,15 +319,15 @@ public class RatingDB {
     }
 
     /**
-     * Get Rating of the specific postID that was made by the user with the specific username
+     * Get Rate of the specific postID that was made by the user with the specific username
      *
      * @param postID
      * @param username
      * @return
      * @throws ClassNotFoundException
      */
-    public static int getRating(int postID, String username) throws ClassNotFoundException {
-        int rating = 0;
+    public static int getRate(int postID, String username) throws ClassNotFoundException {
+        int rate = -1;
         Statement stmt = null;
         Connection con = null;
         try {
@@ -348,7 +348,57 @@ public class RatingDB {
             ResultSet res = stmt.getResultSet();
 
             if (res.next() == true) {
-                rating = res.getInt("rating");
+                rate = res.getInt("rating");
+            }
+            else {
+                rate = 0;
+            }
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(RatingDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            closeDBConnection(stmt, con);
+        }
+
+        return rate;
+    }
+
+    /**
+     * Get Rating of the specific postID that was made by the user with the specific username
+     * @param postID
+     * @param username
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public static Rating getRating(int postID, String username) throws ClassNotFoundException {
+        Rating rating = null;
+        Statement stmt = null;
+        Connection con = null;
+        try {
+
+            con = CS359DB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM ratings ")
+                    .append(" WHERE ")
+                    .append(" post_id = ").append("'").append(postID).append("'")
+                    .append(" AND ")
+                    .append(" user_name = ").append("'").append(username).append("';");
+
+            stmt.execute(insQuery.toString());
+
+            ResultSet res = stmt.getResultSet();
+
+
+            if (res.next() == true) {
+                rating = new Rating();
+                rating.setID(res.getInt("rating_id"));
+                rating.setUserName(res.getString("user_name"));
+                rating.setPostID(res.getInt("post_id"));
+                rating.setRate(res.getInt("rating"));
             }
         } catch (SQLException ex) {
             // Log exception

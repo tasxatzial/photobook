@@ -87,6 +87,7 @@ var Posts = (function() {
       if (username === null) {
         var postsButton = document.getElementById('show-posts');
         Homepage.initializeButton(postsButton);
+        Homepage.initializeButton(postsButton);
       }
 
       var shortPost = null;
@@ -518,15 +519,44 @@ var Posts = (function() {
     if (data['username'] === Init.getUser()) {
       selectRate.disabled = true;
     }
-    else if (data['userRating'] === 0) {
-      selectRate.children[data['userRating'] - 1].selected = true;
+    else if (data['userRating'] !== 0) {
+      selectRate.children[data['userRating']].selected = true;
     }
+    selectRate.addEventListener('change', function() {
+        ratePost(this, data);
+    });
     data['ratingDiv'].appendChild(selectRate);
 
     el.postsParent.innerHTML = '';
     el.postsParent.appendChild(data['postDiv']);
     window.scrollTo(0, 0);
     state.clickedFullPost = true;
+  }
+
+    /**
+     * Rates a post (makes request to server)
+     * @param selectRateDiv
+     * @param data
+     */
+  function ratePost(selectRateDiv, data) {
+      var rating = selectRateDiv.value;
+
+      var formData = new FormData();
+      formData.append("action", "RatePost");
+      formData.append("postID", data['postID']);
+      formData.append("rate", rating);
+
+      var ID = Requests.add(ajaxRequest('POST', "Main", formData, successCallback, failCallback));
+
+      function successCallback() {
+          var response = JSON.parse(Requests.get(ID).responseText);
+          console.log(response);
+      }
+
+      function failCallback() {
+          var response = JSON.parse(Requests.get(ID).responseText);
+          console.log(response);
+      }
   }
 
   /**
