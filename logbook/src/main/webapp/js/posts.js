@@ -280,25 +280,10 @@ var Posts = (function() {
 
     /* create all elements related to the rating of the post */
     var ratingValue = document.createElement('span');
-    if (postJSON['ratings'].length) {
-      var ratingsSum = postJSON['ratings'].reduce(function (a, b) {
-        return a + b;
-      });
-      var rating = (Math.round(10 * (ratingsSum / postJSON['ratings'].length)) / 10).toFixed(1);
-      var ratingText = rating + ' / 5 [' + postJSON['ratings'].length;
-      if (postJSON['ratings'].length === 1) {
-        ratingValue.innerHTML = ratingText + ' rating]';
-      }
-      else {
-        ratingValue.innerHTML = ratingText + ' ratings]';
-      }
-    }
-    else {
-      ratingValue.innerHTML = 'No ratings';
-    }
+    ratingValue.innerHTML = createRatingsText(postJSON['ratings']);
     var ratingDiv = document.createElement('div');
     ratingDiv.className = 'ratings';
-    ratingDiv.innerHTML = 'Rating:';
+    ratingDiv.innerHTML = 'Rating: ';
     ratingDiv.appendChild(ratingValue);
 
     /* create the footer element, this currently shows only who created the post and when */
@@ -336,8 +321,9 @@ var Posts = (function() {
       lon: postJSON['longitude'],
       username: postJSON['username'],
       postID: postJSON['postID'],
-      ratingDiv: ratingDiv,
       userRating: postJSON['userRating'],
+      ratings: postJSON['ratings'],
+      ratingTextDiv: ratingValue,
       descriptionDiv: description,
       readMoreButtonDiv: readMoreButton,
       footerDiv: footer,
@@ -354,6 +340,31 @@ var Posts = (function() {
     postDiv.appendChild(ratingDiv);
 
     return postDiv;
+  }
+
+  /**
+   * Returns the text that shows the rating + number of ratings for a post
+   * @param ratings Array of ratings
+   * @returns {string}
+   */
+  function createRatingsText(ratings) {
+    var ratingsSum = 0;
+    if (ratings.length) {
+      ratingsSum = ratings.reduce(function (a, b) {
+        return Number(a) + Number(b);
+      });
+      var rating = (Math.round(10 * (ratingsSum / ratings.length)) / 10).toFixed(1);
+      var ratingText = rating + ' / 5 [' + ratings.length;
+      if (ratings.length === 1) {
+        return ratingText + ' rating]';
+      }
+      else {
+        return ratingText + ' ratings]';
+      }
+    }
+    else {
+      return 'No ratings';
+    }
   }
 
   /**
@@ -519,13 +530,13 @@ var Posts = (function() {
     if (data['username'] === Init.getUser()) {
       selectRate.disabled = true;
     }
-    else if (data['userRating'] !== 0) {
+    else if (data['userRating'] !== '') {
       selectRate.children[data['userRating']].selected = true;
     }
     selectRate.addEventListener('change', function() {
-        ratePost(this, data);
+        ratePost(selectRate.value, data);
     });
-    data['ratingDiv'].appendChild(selectRate);
+    data['ratingTextDiv'].parentElement.appendChild(selectRate);
 
     el.postsParent.innerHTML = '';
     el.postsParent.appendChild(data['postDiv']);
@@ -535,27 +546,39 @@ var Posts = (function() {
 
     /**
      * Rates a post (makes request to server)
-     * @param selectRateDiv
+     * @param rate
      * @param data
      */
-  function ratePost(selectRateDiv, data) {
-      var rating = selectRateDiv.value;
-
+  function ratePost(rate, data) {
       var formData = new FormData();
       formData.append("action", "RatePost");
       formData.append("postID", data['postID']);
-      formData.append("rate", rating);
+      formData.append("rate", rate);
 
       var ID = Requests.add(ajaxRequest('POST', "Main", formData, successCallback, failCallback));
 
       function successCallback() {
-          var response = JSON.parse(Requests.get(ID).responseText);
-          console.log(response);
+        var idx;
+        var newRatings = data['ratings'].concat([]);
+        if (data['userRating'] === '') {
+          newRatings.push(rate);
+        }
+        else if (rate === '') {
+          idx = newRatings.indexOf(data['userRating']);
+          newRatings = newRatings.slice(0, idx).concat(newRatings.slice(idx + 1));
+        }
+        else {
+          newRatings = data['ratings'].concat([]);
+          idx = newRatings.indexOf(data['userRating']);
+          newRatings[idx] = rate;
+        }
+        data['ratingTextDiv'].innerHTML = createRatingsText(newRatings);
+        var response = JSON.parse(Requests.get(ID).responseText);
       }
 
       function failCallback() {
-          var response = JSON.parse(Requests.get(ID).responseText);
-          console.log(response);
+        var response = JSON.parse(Requests.get(ID).responseText);
+        console.log(response);
       }
   }
 
