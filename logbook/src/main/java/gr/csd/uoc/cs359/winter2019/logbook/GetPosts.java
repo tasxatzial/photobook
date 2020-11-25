@@ -99,14 +99,26 @@ public class GetPosts extends HttpServlet {
             json.put("postID", post.getPostID());
 
             int userRating = RatingDB.getRate(post.getPostID(), (String) oldSession.getAttribute("username"));
+            if (userRating == -1) {
+                json.put("ERROR", "SERVER_ERROR");
+                out.print(json.toJSONString());
+                response.setStatus(500);
+                return;
+            }
             if (userRating == 0) {
                 json.put("userRating", "");
             }
-            else {
+            else  {
                 json.put("userRating", userRating);
             }
 
             List<Rating> ratingsList = RatingDB.getRatings(post.getPostID());
+            if (ratingsList == null) {
+                json.put("ERROR", "SERVER_ERROR");
+                out.print(json.toJSONString());
+                response.setStatus(500);
+                return;
+            }
             JSONArray ratings = new JSONArray();
             for (Rating rating : ratingsList) {
                 ratings.add(rating.getRate());

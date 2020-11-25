@@ -571,22 +571,8 @@ var Posts = (function() {
       var ID = Requests.add(ajaxRequest('POST', "Main", formData, successCallback, failCallback));
 
       function successCallback() {
-        var idx;
-        var newRatings = data['ratings'].concat([]);
-        if (data['userRating'] === '') {
-          newRatings.push(rate);
-        }
-        else if (rate === '') {
-          idx = newRatings.indexOf(data['userRating']);
-          newRatings = newRatings.slice(0, idx).concat(newRatings.slice(idx + 1));
-        }
-        else {
-          newRatings = data['ratings'].concat([]);
-          idx = newRatings.indexOf(data['userRating']);
-          newRatings[idx] = rate;
-        }
-        data['ratingTextDiv'].innerHTML = createRatingsText(newRatings);
         var response = JSON.parse(Requests.get(ID).responseText);
+        data['ratingTextDiv'].innerHTML = createRatingsText(response['ratings']);
       }
 
       function failCallback() {

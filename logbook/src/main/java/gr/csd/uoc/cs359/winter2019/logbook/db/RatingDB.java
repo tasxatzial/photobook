@@ -75,7 +75,7 @@ public class RatingDB {
      * @throws ClassNotFoundException
      */
     public static List<Rating> getRatings(int postID) throws ClassNotFoundException {
-        List<Rating> ratings = new ArrayList<>();
+        List<Rating> ratings = null;
 
         Statement stmt = null;
         Connection con = null;
@@ -93,6 +93,7 @@ public class RatingDB {
 
             ResultSet res = stmt.getResultSet();
 
+            ratings = new ArrayList<>();
             while (res.next() == true) {
                 Rating rating = new Rating();
                 rating.setID(res.getInt("rating_id"));
@@ -392,9 +393,8 @@ public class RatingDB {
 
             ResultSet res = stmt.getResultSet();
 
-
+            rating = new Rating();
             if (res.next() == true) {
-                rating = new Rating();
                 rating.setID(res.getInt("rating_id"));
                 rating.setUserName(res.getString("user_name"));
                 rating.setPostID(res.getInt("post_id"));

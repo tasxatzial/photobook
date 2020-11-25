@@ -9,6 +9,7 @@ import gr.csd.uoc.cs359.winter2019.logbook.db.PostDB;
 import gr.csd.uoc.cs359.winter2019.logbook.db.RatingDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Post;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Rating;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * Rates a post.
@@ -126,10 +128,23 @@ public class RatePost extends HttpServlet {
                     json.put("ERROR", "SERVER_ERROR");
                     out.print(json.toJSONString());
                     response.setStatus(500);
+                    return;
                 }
-                else {
+
+                /* return the updated ratings */
+                List<Rating> ratingsList = RatingDB.getRatings(pID);
+                if (ratingsList == null) {
+                    json.put("ERROR", "SERVER_ERROR");
                     out.print(json.toJSONString());
+                    response.setStatus(500);
+                    return;
                 }
+                JSONArray ratings = new JSONArray();
+                for (Rating r : ratingsList) {
+                    ratings.add(r.getRate());
+                }
+                json.put("ratings", ratings);
+                out.print(json.toJSONString());
             }
         }
         else {
@@ -188,10 +203,24 @@ public class RatePost extends HttpServlet {
                 json.put("ERROR", "SERVER_ERROR");
                 out.print(json.toJSONString());
                 response.setStatus(500);
+                return;
             }
-            else {
+
+            /* return the updated ratings */
+            List<Rating> ratingsList = RatingDB.getRatings(pID);
+            if (ratingsList == null) {
+                json.put("ERROR", "SERVER_ERROR");
                 out.print(json.toJSONString());
+                response.setStatus(500);
+                return;
             }
+
+            JSONArray ratings = new JSONArray();
+            for (Rating r : ratingsList) {
+                ratings.add(r.getRate());
+            }
+            json.put("ratings", ratings);
+            out.print(json.toJSONString());
         }
     }
 
