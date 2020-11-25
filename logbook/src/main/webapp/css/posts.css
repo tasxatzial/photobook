@@ -146,3 +146,13 @@
 .select-rate {
   margin-left: .4em;
 }
+
+.sort-container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+
+.sort-container select {
+  margin-left: .5em;
+}

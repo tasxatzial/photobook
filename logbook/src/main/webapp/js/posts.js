@@ -14,6 +14,7 @@ var Posts = (function() {
     postButton: null,
     showMapButton: null
   };
+
   var posts = {};
 
   var data = {
@@ -23,7 +24,8 @@ var Posts = (function() {
   var state = {
     clickedFullPost: null,
     locationValid: null,
-    mapView: false
+    mapView: false,
+    sortPosts: ''
   };
 
   var obj = {
@@ -89,11 +91,12 @@ var Posts = (function() {
       if (username === null) {
         var postsButton = document.getElementById('show-posts');
         Homepage.initializeButton(postsButton);
-        Homepage.initializeButton(postsButton);
       }
 
       var shortPost = null;
       if (Object.keys(response).length > 0) {
+        var sortDiv = createSortDiv();
+        el.postsParent.appendChild(sortDiv);
         el.postsParent.appendChild(document.createElement('hr'));
       }
       Object.keys(response).forEach(function(key,index) {
@@ -123,6 +126,41 @@ var Posts = (function() {
       }
       newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
+  }
+
+  /**
+   * Returns the container that has the sort by rating option
+   * @returns {HTMLDivElement}
+   */
+  function createSortDiv() {
+    var option1 = document.createElement('option');
+    option1.value = '';
+    option1.innerHTML = '-';
+    var option2 = document.createElement('option');
+    option2.value = 'rating';
+    option2.innerHTML = 'rating';
+
+    if (state.sortPosts === '') {
+      option1.selected = true;
+    }
+    else {
+      option2.selected = true;
+    }
+
+    var selectSort = document.createElement('select');
+    selectSort.appendChild(option1);
+    selectSort.appendChild(option2);
+
+    selectSort.addEventListener('change', function () {
+      state.sortPosts = selectSort.value;
+    });
+
+    var sortDiv = document.createElement('div');
+    sortDiv.className = 'sort-container';
+    sortDiv.innerHTML = 'Sort by ';
+    sortDiv.appendChild(selectSort);
+
+    return sortDiv;
   }
 
   /**
