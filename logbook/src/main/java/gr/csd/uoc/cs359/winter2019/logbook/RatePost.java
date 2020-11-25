@@ -105,26 +105,19 @@ public class RatePost extends HttpServlet {
 
         /* if rate is an empty string, the user will delete the rating if it exists */
         if (rate.equals("")) {
-            int rateDB = RatingDB.getRate(pID, username);
-            if (rateDB == -1) {
+            Rating rating = RatingDB.getRating(pID, username);
+            if (rating == null) {
                 json.put("ERROR", "SERVER_ERROR");
                 out.print(json.toJSONString());
                 response.setStatus(500);
                 return;
             }
-            if (rateDB > 0) {
-                Rating rating = RatingDB.getRating(pID, username);
-                if (rating == null) {
-                    json.put("ERROR", "SERVER_ERROR");
-                    out.print(json.toJSONString());
-                    response.setStatus(500);
-                    return;
-                }
+            if (rating.getRate() > 0) {
                 int id = rating.getID();
                 RatingDB.deleteRating(id);
 
                 rating = RatingDB.getRating(pID, username);
-                if (rating != null) {
+                if (rating == null) {
                     json.put("ERROR", "SERVER_ERROR");
                     out.print(json.toJSONString());
                     response.setStatus(500);
@@ -174,31 +167,23 @@ public class RatePost extends HttpServlet {
             rating.setPostID(pID);
 
             /* check whether there is already a rating in the db and either update or add a new one */
-            int rateDB = RatingDB.getRate(pID, username);
-            if (rateDB == -1) {
+            Rating oldRating = RatingDB.getRating(pID, username);
+            if (oldRating == null) {
                 json.put("ERROR", "SERVER_ERROR");
                 out.print(json.toJSONString());
                 response.setStatus(500);
                 return;
             }
-            if (rateDB > 0) {
-                Rating oldRating = RatingDB.getRating(pID, username);
-                if (oldRating == null) {
-                    json.put("ERROR", "SERVER_ERROR");
-                    out.print(json.toJSONString());
-                    response.setStatus(500);
-                }
-                else {
-                    oldRating.setRate(ratingNum);
-                    RatingDB.updateRating(oldRating);
-                }
+            if (oldRating.getRate() > 0) {
+                oldRating.setRate(ratingNum);
+                RatingDB.updateRating(oldRating);
             }
             else {
                 RatingDB.addRating(rating);
             }
 
             /* verify that rating has been written on the db */
-            rateDB = RatingDB.getRate(pID, username);
+            int rateDB = RatingDB.getRate(pID, username);
             if (rateDB == -1) {
                 json.put("ERROR", "SERVER_ERROR");
                 out.print(json.toJSONString());
