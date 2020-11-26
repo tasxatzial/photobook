@@ -83,7 +83,7 @@ public class PostDB {
      * @throws ClassNotFoundException
      */
     public static List<Post> getAllPostsBy(User user) throws ClassNotFoundException {
-        List<Post> posts = new ArrayList<>();
+        List<Post> posts = null;
 
         Statement stmt = null;
         Connection con = null;
@@ -103,6 +103,7 @@ public class PostDB {
 
             ResultSet res = stmt.getResultSet();
 
+            posts = new ArrayList<>();
             while (res.next() == true) {
                 Post post = new Post();
                 post.setPostID(res.getInt("post_id"));
@@ -115,6 +116,49 @@ public class PostDB {
                 post.setLongitude(res.getString("longitude"));
                 post.setCreatedAt(res.getString("created_at"));
                 posts.add(post);
+            }
+
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            closeDBConnection(stmt, con);
+        }
+
+        return posts;
+    }
+
+    /**
+     * Get all posts by user
+     *
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public static List<Integer> getAllPostsIDsBy(User user) throws ClassNotFoundException {
+        List<Integer> posts = null;
+
+        Statement stmt = null;
+        Connection con = null;
+
+        try {
+
+            con = CS359DB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM posts ")
+                    .append(" WHERE ")
+                    .append(" user_name = ").append("'").append(user.getUserName()).append("';");
+
+            stmt.execute(insQuery.toString());
+
+            ResultSet res = stmt.getResultSet();
+
+            posts = new ArrayList<>();
+            while (res.next() == true) {
+                posts.add(res.getInt("post_id"));
             }
 
         } catch (SQLException ex) {
@@ -353,7 +397,7 @@ public class PostDB {
      * @throws ClassNotFoundException
      */
     public static List<Post> getTop10RecentPostsOfUser(String userName) throws ClassNotFoundException {
-        List<Post> posts = new ArrayList<>();
+        List<Post> posts = null;
 
         Statement stmt = null;
         Connection con = null;
@@ -373,6 +417,7 @@ public class PostDB {
 
             ResultSet res = stmt.getResultSet();
 
+            posts = new ArrayList<>();
             while (res.next() == true) {
                 Post post = new Post();
                 post.setPostID(res.getInt("post_id"));

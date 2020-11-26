@@ -6,8 +6,10 @@
 package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.PostDB;
+import gr.csd.uoc.cs359.winter2019.logbook.db.RatingDB;
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Post;
+import gr.csd.uoc.cs359.winter2019.logbook.model.Rating;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -40,12 +42,32 @@ public class DeletePost extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
 
-        /* if the attribute username exists, this means all posts by this username will be deleted */
+        /* if the attribute username exists, this means we want all posts by this username to be deleted */
         String i_username = (String) request.getAttribute("username");
         if (i_username != null) {
+
+            /* first we delete all ratings of each post */
+            List<Post> posts = PostDB.getAllPostsBy(UserDB.getUser(i_username));
+            if (posts == null) {
+                request.setAttribute("DELETE_POSTS", "0");
+                return;
+            }
+            for (Post post : posts) {
+                RatingDB.deletePostRatings(post.getPostID());
+                List<Rating> ratings = RatingDB.getRatings(post.getPostID());
+                if (ratings == null || ratings.size() > 0) {
+                    request.setAttribute("DELETE_POST_RATINGS", "0");
+                    return;
+                }
+                else {
+                    request.setAttribute("DELETE_POST_RATINGS", "1");
+                }
+            }
+
+            /* now we delete all posts */
             PostDB.deleteAllPostsBy(UserDB.getUser(i_username));
-            List<Post> posts = PostDB.getTop10RecentPostsOfUser(i_username);
-            if (posts.size() > 0) {
+            posts = PostDB.getTop10RecentPostsOfUser(i_username);
+            if (posts == null || posts.size() > 0) {
                 request.setAttribute("DELETE_POSTS", "0");
             }
             else {
@@ -95,10 +117,20 @@ public class DeletePost extends HttpServlet {
                 return;
             }
 
+            /* before deleting the post, we should delete its ratings and verify that they
+            * have been erased from the DB */
+            RatingDB.deletePostRatings(pID);
+            List<Rating> ratings = RatingDB.getRatings(pID);
+            if (ratings == null || ratings.size() > 0) {
+                jsonFinal.put("ERROR", "DELETE_POST_RATINGS");
+                out.print(jsonFinal.toJSONString());
+                response.setStatus(500);
+                return;
+            }
+
             /* delete the post and verify that it has been erased from the DB */
             PostDB.deletePost(pID);
             post = PostDB.getPost(pID);
-
             if (post != null) {
                 jsonFinal.put("ERROR", "DELETE_POST");
                 out.print(jsonFinal.toJSONString());

@@ -72,7 +72,7 @@ public class DeleteAccount extends HttpServlet {
                 return;
             }
             if (rating.getRate() != -1) {
-                jsonFinal.put("ERROR", "DELETE_RATINGS");
+                jsonFinal.put("ERROR", "DELETE_OWN_RATINGS");
                 out.print(jsonFinal.toJSONString());
                 response.setStatus(500);
                 return;
@@ -85,7 +85,8 @@ public class DeleteAccount extends HttpServlet {
         dispatcher.include(request, response);
 
         /* if the posts have been deleted proceed deleting the account */
-        if (request.getAttribute("DELETE_POSTS").equals("1")) {
+        if (request.getAttribute("DELETE_POSTS") != null &&
+                request.getAttribute("DELETE_POSTS").equals("1")) {
 
             /* verify that the account has been deleted */
             UserDB.deleteUser(username);
@@ -102,7 +103,12 @@ public class DeleteAccount extends HttpServlet {
         }
 
         /* it is an error if at least one post could not been deleted */
-        else {
+        else if (request.getAttribute("DELETE_POST_RATINGS").equals("0")){
+            jsonFinal.put("ERROR", "DELETE_POST_RATINGS");
+            out.print(jsonFinal.toJSONString());
+            response.setStatus(500);
+        }
+        else if (request.getAttribute("DELETE_POSTS").equals("0")){
             jsonFinal.put("ERROR", "DELETE_POSTS");
             out.print(jsonFinal.toJSONString());
             response.setStatus(500);

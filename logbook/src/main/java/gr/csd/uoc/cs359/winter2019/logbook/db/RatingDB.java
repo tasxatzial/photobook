@@ -321,6 +321,39 @@ public class RatingDB {
     }
 
     /**
+     * Delete specific rating
+     *
+     * @param postID
+     * @throws ClassNotFoundException
+     */
+    public static void deletePostRatings(int postID) throws ClassNotFoundException {
+
+        Statement stmt = null;
+        Connection con = null;
+        try {
+
+            con = CS359DB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("DELETE FROM ratings ")
+                    .append(" WHERE ")
+                    .append(" post_id = ").append("'").append(postID).append("';");
+
+            stmt.executeUpdate(insQuery.toString());
+            System.out.println("#DB: The rating was successfully deleted from the database.");
+
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(RatingDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            closeDBConnection(stmt, con);
+        }
+    }
+
+    /**
      * Get Rate of the specific postID that was made by the user with the specific username
      *
      * @param postID
