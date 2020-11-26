@@ -141,6 +141,7 @@
 .ratings span {
   font-weight: 400;
   margin-left: .4em;
+  height: 1rem;
 }
 
 .select-rate {
