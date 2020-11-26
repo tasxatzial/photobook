@@ -248,28 +248,36 @@ var PostForm = (function() {
       formData.append("imageBase64", '');
     }
 
-    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
-
+    var xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
+    
     function successCallback() {
+      var postForm = document.getElementById('post-form');
+      if (!postForm) {
+        return;
+      }
       Init.navbarContent.removeChild(loader);
       Posts.init(data.username);
     }
 
     function failCallback() {
+      var postForm = document.getElementById('post-form');
+      if (!postForm) {
+        return;
+      }
       Init.navbarContent.removeChild(loader);
       enableInputs();
-      if (Requests.get(ID).status === 401) {
+      if (xhr.status === 401) {
         Logout.showExpired();
         return;
       }
-      if (Requests.get(ID).status === 500) {
+      if (xhr.status === 500) {
         newElements.showFullWindowMsg('OK', 'Server error', Init.clearFullWindowMsg);
       }
-      else if (Requests.get(ID).status === 0) {
+      else if (xhr.status === 0) {
         newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
-      else if (Requests.get(ID).status === 400) {
-        var response = JSON.parse(Requests.get(ID).responseText);
+      else if (xhr.status === 400) {
+        var response = JSON.parse(xhr.responseText);
         var info = newElements.createSignupSummary(response, Init.postNames);
         el.postFormContent.innerHTML = '';
         el.postFormContent.appendChild(info);

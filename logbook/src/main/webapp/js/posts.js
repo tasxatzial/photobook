@@ -645,7 +645,7 @@ var Posts = (function() {
 
       data['ratingTextDiv'].innerHTML = '';
       data['ratingTextDiv'].appendChild(Init.loader);
-      
+
       var xhr = ajaxRequest('POST', "Main", formData, successCallback, failCallback);
 
       function successCallback() {
