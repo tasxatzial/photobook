@@ -645,10 +645,14 @@ var Posts = (function() {
 
       data['ratingTextDiv'].innerHTML = '';
       data['ratingTextDiv'].appendChild(Init.loader);
-
-      var ID = Requests.add(ajaxRequest('POST', "Main", formData, successCallback, failCallback));
+      
+      var xhr = ajaxRequest('POST', "Main", formData, successCallback, failCallback);
 
       function successCallback() {
+        var selectRate = document.querySelector('.select-rate');
+        if (!selectRate) {
+          return;
+        }
         data['selectRateDiv'].disabled = false;
         data['userRating'] = rate;
         var response = JSON.parse(Requests.get(ID).responseText);
@@ -666,7 +670,7 @@ var Posts = (function() {
 
         var error = null;
         if (Requests.get(ID).status === 401) {
-          var responseText = Requests.get(ID).responseText;
+          var responseText = xhr.responseText;
           if (!responseText) {
             error = 'Error';
           }
