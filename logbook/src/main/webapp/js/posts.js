@@ -272,12 +272,7 @@ var Posts = (function() {
           error = 'Error';
         }
         else {
-          if (JSON.parse(responseText).ERROR === 'MISSING_USERNAME') {
-            error = 'Invalid user';
-          }
-          else {
-            error = 'Invalid post';
-          }
+          error = 'Invalid post';
         }
       }
       else if (Requests.get(ID).status === 0) {

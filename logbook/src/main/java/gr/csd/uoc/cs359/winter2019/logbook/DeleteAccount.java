@@ -5,12 +5,15 @@
  */
 package gr.csd.uoc.cs359.winter2019.logbook;
 
+import gr.csd.uoc.cs359.winter2019.logbook.db.RatingDB;
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.Rating;
 import gr.csd.uoc.cs359.winter2019.logbook.model.User;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,26 +56,40 @@ public class DeleteAccount extends HttpServlet {
             return;
         }
 
-        /* delete the posts of the user */
         String username = (String) oldSession.getAttribute("username");
-        request.setAttribute("username",username);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("DeletePost");
-        dispatcher.include(request, response);
 
-        if (request.getAttribute("DELETE_POSTS").equals("1")) {
+        /* now delete the ratings of the user */
+        List<Integer> ratingsIDs = RatingDB.getRatings(username);
+        for (Integer ratingsID : ratingsIDs) {
+            RatingDB.deleteRating(ratingsID);
 
-            /* it is an error if the account does not exist */
-            User user = UserDB.getUser(username);
-            if (user == null) {
-                jsonFinal.put("ERROR", "DELETE_ACCOUNT");
+            /* verify that the rating has been deleted */
+            Rating rating = RatingDB.getRate(ratingsID);
+            if (rating == null) {
+                jsonFinal.put("ERROR", "SERVER_ERROR");
                 out.print(jsonFinal.toJSONString());
                 response.setStatus(500);
                 return;
             }
+            if (rating.getRate() != -1) {
+                jsonFinal.put("ERROR", "DELETE_RATINGS");
+                out.print(jsonFinal.toJSONString());
+                response.setStatus(500);
+                return;
+            }
+        }
 
-            /* it is an error if the account cannot be deleted */
+        /* delete the posts of the user */
+        request.setAttribute("username", username);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("DeletePost");
+        dispatcher.include(request, response);
+
+        /* if the posts have been deleted proceed deleting the account */
+        if (request.getAttribute("DELETE_POSTS").equals("1")) {
+
+            /* verify that the account has been deleted */
             UserDB.deleteUser(username);
-            user = UserDB.getUser(username);
+            User user = UserDB.getUser(username);
             if (user != null) {
                 jsonFinal.put("ERROR", "DELETE_ACCOUNT");
                 out.print(jsonFinal.toJSONString());
@@ -84,7 +101,7 @@ public class DeleteAccount extends HttpServlet {
             }
         }
 
-        /* it is an error if all post could not be deleted. Do not delete the account in that case */
+        /* it is an error if at least one post could not been deleted */
         else {
             jsonFinal.put("ERROR", "DELETE_POSTS");
             out.print(jsonFinal.toJSONString());

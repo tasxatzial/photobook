@@ -122,7 +122,7 @@ public class RatingDB {
      * @throws ClassNotFoundException
      */
     public static Rating getRate(int id) throws ClassNotFoundException {
-        Rating rating = new Rating();
+        Rating rating = null;
         Statement stmt = null;
         Connection con = null;
         try {
@@ -140,6 +140,7 @@ public class RatingDB {
 
             ResultSet res = stmt.getResultSet();
 
+            rating = new Rating();
             if (res.next() == true) {
                 rating.setID(res.getInt("rating_id"));
                 rating.setUserName(res.getString("user_name"));
@@ -409,6 +410,46 @@ public class RatingDB {
         }
 
         return rating;
+    }
+
+    /**
+     * Get Rating of the specific postID that was made by the user with the specific username
+     * @param username
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public static List<Integer> getRatings(String username) throws ClassNotFoundException {
+        List<Integer> ratingsIDs = null;
+        Statement stmt = null;
+        Connection con = null;
+        try {
+
+            con = CS359DB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM ratings ")
+                    .append(" WHERE ")
+                    .append(" user_name = ").append("'").append(username).append("';");
+
+            stmt.execute(insQuery.toString());
+
+            ResultSet res = stmt.getResultSet();
+
+            ratingsIDs = new ArrayList<>();
+            while (res.next() == true) {
+                ratingsIDs.add(res.getInt("rating_id"));
+            }
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(RatingDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            closeDBConnection(stmt, con);
+        }
+
+        return ratingsIDs;
     }
 
     /**
