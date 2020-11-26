@@ -178,6 +178,7 @@ var Posts = (function() {
     selectSort.appendChild(option2);
 
     selectSort.addEventListener('change', function () {
+      this.blur();
       state.sortPosts = selectSort.value;
       var sortedPosts = sortPosts();
       el.postsDiv.innerHTML = '';
@@ -206,15 +207,20 @@ var Posts = (function() {
     if (state.sortPosts === 'date') {
       Object.keys(response).forEach(function(key, index) {
         sortedPosts.push(key);
-        sortedPosts.sort(function (a, b) {
-          return a - b;
-        })
       });
+      sortedPosts.sort(function (a, b) {
+        return a - b;
+      })
     }
     else {
       Object.keys(response).forEach(function(key, index) {
-        sortedPosts.push(key);
-        //todo sorting function
+        sortedPosts.push({'key': key, 'avgRating': response[key]['avgRating']});
+      });
+      sortedPosts.sort(function(a, b) {
+        return b['avgRating'] - a['avgRating'];
+      });
+      sortedPosts = sortedPosts.map(function(x) {
+        return x['key'];
       });
     }
 
