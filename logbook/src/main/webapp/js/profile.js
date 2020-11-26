@@ -7,7 +7,10 @@
  */
 var ShowProfile = (function() {
   var el = {
-    accountSubsection: null
+    accountSubsection: null,
+    showProfileButton: null,
+    showPostsButton: null,
+    editAccountButton: null
   };
 
   /**
@@ -29,13 +32,6 @@ var ShowProfile = (function() {
       Init.nonav.appendChild(createAccountSection(username));
       el.accountSubsection = document.getElementById('account-subsection');
     }
-    else {
-      el.accountSubsection.innerHTML = '';
-    }
-
-    var profileSection = createProfileSection();
-    var profileParent = profileSection.children[0];
-    el.accountSubsection.appendChild(profileSection);
 
     if (username === Init.getUser()) {
       var accountButton = document.getElementById('profile-button');
@@ -54,7 +50,14 @@ var ShowProfile = (function() {
     var ID = Requests.add(ajaxRequest("POST", "Main", data, successCallback, failCallback));
 
     function successCallback() {
+      showBorders(el.showProfileButton, el.showPostsButton, el.editAccountButton);
       Init.navbarContent.removeChild(loader);
+      var profileSection = createProfileSection();
+      var profileParent = profileSection.children[0];
+      if (firstTime === false) {
+        el.accountSubsection.innerHTML = '';
+      }
+      el.accountSubsection.appendChild(profileSection);
 
       var navTabs = document.getElementById('account-nav');
       showBorders(navTabs.children[0], navTabs.children[1], navTabs.children[2]);
@@ -160,41 +163,40 @@ var ShowProfile = (function() {
    * Creates the navigation tabs on the user account page. We should have 3 tabs if we have opened
    * our account page, 2 tabs in all other cases.
    * @param username
-   * @returns {HTMLButtonElement}
+   * @returns
    */
   function createNavTabs(username) {
     var navTabs = document.createElement('div');
     navTabs.id = 'account-nav';
 
-    var showProfileButton = createNavTab('Profile');
-    var showPostsButton = createNavTab('Posts');
-    var editAccountButton = null;
+    el.showProfileButton = createNavTab('Profile');
+    el.showPostsButton = createNavTab('Posts');
+    el.editAccountButton = null;
     if (username === Init.getUser()) {
-      editAccountButton = createNavTab('Account');
+      el.editAccountButton = createNavTab('Account');
     }
 
-    showProfileButton.addEventListener('click', function () {
+    el.showProfileButton.addEventListener('click', function () {
       ShowProfile.init(username, false);
-      showBorders(showProfileButton, showPostsButton, editAccountButton);
-      showProfileButton.blur();
+      el.showProfileButton.blur();
     });
-    showPostsButton.addEventListener('click', function () {
+    el.showPostsButton.addEventListener('click', function () {
       Posts.init(username);
-      showBorders(showPostsButton, showProfileButton, editAccountButton);
+      showBorders(el.showPostsButton, el.showProfileButton, el.editAccountButton);
       this.blur();
     });
-    if (editAccountButton) {
-      editAccountButton.addEventListener('click', function () {
+    if (el.editAccountButton) {
+      el.editAccountButton.addEventListener('click', function () {
         AccountInfo.init();
-        showBorders(editAccountButton, showProfileButton, showPostsButton);
+        showBorders(el.editAccountButton, el.showProfileButton, el.showPostsButton);
         this.blur();
       });
     }
 
-    navTabs.appendChild(showProfileButton);
-    navTabs.appendChild(showPostsButton);
+    navTabs.appendChild(el.showProfileButton);
+    navTabs.appendChild(el.showPostsButton);
     if (username === Init.getUser()) {
-      navTabs.appendChild(editAccountButton);
+      navTabs.appendChild(el.editAccountButton);
     }
 
     return navTabs;
