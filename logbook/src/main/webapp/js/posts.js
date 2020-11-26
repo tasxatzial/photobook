@@ -457,7 +457,7 @@ var Posts = (function() {
         return Number(a) + Number(b);
       }, 0);
       var rating = (Math.round(10 * (ratingsSum / ratings.length)) / 10).toFixed(1);
-      var ratingText = rating + ' / 5 [' + ratings.length;
+      var ratingText = rating + ' out of 5 [' + ratings.length;
       if (ratings.length === 1) {
         return ratingText + ' rating]';
       }
@@ -716,7 +716,7 @@ var Posts = (function() {
    * Creates an array of p elements for the description based on the given description text.
    * @param descriptionText
    * @param maxVisibleLength Drop all description characters after index maxVisibleLength
-   * @returns
+   * @returns {Array}
    */
   function createDescription(descriptionText, maxVisibleLength) {
     var description = descriptionText.trim().replace(/ +/g, ' ').replace(/\n+/g, '\n');

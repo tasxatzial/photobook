@@ -24,14 +24,14 @@
 }
 
 #post-location {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   margin: 0;
 }
 
 .read-more-button {
   box-sizing: content-box;
   font: inherit;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   background-color: transparent;
   cursor: pointer;
   border: 0;
@@ -75,7 +75,7 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-end;
-  font-size: 0.95rem;
+  font-size: .95rem;
   margin-top: 1.4em;
 }
 
@@ -110,7 +110,7 @@
 .post-description p {
   margin-bottom: 0;
   margin-top: 0.5em;
-  line-height: 1.3em;
+  line-height: 1.35em;
 }
 
 .location-container .sign-internal-button {
@@ -144,15 +144,17 @@
 }
 
 .select-rate {
-  margin-left: .4em;
+  margin-left: .5em;
 }
 
 .sort-container {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-end;
+  font-weight: 500;
 }
 
 .sort-container select {
   margin-left: .5em;
+  font-size: .9rem;
 }

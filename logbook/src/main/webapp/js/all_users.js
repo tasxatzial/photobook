@@ -236,7 +236,7 @@ var AllUsers = (function() {
     lastUpdatedContainer.appendChild(el.lastUpdatedText);
 
     var registedSince = document.createElement('div');
-    registedSince.innerHTML = 'Registered since';
+    registedSince.innerHTML = 'Registered';
 
     el.topLegendContainer = document.createElement('div');
     el.topLegendContainer.id = 'legend';
@@ -245,6 +245,7 @@ var AllUsers = (function() {
 
     var activeUsers = document.createElement('p');
     activeUsers.innerText = 'Online users are those who have been active < 1 min ago.';
+    activeUsers.className = 'online-users-text';
 
     var div = document.createElement('div');
     div.id = 'userlist-parent';

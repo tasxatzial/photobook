@@ -84,6 +84,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: .5em;
+    font-weight: 500;
 }
 
 #legend-text {
@@ -107,6 +108,10 @@
 
 .registered-since {
     flex-shrink: 0;
+}
+
+.online-users-text {
+    font-size: 1.05rem;
 }
 
 @media only screen and (max-width: 45rem) {

@@ -50,7 +50,7 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
-  align-items: center;
+  align-items: baseline;
 }
 
 #post-form-detect-button {
@@ -63,10 +63,6 @@
 
 #post-form-place-parent {
   margin-bottom: 0.7rem;
-}
-
-#post-form-load-msg {
-  height: 1rem;
 }
 
 #post-button button {
