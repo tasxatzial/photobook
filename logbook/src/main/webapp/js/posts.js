@@ -239,7 +239,6 @@ var Posts = (function() {
     var formData = new FormData();
     formData.append("action", "DeletePost");
     formData.append("postID", postID);
-    formData.append("username", username);
 
     var ID = Requests.add(ajaxRequest('POST', "Main", formData, successCallback, failCallback));
 
@@ -259,14 +258,9 @@ var Posts = (function() {
         if (!responseText) {
           error = 'Error';
         }
-        else {
-          if (JSON.parse(responseText).ERROR === 'NO_SESSION') {
-            Logout.showExpired();
-            return;
-          }
-          else {
-            error = 'Unauthorized';
-          }
+        else if (JSON.parse(responseText).ERROR === 'NO_SESSION') {
+          Logout.showExpired();
+          return;
         }
       }
       else if (Requests.get(ID).status === 500) {

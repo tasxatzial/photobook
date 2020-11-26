@@ -40,7 +40,7 @@ public class DeletePost extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
 
-        /* only a logged in user can delete a post and that post must belong to the same user */
+        /* if the attribute username exists, this means all posts by this username will be deleted */
         String i_username = (String) request.getAttribute("username");
         if (i_username != null) {
             PostDB.deleteAllPostsBy(UserDB.getUser(i_username));
@@ -63,24 +63,6 @@ public class DeletePost extends HttpServlet {
                 jsonFinal.put("ERROR", "NO_SESSION");
                 out.print(jsonFinal.toJSONString());
                 response.setStatus(401);
-                return;
-            }
-
-            /* we need a username in the request */
-            String r_username = request.getParameter("username");
-            if (r_username == null) {
-                jsonFinal.put("ERROR", "MISSING_USERNAME");
-                out.print(jsonFinal.toJSONString());
-                response.setStatus(400);
-                return;
-            }
-
-            /* we need the username in the request to match the username of the logged in user */
-            String s_username = (String) oldSession.getAttribute("username");
-            if (!r_username.equals(s_username)) {
-                jsonFinal.put("ERROR", "UNAUTHORIZED");
-                response.setStatus(401);
-                out.print(jsonFinal.toJSONString());
                 return;
             }
 
