@@ -12,8 +12,11 @@ var Posts = (function() {
     deleteButton: null,
     deleteMsg: null,
     postButton: null,
-    showMapButton: null
+    showMapButton: null,
+    postsDiv: null
   };
+
+  var response = null;
 
   var posts = {};
 
@@ -25,7 +28,7 @@ var Posts = (function() {
     clickedFullPost: null,
     locationValid: null,
     mapView: false,
-    sortPosts: ''
+    sortPosts: 'date'
   };
 
   var obj = {
@@ -41,11 +44,11 @@ var Posts = (function() {
    * @param username
    */
   function init(username) {
-    posts = {};
     data.username = username;
     el.confirmDelete = null;
     state.clickedFullPost = null;
     state.mapView = false;
+    posts = {};
 
     var postsSection = createPostsSection(username);
     el.postsParent = postsSection.children[0];
@@ -87,7 +90,7 @@ var Posts = (function() {
 
     function successCallback() {
       Init.navbarContent.removeChild(loader);
-      var response = JSON.parse(Requests.get(ID).responseText);
+      response = JSON.parse(Requests.get(ID).responseText);
       if (username === null) {
         var postsButton = document.getElementById('show-posts');
         Homepage.initializeButton(postsButton);
@@ -103,7 +106,6 @@ var Posts = (function() {
       /* compute avg rating for each post */
       Object.keys(response).forEach(function (key, index) {
         var ratings = response[key]['ratings'];
-        var postID = response[key]['postID'];
         var ratingsSum = ratings.reduce(function (a, b) {
           return Number(a) + Number(b);
         }, 0);
@@ -111,21 +113,27 @@ var Posts = (function() {
         if (ratings.length) {
           avgRating = ratingsSum / ratings.length;
         }
-        posts[postID] = avgRating;
+        response[key]['avgRating'] = avgRating;
       });
 
-      /* create the posts and populate the dom */
-      Object.keys(response).forEach(function(key,index) {
-        var shortPost = createShortPost(response[key]);
-        el.postsParent.appendChild(shortPost);
-        el.postsParent.appendChild(document.createElement('hr'));
-      });
+      /* sort the postID of the posts and create each post element */
+      el.postsDiv = document.createElement('div');
+
+      var sortedPosts = sortPosts();
+      for (var i = 0; i < sortedPosts.length; i++) {
+        var shortPost = createShortPost(response[sortedPosts[i]]);
+        posts[sortedPosts[i]] = shortPost;
+        el.postsDiv.appendChild(shortPost);
+      }
 
       /* case where there are 0 posts */
       if (Object.keys(response).length === 0) {
         var postsMsg = document.createElement('p');
         postsMsg.innerHTML = 'No posts.';
         el.postsParent.appendChild(postsMsg);
+      }
+      else {
+        el.postsParent.appendChild(el.postsDiv);
       }
     }
 
@@ -152,13 +160,13 @@ var Posts = (function() {
    */
   function createSortDiv() {
     var option1 = document.createElement('option');
-    option1.value = '';
-    option1.innerHTML = '-';
+    option1.value = 'date';
+    option1.innerHTML = 'date';
     var option2 = document.createElement('option');
     option2.value = 'rating';
     option2.innerHTML = 'rating';
 
-    if (state.sortPosts === '') {
+    if (state.sortPosts === 'date') {
       option1.selected = true;
     }
     else {
@@ -171,6 +179,11 @@ var Posts = (function() {
 
     selectSort.addEventListener('change', function () {
       state.sortPosts = selectSort.value;
+      var sortedPosts = sortPosts();
+      el.postsDiv.innerHTML = '';
+      for (var i = 0; i < sortedPosts.length; i++) {
+        el.postsDiv.appendChild(posts[sortedPosts[i]]);
+      }
     });
 
     var sortDiv = document.createElement('div');
@@ -179,6 +192,33 @@ var Posts = (function() {
     sortDiv.appendChild(selectSort);
 
     return sortDiv;
+  }
+
+  /**
+   * Returns a sorted array of the keys of the response object based on the selected
+   * sorting method.
+   * @returns {[]}
+   */
+  function sortPosts() {
+    var sortedPosts = [];
+
+    /* date sorting is done by sorting the keys of the response object by value */
+    if (state.sortPosts === 'date') {
+      Object.keys(response).forEach(function(key, index) {
+        sortedPosts.push(key);
+        sortedPosts.sort(function (a, b) {
+          return a - b;
+        })
+      });
+    }
+    else {
+      Object.keys(response).forEach(function(key, index) {
+        sortedPosts.push(key);
+        //todo sorting function
+      });
+    }
+
+    return sortedPosts;
   }
 
   /**
@@ -395,6 +435,8 @@ var Posts = (function() {
     postDiv.appendChild(readMoreButton);
     postDiv.appendChild(footer);
     postDiv.appendChild(ratingDiv);
+    postDiv.appendChild(document.createElement('hr'));
+
     return postDiv;
   }
 
