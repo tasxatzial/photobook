@@ -16,7 +16,7 @@ var PostForm = (function() {
       lon: null
     }
   };
-  
+
   var nominatimAPI = {
     url: 'https://nominatim.openstreetmap.org/search'
   };
@@ -248,36 +248,28 @@ var PostForm = (function() {
       formData.append("imageBase64", '');
     }
 
-    var xhr = ajaxRequest('POST', 'Main', formData, successCallback, failCallback);
-    
+    var ID = Requests.add(ajaxRequest('POST', 'Main', formData, successCallback, failCallback));
+
     function successCallback() {
-      var postForm = document.getElementById('post-form');
-      if (!postForm) {
-        return;
-      }
       Init.navbarContent.removeChild(loader);
       Posts.init(data.username);
     }
 
     function failCallback() {
-      var postForm = document.getElementById('post-form');
-      if (!postForm) {
-        return;
-      }
       Init.navbarContent.removeChild(loader);
       enableInputs();
-      if (xhr.status === 401) {
+      if (Requests.get(ID).status === 401) {
         Logout.showExpired();
         return;
       }
-      if (xhr.status === 500) {
+      if (Requests.get(ID).status === 500) {
         newElements.showFullWindowMsg('OK', 'Server error', Init.clearFullWindowMsg);
       }
-      else if (xhr.status === 0) {
+      else if (Requests.get(ID).status === 0) {
         newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
       }
-      else if (xhr.status === 400) {
-        var response = JSON.parse(xhr.responseText);
+      else if (Requests.get(ID).status === 400) {
+        var response = JSON.parse(Requests.get(ID).responseText);
         var info = newElements.createSignupSummary(response, Init.postNames);
         el.postFormContent.innerHTML = '';
         el.postFormContent.appendChild(info);
