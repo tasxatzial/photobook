@@ -650,7 +650,7 @@ var Posts = (function() {
       }
       data['selectRateDiv'].disabled = false;
       data['userRating'] = rate;
-      var response = JSON.parse(Requests.get(ID).responseText);
+      var response = JSON.parse(xhr.responseText);
       data['ratingTextDiv'].innerHTML = createRatingsText(response['ratings']);
     }
 
@@ -661,29 +661,17 @@ var Posts = (function() {
       }
       data['selectRateDiv'].disabled = false;
       data['selectRateDiv'].children[data['userRating']].selected = true;
-      data['ratingTextDiv'].innerHTML = oldRatingText;
+      data['ratingTextDiv'].innerHTML = 'N/A';
 
-      var error = null;
-      if (Requests.get(ID).status === 401) {
+      if (xhr.status === 401) {
         var responseText = xhr.responseText;
         if (!responseText) {
-          error = 'Error';
+          newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
         }
         else if (JSON.parse(responseText).ERROR === 'NO_SESSION') {
           Logout.showExpired();
-          return;
         }
       }
-      else if (Requests.get(ID).status === 500) {
-        error = 'Rating failed: Server error';
-      }
-      else if (Requests.get(ID).status === 0) {
-        error = 'Rating failed: Unable to send request';
-      }
-      else {
-        error = 'Rating failed: Error';
-      }
-      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
   }
 
