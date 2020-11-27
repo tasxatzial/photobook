@@ -74,12 +74,7 @@ var Posts = (function() {
    */
   function getPosts(username) {
     Requests.cancelExcept(null);
-
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     var formData = new FormData();
     formData.append("action", "GetPosts");
@@ -634,62 +629,62 @@ var Posts = (function() {
      * @param data
      */
   function ratePost(rate, data) {
-      data['selectRateDiv'].disabled = true;
+    data['selectRateDiv'].disabled = true;
 
-      var formData = new FormData();
-      formData.append("action", "RatePost");
-      formData.append("postID", data['postID']);
-      formData.append("rate", rate);
+    var formData = new FormData();
+    formData.append("action", "RatePost");
+    formData.append("postID", data['postID']);
+    formData.append("rate", rate);
 
-      var oldRatingText = data['ratingTextDiv'].innerHTML;
+    var oldRatingText = data['ratingTextDiv'].innerHTML;
 
-      data['ratingTextDiv'].innerHTML = '';
-      data['ratingTextDiv'].appendChild(Init.loader);
+    data['ratingTextDiv'].innerHTML = '';
+    data['ratingTextDiv'].appendChild(Init.loader);
 
-      var xhr = ajaxRequest('POST', "Main", formData, successCallback, failCallback);
+    var xhr = ajaxRequest('POST', "Main", formData, successCallback, failCallback);
 
-      function successCallback() {
-        var selectRate = document.querySelector('.select-rate');
-        if (!selectRate) {
+    function successCallback() {
+      var selectRate = document.querySelector('.select-rate');
+      if (!selectRate) {
+        return;
+      }
+      data['selectRateDiv'].disabled = false;
+      data['userRating'] = rate;
+      var response = JSON.parse(Requests.get(ID).responseText);
+      data['ratingTextDiv'].innerHTML = createRatingsText(response['ratings']);
+    }
+
+    function failCallback() {
+      var selectRate = document.querySelector('.select-rate');
+      if (!selectRate) {
+        return;
+      }
+      data['selectRateDiv'].disabled = false;
+      data['selectRateDiv'].children[data['userRating']].selected = true;
+      data['ratingTextDiv'].innerHTML = oldRatingText;
+
+      var error = null;
+      if (Requests.get(ID).status === 401) {
+        var responseText = xhr.responseText;
+        if (!responseText) {
+          error = 'Error';
+        }
+        else if (JSON.parse(responseText).ERROR === 'NO_SESSION') {
+          Logout.showExpired();
           return;
         }
-        data['selectRateDiv'].disabled = false;
-        data['userRating'] = rate;
-        var response = JSON.parse(Requests.get(ID).responseText);
-        data['ratingTextDiv'].innerHTML = createRatingsText(response['ratings']);
       }
-
-      function failCallback() {
-        var selectRate = document.querySelector('.select-rate');
-        if (!selectRate) {
-          return;
-        }
-        data['selectRateDiv'].disabled = false;
-        data['selectRateDiv'].children[data['userRating']].selected = true;
-        data['ratingTextDiv'].innerHTML = oldRatingText;
-
-        var error = null;
-        if (Requests.get(ID).status === 401) {
-          var responseText = xhr.responseText;
-          if (!responseText) {
-            error = 'Error';
-          }
-          else if (JSON.parse(responseText).ERROR === 'NO_SESSION') {
-            Logout.showExpired();
-            return;
-          }
-        }
-        else if (Requests.get(ID).status === 500) {
-          error = 'Rating failed: Server error';
-        }
-        else if (Requests.get(ID).status === 0) {
-          error = 'Rating failed: Unable to send request';
-        }
-        else {
-          error = 'Rating failed: Error';
-        }
-        newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
+      else if (Requests.get(ID).status === 500) {
+        error = 'Rating failed: Server error';
       }
+      else if (Requests.get(ID).status === 0) {
+        error = 'Rating failed: Unable to send request';
+      }
+      else {
+        error = 'Rating failed: Error';
+      }
+      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
+    }
   }
 
   /**
@@ -778,12 +773,7 @@ var Posts = (function() {
    */
   function getPostForm(username) {
     Requests.cancelExcept(null);
-
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     var formData = new FormData();
     formData.append("action", "GetPostForm");

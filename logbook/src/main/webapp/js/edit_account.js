@@ -106,12 +106,7 @@ var EditAccount = (function() {
   function updateAccount() {
     Requests.cancelExcept(null);
     disableInputs();
-
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     var data = gatherData();
     data.append('action', 'UpdateAccount');
@@ -177,11 +172,7 @@ var EditAccount = (function() {
     }
     Requests.cancelExcept(null);
 
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     /* disable email field & update account button during this process */
     formInput.disable(el.email);

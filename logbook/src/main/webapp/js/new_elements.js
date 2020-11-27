@@ -344,13 +344,18 @@ var newElements = (function NewElements() {
   }
 
   /**
-   * Creates a sliding loader.
+   * Creates a sliding loader and adds it to navbar
    * @returns {HTMLDivElement}
    */
   function createSlidingLoader() {
-    var loader = document.createElement('div');
+    var loader = document.querySelector('.bar-loader');
+    if (loader) {
+      Init.navbarContent.removeChild(loader);
+    }
+    loader = document.createElement('div');
     loader.className = 'bar-loader';
     loader.style.animationDuration = (window.innerWidth * 1.5)/1000 + 's';
+    Init.navbarContent.appendChild(loader);
 
     return loader;
   }

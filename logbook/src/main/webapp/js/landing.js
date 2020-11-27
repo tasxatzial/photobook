@@ -29,11 +29,7 @@ var Landing = (function() {
     if (signinButton) {
       signinButton.blur();
     }
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     function successCallback() {
       Init.navbarContent.removeChild(loader);
@@ -65,11 +61,7 @@ var Landing = (function() {
     if (signupButton) {
       signupButton.blur();
     }
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     function successCallback() {
       Init.navbarContent.removeChild(loader);

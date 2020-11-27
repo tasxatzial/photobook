@@ -20,12 +20,7 @@ var ShowProfile = (function() {
    */
   function init(username, firstTime) {
     Requests.cancelExcept(null);
-
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     if (firstTime === true) {
       Init.nonav.innerHTML = '';

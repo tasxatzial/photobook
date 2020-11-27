@@ -24,12 +24,7 @@ var AllUsers = (function() {
    */
   function init() {
     Requests.cancelExcept(null);
-
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     var data = new FormData();
     data.append("action", "GetAllUsers");

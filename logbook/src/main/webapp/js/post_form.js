@@ -50,7 +50,6 @@ var PostForm = (function() {
    * @param username
    */
   function init(username) {
-    var accountSection = document.getElementById('account-section');
     data.loc.lat = null;
     data.loc.lon = null;
     state.lastDetectionMethod = null;
@@ -226,12 +225,7 @@ var PostForm = (function() {
     }
 
     disableInputs();
-
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     var formData = new FormData();
     formData.append("action", "CreatePost");

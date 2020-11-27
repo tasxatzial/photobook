@@ -117,12 +117,7 @@ var Signup = (function() {
   function doSignup() {
     Requests.cancelExcept(null);
     disableInputsStep4();
-
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
+    var loader = newElements.createSlidingLoader();
 
     var data = gatherData();
     data.append('action', 'Signup');
@@ -187,13 +182,7 @@ var Signup = (function() {
    */
   function checkUsernameEmailDB() {
     Requests.cancelExcept(null);
-
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
-
+    var loader = newElements.createSlidingLoader();
     disableInputsStep1();
 
     var formData = new FormData();

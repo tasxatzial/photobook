@@ -38,14 +38,8 @@ var Signin = (function() {
    */
   function doSignin() {
     Requests.cancelExcept(null);
-
     formMsg.clear(el.signinMsg);
-    var loader = document.querySelector('.bar-loader');
-    if (!loader) {
-      loader = newElements.createSlidingLoader();
-      Init.navbarContent.appendChild(loader);
-    }
-
+    var loader = newElements.createSlidingLoader();
     disableInputs();
 
     /* prepare data */

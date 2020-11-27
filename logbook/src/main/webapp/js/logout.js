@@ -19,14 +19,8 @@ var Logout = (function() {
     data.append("action", "Logout");
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
-    var logoutButton = document.getElementById('logout-button');
     if (clickedLogout) {
-      Homepage.initializeButton(logoutButton);
-      var loader = document.querySelector('.bar-loader');
-      if (!loader) {
-        loader = newElements.createSlidingLoader();
-        Init.navbarContent.appendChild(loader);
-      }
+      var loader = newElements.createSlidingLoader();
     }
 
     function successCallback() {
@@ -47,7 +41,6 @@ var Logout = (function() {
     function failCallback() {
       if (loader) {
         navbarContent.removeChild(loader);
-        Homepage.initializeButton(null);
       }
       if (Requests.get(ID).status === 0) {
         newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
