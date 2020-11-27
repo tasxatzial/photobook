@@ -12,6 +12,9 @@
           <input type="file" id="file-input" name="name" style="display: none">
         </div>
       </div>
+      <div id="signin-photo-section" class="sign-child">
+        <div id="signin-photo-parent"></div>
+      </div>
       <div id="signin-password-parent" class="sign-child">
         <label for="signin-password" class="sign-label sign-top-label">Password</label><br>
         <input type="password" class="sign-tofill" name="signin-password" id="signin-password" required>

@@ -18,10 +18,7 @@ var SignInFace = (function () {
     /* object that controls the select photo button and the display of the image on the DOM */
     photoPicker: null,
 
-    uploadMsgParent: null,
-    signinMsg: null,
-
-    /* hidden photo section that appears when photo button is clicked */
+    /* photo section that appears when photo button is clicked */
     photoSection: null,
 
     username: null,
@@ -30,7 +27,9 @@ var SignInFace = (function () {
     form: null,
     photoButton: null,
     submit: null,
-    uploadPhotoButton: null
+    uploadPhotoButton: null,
+    uploadMsgParent: null,
+    signinMsg: null,
   };
 
   /**
@@ -95,29 +94,17 @@ var SignInFace = (function () {
    * Called each time the user clicks the select image button.
    */
   function selectPhoto() {
-    /* initialize once */
-    if (!el.photoPicker) {
-      el.photoSection = createSignInPhotoSection();
-      var fileInput = document.getElementById('file-input');
-      var photoParent = el.photoSection.childNodes[0];
-      el.uploadPhotoButton = el.photoSection.childNodes[1];
-      el.uploadMsgParent = el.photoSection.childNodes[2];
-      el.photoPicker = new PhotoPicker(photoParent, fileInput);
-    }
 
     /* trigger the click and pass postSelectPhoto() to photoPicker click function so that it
     is called after the image has finished loading */
     el.photoPicker.click(function () {
-        state.photoSectionVisible = true;
-        if (!el.photoPicker.getPhotob64()) {
-          formButton.disable(el.uploadPhotoButton);
-        }
-        else {
-          formButton.enable(el.uploadPhotoButton);
-        }
-        formMsg.clear(el.uploadMsgParent);
-        formMsg.clear(el.signinMsg);
-        el.form.insertBefore(el.photoSection, el.passwordParent);
+      createSignInPhotoSection();
+      if (!el.photoPicker.getPhotob64()) {
+        formButton.disable(el.uploadPhotoButton);
+      }
+      else {
+        formButton.enable(el.uploadPhotoButton);
+      }
     });
   }
 
@@ -135,47 +122,31 @@ var SignInFace = (function () {
   }
 
   /**
-   * Removes everything in the image section (triggered by the user typing a username).
-   */
-  function resetPhotoSection() {
-    if (state.photoSectionVisible) {
-      state.photoSectionVisible = false;
-      el.form.removeChild(el.photoSection);
-      formMsg.clear(el.uploadMsgParent);
-      formButton.enable(el.uploadPhotoButton);
-      el.photoPicker.clearPhoto();
-    }
-  }
-
-  /**
    * Creates all the elements that appear on the page after the user has selected an image.
    * @returns {HTMLDivElement}
    */
   function createSignInPhotoSection() {
-    var photoContainer = document.createElement('div');
-    photoContainer.id = 'signin-photo-parent';
+    if (el.uploadPhotoButton) {
+      el.photoSection.removeChild(el.uploadPhotoButton);
+      el.photoSection.removeChild(el.uploadMsgParent);
+    }
 
-    var uploadMsg = document.createElement('div');
-    uploadMsg.className = 'sign-process-msg';
+    el.uploadMsgParent = document.createElement('div');
+    el.uploadMsgParent.className = 'sign-process-msg';
 
-    var uploadPhotoButton = document.createElement('button');
-    uploadPhotoButton.innerHTML = 'Upload';
-    uploadPhotoButton.className = 'sign-internal-button';
-    uploadPhotoButton.id = 'signin-upload-button';
-    uploadPhotoButton.addEventListener('click', function () {
+    el.uploadPhotoButton = document.createElement('button');
+    el.uploadPhotoButton.innerHTML = 'Upload';
+    el.uploadPhotoButton.className = 'sign-internal-button';
+    el.uploadPhotoButton.id = 'signin-upload-button';
+    el.uploadPhotoButton.addEventListener('click', function () {
       var photo = el.photoPicker.getPhotob64();
       uploadPhoto(photo);
     });
-    formButton.enable(uploadPhotoButton);
+    formButton.enable(el.uploadPhotoButton);
 
-    var section = document.createElement('div');
-    section.id = 'signin-photo-section';
-    section.className = 'sign-child';
-    section.appendChild(photoContainer);
-    section.appendChild(uploadPhotoButton);
-    section.appendChild(uploadMsg);
-
-    return section;
+    el.photoSection.appendChild(el.uploadPhotoButton);
+    el.photoSection.appendChild(el.uploadMsgParent);
+    el.photoSection.classList.add('display-flex');
   }
 
   /**
@@ -189,12 +160,25 @@ var SignInFace = (function () {
     el.photoButton = document.getElementsByClassName('signin-photo-button')[0];
     el.submit = document.querySelector('#signin-button button');
     el.signinMsg = document.getElementById('signin-process-msg');
-    el.photoPicker = null;
+    el.photoSection = document.getElementById('signin-photo-section');
+    el.photoContainer = document.getElementById('signin-photo-parent');
+    el.fileInput = document.getElementById('file-input');
+    el.photoPicker = new PhotoPicker(el.photoSection.children[0], el.fileInput);
+    el.uploadMsgParent = null;
+    el.uploadPhotoButton = null;
 
-    state.photoSectionVisible = false;
     formButton.enable(el.photoButton);
     el.photoButton.addEventListener('click', selectPhoto);
-    el.username.addEventListener('input', resetPhotoSection);
+    el.username.addEventListener('input', function () {
+      if (el.uploadPhotoButton) {
+        el.photoSection.removeChild(el.uploadPhotoButton);
+        el.photoSection.removeChild(el.uploadMsgParent);
+        el.uploadPhotoButton = null;
+        el.uploadMsgParent = null;
+        el.photoContainer.innerHTML = '';
+        el.photoSection.classList.remove('display-flex');
+      }
+    });
   }
   
   return {

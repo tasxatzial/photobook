@@ -23,10 +23,8 @@
 
 /* the hidden photo section element */
 #signin-photo-section {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: stretch;
-  justify-content: flex-start;
+  display: none;
+  height: 0;
 }
 
 /* selected photo container */
@@ -44,4 +42,12 @@
 #signin-upload-button {
   margin-left: auto;
   margin-right: auto;
+}
+
+#signin-photo-section.display-flex {
+  height: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
 }
