@@ -29,7 +29,8 @@ var SignInFace = (function () {
     passwordParent: null,
     form: null,
     photoButton: null,
-    submit: null
+    submit: null,
+    uploadPhotoButton: null
   };
 
   /**
@@ -86,47 +87,51 @@ var SignInFace = (function () {
     formInput.enable(el.username);
     formButton.enable(el.photoButton);
     formSubmit.enable(el.submit);
+    formButton.enable(el.uploadPhotoButton);
     formMsg.showError(el.uploadMsgParent, FaceAPI.shortMsg(tasks.search.getErrorMsg()));
-  }
-
-  /**
-   * Called after the selected image has finished loading. Then a request to the face++ search face
-   * service is triggered.
-   */
-  function postSelectPhoto() {
-    var photo = el.photoPicker.getPhotob64();
-    state.photoSectionVisible = true;
-    el.form.insertBefore(el.photoSection, el.passwordParent);
-    formMsg.clear(el.uploadMsgParent);
-    formMsg.clear(el.signinMsg);
-    if (photo) {
-      formMsg.showElement(el.uploadMsgParent, Init.loader);
-      formInput.disable(el.username);
-      formButton.disable(el.photoButton);
-      formSubmit.disable(el.submit);
-      el.username.value = '';
-      el.password.value = '';
-      tasks.search = FaceAPI.search(photo, searchPhotoSuccess, searchPhotoFail);
-    }
   }
 
   /**
    * Called each time the user clicks the select image button.
    */
   function selectPhoto() {
-
     /* initialize once */
     if (!el.photoPicker) {
       el.photoSection = createSignInPhotoSection();
       var fileInput = document.getElementById('file-input');
       var photoParent = el.photoSection.childNodes[0];
-      el.uploadMsgParent = el.photoSection.childNodes[1];
+      el.uploadPhotoButton = el.photoSection.childNodes[1];
+      el.uploadMsgParent = el.photoSection.childNodes[2];
       el.photoPicker = new PhotoPicker(photoParent, fileInput);
     }
 
     /* trigger the click and pass postSelectPhoto() to photoPicker click function so that it
     is called after the image has finished loading */
-    el.photoPicker.click(postSelectPhoto);
+    el.photoPicker.click(function () {
+        state.photoSectionVisible = true;
+        if (!el.photoPicker.getPhotob64()) {
+          formButton.disable(el.uploadPhotoButton);
+        }
+        else {
+          formButton.enable(el.uploadPhotoButton);
+        }
+        formMsg.clear(el.uploadMsgParent);
+        formMsg.clear(el.signinMsg);
+        el.form.insertBefore(el.photoSection, el.passwordParent);
+    });
+  }
+
+  function uploadPhoto(photo) {
+    if (photo) {
+      formMsg.showElement(el.uploadMsgParent, Init.loader);
+      formInput.disable(el.username);
+      formButton.disable(el.photoButton);
+      formSubmit.disable(el.submit);
+      formButton.disable(el.uploadPhotoButton);
+      el.username.value = '';
+      el.password.value = '';
+      tasks.search = FaceAPI.search(photo, searchPhotoSuccess, searchPhotoFail);
+    }
   }
 
   /**
@@ -137,6 +142,7 @@ var SignInFace = (function () {
       state.photoSectionVisible = false;
       el.form.removeChild(el.photoSection);
       formMsg.clear(el.uploadMsgParent);
+      formButton.enable(el.uploadPhotoButton);
       el.photoPicker.clearPhoto();
     }
   }
@@ -152,10 +158,21 @@ var SignInFace = (function () {
     var uploadMsg = document.createElement('div');
     uploadMsg.className = 'sign-process-msg';
 
+    var uploadPhotoButton = document.createElement('button');
+    uploadPhotoButton.innerHTML = 'Upload';
+    uploadPhotoButton.className = 'sign-internal-button';
+    uploadPhotoButton.id = 'signin-upload-button';
+    uploadPhotoButton.addEventListener('click', function () {
+      var photo = el.photoPicker.getPhotob64();
+      uploadPhoto(photo);
+    });
+    formButton.enable(uploadPhotoButton);
+
     var section = document.createElement('div');
     section.id = 'signin-photo-section';
     section.className = 'sign-child';
     section.appendChild(photoContainer);
+    section.appendChild(uploadPhotoButton);
     section.appendChild(uploadMsg);
 
     return section;
@@ -172,8 +189,7 @@ var SignInFace = (function () {
     el.photoButton = document.getElementsByClassName('signin-photo-button')[0];
     el.submit = document.querySelector('#signin-button button');
     el.signinMsg = document.getElementById('signin-process-msg');
-    el.photoSection = null;
-    el.uploadMsgParent = null;
+    el.photoPicker = null;
 
     state.photoSectionVisible = false;
     formButton.enable(el.photoButton);

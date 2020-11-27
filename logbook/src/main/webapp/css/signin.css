@@ -40,3 +40,8 @@
 #signin-photo-parent img {
   width: 100%;
 }
+
+#signin-upload-button {
+  margin-left: auto;
+  margin-right: auto;
+}
