@@ -101,14 +101,19 @@ var Posts = (function() {
       /* compute avg rating for each post */
       Object.keys(response).forEach(function (key, index) {
         var ratings = response[key]['ratings'];
-        var ratingsSum = ratings.reduce(function (a, b) {
-          return Number(a) + Number(b);
-        }, 0);
-        var avgRating = 0;
-        if (ratings.length) {
-          avgRating = ratingsSum / ratings.length;
+        if (ratings === '') {
+          response[key]['avgRating'] = '';
         }
-        response[key]['avgRating'] = avgRating;
+        else {
+          var ratingsSum = ratings.reduce(function (a, b) {
+            return Number(a) + Number(b);
+          }, 0);
+          var avgRating = 0;
+          if (ratings.length) {
+            avgRating = ratingsSum / ratings.length;
+          }
+          response[key]['avgRating'] = avgRating;
+        }
       });
 
       /* sort the postID of the posts and create each post element */
@@ -427,6 +432,9 @@ var Posts = (function() {
    * @returns {string}
    */
   function createRatingsText(ratings) {
+    if (ratings === '') {
+      return 'N/A';
+    }
     if (ratings.length) {
       var ratingsSum = ratings.reduce(function (a, b) {
         return Number(a) + Number(b);

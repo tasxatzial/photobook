@@ -114,17 +114,15 @@ public class GetPosts extends HttpServlet {
 
             List<Rating> ratingsList = RatingDB.getRatings(post.getPostID());
             if (ratingsList == null) {
-                json.put("ERROR", "SERVER_ERROR");
-                out.print(json.toJSONString());
-                response.setStatus(500);
-                return;
+                json.put("ratings", "");
             }
-            JSONArray ratings = new JSONArray();
-            for (Rating rating : ratingsList) {
-                ratings.add(rating.getRate());
+            else {
+                JSONArray ratings = new JSONArray();
+                for (Rating rating : ratingsList) {
+                    ratings.add(rating.getRate());
+                }
+                json.put("ratings", ratings);
             }
-            json.put("ratings", ratings);
-
             jsonFinal.put(Integer.toString(i), json);
         }
         out.println(jsonFinal.toJSONString());
