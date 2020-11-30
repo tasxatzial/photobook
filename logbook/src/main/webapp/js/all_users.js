@@ -43,7 +43,7 @@ var AllUsers = (function() {
       Init.nonav.appendChild(userlistSection);
 
       state.lastUpdateTime = Date.now();
-      setLastUpdateContainer();
+      setInterval(setLastUpdateContainer, 60000);
 
       var response = JSON.parse(Requests.get(ID).responseText);
       state.response = response;
@@ -104,7 +104,6 @@ var AllUsers = (function() {
         rightButton.children[0].src = 'images/right.svg';
       }
       showPage(selectButton.value);
-      setLastUpdateContainer();
     });
     rightButton.addEventListener('click', function () {
       selectButton.value = Number(selectButton.value) + 1;
@@ -119,11 +118,9 @@ var AllUsers = (function() {
         leftButton.children[0].src = 'images/left.svg';
       }
       showPage(selectButton.value);
-      setLastUpdateContainer();
     });
     selectButton.addEventListener('change', function () {
       showPage(selectButton.value);
-      setLastUpdateContainer();
       leftButton.disabled = selectButton.value === '1';
       rightButton.disabled = Number(selectButton.value) === state.pages;
       if (leftButton.disabled) {
