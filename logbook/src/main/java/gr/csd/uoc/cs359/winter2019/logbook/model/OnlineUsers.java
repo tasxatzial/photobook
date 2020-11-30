@@ -59,7 +59,7 @@ public final class OnlineUsers {
             return false;
         } else {
             long now = new Date().getTime();
-            return (now - userLastOnline.getTime() < 60);
+            return (now - userLastOnline.getTime() < 60000);
         }
     }
 }

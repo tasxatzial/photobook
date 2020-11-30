@@ -7,6 +7,7 @@ package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class GetAllUsers extends HttpServlet {
 
         JSONObject jsonPage = new JSONObject();
         List<List<String>> usernames = UserDB.getAllUsersNames();
-        int j = 1;
+        int j = 1; //first page is 1
         for (int i = 0; i < usernames.size(); i++) {
             JSONObject jsonUser = new JSONObject();
             jsonUser.put("n", usernames.get(i).get(0));
@@ -69,6 +70,14 @@ public class GetAllUsers extends HttpServlet {
                 jsonPage = new JSONObject();
             }
         }
+        JSONArray jsonOnline = new JSONArray();
+        for (int i = 0; i < usernames.size(); i++) {
+            String user = usernames.get(i).get(0);
+            if (OnlineUsers.isUserOnline(user)) {
+                jsonOnline.add(user);
+            }
+        }
+        json.put("online", jsonOnline);
         out.print(json.toJSONString());
     }
 
