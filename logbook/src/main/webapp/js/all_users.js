@@ -268,7 +268,15 @@ var AllUsers = (function() {
     var div = document.createElement('div');
     div.id = 'userlist';
     div.appendChild(hrBottom);
+
+    var sortedIndexes = [];
     Object.keys(page).forEach(function(key, index) {
+      sortedIndexes.push(key);
+    });
+    sortedIndexes.sort(function (a, b) {
+      return a - b;
+    });
+    sortedIndexes.forEach(function(key, index) {
       var username = page[key]['n'];
       var registered = page[key]['r'].substring(0, 10);
       var userText = newElements.createKeyValue(key, username);
