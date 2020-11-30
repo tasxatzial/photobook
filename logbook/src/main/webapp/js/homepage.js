@@ -36,7 +36,7 @@ var Homepage = (function() {
     allUsersButton.addEventListener('click', function () {
       closeBurgerButton();
       this.blur();
-      AllUsers.init();
+      AllUsers.init(true);
     });
     el.navbarList.appendChild(allUsersButton);
 
