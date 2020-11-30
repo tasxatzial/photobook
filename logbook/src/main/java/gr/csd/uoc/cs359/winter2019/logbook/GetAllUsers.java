@@ -78,6 +78,10 @@ public class GetAllUsers extends HttpServlet {
             }
         }
         json.put("online", jsonOnline);
+        if (usernames.size() == 0) {
+            json.put("0", jsonPage);
+            json.put("online", jsonOnline);
+        }
         out.print(json.toJSONString());
     }
 

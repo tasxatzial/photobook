@@ -194,10 +194,6 @@ var AllUsers = (function() {
    * @returns {HTMLDivElement}
    */
   function createNavBar(pages) {
-    if (!pages) {
-      pages = 1;
-    }
-
     var prevButton = newElements.createArrowButton('images/left.svg');
     prevButton.className = 'userlist-arrow-button transparent-button';
     prevButton.id = 'userlist-left-arrow-button';
