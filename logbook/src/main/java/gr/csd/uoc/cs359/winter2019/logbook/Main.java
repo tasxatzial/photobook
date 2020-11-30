@@ -5,6 +5,7 @@
  */
 package gr.csd.uoc.cs359.winter2019.logbook;
 
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -26,7 +27,6 @@ import javax.servlet.RequestDispatcher;
 @MultipartConfig
 public class Main extends HttpServlet {
 
-    public Map<Integer, Date> onlineUsers = new HashMap<>();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -82,6 +82,8 @@ public class Main extends HttpServlet {
             case "GetPostForm":
                 oldSession = request.getSession(false);
                 if (oldSession != null && oldSession.getAttribute("username") != null) {
+                    String username = (String) oldSession.getAttribute("username");
+                    OnlineUsers.addUser(username);
                     dispatcher = request.getRequestDispatcher("WEB-INF/post_form.jsp");
                 }
                 else {
@@ -111,6 +113,8 @@ public class Main extends HttpServlet {
             case "Logout":
                 oldSession = request.getSession(false);
                 if (oldSession != null) {
+                    String username = (String) oldSession.getAttribute("username");
+                    OnlineUsers.removeUser(username);
                     oldSession.invalidate();
                 }
                 dispatcher = request.getRequestDispatcher("Init");

@@ -6,6 +6,7 @@
 package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.PostDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Post;
 import org.json.simple.JSONObject;
 
@@ -75,6 +76,7 @@ public class CreatePost extends HttpServlet {
         /* create a Post object using the request parameters */
         Post post = new Post();
         String username = (String) oldSession.getAttribute("username");
+        OnlineUsers.addUser(username);
         String r_description = request.getParameter("description");
         String r_resourceURL = request.getParameter("resourceURL");
         String r_imageURL = request.getParameter("imageURL");

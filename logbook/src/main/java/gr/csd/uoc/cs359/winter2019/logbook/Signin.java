@@ -6,6 +6,7 @@
 package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class Signin extends HttpServlet {
         else {
             HttpSession newSession = request.getSession(true);
             newSession.setAttribute("username", request.getParameter("username"));
-
+            OnlineUsers.addUser(request.getParameter("username"));
             Cookie cookie = new Cookie("JSESSIONID", newSession.getId());
             cookie.setMaxAge(365 * 24 * 3600);
             newSession.setMaxInactiveInterval(600);

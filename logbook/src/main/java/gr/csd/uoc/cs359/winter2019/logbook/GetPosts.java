@@ -7,6 +7,7 @@ package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.PostDB;
 import gr.csd.uoc.cs359.winter2019.logbook.db.RatingDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Post;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Rating;
 import org.json.simple.JSONArray;
@@ -55,9 +56,12 @@ public class GetPosts extends HttpServlet {
             return;
         }
 
+        String username = (String) oldSession.getAttribute("username");
+        OnlineUsers.addUser(username);
+
         /* If a username was provided in the request, get the 10 latest posts of that user.
         else get the 10 latest posts */
-        String username = request.getParameter("username");
+        username = request.getParameter("username");
         List<Post> posts;
         if (username != null) {
             posts = PostDB.getTop10RecentPostsOfUser(username);

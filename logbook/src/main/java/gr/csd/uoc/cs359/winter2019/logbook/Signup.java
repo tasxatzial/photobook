@@ -7,6 +7,7 @@ package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Countries;
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import gr.csd.uoc.cs359.winter2019.logbook.model.User;
 import org.json.simple.JSONObject;
 
@@ -69,6 +70,7 @@ public class Signup extends HttpServlet {
                 return;
             }
             username = (String) oldSession.getAttribute("username");
+            OnlineUsers.addUser(username);
         }
 
         jsonSignup = checkFields(request);

@@ -7,6 +7,7 @@ package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Countries;
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import gr.csd.uoc.cs359.winter2019.logbook.model.User;
 import org.json.simple.JSONObject;
 
@@ -50,6 +51,9 @@ public class GetProfile extends HttpServlet {
             response.setStatus(401);
             return;
         }
+
+        String username = (String) oldSession.getAttribute("username");
+        OnlineUsers.addUser(username);
 
         User user;
         if (request.getParameter("username") == null) {

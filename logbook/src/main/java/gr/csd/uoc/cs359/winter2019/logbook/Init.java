@@ -5,6 +5,7 @@
  */
 package gr.csd.uoc.cs359.winter2019.logbook;
 
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -40,6 +41,8 @@ public class Init extends HttpServlet {
 
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null && oldSession.getAttribute("username") != null) {
+            String username = (String) oldSession.getAttribute("username");
+            OnlineUsers.addUser(username);
             json.put("HOMEPAGE", "1");
             json.put("USER", oldSession.getAttribute("username"));
         }

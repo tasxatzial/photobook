@@ -7,6 +7,7 @@ package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.RatingDB;
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Rating;
 import gr.csd.uoc.cs359.winter2019.logbook.model.User;
 import org.json.simple.JSONObject;
@@ -57,6 +58,7 @@ public class DeleteAccount extends HttpServlet {
         }
 
         String username = (String) oldSession.getAttribute("username");
+        OnlineUsers.removeUser(username);
 
         /* now delete the ratings of the user */
         List<Integer> ratingsIDs = RatingDB.getRatings(username);

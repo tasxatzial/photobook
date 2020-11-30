@@ -23,7 +23,9 @@ public final class OnlineUsers {
      * @param username
      */
     public static void addUser(String username) {
-        users.put(username, new Date());
+        if (username != null) {
+            users.put(username, new Date());
+        }
     }
 
     /**
@@ -33,7 +35,9 @@ public final class OnlineUsers {
      * @param username
      */
     public static void removeUser(String username) {
-        users.remove(username);
+        if (username != null) {
+            users.remove(username);
+        }
     }
 
     /**
@@ -46,6 +50,10 @@ public final class OnlineUsers {
      * @return
      */
     public static boolean isUserOnline(String username) {
+        if (username == null) {
+            return false;
+        }
+
         Date userLastOnline = users.get(username);
         if (userLastOnline == null) {
             return false;

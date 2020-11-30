@@ -6,6 +6,7 @@
 package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import gr.csd.uoc.cs359.winter2019.logbook.model.User;
 import org.json.simple.JSONObject;
 
@@ -45,6 +46,7 @@ public class AccountInfo extends HttpServlet {
             /* we need a valid session */
             if (oldSession != null && oldSession.getAttribute("username") != null) {
                 String username = (String) oldSession.getAttribute("username");
+                OnlineUsers.addUser(username);
                 User user = UserDB.getUser(username);
 
                 /* get the account info only for the logged in user */

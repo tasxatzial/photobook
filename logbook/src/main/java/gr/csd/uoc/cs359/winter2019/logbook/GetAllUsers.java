@@ -6,6 +6,7 @@
 package gr.csd.uoc.cs359.winter2019.logbook;
 
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -50,6 +51,9 @@ public class GetAllUsers extends HttpServlet {
             response.setStatus(401);
             return;
         }
+
+        String username = (String) oldSession.getAttribute("username");
+        OnlineUsers.addUser(username);
 
         JSONObject jsonPage = new JSONObject();
         List<List<String>> usernames = UserDB.getAllUsersNames();

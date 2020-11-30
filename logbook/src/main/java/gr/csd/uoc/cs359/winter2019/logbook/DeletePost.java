@@ -8,6 +8,7 @@ package gr.csd.uoc.cs359.winter2019.logbook;
 import gr.csd.uoc.cs359.winter2019.logbook.db.PostDB;
 import gr.csd.uoc.cs359.winter2019.logbook.db.RatingDB;
 import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
+import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Post;
 import gr.csd.uoc.cs359.winter2019.logbook.model.Rating;
 import org.json.simple.JSONObject;
@@ -87,6 +88,9 @@ public class DeletePost extends HttpServlet {
                 response.setStatus(401);
                 return;
             }
+
+            String username = (String) oldSession.getAttribute("username");
+            OnlineUsers.addUser(username);
 
             /* we need an post ID so that we know which post to delete */
             String postID = request.getParameter("postID");
