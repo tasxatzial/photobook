@@ -56,7 +56,8 @@ var newElements = (function NewElements() {
   function createGreenCircle(pathToFile) {
     var circle = document.createElement('img');
     circle.src = pathToFile;
-    circle.className = 'online-user';
+    circle.alt = 'user is online';
+    circle.className = 'user-status';
 
     return circle;
   }
@@ -110,9 +111,12 @@ var newElements = (function NewElements() {
     }
     span.className = 'normal-font-weight';
 
+    var span2 = document.createElement('span');
+    span2.innerHTML = key + ': ';
+    span2.className = 'bold-font-weight';
+
     var msg = document.createElement('p');
-    msg.innerHTML = key + ': ';
-    msg.className = 'bold-font-weight';
+    msg.appendChild(span2);
     msg.appendChild(span);
 
     return msg;

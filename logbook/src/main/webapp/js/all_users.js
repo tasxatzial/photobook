@@ -52,9 +52,8 @@ var AllUsers = (function() {
         el.lastUpdatedTextContainer.appendChild(refreshButton);
       }, 60000);
 
-      var response = JSON.parse(Requests.get(ID).responseText);
-      state.response = response;
-      state.pages = Object.keys(response).length - 1;
+      state.response = JSON.parse(Requests.get(ID).responseText);
+      state.pages = Object.keys(state.response).length - 1;
       if (firstTime) {
         state.currentPage = 1;
       }
@@ -95,7 +94,6 @@ var AllUsers = (function() {
 
     if (Number(state.currentPage) === 1) {
       selectButton.value = 1;
-      console.log(selectButton.value);
       leftButton.disabled = true;
       leftButton.classList.remove('userlist-enabled-arrow-button');
       leftButton.children[0].src = 'images/left_disabled.svg';
@@ -231,6 +229,7 @@ var AllUsers = (function() {
     lastUpdatedText.innerText = 'Online';
 
     el.lastUpdatedTextContainer = document.createElement('div');
+    el.lastUpdatedTextContainer.className = 'legend-text-container';
     el.lastUpdatedTextContainer.appendChild(circle);
     el.lastUpdatedTextContainer.appendChild(lastUpdatedText);
 
@@ -289,7 +288,18 @@ var AllUsers = (function() {
       var username = page[key]['n'];
       var registered = page[key]['r'].substring(0, 10);
       var userText = newElements.createKeyValue(key, username);
-      userText.classList.add('allusers-name');
+      userText.className = 'allusers-name legend-text-container';
+
+      var onlineImg = null;
+      if (state.response['online'].includes(username)) {
+        onlineImg = newElements.createGreenCircle('images/green_circle.svg');
+      }
+      else {
+        onlineImg = document.createElement('div');
+        onlineImg.innerHTML = '&#8212;';
+        onlineImg.className = 'user-status';
+      }
+      userText.insertBefore(onlineImg, userText.children[0]);
 
       var registeredDate = document.createElement('div');
       registeredDate.innerHTML = registered;

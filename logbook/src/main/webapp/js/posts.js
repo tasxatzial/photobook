@@ -494,7 +494,7 @@ var Posts = (function() {
         if (locationQuery.address) {
           loc += ', ' + locationQuery.address;
         }
-        data['locationDiv'].children[0].innerHTML = loc;
+        data['locationDiv'].children[1].innerHTML = loc;
         if (state.clickedFullPost) {
           data['locationQuery'] = locationQuery;
           formButton.enable(el.showMapButton);
@@ -504,14 +504,14 @@ var Posts = (function() {
 
       function failCallback() {
         if (LocationSearch.isValidLatLon(data['lat'], data['lon'])) {
-          data['locationDiv'].children[0].innerHTML = '(' + parseFloat(data['lat']).toFixed(4) + ', ' + parseFloat(data['lon']).toFixed(4) + ') deg';
+          data['locationDiv'].children[1].innerHTML = '(' + parseFloat(data['lat']).toFixed(4) + ', ' + parseFloat(data['lon']).toFixed(4) + ') deg';
           if (state.clickedFullPost) {
             formButton.enable(el.showMapButton);
           }
           state.locationValid = true;
         }
         else {
-          data['locationDiv'].children[0].innerHTML = 'Not available';
+          data['locationDiv'].children[1].innerHTML = 'Not available';
           state.locationValid = false;
         }
       }
