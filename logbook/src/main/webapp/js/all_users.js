@@ -52,7 +52,7 @@ var AllUsers = (function() {
       var response = JSON.parse(Requests.get(ID).responseText);
       state.response = response;
 
-      state.pages = Object.keys(response).length;
+      state.pages = Object.keys(response).length - 1;
       el.navBar = createNavBar(state.pages);
       addNavBarListeners();
 
