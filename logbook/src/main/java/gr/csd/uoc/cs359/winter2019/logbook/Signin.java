@@ -80,6 +80,7 @@ public class Signin extends HttpServlet {
         else {
             HttpSession newSession = request.getSession(true);
             newSession.setAttribute("username", request.getParameter("username"));
+
             Cookie cookie = new Cookie("JSESSIONID", newSession.getId());
             cookie.setMaxAge(365 * 24 * 3600);
             newSession.setMaxInactiveInterval(600);

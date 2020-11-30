@@ -9,6 +9,9 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +26,7 @@ import javax.servlet.RequestDispatcher;
 @MultipartConfig
 public class Main extends HttpServlet {
 
+    public Map<Integer, Date> onlineUsers = new HashMap<>();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
