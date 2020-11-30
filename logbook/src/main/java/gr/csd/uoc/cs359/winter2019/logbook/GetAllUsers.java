@@ -62,7 +62,7 @@ public class GetAllUsers extends HttpServlet {
         for (int i = 0; i < usernames.size(); i++) {
             JSONObject jsonUser = new JSONObject();
             jsonUser.put("n", usernames.get(i).get(0));
-            jsonUser.put("r", usernames.get(i).get(1));
+            jsonUser.put("r", usernames.get(i).get(1).substring(0, 10));
             jsonPage.put(Integer.toString(i + 1), jsonUser);
             if (i % 10 == 9 || i == usernames.size() - 1) {
                 json.put(Integer.toString(j), jsonPage);
