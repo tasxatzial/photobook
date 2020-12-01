@@ -15,12 +15,14 @@ var Logout = (function() {
 
     var navbarContent = document.getElementById('navbar-content');
 
-    var data = new FormData();
-    data.append("action", "Logout");
-    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
-
     if (clickedLogout) {
       var loader = newElements.createSlidingLoader();
+      var data = new FormData();
+      data.append("action", "Logout");
+      var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
+    }
+    else {
+      successCallback();
     }
 
     function successCallback() {
