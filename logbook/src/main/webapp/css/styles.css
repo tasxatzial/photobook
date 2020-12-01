@@ -1,4 +1,9 @@
 html {
+  min-height: 100vh;
+}
+
+body {
+  background-color: #bdc3cb;
   background-image:
       radial-gradient(circle farthest-corner at top left, rgb(207, 205, 223) 0%, rgba(120, 216, 136, 0) 30%),
       radial-gradient(circle farthest-side at top right, rgb(216, 221, 237) 0%, rgba(211, 216, 177,0) 40%),
@@ -6,10 +11,9 @@ html {
       radial-gradient(circle farthest-corner at top right, rgba(175, 221, 240,1) 0%, rgba(224, 240, 195, 0) 50%),
       radial-gradient(ellipse at bottom left, rgb(205, 223, 205) 0%, rgba(197, 243, 199, 0) 56%),
       radial-gradient(ellipse at top center, rgba(254, 233, 230,0.6) 0%, rgba(254, 223, 190, 0) 60%);
-  background-color: #bdc3cb;
 }
 
-.html-logged-in {
+.logged-in {
   background-image: revert;
 }
 

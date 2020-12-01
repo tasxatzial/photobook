@@ -27,7 +27,7 @@ var Logout = (function() {
 
     function successCallback() {
       Init.nonav.classList.remove('no-nav-logged-in');
-      document.getElementsByTagName('html')[0].classList.remove('html-logged-in');
+      document.getElementsByTagName('body')[0].classList.remove('logged-in');
       var navbarList = document.querySelector('.navbar-list');
       var burgerButton = document.querySelector('.initial-burger-button');
       navbarContent.removeChild(navbarList);
