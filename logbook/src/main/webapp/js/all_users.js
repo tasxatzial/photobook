@@ -67,7 +67,7 @@ var AllUsers = (function() {
   }
 
   /**
-   *
+   * Gets the online status of the specified list from the server and updates the DOM
    * @param userList
    */
   function getOnlineStatus(userList) {
@@ -78,13 +78,35 @@ var AllUsers = (function() {
     }
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
+    var userDiv = document.querySelectorAll('.allusers-name');
+    var onlineTopStatus = document.querySelector('.user-status');
+    onlineTopStatus.innerHTML = '';
+    onlineTopStatus.appendChild(Init.loader);
+
     function successCallback() {
+      var isOnline = newElements.createGreenCircle('images/green_circle.svg');
+      onlineTopStatus.innerHTML = '';
+      onlineTopStatus.appendChild(isOnline);
       var response = JSON.parse(Requests.get(ID).responseText);
-      console.log(response);
+      for (var i = 0; i < userDiv.length; i++) {
+        if (response[userDiv[i].children[2].innerHTML] === '1') {
+          isOnline = newElements.createGreenCircle('images/green_circle.svg');
+          userDiv[i].children[0].innerHTML = '';
+          userDiv[i].children[0].appendChild(isOnline);
+        }
+        else {
+          userDiv[i].children[0].innerHTML = '&#8212;';
+        }
+      }
     }
 
     function failCallback() {
-
+      var isOnline = newElements.createGreenCircle('images/green_circle.svg');
+      onlineTopStatus.innerHTML = '';
+      onlineTopStatus.appendChild(isOnline);
+      for (var i = 0; i < userDiv.length; i++) {
+        userDiv[i].children[0].innerHTML = '?';
+      }
     }
   }
 
@@ -172,6 +194,7 @@ var AllUsers = (function() {
         pageUsers.push(state.response[pageNo][key]['n']);
       });
 
+      getOnlineStatus(pageUsers);
       clearInterval(state.interval);
       state.interval = setInterval(function () {
         getOnlineStatus(pageUsers);
@@ -215,7 +238,8 @@ var AllUsers = (function() {
     var header = document.createElement('header');
     header.appendChild(headerH2);
 
-    var circle = newElements.createGreenCircle('images/green_circle.svg');
+    var onlineStatus = document.createElement('div');
+    onlineStatus.className = 'user-status';
 
     var lastUpdatedText = document.createElement('span');
     lastUpdatedText.id = 'legend-text';
@@ -223,7 +247,7 @@ var AllUsers = (function() {
 
     el.lastUpdatedTextContainer = document.createElement('div');
     el.lastUpdatedTextContainer.className = 'legend-text-container';
-    el.lastUpdatedTextContainer.appendChild(circle);
+    el.lastUpdatedTextContainer.appendChild(onlineStatus);
     el.lastUpdatedTextContainer.appendChild(lastUpdatedText);
 
     var registedSince = document.createElement('div');
@@ -239,7 +263,7 @@ var AllUsers = (function() {
     activeUsers.className = 'online-users-text';
 
     var updatePromptText = document.createElement('p');
-    updatePromptText.innerText = 'Refresh when prompted to see the updated list.';
+    updatePromptText.innerText = 'The online status is updated every 1 min.';
     updatePromptText.className = 'online-users-text';
 
     var div = document.createElement('div');
@@ -283,10 +307,10 @@ var AllUsers = (function() {
       var userText = newElements.createKeyValue(key, username);
       userText.className = 'allusers-name legend-text-container';
 
-      var onlineImg = document.createElement('div');
-      onlineImg.innerHTML = '&#8212;';
-      onlineImg.className = 'user-status';
-      userText.insertBefore(onlineImg, userText.children[0]);
+      var onlineStatus = document.createElement('div');
+      onlineStatus.innerHTML = '?';
+      onlineStatus.className = 'user-status';
+      userText.insertBefore(onlineStatus, userText.children[0]);
 
       var registeredDate = document.createElement('div');
       registeredDate.innerHTML = registered;
