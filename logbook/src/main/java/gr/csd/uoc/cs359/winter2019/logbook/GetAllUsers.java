@@ -70,17 +70,8 @@ public class GetAllUsers extends HttpServlet {
                 jsonPage = new JSONObject();
             }
         }
-        JSONArray jsonOnline = new JSONArray();
-        for (int i = 0; i < usernames.size(); i++) {
-            String user = usernames.get(i).get(0);
-            if (OnlineUsers.isUserOnline(user)) {
-                jsonOnline.add(user);
-            }
-        }
-        json.put("online", jsonOnline);
         if (usernames.size() == 0) {
             json.put("0", jsonPage);
-            json.put("online", jsonOnline);
         }
         out.print(json.toJSONString());
     }

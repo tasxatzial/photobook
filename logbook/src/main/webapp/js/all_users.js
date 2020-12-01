@@ -8,8 +8,7 @@ var AllUsers = (function() {
   var state = {
     response: null,
     pages: 0,
-    timeout: null,
-    currentPage: 1
+    interval: null
   };
 
   var el = {
@@ -21,7 +20,7 @@ var AllUsers = (function() {
   /**
    * Initializes the view when the all users button is clicked.
    */
-  function init(firstTime) {
+  function init() {
     Requests.cancelExcept(null);
     var loader = newElements.createSlidingLoader();
 
@@ -41,30 +40,13 @@ var AllUsers = (function() {
       Init.nonav.innerHTML = '';
       Init.nonav.appendChild(userlistSection);
 
-      clearTimeout(state.timeout);
-      state.timeout = setTimeout(function () {
-        var refreshButton = document.createElement('button');
-        refreshButton.innerHTML = 'Refresh';
-        refreshButton.className = 'userlist-refresh-button';
-        refreshButton.addEventListener('click', function() {
-          AllUsers.init(false);
-        });
-        el.lastUpdatedTextContainer.appendChild(refreshButton);
-      }, 60000);
-
       state.response = JSON.parse(Requests.get(ID).responseText);
-      state.pages = Object.keys(state.response).length - 1;
-      if (firstTime) {
-        state.currentPage = 1;
-      }
-      if (state.currentPage > state.pages) {
-        state.currentPage = state.pages;
-      }
+      state.pages = Object.keys(state.response).length;
 
       el.navBar = createNavBar(state.pages);
       addNavBarListeners();
       el.userListParent.appendChild(el.navBar);
-      showPage(state.currentPage);
+      showPage(1);
     }
 
     function failCallback() {
@@ -85,6 +67,28 @@ var AllUsers = (function() {
   }
 
   /**
+   *
+   * @param userList
+   */
+  function getOnlineStatus(userList) {
+    var data = new FormData();
+    data.append("action", "GetOnlineStatus");
+    for (var i = 0; i < userList.length; i++) {
+      data.append("users", userList[i]);
+    }
+    var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
+
+    function successCallback() {
+      var response = JSON.parse(Requests.get(ID).responseText);
+      console.log(response);
+    }
+
+    function failCallback() {
+
+    }
+  }
+
+  /**
    * Adds listeners to the navigation bar of the user list (left button, right button, page selector).
    */
   function addNavBarListeners() {
@@ -92,37 +96,18 @@ var AllUsers = (function() {
     var selectButton = el.navBar.children[1].children[0];
     var rightButton = el.navBar.children[2];
 
-    if (Number(state.currentPage) === 1) {
-      selectButton.value = 1;
-      leftButton.disabled = true;
-      leftButton.classList.remove('userlist-enabled-arrow-button');
-      leftButton.children[0].src = 'images/left_disabled.svg';
-      if (state.pages <= 1) {
-        rightButton.disabled = true;
-        rightButton.classList.remove('userlist-enabled-arrow-button');
-        rightButton.children[0].src = 'images/right_disabled.svg';
-      } else {
-        rightButton.classList.add('userlist-enabled-arrow-button');
-      }
-    }
-    else if (state.currentPage >= state.pages) {
-      state.currentPage = state.pages;
-      selectButton.value = state.pages;
+    leftButton.disabled = true;
+    leftButton.classList.remove('userlist-enabled-arrow-button');
+    leftButton.children[0].src = 'images/left_disabled.svg';
+    if (state.pages === 1) {
       rightButton.disabled = true;
       rightButton.classList.remove('userlist-enabled-arrow-button');
       rightButton.children[0].src = 'images/right_disabled.svg';
-      if (Number(state.currentPage) === 1) {
-        leftButton.disabled = true;
-        leftButton.classList.remove('userlist-enabled-arrow-button');
-        leftButton.children[0].src = 'images/left_disabled.svg';
-      }
-    }
-    else {
-      selectButton.value = state.currentPage;
+    } else {
+      rightButton.classList.add('userlist-enabled-arrow-button');
     }
     leftButton.addEventListener('click', function () {
       selectButton.value = Number(selectButton.value) - 1;
-      state.currentPage = selectButton.value;
       if (Number(selectButton.value) === 1) {
         leftButton.disabled = true;
         leftButton.classList.remove('userlist-enabled-arrow-button');
@@ -137,7 +122,6 @@ var AllUsers = (function() {
     });
     rightButton.addEventListener('click', function () {
       selectButton.value = Number(selectButton.value) + 1;
-      state.currentPage = selectButton.value;
       if (Number(selectButton.value) === state.pages) {
         rightButton.disabled = true;
         rightButton.classList.remove('userlist-enabled-arrow-button');
@@ -152,7 +136,6 @@ var AllUsers = (function() {
     });
     selectButton.addEventListener('change', function () {
       showPage(selectButton.value);
-      state.currentPage = selectButton.value;
       leftButton.disabled = selectButton.value === '1';
       rightButton.disabled = Number(selectButton.value) === state.pages;
       if (leftButton.disabled) {
@@ -183,6 +166,16 @@ var AllUsers = (function() {
       }
       var userPage = createUserPage(state.response[pageNo]);
       el.userListParent.insertBefore(userPage, el.navBar);
+
+      var pageUsers = [];
+      Object.keys(state.response[pageNo]).forEach(function(key, index) {
+        pageUsers.push(state.response[pageNo][key]['n']);
+      });
+
+      clearInterval(state.interval);
+      state.interval = setInterval(function () {
+        getOnlineStatus(pageUsers);
+      }, 60000);
     }
   }
 
@@ -290,15 +283,9 @@ var AllUsers = (function() {
       var userText = newElements.createKeyValue(key, username);
       userText.className = 'allusers-name legend-text-container';
 
-      var onlineImg = null;
-      if (state.response['online'].includes(username)) {
-        onlineImg = newElements.createGreenCircle('images/green_circle.svg');
-      }
-      else {
-        onlineImg = document.createElement('div');
-        onlineImg.innerHTML = '&#8212;';
-        onlineImg.className = 'user-status';
-      }
+      var onlineImg = document.createElement('div');
+      onlineImg.innerHTML = '&#8212;';
+      onlineImg.className = 'user-status';
       userText.insertBefore(onlineImg, userText.children[0]);
 
       var registeredDate = document.createElement('div');

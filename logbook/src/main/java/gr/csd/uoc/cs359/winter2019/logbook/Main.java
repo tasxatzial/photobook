@@ -110,6 +110,9 @@ public class Main extends HttpServlet {
             case "RatePost":
                 dispatcher = request.getRequestDispatcher("RatePost");
                 break;
+            case "GetOnlineStatus":
+                dispatcher = request.getRequestDispatcher("GetOnlineStatus");
+                break;
             case "Logout":
                 oldSession = request.getSession(false);
                 if (oldSession != null) {

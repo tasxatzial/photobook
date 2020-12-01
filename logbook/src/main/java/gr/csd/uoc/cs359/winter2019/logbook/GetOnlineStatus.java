@@ -1,8 +1,6 @@
 package gr.csd.uoc.cs359.winter2019.logbook;
 
-import gr.csd.uoc.cs359.winter2019.logbook.db.UserDB;
 import gr.csd.uoc.cs359.winter2019.logbook.model.OnlineUsers;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.servlet.ServletException;
@@ -14,8 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
+/**
+ * Gets the online status of a list of users
+ */
 @WebServlet(name = "GetOnlineStatus", urlPatterns = "/GetOnlineStatus")
 @MultipartConfig
 public class GetOnlineStatus extends HttpServlet {
@@ -47,15 +47,22 @@ public class GetOnlineStatus extends HttpServlet {
         String username = (String) oldSession.getAttribute("username");
         OnlineUsers.addUser(username);
 
-        List<List<String>> usernames = UserDB.getAllUsersNames();
-        JSONArray jsonOnline = new JSONArray();
-        for (int i = 0; i < usernames.size(); i++) {
-            String user = usernames.get(i).get(0);
-            if (OnlineUsers.isUserOnline(user)) {
-                jsonOnline.add(user);
+        if (request.getParameter("users") == null) {
+            json.put("ERROR", "MISSING_USERS_LIST");
+            out.print(json.toJSONString());
+            response.setStatus(400);
+            return;
+        }
+
+        String[] userList = request.getParameterValues("users");
+
+        for (String s : userList) {
+            if (OnlineUsers.isUserOnline(s)) {
+                json.put(s, "1");
+            } else {
+                json.put(s, "0");
             }
         }
-        json.put("online", jsonOnline);
         out.print(json.toJSONString());
     }
 
