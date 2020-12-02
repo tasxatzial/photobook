@@ -223,6 +223,10 @@ var EditAccount = (function() {
     el.signupParent = document.getElementById('signup-parent');
     el.header = el.signupParent.children[0].children[0];
     el.signupContent = el.signupParent.children[1];
+    el.step1Content = el.signupContent.children[0];
+    el.step2Content = el.signupContent.children[1];
+    el.step3Content = el.signupContent.children[2];
+    el.step4Content = el.signupContent.children[3];
     el.address = document.getElementById('signup-address');
     el.gender = document.querySelectorAll('input[type="radio"]');
     el.interests = document.querySelector('#signup-interests-parent textarea');
@@ -233,13 +237,9 @@ var EditAccount = (function() {
     el.updateButton = el.signupButtonContainer.children[1];
     el.geolocSearchButton = document.getElementsByClassName('signup-geolocation-search-button')[0];
     el.nominatimSearchButton = document.getElementsByClassName('signup-location-search-button')[0];
-    el.step2Content = document.getElementById('signup-step2');
-    el.step3Content = document.getElementById('signup-step3');
-    el.step4Content = document.getElementById('signup-step4');
     el.step1ButtonContainer = document.getElementById('signup-step1-button-container');
     el.step2ButtonContainer = document.getElementById('signup-step2-button-container');
     el.step3ButtonContainer = document.getElementById('signup-step3-button-container');
-    el.step4BackButton = el.signupButtonContainer.children[0];
     el.step1Label = document.getElementById('step1-label');
     el.step2Label = document.getElementById('step2-label');
     el.step3Label = document.getElementById('step3-label');
@@ -266,21 +266,22 @@ var EditAccount = (function() {
       this.blur();
       clickSignup();
     });
+
     el.updateButton.classList.add('center-button');
     el.updateButton.disabled = false;
-    el.step4BackButton.classList.add('signup-hidden');
-    el.step1ButtonContainer.classList.add('signup-hidden');
-    el.step2ButtonContainer.classList.add('signup-hidden');
-    el.step3ButtonContainer.classList.add('signup-hidden');
-    el.step1Label.classList.add('signup-hidden');
-    el.step2Label.classList.add('signup-hidden');
-    el.step3Label.classList.add('signup-hidden');
-    el.step4Label.classList.add('signup-hidden');
+    el.signupButtonContainer.removeChild(el.signupButtonContainer.children[0]);
+    el.step1Content.removeChild(el.step1ButtonContainer);
+    el.step2Content.removeChild(el.step2ButtonContainer);
+    el.step3Content.removeChild(el.step3ButtonContainer);
+    el.step1Content.removeChild(el.step1Label);
+    el.step2Content.removeChild(el.step2Label);
+    el.step3Content.removeChild(el.step3Label);
+    el.step4Content.removeChild(el.step4Label);
+    el.step2Content.removeChild(el.step2asterisk);
+    el.step3Content.removeChild(el.step3asterisk);
     el.step2Content.classList.remove('signup-hidden');
     el.step3Content.classList.remove('signup-hidden');
     el.step4Content.classList.remove('signup-hidden');
-    el.step2asterisk.classList.add('signup-hidden');
-    el.step3asterisk.classList.add('signup-hidden');
 
     el.interestsRemaining.innerHTML = (el.interests.maxLength - el.interests.value.length) + " characters remaining";
     el.aboutRemaining.innerHTML = (el.about.maxLength - el.about.value.length) + " characters remaining";
@@ -291,7 +292,31 @@ var EditAccount = (function() {
       el.aboutRemaining.innerHTML = (el.about.maxLength - el.about.value.length) + " characters remaining";
     });
 
-    ValidChecker.init();
+    var firstName = document.getElementById('signup-firstName');
+    var lastName = document.getElementById('signup-lastName');
+    var occupation = document.getElementById('signup-job');
+    var city = document.getElementById('signup-city');
+    var birthDate = document.getElementById('signup-birthDate');
+    var password = document.getElementById('signup-password');
+    var passwordConfirm = document.getElementById('signup-passwordConfirm');
+
+    var checkedInputs = {
+      username: el.username,
+      email: el.email,
+      passwd1: password,
+      passwd2: passwordConfirm,
+      firstName: firstName,
+      lastName: lastName,
+      occupation: occupation,
+      city: city,
+      birthDate: birthDate,
+      country: country,
+      address: el.address,
+      interests: el.interests,
+      about: el.about
+    };
+
+    ValidChecker.init(checkedInputs);
     SignUpLocation.init();
     SignUpFace.init();
     data.oldEmail = el.email.value;

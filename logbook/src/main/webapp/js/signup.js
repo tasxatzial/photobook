@@ -196,8 +196,8 @@ var Signup = (function() {
       Init.navbarContent.removeChild(loader);
       var response = JSON.parse(Requests.get(ID).responseText);
       if (response.username === 'unused' && response.email === 'unused') {
-        el.step1Content.classList.add('signup-hidden');
-        el.step2Content.classList.remove('signup-hidden');
+        el.signupContent.removeChild(el.step1Content);
+        el.signupContent.appendChild(el.step2Content);
         el.step2BackButton.style.top = computeTop(el.step2BackButton);
       }
       else {
@@ -249,10 +249,10 @@ var Signup = (function() {
     el.about = document.querySelector('#signup-about-parent textarea');
     el.signupButtonContainer = document.querySelector('#signup-button');
     el.signupButton = el.signupButtonContainer.children[1];
-    el.step1Content = document.getElementById('signup-step1');
-    el.step2Content = document.getElementById('signup-step2');
-    el.step3Content = document.getElementById('signup-step3');
-    el.step4Content = document.getElementById('signup-step4');
+    el.step1Content = el.signupContent.children[0];
+    el.step2Content = el.signupContent.children[1];
+    el.step3Content = el.signupContent.children[2];
+    el.step4Content = el.signupContent.children[3];
     el.step1ButtonContainer = document.getElementById('signup-step1-button-container');
     el.step2ButtonContainer = document.getElementById('signup-step2-button-container');
     el.step3ButtonContainer = document.getElementById('signup-step3-button-container');
@@ -276,8 +276,8 @@ var Signup = (function() {
         Init.scrollTo(invalidEvent.parentNode);
       }
       else {
-        el.step2Content.classList.add('signup-hidden');
-        el.step3Content.classList.remove('signup-hidden');
+        el.signupContent.removeChild(el.step2Content);
+        el.signupContent.appendChild(el.step3Content);
         el.step3BackButton.style.top = computeTop(el.step3BackButton);
       }
     });
@@ -288,8 +288,8 @@ var Signup = (function() {
         Init.scrollTo(invalidEvent.parentNode);
       }
       else {
-        el.step3Content.classList.add('signup-hidden');
-        el.step4Content.classList.remove('signup-hidden');
+        el.signupContent.removeChild(el.step3Content);
+        el.signupContent.appendChild(el.step4Content);
         el.step4BackButton.style.top = computeTop(el.step4BackButton);
       }
     });
@@ -304,16 +304,16 @@ var Signup = (function() {
       }
     });
     el.step2BackButton.addEventListener('click', function() {
-      el.step2Content.classList.add('signup-hidden');
-      el.step1Content.classList.remove('signup-hidden');
+      el.signupContent.removeChild(el.step2Content);
+      el.signupContent.appendChild(el.step1Content);
     });
     el.step3BackButton.addEventListener('click', function() {
-      el.step3Content.classList.add('signup-hidden');
-      el.step2Content.classList.remove('signup-hidden');
+      el.signupContent.removeChild(el.step3Content);
+      el.signupContent.appendChild(el.step2Content);
     });
     el.step4BackButton.addEventListener('click', function() {
-      el.step4Content.classList.add('signup-hidden');
-      el.step3Content.classList.remove('signup-hidden');
+      el.signupContent.removeChild(el.step4Content);
+      el.signupContent.appendChild(el.step3Content);
     });
     el.step1NextButton.disabled = false;
 
@@ -326,10 +326,40 @@ var Signup = (function() {
       el.aboutRemaining.innerHTML = (el.about.maxLength - el.about.value.length) + " characters remaining";
     });
 
-    ValidChecker.init();
+    var firstName = document.getElementById('signup-firstName');
+    var lastName = document.getElementById('signup-lastName');
+    var occupation = document.getElementById('signup-job');
+    var city = document.getElementById('signup-city');
+    var birthDate = document.getElementById('signup-birthDate');
+    var country = document.getElementById('signup-country');
+
+    var checkedInputs = {
+      username: el.username,
+      email: el.email,
+      passwd1: el.password,
+      passwd2: el.passwordConfirm,
+      firstName: firstName,
+      lastName: lastName,
+      occupation: occupation,
+      city: city,
+      birthDate: birthDate,
+      country: country,
+      address: el.address,
+      interests: el.interests,
+      about: el.about
+    };
+
+    ValidChecker.init(checkedInputs);
     SignUpLocation.init();
     SignUpFace.init();
     el.email.disabled = false;
+
+    el.signupContent.removeChild(el.step2Content);
+    el.signupContent.removeChild(el.step3Content);
+    el.signupContent.removeChild(el.step4Content);
+    el.step2Content.classList.remove('signup-hidden');
+    el.step3Content.classList.remove('signup-hidden');
+    el.step4Content.classList.remove('signup-hidden');
   }
 
   /* used to compute the top of the go back buttons */

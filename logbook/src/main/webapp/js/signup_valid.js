@@ -18,20 +18,20 @@ var ValidChecker = (function() {
   /**
    * Initializations after the signup form has loaded.
    */
-  function init() {
-    var username = document.getElementById('signup-username');
-    var email = document.getElementById('signup-email');
-    var passwd1 = document.getElementById('signup-password');
-    var passwd2 = document.getElementById('signup-passwordConfirm');
-    var firstName = document.getElementById('signup-firstName');
-    var lastName = document.getElementById('signup-lastName');
-    var occupation = document.getElementById('signup-job');
-    var city = document.getElementById('signup-city');
-    var birthDate = document.getElementById('signup-birthDate');
-    var country = document.getElementById('signup-country');
-    var interests = document.querySelector('textarea[name="signup-interests"]');
-    var about = document.querySelector('textarea[name="signup-about"]');
-    var address = document.getElementById('signup-address');
+  function init(checkedInputs) {
+    var username = checkedInputs['username'];
+    var email = checkedInputs['email'];
+    var passwd1 = checkedInputs['passwd1'];
+    var passwd2 = checkedInputs['passwd2'];
+    var firstName = checkedInputs['firstName'];
+    var lastName = checkedInputs['lastName'];
+    var occupation = checkedInputs['occupation'];
+    var city = checkedInputs['city'];
+    var birthDate = checkedInputs['birthDate'];
+    var country = checkedInputs['country'];
+    var interests = checkedInputs['interests'];
+    var about = checkedInputs['about'];
+    var address = checkedInputs['address'];
 
     data.checkedInputsStep1 = [];
     data.checkedInputsStep2 = [];
