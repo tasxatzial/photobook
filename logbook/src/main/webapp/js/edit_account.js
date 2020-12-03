@@ -6,7 +6,7 @@
  * @type {{init: init}}
  */
 var EditAccount = (function() {
-  var data = {
+  var stateData = {
     oldEmail: null
   };
 
@@ -114,6 +114,7 @@ var EditAccount = (function() {
 
     function successCallback() {
       Init.navbarContent.removeChild(loader);
+      stateData.oldEmail = el.email.value;
       newElements.showFullWindowMsg('OK', 'Account updated!', Init.clearFullWindowMsg);
       enableInputs();
     }
@@ -166,7 +167,7 @@ var EditAccount = (function() {
 
     /* if we just want to update account info (that means the username field is already disabled)
     and the email has not changed, there is no need to send a request */
-    if (el.email.value === data.oldEmail) {
+    if (el.email.value === stateData.oldEmail) {
       updateAccount();
       return;
     }
@@ -319,7 +320,7 @@ var EditAccount = (function() {
     ValidChecker.init(checkedInputs);
     SignUpLocation.init();
     SignUpFace.init();
-    data.oldEmail = el.email.value;
+    stateData.oldEmail = el.email.value;
     el.email.disabled = false;
   }
 
