@@ -112,7 +112,7 @@ var newElements = (function NewElements() {
     span.className = 'normal-font-weight';
 
     var span2 = document.createElement('span');
-    span2.innerHTML = key + ': ';
+    span2.textContent = key + ': ';
     span2.className = 'bold-font-weight';
 
     var msg = document.createElement('p');

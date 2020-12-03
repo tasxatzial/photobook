@@ -367,7 +367,7 @@ public class Signup extends HttpServlet {
             case "address":
             case "interests":
             case "about":
-                return ".*<.*=?.*>.*";
+                return "<\\/?(\\s|\\S)*?>";
             default:
                 return null;
         }

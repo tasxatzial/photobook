@@ -62,14 +62,14 @@ var ValidChecker = (function() {
     function regexValid(element) {
       element.valid = function () {
         var regex = new RegExp(element.pattern);
-        var regex2 = new RegExp(/<.*=?.*>/);
+        var regex2 = new RegExp(/<\/?(\s|\S)*?>/);
         return regex.test(element.value) && !regex2.test(element.value) && element.value;
       };
     }
 
     function regexValid2(element) {
       element.valid = function () {
-        var regex = new RegExp(/<.*=?.*>/);
+        var regex = new RegExp(/<\/?(\s|\S)*?>/);
         return !regex.test(element.value);
       };
     }
