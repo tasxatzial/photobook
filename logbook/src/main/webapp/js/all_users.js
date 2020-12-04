@@ -56,7 +56,10 @@ var AllUsers = (function() {
         return;
       }
       var error = null;
-      if (Requests.get(ID).status === 0) {
+      if (Requests.get(ID).status === 500) {
+        error = 'Server error';
+      }
+      else if (Requests.get(ID).status === 0) {
         error = 'Unable to send request';
       }
       else {

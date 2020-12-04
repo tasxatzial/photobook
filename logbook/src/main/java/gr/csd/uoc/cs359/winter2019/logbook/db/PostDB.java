@@ -347,7 +347,7 @@ public class PostDB {
      * @throws ClassNotFoundException
      */
     public static List<Post> getTop10RecentPosts() throws ClassNotFoundException {
-        List<Post> posts = new ArrayList<>();
+        List<Post> posts = null;
 
         Statement stmt = null;
         Connection con = null;
@@ -365,6 +365,7 @@ public class PostDB {
 
             ResultSet res = stmt.getResultSet();
 
+            posts = new ArrayList<>();
             while (res.next() == true) {
                 Post post = new Post();
                 post.setPostID(res.getInt("post_id"));

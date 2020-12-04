@@ -70,6 +70,14 @@ public class GetPosts extends HttpServlet {
             posts = PostDB.getTop10RecentPosts();
         }
 
+        /* check that we get posts from DB */
+        if (posts == null) {
+            jsonFinal.put("ERROR", "SERVER_ERROR");
+            out.println(jsonFinal.toJSONString());
+            response.setStatus(500);
+            return;
+        }
+
         Post post;
         JSONObject json;
 

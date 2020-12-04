@@ -58,6 +58,13 @@ public class GetAllUsers extends HttpServlet {
 
         JSONObject jsonPage = new JSONObject();
         List<List<String>> usernames = UserDB.getAllUsersNames();
+        if (usernames == null) {
+            json.put("ERROR", "SERVER_ERROR");
+            out.print(json.toJSONString());
+            response.setStatus(500);
+            return;
+        }
+
         int j = 1; //first page is 1
         for (int i = 0; i < usernames.size(); i++) {
             JSONObject jsonUser = new JSONObject();

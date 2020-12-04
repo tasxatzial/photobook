@@ -57,15 +57,23 @@ public class GetProfile extends HttpServlet {
 
         User user;
         if (request.getParameter("username") == null) {
-            json.put("ERROR", "INVALID_PARAMETER");
+            json.put("ERROR", "MISSING_PARAMETER");
             out.print(json.toJSONString());
             response.setStatus(400);
             return;
         }
 
-        /* check that the username exists */
         user = UserDB.getUser(request.getParameter("username"));
+        /* check that the db returns a user */
         if (user == null) {
+            json.put("ERROR", "SERVER_ERROR");
+            out.print(json.toJSONString());
+            response.setStatus(500);
+            return;
+        }
+
+        /* check that the username exists */
+        if (user.getUserID() == 0) {
             json.put("ERROR", "INVALID_USER");
             out.print(json.toJSONString());
             response.setStatus(400);

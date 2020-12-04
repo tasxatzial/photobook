@@ -68,15 +68,20 @@ var ShowProfile = (function() {
         Logout.showExpired();
         return;
       }
-      if (Requests.get(ID).status === 400) {
-        newElements.showFullWindowMsg('OK', 'Invalid user', Init.clearFullWindowMsg);
+      var error = null;
+      if (Requests.get(ID).status === 500) {
+        error = 'Server error';
+      }
+      else if (Requests.get(ID).status === 400) {
+        error = 'Invalid user';
       }
       else if (Requests.get(ID).status === 0) {
-        newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
+        error = 'Unable to send request';
       }
       else {
-        newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
+        error = 'Error';
       }
+      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
   }
 

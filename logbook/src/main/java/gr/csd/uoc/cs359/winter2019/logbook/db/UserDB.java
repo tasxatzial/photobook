@@ -87,7 +87,7 @@ public class UserDB {
      * @throws ClassNotFoundException
      */
     public static List<List<String>> getAllUsersNames() throws ClassNotFoundException {
-        List<List<String>> userNames = new ArrayList<>();
+        List<List<String>> userNames = null;
 
         Statement stmt = null;
         Connection con = null;
@@ -105,6 +105,7 @@ public class UserDB {
 
             ResultSet res = stmt.getResultSet();
 
+            userNames = new ArrayList<>();
             while (res.next() == true) {
                 List<String> user = new ArrayList<>();
                 user.add(res.getString("user_name"));
@@ -149,9 +150,8 @@ public class UserDB {
             stmt.execute(insQuery.toString());
 
             ResultSet res = stmt.getResultSet();
-
+            user = new User();
             if (res.next() == true) {
-                user = new User();
                 user.setUserName(res.getString("user_name"));
                 user.setUserID(res.getInt("user_id"));
                 user.setEmail(res.getString("email"));
