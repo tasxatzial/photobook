@@ -200,6 +200,10 @@ var AllUsers = (function() {
       getOnlineStatus(pageUsers);
       clearInterval(state.interval);
       state.interval = setInterval(function () {
+        if (!document.getElementById('userlist-parent')) {
+          clearInterval(state.interval);
+          return;
+        }
         getOnlineStatus(pageUsers);
       }, 60000);
     }
