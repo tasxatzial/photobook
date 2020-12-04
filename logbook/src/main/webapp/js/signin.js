@@ -82,6 +82,9 @@ var Signin = (function() {
       if (Requests.get(ID).status === 0) {
         error = 'Unable to send request';
       }
+      else if (Requests.get(ID).status === 500) {
+        error = "Server error";
+      }
       else {
         error = 'Error';
       }

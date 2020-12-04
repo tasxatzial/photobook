@@ -397,8 +397,8 @@ public class UserDB {
         }
     }
 
-    public static boolean checkValidUserName(String userName) throws ClassNotFoundException {
-        boolean valid = true;
+    public static Boolean checkValidUserName(String userName) throws ClassNotFoundException {
+        Boolean valid = null;
         Statement stmt = null;
         Connection con = null;
         try {
@@ -414,6 +414,7 @@ public class UserDB {
 
             stmt.execute(insQuery.toString());
 
+            valid = true;
             if (stmt.getResultSet().next() == true) {
                 System.out.println("#DB: The member already exists");
                 valid = false;
@@ -462,8 +463,8 @@ public class UserDB {
         return valid;
     }
 
-    public static boolean checkValidPassword(String userName, String password) throws ClassNotFoundException {
-        boolean valid = false;
+    public static Boolean checkValidPassword(String userName, String password) throws ClassNotFoundException {
+        Boolean valid = null;
         Statement stmt = null;
         Connection con = null;
 
@@ -480,7 +481,7 @@ public class UserDB {
                     .append(" password = ").append("'").append(password).append("';");
 
             stmt.execute(insQuery.toString());
-
+            valid = false;
             if (stmt.getResultSet().next() == true) {
                 System.out.println("#DB: Password is valid");
                 valid = true;

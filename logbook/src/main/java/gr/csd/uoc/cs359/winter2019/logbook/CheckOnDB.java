@@ -40,12 +40,15 @@ public class CheckOnDB extends HttpServlet {
             if (parameterValue == null) {
                 request.setAttribute(parameter, "0");
             } else {
-                boolean valid = false;
+                Boolean valid = null;
                 if (parameter.equals("email")) {
                     valid = UserDB.checkValidEmail(parameterValue);
                 }
                 else if (parameter.equals("username")){
                     valid = UserDB.checkValidUserName(parameterValue);
+                }
+                if (valid == null) {
+                    return;
                 }
                 if (!valid) {
                     request.setAttribute(parameter, "0");

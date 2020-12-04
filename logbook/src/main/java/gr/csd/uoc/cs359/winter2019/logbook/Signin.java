@@ -54,11 +54,30 @@ public class Signin extends HttpServlet {
         dispatcher = request.getRequestDispatcher("CheckOnDB");
         dispatcher.include(request, response);
 
+        /* if attribute username does not exist, that means there was a problem querying the DB */
+        if (request.getParameter("username") != null && request.getAttribute("username") == null) {
+            jsonSignin.put("ERROR", "SERVER_ERROR");
+            response.setContentType("application/json;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print(jsonSignin.toJSONString());
+            response.setStatus(500);
+            return;
+        }
+
         /* if username does not exist on DB, there is no need to check the password */
         if (request.getParameter("username") != null && request.getAttribute("username").equals("0")) {
             jsonSignin.put("username", "1");
             String password = request.getParameter("password").replace("'", "''");
             String username = request.getParameter("username");
+            Boolean valid = UserDB.checkValidPassword(username, password);
+            if (valid == null) {
+                jsonSignin.put("ERROR", "SERVER_ERROR");
+                response.setContentType("application/json;charset=UTF-8");
+                PrintWriter out = response.getWriter();
+                out.print(jsonSignin.toJSONString());
+                response.setStatus(500);
+                return;
+            }
             if (!UserDB.checkValidPassword(username, password)) {
                 jsonSignin.put("password", "0");
             }
