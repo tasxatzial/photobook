@@ -220,12 +220,17 @@ var Signup = (function() {
     function failCallback() {
       Init.navbarContent.removeChild(loader);
       enableInputsStep1();
+      var error = null;
       if (Requests.get(ID).status === 0) {
-        newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
+        error = 'Unable to send request';
+      }
+      else if (Requests.get(ID).status === 500) {
+        error = "Server error";
       }
       else {
-        newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
+        error = 'Error';
       }
+      newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }
   }
 

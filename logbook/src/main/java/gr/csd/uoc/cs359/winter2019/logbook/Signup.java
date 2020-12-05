@@ -144,6 +144,13 @@ public class Signup extends HttpServlet {
             request.setAttribute("parameterValue", request.getParameter("username"));
             dispatcher = request.getRequestDispatcher("CheckOnDB");
             dispatcher.include(request, response);
+            if (request.getAttribute("username") == null) {
+                JSONObject json = new JSONObject();
+                json.put("ERROR", "SERVER_ERROR");
+                out.print(json.toJSONString());
+                response.setStatus(500);
+                return;
+            }
             if (request.getAttribute("username").equals("0")) {
                 jsonSignup.put("username", "Already taken");
             }
@@ -158,6 +165,13 @@ public class Signup extends HttpServlet {
                 request.setAttribute("parameterValue", request.getParameter("email"));
                 dispatcher = request.getRequestDispatcher("CheckOnDB");
                 dispatcher.include(request, response);
+                if (request.getAttribute("email") == null) {
+                    JSONObject json = new JSONObject();
+                    json.put("ERROR", "SERVER_ERROR");
+                    out.print(json.toJSONString());
+                    response.setStatus(500);
+                    return;
+                }
                 if (request.getAttribute("email").equals("0")) {
                     jsonSignup.put("email", "Already taken");
                 }
@@ -173,6 +187,13 @@ public class Signup extends HttpServlet {
                         request.setAttribute("parameterValue", request.getParameter("email"));
                         dispatcher = request.getRequestDispatcher("CheckOnDB");
                         dispatcher.include(request, response);
+                        if (request.getAttribute("email") == null) {
+                            JSONObject json = new JSONObject();
+                            json.put("ERROR", "SERVER_ERROR");
+                            out.print(json.toJSONString());
+                            response.setStatus(500);
+                            return;
+                        }
                         if (request.getAttribute("email").equals("0")) {
                             jsonSignup.put("email", "Already taken");
                         }

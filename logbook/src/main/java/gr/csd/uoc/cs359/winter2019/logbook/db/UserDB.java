@@ -431,8 +431,8 @@ public class UserDB {
         return valid;
     }
 
-    public static boolean checkValidEmail(String email) throws ClassNotFoundException {
-        boolean valid = true;
+    public static Boolean checkValidEmail(String email) throws ClassNotFoundException {
+        Boolean valid = null;
         Statement stmt = null;
         Connection con = null;
         try {
@@ -447,6 +447,8 @@ public class UserDB {
                     .append(" EMAIL = ").append("'").append(email).append("';");
 
             stmt.execute(insQuery.toString());
+
+            valid = true;
             if (stmt.getResultSet().next() == true) {
                 System.out.println("#DB: The member alreadyExists");
                 valid = false;
