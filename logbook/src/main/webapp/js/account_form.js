@@ -104,8 +104,14 @@ var AccountInfo = (function() {
         if (response.ERROR === 'DELETE_POSTS') {
           error = 'Server error: Delete posts';
         }
-        else {
+        else if (response.ERROR === 'DELETE_ACCOUNT') {
           error = 'Server error: Delete account';
+        }
+        else if (response.ERROR === 'DELETE_POST_RATINGS') {
+          error = 'Server error: Delete ratings';
+        }
+        else {
+          error = 'Server error';
         }
       }
       else {

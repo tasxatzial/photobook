@@ -58,7 +58,6 @@ public class DeleteAccount extends HttpServlet {
         }
 
         String username = (String) oldSession.getAttribute("username");
-        OnlineUsers.removeUser(username);
 
         /* now delete the ratings of the user */
         List<Integer> ratingsIDs = RatingDB.getRatings(username);
@@ -93,7 +92,12 @@ public class DeleteAccount extends HttpServlet {
             /* verify that the account has been deleted */
             UserDB.deleteUser(username);
             User user = UserDB.getUser(username);
-            if (user != null) {
+            if (user == null) {
+                jsonFinal.put("ERROR", "SERVER_ERROR");
+                out.print(jsonFinal.toJSONString());
+                response.setStatus(500);
+            }
+            else if (user.getUserID() != 0) {
                 jsonFinal.put("ERROR", "DELETE_ACCOUNT");
                 out.print(jsonFinal.toJSONString());
                 response.setStatus(500);
@@ -102,6 +106,7 @@ public class DeleteAccount extends HttpServlet {
                 oldSession.invalidate();
                 out.print(jsonFinal.toJSONString());
             }
+            return;
         }
 
         /* it is an error if at least one post could not been deleted */
@@ -109,12 +114,15 @@ public class DeleteAccount extends HttpServlet {
             jsonFinal.put("ERROR", "DELETE_POST_RATINGS");
             out.print(jsonFinal.toJSONString());
             response.setStatus(500);
+            return;
         }
         else if (request.getAttribute("DELETE_POSTS").equals("0")){
             jsonFinal.put("ERROR", "DELETE_POSTS");
             out.print(jsonFinal.toJSONString());
             response.setStatus(500);
+            return;
         }
+        OnlineUsers.removeUser(username);
     }
 
     /**

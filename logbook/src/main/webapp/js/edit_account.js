@@ -115,7 +115,10 @@ var EditAccount = (function() {
     function successCallback() {
       Init.navbarContent.removeChild(loader);
       stateData.oldEmail = el.email.value;
-      newElements.showFullWindowMsg('OK', 'Account updated!', Init.clearFullWindowMsg);
+      var editSection = document.querySelector('#account-subsection #signup-section');
+      if (editSection) {
+        newElements.showFullWindowMsg('OK', 'Account updated!', Init.clearFullWindowMsg);
+      }
       enableInputs();
     }
 

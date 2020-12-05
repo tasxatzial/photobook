@@ -267,7 +267,16 @@ var Posts = (function() {
         }
       }
       else if (Requests.get(ID).status === 500) {
-        error = 'Server error';
+        var response = JSON.parse(Requests.get(ID).responseText);
+        if (response.ERROR === 'DELETE_POSTS') {
+          error = 'Server error: Delete posts';
+        }
+        else if (response.ERROR === 'DELETE_POST_RATINGS') {
+          error = 'Server error: Delete ratings';
+        }
+        else {
+          error = 'Server error';
+        }
       }
       else if (Requests.get(ID).status === 0) {
         error = 'Unable to send request';

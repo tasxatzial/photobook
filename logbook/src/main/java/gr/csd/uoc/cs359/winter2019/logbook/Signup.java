@@ -293,7 +293,7 @@ public class Signup extends HttpServlet {
         user = UserDB.getUser(request.getParameter("username"));
         JSONObject jsonSignup = new JSONObject();
         PrintWriter out = response.getWriter();
-        if (user != null) {
+        if (user.getUserID() != 0) {
             String username = user.getUserName();
             String password = user.getPassword();
             String email = user.getEmail();
@@ -342,7 +342,14 @@ public class Signup extends HttpServlet {
                 out.print(json.toJSONString());
                 response.setStatus(500);
             }
-        } else {
+        }
+        else if (user.getUserID() == 0) {
+            JSONObject json = new JSONObject();
+            json.put("ERROR", "INVALID_USER");
+            out.print(json.toJSONString());
+            response.setStatus(400);
+        }
+        else {
             JSONObject json = new JSONObject();
             json.put("ERROR", "SERVER_ERROR");
             out.print(json.toJSONString());
