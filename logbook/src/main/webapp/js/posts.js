@@ -880,14 +880,9 @@ var Posts = (function() {
   function createPostOptionsMenu(data) {
     el.deleteButton = newElements.createBlueButton('Delete post', 'delete-post-button');
     el.deleteButton.children[0].addEventListener('click', function() {
-      var self = this;
-      self.disabled = true;
-      setTimeout(function() {
-        newElements.showConfirmDelete('This post will be deleted!', 'post-delete-confirm', function() {
-          deletePost(data['postDiv'], data['username'], data['postID']);
-        });
-        self.disabled = false;
-      }, 200);
+      newElements.showConfirmDelete('This post will be deleted!', 'post-delete-confirm', function() {
+        deletePost(data['postDiv'], data['username'], data['postID']);
+      });
     });
 
     data['postDiv'].appendChild(el.deleteButton);

@@ -133,12 +133,7 @@ var AccountInfo = (function() {
 
     el.deleteAccountDiv = newElements.createBlueButton('Delete Account', 'delete-account-button');
     el.deleteAccountDiv.children[0].addEventListener('click', function() {
-      var self = this;
-      self.disabled = true;
-      setTimeout(function() {
-        newElements.showConfirmDelete('Your account & posts will be deleted!', 'account-delete-confirm', deleteAccount);
-        self.disabled = false;
-      }, 200);
+      newElements.showConfirmDelete('Your account & posts will be deleted!', 'account-delete-confirm', deleteAccount);
     });
 
     var div = document.createElement('div');
