@@ -88,12 +88,17 @@ var Landing = (function() {
   function failCallback(ID, button) {
     var loader = document.querySelector('.bar-loader');
     Init.navbarContent.removeChild(loader);
+    var error = null;
     if (Requests.get(ID).status === 0) {
-      newElements.showFullWindowMsg('OK', 'Unable to send request', Init.clearFullWindowMsg);
+      error = 'Unable to send request';
+    }
+    else if (Requests.get(ID).status === 500) {
+      error = 'Server error';
     }
     else {
-      newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
+      error = 'Error';
     }
+    newElements.showFullWindowMsg('OK', 'Error', Init.clearFullWindowMsg);
   }
 
   /**

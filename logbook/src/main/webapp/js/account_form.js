@@ -69,7 +69,7 @@ var AccountInfo = (function() {
         error = 'Unable to send request';
       }
       else {
-        error = 'Unknown';
+        error = 'Error';
       }
       newElements.showFullWindowMsg('OK', error, Init.clearFullWindowMsg);
     }

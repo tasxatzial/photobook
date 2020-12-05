@@ -53,6 +53,13 @@ public class AccountInfo extends HttpServlet {
                 if (user == null) {
                     response.setContentType("application/json;charset=UTF-8");
                     PrintWriter out = response.getWriter();
+                    json.put("ERROR", "SERVER_ERROR");
+                    out.print(json.toJSONString());
+                    response.setStatus(500);
+                }
+                else if (user.getUserID() == 0) {
+                    response.setContentType("application/json;charset=UTF-8");
+                    PrintWriter out = response.getWriter();
                     json.put("ERROR", "INVALID_USER");
                     out.print(json.toJSONString());
                     response.setStatus(400);
