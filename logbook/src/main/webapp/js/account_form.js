@@ -15,6 +15,8 @@ var AccountInfo = (function() {
    * Initializes the view when the user account tab is clicked.
    */
   function init() {
+    Requests.cancelExcept(null);
+    newElements.deleteSlidingLoader();
     var accountSubsection = document.getElementById('account-subsection');
     accountSubsection.innerHTML = '';
     accountSubsection.appendChild(createEditAccountSection());

@@ -352,16 +352,23 @@ var newElements = (function NewElements() {
    * @returns {HTMLDivElement}
    */
   function createSlidingLoader() {
-    var loader = document.querySelector('.bar-loader');
-    if (loader) {
-      Init.navbarContent.removeChild(loader);
-    }
-    loader = document.createElement('div');
+    deleteSlidingLoader();
+    var loader = document.createElement('div');
     loader.className = 'bar-loader';
     loader.style.animationDuration = (window.innerWidth * 1.5)/1000 + 's';
     Init.navbarContent.appendChild(loader);
 
     return loader;
+  }
+
+  /**
+   * Deletes the sliding loader
+   */
+  function deleteSlidingLoader() {
+    var loader = document.querySelector('.bar-loader');
+    if (loader) {
+      Init.navbarContent.removeChild(loader);
+    }
   }
 
   return {
@@ -380,6 +387,7 @@ var newElements = (function NewElements() {
     createFullWindowButton: createFullWindowButton,
     showFullWindowMsg: showFullWindowMsg,
     createGreenCircle: createGreenCircle,
-    showConfirmDelete: showConfirmDelete
+    showConfirmDelete: showConfirmDelete,
+    deleteSlidingLoader: deleteSlidingLoader
   };
 }());
