@@ -78,8 +78,13 @@
 }
 
 .user-status {
-    height: 1rem;
+    height: .85rem;
+    width: .85rem;
+}
+
+.user-status-container, #online-status-container {
     width: 1rem;
+    height: 1rem;
 }
 
 #legend {
@@ -88,7 +93,6 @@
     align-items: center;
     margin-bottom: .5em;
     font-weight: 500;
-    line-height: 1.6rem;
 }
 
 #legend-text {
@@ -116,7 +120,7 @@
 
 .legend-text-container {
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
 }
 
 @media only screen and (max-width: 45rem) {

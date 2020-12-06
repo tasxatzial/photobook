@@ -82,7 +82,7 @@ var AllUsers = (function() {
     var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
 
     var userDiv = document.querySelectorAll('.allusers-name');
-    var onlineTopStatus = document.querySelector('.user-status');
+    var onlineTopStatus = document.getElementById('online-status-container');
     onlineTopStatus.innerHTML = '';
     onlineTopStatus.appendChild(Init.loader);
 
@@ -246,7 +246,7 @@ var AllUsers = (function() {
     header.appendChild(headerH2);
 
     var onlineStatus = document.createElement('div');
-    onlineStatus.className = 'user-status';
+    onlineStatus.id = 'online-status-container';
 
     var lastUpdatedText = document.createElement('span');
     lastUpdatedText.id = 'legend-text';
@@ -316,7 +316,7 @@ var AllUsers = (function() {
 
       var onlineStatus = document.createElement('div');
       onlineStatus.innerHTML = '?';
-      onlineStatus.className = 'user-status';
+      onlineStatus.className = 'user-status-container';
       userText.insertBefore(onlineStatus, userText.children[0]);
 
       var registeredDate = document.createElement('div');
