@@ -26,7 +26,6 @@ var Posts = (function() {
 
   var state = {
     clickedFullPost: null,
-    locationValid: null,
     mapView: false,
     sortPosts: 'date'
   };
@@ -345,11 +344,13 @@ var Posts = (function() {
     else if (postJSON['imageBase64']) {
       image.src = postJSON['imageBase64'];
     }
+    else {
+      image.className = 'short-post-no-photo';
+    }
     var imageParent = document.createElement('div');
     imageParent.className = 'short-post-photo-parent';
     if (!image.src) {
       image.src = 'images/no-image.jpg';
-      imageParent.classList.add('post-no-image');
     }
     imageParent.appendChild(image);
 
@@ -511,7 +512,7 @@ var Posts = (function() {
           data['locationQuery'] = locationQuery;
           formButton.enable(el.showMapButton);
         }
-        state.locationValid = true;
+        data['locationValid'] = true;
       }
 
       function failCallback() {
@@ -520,11 +521,11 @@ var Posts = (function() {
           if (state.clickedFullPost) {
             formButton.enable(el.showMapButton);
           }
-          state.locationValid = true;
+          data['locationValid'] = true;
         }
         else {
           data['locationDiv'].children[1].innerHTML = 'Not available';
-          state.locationValid = false;
+          data['locationValid'] = false;
         }
       }
     }());
@@ -551,7 +552,7 @@ var Posts = (function() {
   function turnToFullPost(data) {
     Requests.cancelExcept(data['queryID']);
 
-    if (!data['imageDiv'].classList.contains('post-no-image')) {
+    if (!data['imageDiv'].children[0].classList.contains('short-post-no-photo')) {
       data['imageDiv'].children[0].className = 'full-post-photo';
     }
     data['descriptionDiv'].innerHTML = '';
@@ -587,7 +588,7 @@ var Posts = (function() {
     el.showMapButton = document.createElement('button');
     el.showMapButton.className = 'sign-internal-button';
     el.showMapButton.innerHTML = 'Map view';
-    if (state.locationValid) {
+    if (data['locationValid']) {
       formButton.enable(el.showMapButton);
       el.showMapButton.addEventListener('click', function() {
           if (state.mapView) {
@@ -745,7 +746,9 @@ var Posts = (function() {
   function createDescription(descriptionText, maxVisibleLength) {
     var description = descriptionText.trim().replace(/ +/g, ' ').replace(/\n+/g, '\n');
     if (description === '') {
-      return 'Missing description';
+      var p = document.createElement('p');
+      p.innerHTML = '*** Missing description ***';
+      return [p];
     }
     if (maxVisibleLength && maxVisibleLength >= 20 && maxVisibleLength < descriptionText.length) {
       var cropped = true;
