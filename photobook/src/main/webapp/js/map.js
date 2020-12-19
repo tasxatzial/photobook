@@ -24,7 +24,7 @@ function OLMap(divId) {
 
     /* custom zoom level set by user */
     customInitZoom: 0,
-  
+
     /* the projections that are needed for converting coordinates */
     projection: null,
     projection4326: null

@@ -5,26 +5,30 @@
  * @type {{init: init}}
  */
 var SignUpLocation = (function () {
-  var state = {
-    response: null,
-    mapVisible: false,
-    mapObj: null,
+  var state = null;
+  var el = null;
 
-    /* true if the map displays a location for the first time */
-    newLocation: true
-  };
+  function runInit() {
+    state = {
+      response: null,
+      mapVisible: false,
+      mapObj: null,
 
-  var el = {
-    nominatimSearchButton: null,
-    nominatimSearchMsg: null,
-    geolocSearchButton: null,
-    geolocSearchMsg: null,
-    address: null,
-    country: null,
-    city: null,
-    mapParent: null,
-    mapButton: null
-  };
+      /* true if the map displays a location for the first time */
+      newLocation: true
+    };
+    el = {
+      nominatimSearchButton: null,
+      nominatimSearchMsg: null,
+      geolocSearchButton: null,
+      geolocSearchMsg: null,
+      address: null,
+      country: null,
+      city: null,
+      mapParent: null,
+      mapButton: null
+    };
+  }
 
   var nominatimAPI = {
     url: 'https://nominatim.openstreetmap.org/search',
@@ -305,7 +309,8 @@ var SignUpLocation = (function () {
   }
 
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());
 

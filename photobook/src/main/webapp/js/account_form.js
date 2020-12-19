@@ -5,11 +5,15 @@
  * @type {{init: init}}
  */
 var AccountInfo = (function() {
-  var el = {
-    confirmDelete: null,
-    deleteAccountDiv: null,
-    editAccountDiv: null,
-  };
+  var el = null;
+
+  function runInit() {
+    el = {
+      confirmDelete: null,
+      deleteAccountDiv: null,
+      editAccountDiv: null,
+    };
+  }
 
   /**
    * Initializes the view when the user account tab is clicked.
@@ -151,6 +155,7 @@ var AccountInfo = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

@@ -57,6 +57,8 @@ var Init = (function() {
 
   var user = null;
 
+  runInit();
+
   var data = new FormData();
   data.append("action", "Init");
   var ID = Requests.add(ajaxRequest('POST', 'Main', data, successCallback, failCallback));
@@ -116,6 +118,26 @@ var Init = (function() {
     }
   }
 
+  /**
+   * Initializes states in all global objects
+   */
+  function runInit() {
+    user = null;
+    AccountInfo.runInit();
+    AllUsers.runInit();
+    EditAccount.runInit();
+    Homepage.runInit();
+    PostForm.runInit();
+    Posts.runInit();
+    ShowProfile.runInit();
+    Signin.runInit();
+    SignInFace.runInit();
+    SignUpFace.runInit();
+    Signup.runInit();
+    SignUpLocation.runInit();
+    ValidChecker.runInit();
+  }
+
   return {
     dataNames: dataNames,
     postNames: postNames,
@@ -126,5 +148,6 @@ var Init = (function() {
     loader: loader,
     scrollTo: scrollTo,
     clearFullWindowMsg: clearFullWindowMsg,
+    runInit: runInit
   };
 }());

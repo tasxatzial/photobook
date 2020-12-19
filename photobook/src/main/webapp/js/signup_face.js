@@ -5,39 +5,42 @@
  * @type {{init: init}}
  */
 var SignUpFace = (function () {
+  var state = null;
+  var tasks = null;
+  var el = null;
 
-  var state = {
-    photoSectionVisible: false,
+  function runInit() {
+    state = {
+      photoSectionVisible: false,
 
-    /* class that controls the select photo button and the display of the image */
-    photoPicker: null,
+      /* class that controls the select photo button and the display of the image */
+      photoPicker: null,
 
-    /* true when setID or addFace fail */
-    fail: false,
+      /* true when setID or addFace fail */
+      fail: false,
 
-    /* true when setID or addFace finish (either fail or succeed) */
-    ended: false
-  };
+      /* true when setID or addFace finish (either fail or succeed) */
+      ended: false
+    };
+    tasks = {
+      detect: null,
+      setID: null,
+      addFace: null
+    };
+    el = {
+      username: null,
+      checkBox: null,
+      photoSectionParent: null,
 
-  var tasks = {
-    detect: null,
-    setID: null,
-    addFace: null
-  };
+      /* hidden photo section that appears when checkbox is clicked */
+      photoSection: null,
 
-  var el = {
-    username: null,
-    checkBox: null,
-    photoSectionParent: null,
-
-    /* hidden photo section that appears when checkbox is clicked */
-    photoSection: null,
-
-    uploadMsgParent: null,
-    uploadButton: null,
-    photoParent: null,
-    selectButton: null
-  };
+      uploadMsgParent: null,
+      uploadButton: null,
+      photoParent: null,
+      selectButton: null
+    };
+  }
 
   /**
    * Called from faceAPI.js success callback functions of setID/addFace.
@@ -279,6 +282,7 @@ var SignUpFace = (function () {
   }
   
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

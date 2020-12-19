@@ -5,17 +5,22 @@
  * @type {{init: init}}
  */
 var AllUsers = (function() {
-  var state = {
-    response: null,
-    pages: 0,
-    interval: null
-  };
+  var state = null;
+  var el = null;
 
-  var el = {
-    userListParent: null,
-    navBar: null,
-    lastUpdatedTextContainer: null
-  };
+  function runInit() {
+    state = {
+      response: null,
+      pages: 0,
+      interval: null
+    };
+
+    el = {
+      userListParent: null,
+      navBar: null,
+      lastUpdatedTextContainer: null
+    };
+  }
 
   /**
    * Initializes the view when the all users button is clicked.
@@ -346,6 +351,7 @@ var AllUsers = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

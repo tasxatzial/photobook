@@ -6,29 +6,34 @@
  * @type {{init: init}}
  */
 var EditAccount = (function() {
-  var stateData = {
-    oldEmail: null,
-    oldPassword: null
-  };
+  var stateData = null;
+  var el = null;
 
-  var el = {
-    signupSection: null,
-    signupParent: null,
-    updateButton: null,
-    signupContent: null,
-    header: null,
-    username: null,
-    email: null,
-    password: null,
-    passwordConfirm: null,
-    address: null,
-    gender: null,
-    interests: null,
-    about: null,
-    geolocSearchButton: null,
-    nominatimSearchButton: null,
-    faceAssosiate: null
-  };
+  function runInit() {
+    stateData = {
+      oldEmail: null,
+      oldPassword: null
+    };
+
+    el = {
+      signupSection: null,
+      signupParent: null,
+      updateButton: null,
+      signupContent: null,
+      header: null,
+      username: null,
+      email: null,
+      password: null,
+      passwordConfirm: null,
+      address: null,
+      gender: null,
+      interests: null,
+      about: null,
+      geolocSearchButton: null,
+      nominatimSearchButton: null,
+      faceAssosiate: null
+    };
+  }
 
   /**
    * The first function that is called when the update account button is clicked.
@@ -337,6 +342,7 @@ var EditAccount = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

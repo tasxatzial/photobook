@@ -5,34 +5,39 @@
  * @type {{init: init}}
  */
 var Posts = (function() {
-  var el = {
-    postsParent: null,
-    mapParent: null,
-    confirmDelete: null,
-    deleteButton: null,
-    deleteMsg: null,
-    postButton: null,
-    showMapButton: null,
-    postsDiv: null
-  };
-
+  var el = null;
   var response = null;
-
   var posts = {};
+  var data = null;
+  var state = null;
+  var obj = null;
 
-  var data = {
-    username: null
-  };
+  function runInit() {
+    el = {
+      postsParent: null,
+      mapParent: null,
+      confirmDelete: null,
+      deleteButton: null,
+      deleteMsg: null,
+      postButton: null,
+      showMapButton: null,
+      postsDiv: null
+    };
+    data = {
+      username: null
+    };
+    state = {
+      clickedFullPost: null,
+      mapView: false,
+      sortPosts: 'date'
+    };
+    obj = {
+      map: null
+    };
+    posts = {};
+    response = null;
+  }
 
-  var state = {
-    clickedFullPost: null,
-    mapView: false,
-    sortPosts: 'date'
-  };
-
-  var obj = {
-    map: null
-  };
 
   var nominatimAPI = {
     reverseUrl: 'https://nominatim.openstreetmap.org/reverse'
@@ -898,6 +903,7 @@ var Posts = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

@@ -5,13 +5,16 @@
  * @type {{init: init}}
  */
 var Signin = (function() {
-  var el = {
-    username: null,
-    password: null,
-    signinMsg: null,
-    signinButton: null,
-    signinPhotoButton:null
-  };
+  var el = null;
+  function runInit() {
+    el = {
+      username: null,
+      password: null,
+      signinMsg: null,
+      signinButton: null,
+      signinPhotoButton:null
+    };
+  }
 
   /**
    * Disables all form inputs.
@@ -118,6 +121,7 @@ var Signin = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

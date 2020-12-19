@@ -6,12 +6,15 @@
  * @type {{init: init}}
  */
 var ShowProfile = (function() {
-  var el = {
-    accountSubsection: null,
-    showProfileButton: null,
-    showPostsButton: null,
-    editAccountButton: null
-  };
+  var el = null;
+  function runInit() {
+    el = {
+      accountSubsection: null,
+      showProfileButton: null,
+      showPostsButton: null,
+      editAccountButton: null
+    };
+  }
 
   /**
    * Initializations when the user account page is requested.
@@ -203,6 +206,7 @@ var ShowProfile = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

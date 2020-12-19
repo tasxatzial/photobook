@@ -5,32 +5,36 @@
  * @type {{init: init}}
  */
 var SignInFace = (function () {
-  var tasks = {
-    search: null,
-    analyze: null
-  };
+  var tasks = null;
+  var state = null;
+  var el = null;
 
-  var state = {
-    photoSectionVisible: false
-  };
-  
-  var el = {
-    /* object that controls the select photo button and the display of the image on the DOM */
-    photoPicker: null,
+  function runInit() {
+    tasks = {
+      search: null,
+      analyze: null
+    };
+    state = {
+      photoSectionVisible: false
+    };
+    el = {
+      /* object that controls the select photo button and the display of the image on the DOM */
+      photoPicker: null,
 
-    /* photo section that appears when photo button is clicked */
-    photoSection: null,
+      /* photo section that appears when photo button is clicked */
+      photoSection: null,
 
-    username: null,
-    password: null,
-    passwordParent: null,
-    form: null,
-    photoButton: null,
-    submit: null,
-    uploadPhotoButton: null,
-    uploadMsgParent: null,
-    signinMsg: null,
-  };
+      username: null,
+      password: null,
+      passwordParent: null,
+      form: null,
+      photoButton: null,
+      submit: null,
+      uploadPhotoButton: null,
+      uploadMsgParent: null,
+      signinMsg: null,
+    };
+  }
 
   /**
    * Called after the request for analyze emotion has detected an emotion with confidence > 80.
@@ -182,6 +186,7 @@ var SignInFace = (function () {
   }
   
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

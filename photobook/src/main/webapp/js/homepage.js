@@ -7,12 +7,16 @@
  */
 var Homepage = (function() {
   var activeButton = null;
+  var el = null;
 
-  var el = {
-    burgerButton: null,
-    navbarList: null,
-    activeButton: null
-  };
+  function runInit() {
+    activeButton = null;
+    el = {
+      burgerButton: null,
+      navbarList: null,
+      activeButton: null
+    };
+  }
 
   /**
    * Initializes the view when the homepage (initial screen when a user is logged in) is requested.
@@ -110,6 +114,7 @@ var Homepage = (function() {
 
   return {
     init: init,
-    initializeButton: initializeButton
+    initializeButton: initializeButton,
+    runInit: runInit
   };
 }());

@@ -7,13 +7,17 @@
  * @type {{init: init, showInvalidMsg: showInvalidMsg, getCheckedInputs: (function(): []|*[]), checkInvalidElements: checkInvalidElements}}
  */
 var ValidChecker = (function() {
-  var data = {
-    checkedInputsStep1: [],
-    checkedInputsStep2: [],
-    checkedInputsStep3: [],
-    checkedInputsStep4: [],
-    checkedInputs: []
-  };
+  var data = null;
+
+  function runInit() {
+    data = {
+      checkedInputsStep1: [],
+      checkedInputsStep2: [],
+      checkedInputsStep3: [],
+      checkedInputsStep4: [],
+      checkedInputs: []
+    };
+  }
 
   /**
    * Initializations after the signup form has loaded.
@@ -224,6 +228,7 @@ var ValidChecker = (function() {
 
   return {
     init: init,
+    runInit: runInit,
     checkInvalidElements: checkInvalidElements,
     showInvalidMsg: showInvalidMsg,
     getCheckedInputsStep1: getCheckedInputsStep1,

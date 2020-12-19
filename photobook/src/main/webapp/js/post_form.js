@@ -5,44 +5,48 @@
  * @type {{init: init}}
  */
 var PostForm = (function() {
-  var state = {
-    lastDetectionMethod: null
-  };
+  var state = null;
+  var data = null;
+  var el = null;
 
-  var data = {
-    username: null,
-    loc: {
-      lat: null,
-      lon: null
-    }
-  };
+  function runInit() {
+    state = {
+      lastDetectionMethod: null
+    };
+    data = {
+      username: null,
+      loc: {
+        lat: null,
+        lon: null
+      }
+    };
+    el = {
+      filePicker: null,
+      selectOnlinePhoto: null,
+      locationPlace: null,
+      createPostMsg: null,
+      description: null,
+      onlineResource: null,
+      postButton: null,
+      selectDiskPhoto: null,
+      locationDetectButton: null,
+      geolocationRadio: null,
+      placeRadio: null,
+      country: null,
+      place: null,
+      onlineImage: null,
+      onlineImageCheckbox: null,
+      selectDiskPhotoButton: null,
+      photoToggle: null,
+      locationDetectMsg: null,
+      postFormPhoto: null,
+      postFormContent: null,
+      header: null
+    };
+  }
 
   var nominatimAPI = {
     url: 'https://nominatim.openstreetmap.org/search'
-  };
-
-  var el = {
-    filePicker: null,
-    selectOnlinePhoto: null,
-    locationPlace: null,
-    createPostMsg: null,
-    description: null,
-    onlineResource: null,
-    postButton: null,
-    selectDiskPhoto: null,
-    locationDetectButton: null,
-    geolocationRadio: null,
-    placeRadio: null,
-    country: null,
-    place: null,
-    onlineImage: null,
-    onlineImageCheckbox: null,
-    selectDiskPhotoButton: null,
-    photoToggle: null,
-    locationDetectMsg: null,
-    postFormPhoto: null,
-    postFormContent: null,
-    header: null
   };
 
   /**
@@ -396,6 +400,7 @@ var PostForm = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

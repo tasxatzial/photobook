@@ -13,8 +13,6 @@ var Logout = (function() {
     Init.clearFullWindowMsg();
     Requests.cancelExcept(null);
 
-    var navbarContent = document.getElementById('navbar-content');
-
     if (clickedLogout) {
       var loader = newElements.createSlidingLoader();
       var data = new FormData();
@@ -30,13 +28,14 @@ var Logout = (function() {
       document.getElementsByTagName('body')[0].classList.remove('logged-in');
       var navbarList = document.querySelector('.navbar-list');
       var burgerButton = document.querySelector('.initial-burger-button');
-      navbarContent.removeChild(navbarList);
+      Init.navbarContent.removeChild(navbarList);
       if (loader) {
-        navbarContent.removeChild(loader);
+        Init.navbarContent.removeChild(loader);
       }
       if (burgerButton) {
-        navbarContent.removeChild(burgerButton);
+        Init.navbarContent.removeChild(burgerButton);
       }
+      Init.runInit();
       Landing.init();
     }
 

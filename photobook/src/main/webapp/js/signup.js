@@ -6,29 +6,33 @@
  * @type {{init: init}}
  */
 var Signup = (function() {
-  var el = {
-    signupSection: null,
-    signupParent: null,
-    signupContent: null,
-    signupButton: null,
-    header: null,
-    username: null,
-    email: null,
-    password: null,
-    passwordConfirm: null,
-    address: null,
-    gender: null,
-    interests: null,
-    about: null,
-    geolocSearchButton: null,
-    nominatimSearchButton: null,
-    step1Content: null,
-    step1ButtonContainer: null,
-    step1NextButton: null,
-    step2Content: null,
-    step4BackButton: null,
-    faceAssosiate: null
-  };
+  var el = null;
+
+  function runInit() {
+    el = {
+      signupSection: null,
+      signupParent: null,
+      signupContent: null,
+      signupButton: null,
+      header: null,
+      username: null,
+      email: null,
+      password: null,
+      passwordConfirm: null,
+      address: null,
+      gender: null,
+      interests: null,
+      about: null,
+      geolocSearchButton: null,
+      nominatimSearchButton: null,
+      step1Content: null,
+      step1ButtonContainer: null,
+      step1NextButton: null,
+      step2Content: null,
+      step4BackButton: null,
+      faceAssosiate: null
+    };
+  }
 
   /**
    * The first function that is called when the next button in step1 is clicked.
@@ -381,6 +385,7 @@ var Signup = (function() {
   }
 
   return {
-    init: init
+    init: init,
+    runInit: runInit
   };
 }());

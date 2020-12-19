@@ -126,6 +126,6 @@ function PhotoPicker(photoContainer, fileInput) {
   return {
     clearPhoto: clearPhoto,
     click: click,
-    getPhotob64: getPhotob64
+    getPhotob64: getPhotob64,
   };
 }
