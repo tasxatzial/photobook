@@ -1,5 +1,0 @@
-- Input fields that use characters like ' generate a 500 server error when we try to add them to the database.
-We need to make sure that such characters are properly escaped/replaced before adding them to the database.
-
-- When a signup or signin page is requested, a 'please wait' message is displayed immediately.
-We should either remove this message or at least show it after a certain time period has passed.
