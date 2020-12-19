@@ -7,7 +7,8 @@
  */
 var EditAccount = (function() {
   var stateData = {
-    oldEmail: null
+    oldEmail: null,
+    oldPassword: null
   };
 
   var el = {
@@ -18,6 +19,8 @@ var EditAccount = (function() {
     header: null,
     username: null,
     email: null,
+    password: null,
+    passwordConfirm: null,
     address: null,
     gender: null,
     interests: null,
@@ -51,6 +54,8 @@ var EditAccount = (function() {
       var name = inputs[i].name.split('-')[1];
       if (name === 'username' || name === 'email') {
         data.append(name, inputs[i].value.toLowerCase());
+      } else if (el.password.value !== stateData.oldPassword && (name === 'password' || name === 'passwordConfirm')) {
+        data.append(name, CryptoJS.MD5('hy359' + inputs[i].value + '!”£$').toString());
       } else {
         data.append(name, inputs[i].value);
       }
@@ -115,6 +120,7 @@ var EditAccount = (function() {
     function successCallback() {
       Init.navbarContent.removeChild(loader);
       stateData.oldEmail = el.email.value;
+      stateData.oldPassword = el.password.value;
       var editSection = document.querySelector('#account-subsection #signup-section');
       if (editSection) {
         newElements.showFullWindowMsg('OK', 'Account updated!', Init.clearFullWindowMsg);
@@ -301,14 +307,14 @@ var EditAccount = (function() {
     var occupation = document.getElementById('signup-job');
     var city = document.getElementById('signup-city');
     var birthDate = document.getElementById('signup-birthDate');
-    var password = document.getElementById('signup-password');
-    var passwordConfirm = document.getElementById('signup-passwordConfirm');
+    el.password = document.getElementById('signup-password');
+    el.passwordConfirm = document.getElementById('signup-passwordConfirm');
 
     var checkedInputs = {
       username: el.username,
       email: el.email,
-      passwd1: password,
-      passwd2: passwordConfirm,
+      passwd1: el.password,
+      passwd2: el.passwordConfirm,
       firstName: firstName,
       lastName: lastName,
       occupation: occupation,
@@ -324,7 +330,10 @@ var EditAccount = (function() {
     SignUpLocation.init();
     SignUpFace.init();
     stateData.oldEmail = el.email.value;
+    stateData.oldPassword = el.password.value;
     el.email.disabled = false;
+    el.password.disabled = false;
+    el.passwordConfirm.disabled = false;
   }
 
   return {

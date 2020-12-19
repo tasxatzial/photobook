@@ -45,7 +45,8 @@ var Signin = (function() {
     /* prepare data */
     var data = new FormData();
     data.append(el.username.name.split('-')[1], el.username.value.toLowerCase());
-    data.append(el.password.name.split('-')[1], el.password.value);
+    var encryptedPassword = CryptoJS.MD5('hy359' + el.password.value + '!”£$').toString();
+    data.append(el.password.name.split('-')[1], encryptedPassword);
     data.append('action', 'Signin');
 
     /* make the call */

@@ -31,14 +31,14 @@
           <div class="flex-label">
             <label for="signup-password" class="signup-necessary sign-label sign-top-label">Password</label>
           </div>
-          <input type="password" class="sign-tofill" value="<%= (String) request.getAttribute("password")%>" name="signup-password" id="signup-password" pattern="^[\w0-9!#$%&'*+/=?^`{|}\[\]_\\~<>., -]{8,10}$" required>
-          <p class="signup-require-info">8 to 10 characters</p>
+          <input type="password" class="sign-tofill" value="<%= (String) request.getAttribute("password")%>" name="signup-password" id="signup-password" disabled pattern="^[\w0-9!#$%&'*+/=?^`{|}\[\]_\\~<>., -]{8,32}$" required>
+          <p class="signup-require-info">8 to 32 characters</p>
         </div>
         <div class="sign-child">
           <div class="flex-label">
             <label for="signup-passwordConfirm" class="signup-necessary sign-label sign-top-label">Confirm Password</label>
           </div>
-          <input type="password" class="sign-tofill" value="<%= (String) request.getAttribute("password")%>" name="signup-passwordConfirm" id="signup-passwordConfirm" required>
+          <input type="password" class="sign-tofill" value="<%= (String) request.getAttribute("password")%>" name="signup-passwordConfirm" id="signup-passwordConfirm" disabled required>
         </div>
         <div class="sign-child">
           <div class="flex-label">

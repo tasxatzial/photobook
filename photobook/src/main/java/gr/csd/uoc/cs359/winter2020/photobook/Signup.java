@@ -74,6 +74,7 @@ public class Signup extends HttpServlet {
         }
 
         jsonSignup = checkFields(request);
+        System.out.println(request.getParameter("password"));
 
         String passwd1 = request.getParameter("password");
         Enumeration paramNames = request.getParameterNames();
@@ -383,7 +384,7 @@ public class Signup extends HttpServlet {
             case "username":
                 return "^[A-Za-z]{8,25}$";
             case "password":
-                return "^[\\w0-9!#$%&'*+/=?^`{|}\\[\\]_\\\\~<>., -]{8,10}$";
+                return "^[\\w0-9!#$%&'*+/=?^`{|}\\[\\]_\\\\~<>., -]{32}$";
             case "email":
                 return "^[\\w!#$%&'*+/=?^`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$";
             case "firstName":

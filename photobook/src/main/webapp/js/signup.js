@@ -54,6 +54,8 @@ var Signup = (function() {
       var name = inputs[i].name.split('-')[1];
       if (name === 'username' || name === 'email') {
         data.append(name, inputs[i].value.toLowerCase());
+      } else if (name === 'password' || name === 'passwordConfirm') {
+        data.append(name, CryptoJS.MD5('hy359' + inputs[i].value + '!”£$').toString());
       } else {
         data.append(name, inputs[i].value);
       }
@@ -358,6 +360,8 @@ var Signup = (function() {
     SignUpLocation.init();
     SignUpFace.init();
     el.email.disabled = false;
+    el.password.disabled = false;
+    el.passwordConfirm.disabled = false;
 
     el.signupContent.removeChild(el.step2Content);
     el.signupContent.removeChild(el.step3Content);
