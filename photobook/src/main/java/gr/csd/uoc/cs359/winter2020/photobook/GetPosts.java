@@ -111,13 +111,7 @@ public class GetPosts extends HttpServlet {
             json.put("postID", post.getPostID());
 
             int userRating = RatingDB.getRate(post.getPostID(), (String) oldSession.getAttribute("username"));
-            if (userRating == -1) {
-                json.put("ERROR", "SERVER_ERROR");
-                out.print(json.toJSONString());
-                response.setStatus(500);
-                return;
-            }
-            if (userRating == 0) {
+            if (userRating == 0 || userRating == -1) {
                 json.put("userRating", "");
             }
             else  {
