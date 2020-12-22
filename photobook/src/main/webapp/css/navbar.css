@@ -46,6 +46,10 @@
   border-bottom: 4px solid #585e71;
 }
 
+#logout-separator {
+  background-color: #585e71;
+}
+
 .navbar-button:active {
   top: 0;
 }
@@ -119,6 +123,16 @@
 @media only screen and (max-width: 45rem) {
   #navbar h1 {
     margin: 0 16px;
+  }
+
+  #profile-button {
+    border-top: 1px solid #373b4b;
+  }
+
+  #logout-separator {
+    height: 1rem;
+    border-top: 1px solid #373b4b;
+    border-bottom: 1px solid #373b4b;
   }
 
   #logout-button, #signin-nav-button, #signup-nav-button {

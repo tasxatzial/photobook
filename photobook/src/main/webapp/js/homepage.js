@@ -52,6 +52,10 @@ var Homepage = (function() {
     });
     el.navbarList.appendChild(postsButton);
 
+    var padding = document.createElement('div');
+    padding.id = 'logout-separator';
+    el.navbarList.appendChild(padding);
+
     var logoutButton = newElements.createSignBarButton('Log out', 'logout-button', 'images/logout.svg');
     logoutButton.addEventListener('click', function() {
       this.blur();
