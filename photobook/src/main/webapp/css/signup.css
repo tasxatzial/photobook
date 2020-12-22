@@ -43,6 +43,7 @@
 #signup-photo-section label {
   padding-left: 22px;
   text-indent: -22px;
+  font-size: 0.9rem;
 }
 
 #signup-photo-section input {

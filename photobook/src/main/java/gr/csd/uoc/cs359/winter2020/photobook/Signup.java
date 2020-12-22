@@ -74,7 +74,6 @@ public class Signup extends HttpServlet {
         }
 
         jsonSignup = checkFields(request);
-        System.out.println(request.getParameter("password"));
 
         String passwd1 = request.getParameter("password");
         Enumeration paramNames = request.getParameterNames();

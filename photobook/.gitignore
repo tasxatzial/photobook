@@ -4,5 +4,5 @@ target/
 .settings/
 .classpath
 .project
-logbook.iml
+photobook.iml
 src/main/main.iml
