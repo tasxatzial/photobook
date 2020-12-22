@@ -54,6 +54,7 @@ var Homepage = (function() {
 
     var logoutButton = newElements.createSignBarButton('Log out', 'logout-button', 'images/logout.svg');
     logoutButton.addEventListener('click', function() {
+      this.blur();
       Logout.init(true);
       closeBurgerButton();
     });

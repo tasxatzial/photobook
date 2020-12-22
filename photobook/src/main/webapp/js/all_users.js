@@ -137,6 +137,7 @@ var AllUsers = (function() {
       rightButton.classList.add('userlist-enabled-arrow-button');
     }
     leftButton.addEventListener('click', function () {
+      this.blur();
       selectButton.value = Number(selectButton.value) - 1;
       if (Number(selectButton.value) === 1) {
         leftButton.disabled = true;
@@ -151,6 +152,7 @@ var AllUsers = (function() {
       showPage(selectButton.value);
     });
     rightButton.addEventListener('click', function () {
+      this.blur();
       selectButton.value = Number(selectButton.value) + 1;
       if (Number(selectButton.value) === state.pages) {
         rightButton.disabled = true;
