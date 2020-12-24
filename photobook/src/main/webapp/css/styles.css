@@ -77,6 +77,10 @@ body {
   padding-right: 16px;
 }
 
+#account-subsection #signup-section {
+  align-items: flex-start;
+}
+
 input[type="button"]:focus, button:focus {
   outline: 0;
 }
