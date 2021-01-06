@@ -1,8 +1,8 @@
 # Photobook
 
-## Description
-
 A simple platform where people can share information about travel locations.
+
+*Note:* This is one of my earliest attemps at writing HTML/CSS/Javascript. The site works without any problems, however, there is plenty of room for improvements, especially regarding the code style.
 
 ## Features
 
@@ -40,13 +40,13 @@ Here's a complete list of features:
 
 ## Implementation
 
-This project was created without the help of any frontend/backend frameworks.
+This project was created without the help of any frontend/backend frameworks. More specifically:
 
 ### Frontend
 
 * MVC model.
 * Single Page Application.
-* The website is responsive.
+* The website is responsive and should work properly when width > 320px.
 * Passwords are md5 encoded before sending them over the network.
 
 ### Backend
@@ -58,17 +58,18 @@ This project was created without the help of any frontend/backend frameworks.
 
 ## Known issues
 
-Since this is a single page application thus all requests are AJAX requests. That means we should change the
-browser URLs manually so that we can use bookmarks and navigate to previous/next page.
+This is a single page application thus all requests are AJAX requests. That means we should be changing
+the browser URLs manually so that we can use bookmarks and navigate to previous/next page.
 Currently, such functionality has not been implemented: The URLs never change.
 
 ## Compile & Run
 
-This is a maven project. It can be compiled with:
+This is a maven project. Switch to the root folder and execute:
 
     mvn package
 
-Currently only way to run the project is by seting up Tomcat and a SQL database (postgres) locally. Details may be added in the future.
+Currently, the only way to run the project is by seting up Tomcat and a SQL database (postgres) locally.
+Details may be added in the future.
 
 ## Screenshots
 
