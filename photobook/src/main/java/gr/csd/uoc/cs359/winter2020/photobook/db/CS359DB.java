@@ -18,11 +18,11 @@ public class CS359DB {
     private static final String URL = "jdbc:postgresql://127.0.0.1";
     private static final String DATABASE = "photobook";
     private static final int PORT = 5432;
-    private static final String UNAME = "csd3902"; // Share your repo to give you the credentials
-    private static final String PASSWD = "HTs#hM6D";  // Share your repo to give you the credentials
+    private static final String UNAME = "photobook"; // create this role in db
+    private static final String PASSWD = "HTs#hM6D";
 
     /**
-     * Attempts to establish a database connection Using mariadb
+     * Attempts to establish a database connection.
        *
      * @return a connection to the database
      * @throws SQLException
@@ -36,6 +36,4 @@ public class CS359DB {
     public static String getUserName() {
         return UNAME;
     }
-
-
 }
